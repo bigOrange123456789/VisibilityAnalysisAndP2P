@@ -1,5 +1,12 @@
 # 忽略 /node_modules/ 目录及其下的所有文件
 /node_modules/
 
-# 忽略.cache目录及其下的所有文件
-.cache
+# 忽略/.cache/目录及其下的所有文件
+/.cache/
+
+# 忽略 /dist/ 目录及其下的所有文件
+/dist/
+
+
+# 不忽略 /dist/assets/ 目录及其下的所有文件
+! /dist/assets/ 
