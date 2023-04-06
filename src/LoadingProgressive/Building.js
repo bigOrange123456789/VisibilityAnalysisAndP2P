@@ -5,11 +5,13 @@ import { saveAs } from 'file-saver';
 import config from '../../config/configOP.json'
 import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
+import { Detection } from './Detection.js'
 import {ZipLoader } from '../../lib/zip/ziploader.js';
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
+        this.detection=new Detection()
         this.scene=scene
         
         this.config=config.src.Building_new
@@ -143,6 +145,7 @@ export class Building{
         });
     }
     loadZip(id,cb){
+        this.detection.receivePack("server")
         if(this.meshes_request[id])return
         this.meshes_request[id]=true
         const self=this
@@ -173,6 +176,7 @@ export class Building{
 	    } );
     }
     p2pParse(message){
+        this.detection.receivePack("p2p")
         const cid=message.cid
         const myArray=message.myArray
         // console.log("p2p",cid)

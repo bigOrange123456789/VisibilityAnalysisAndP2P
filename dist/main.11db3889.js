@@ -41385,6 +41385,9 @@ module.exports = {
     "P2P": {
       "urlP2pServer": "http://114.80.207.60:8011"
     },
+    "Detection": {
+      "urlDetectionServer": "http://43.138.54.47:9999"
+    },
     "SamplePointList": {
       "vvd": {}
     },
@@ -41690,6 +41693,89 @@ var P2P = /*#__PURE__*/function () {
   return P2P;
 }();
 exports.P2P = P2P;
+},{"../../config/configOP.json":"config/configOP.json"}],"src/LoadingProgressive/Detection.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Detection = void 0;
+var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var Detection = /*#__PURE__*/function () {
+  //需要服务器
+  function Detection() {
+    _classCallCheck(this, Detection);
+    this.dectionURL = _configOP.default.src.Detection.urlDetectionServer;
+    this.date = [new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getSeconds(), new Date().getMilliseconds()];
+    // this.time0=performance.now()
+
+    this.count_p2p = 0; //P2P加载数量
+    this.count_server = 0; //服务器获取数量
+
+    this.close = false;
+    this.pack_circumstances = {};
+    var scope = this;
+    this.testTime = 60; //window.param.testTime;//测试时间
+    this.frameCount = 0; //记录帧数量
+    function testFrame() {
+      scope.frameCount++;
+      requestAnimationFrame(testFrame);
+    }
+    testFrame();
+    setTimeout(function () {
+      console.log("end");
+      scope.finish();
+    }, scope.testTime * 1000);
+  }
+  _createClass(Detection, [{
+    key: "receivePack",
+    value: function receivePack(type) {
+      if (type == "p2p") this.count_p2p++;else this.count_server++;
+    }
+  }, {
+    key: "finish",
+    value: function finish() {
+      console.log("count_p2p:", this.count_p2p, "count_server:", this.count_server);
+      this.close = true;
+      var data = {
+        count_p2p: this.count_p2p,
+        count_server: this.count_server,
+        url: window.location.href,
+        //地址以及参数
+        date: this.date,
+        //测试日期
+        frameCount: this.frameCount,
+        //测试所用的帧数
+        testTime: this.testTime //测试时间
+      };
+
+      var oReq = new XMLHttpRequest();
+      oReq.open("POST", this.dectionURL, true);
+      oReq.responseType = "arraybuffer";
+      oReq.onload = function () {
+        //接收数据
+        var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
+        var str = String.fromCharCode.apply(null, unitArray); //解析为文本
+        console.log(str);
+        alert("测试完成，感谢您的配合！");
+        //window.opener = null;//为了不出现提示框
+        //window.close();//关闭窗口//完成测试，关闭窗口
+        // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
+      };
+
+      oReq.send(JSON.stringify(data)); //发送请求
+    }
+  }]);
+  return Detection;
+}();
+exports.Detection = Detection;
 },{"../../config/configOP.json":"config/configOP.json"}],"node_modules/base64-js/index.js":[function(require,module,exports) {
 'use strict'
 
@@ -44058,6 +44144,7 @@ var _fileSaver = require("file-saver");
 var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
 var _Visibility = require("./Visibility.js");
 var _P2P = require("./P2P.js");
+var _Detection = require("./Detection.js");
 var _ziploader = require("../../lib/zip/ziploader.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -44073,6 +44160,7 @@ var Building = /*#__PURE__*/function () {
     _classCallCheck(this, Building);
     document.getElementById("LoadProgress").innerHTML = "";
     var self = this;
+    this.detection = new _Detection.Detection();
     this.scene = scene;
     this.config = _configOP.default.src.Building_new;
     this.NumberOfComponents = this.config.NumberOfComponents;
@@ -44192,6 +44280,7 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "loadZip",
     value: function loadZip(id, cb) {
+      this.detection.receivePack("server");
       if (this.meshes_request[id]) return;
       this.meshes_request[id] = true;
       var self = this;
@@ -44229,6 +44318,7 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "p2pParse",
     value: function p2pParse(message) {
+      this.detection.receivePack("p2p");
       var cid = message.cid;
       var myArray = message.myArray;
       // console.log("p2p",cid)
@@ -44304,7 +44394,7 @@ var Building = /*#__PURE__*/function () {
   return Building;
 }();
 exports.Building = Building;
-},{"three":"node_modules/three/build/three.module.js","../../lib/threejs/GLTFLoader":"lib/threejs/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","../../config/configOP.json":"config/configOP.json","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","../../lib/threejs/GLTFLoader":"lib/threejs/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","../../config/configOP.json":"config/configOP.json","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -47506,7 +47596,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64633" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49195" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

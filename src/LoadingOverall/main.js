@@ -14,8 +14,7 @@ export class Loader{
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
         this.panel=new Panel(this)
-        this.initScene()
-        
+        this.initScene()        
     }
     async initScene(){
         this.renderer = new THREE.WebGLRenderer({

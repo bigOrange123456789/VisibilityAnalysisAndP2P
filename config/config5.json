@@ -2,6 +2,13 @@
     "src": {
         "Building_new": {
             "path": "assets/space5.glb",
+            "parentGroup": {
+                "scale": {
+                    "x": 1,
+                    "y": 1,
+                    "z": 1
+                }
+            },
             "createSphere": {
                 "x": [
                     -275,
