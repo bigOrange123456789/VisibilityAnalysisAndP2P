@@ -2,7 +2,7 @@ export class Array3D{
     constructor(config){
         const self=this
         const colorList=[]
-        const s=0.5
+        const s=0.2//0.3//0.5
         for(let r=0;r<=1;r+=s)
             for(let g=0;g<=1;g+=s)
                 for(let b=0;b<=1;b+=s){

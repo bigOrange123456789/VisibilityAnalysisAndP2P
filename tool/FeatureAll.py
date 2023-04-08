@@ -1,5 +1,15 @@
 import numpy as np
 class FeatureAll: #所有视点,每个视点的可见特征
+    @staticmethod
+    def mul(fA1,fA2):
+        for i in range(len(fA1.componentDeAve)):
+            fA1.componentDeAve[i]=(fA1.componentDeAve[i]+fA2.componentDeAve[i])/2
+        for idv in fA1.featureAll:
+            f1=fA1.featureAll[idv]
+            f2=fA2.featureAll[idv]
+            for i in range(len(f1)):
+                f1[i]=f1[i]*f2[i]
+        return fA1
     def __init__(self,loader):
         self.dim=loader.componentIdMax+1
         self.componentDeAve=loader.componentDeAve
@@ -33,6 +43,12 @@ class FeatureAll: #所有视点,每个视点的可见特征
         # print(self.matrix)
         # print(self.matrix.ndim)
         return self.matrix
+    def toPow(self,p):
+        for idv in self.featureAll:
+            feature=self.featureAll[idv]
+            for i in range(len(feature)):
+                feature[i]=feature[i]**p
+        return self
     def toPostion(self):
         self.featureAll={}
         for idv in self.featureAll:

@@ -1,7 +1,7 @@
 {
     "id":6,
     "getwall":{
-        "threshold_entropy":1.4,
+        "threshold_entropy":0,
         "threshold_difference":1,
         "threshold_distance":5000
     },

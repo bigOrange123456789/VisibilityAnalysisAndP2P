@@ -2,12 +2,16 @@
 from FeatureAll import FeatureAll
 import numpy as np
 class ExtractorWall: #所有视点,每个视点的可见特征
-    def __init__(self,loader0,loader1,threshold):
-        self.componentIdMax=loader0.componentIdMax-2
-        self.data=loader0.data
-        dim0=1+loader0.componentIdMax-2
-        dim1=1+loader1.componentIdMax
-        f1=FeatureAll(loader1).toSplice(dim0,dim1-dim0)
+    def __init__(self,loader_ceiling,loader_addSphere_list,threshold):
+        self.componentIdMax=loader_ceiling.componentIdMax-2
+        self.data=loader_ceiling.data
+        dim0=1+loader_ceiling.componentIdMax-2
+        dim1=1+loader_addSphere_list[0].componentIdMax
+        f1=FeatureAll(loader_addSphere_list[0]).toSplice(dim0,dim1-dim0)
+        for i in range(len(loader_addSphere_list)-1):
+            f_temp=FeatureAll(loader_addSphere_list[i+1]).toSplice(dim0,dim1-dim0)
+            f1=FeatureAll.mul(f1,f_temp)
+  
         # self.entropy=FeatureAll(loader1).toSplice(0,dim0).getEntropy()#
         self.entropy=f1.getEntropy()
         
@@ -24,6 +28,10 @@ class ExtractorWall: #所有视点,每个视点的可见特征
             v_list.append(vid)
             v_feature_list.append(np.array(feature))
             v_feature_list_tag[vid]=i
+            if vid=="-63000,2286.5,10000": #325
+                print(vid,i)
+            if vid=="-63000,2286.5,8000":  #326
+                print(vid,i)    
             i=i+1
         # print("采样点的个数为:",i)
         self.v_feature_list_tag=v_feature_list_tag
@@ -54,9 +62,8 @@ class ExtractorWall: #所有视点,每个视点的可见特征
                             cosine = np.dot(v1, v2) / n
                         # if np.dot(v1, v2)==0:
                         #     print("0:",v1,v2,cosine)
-                        if i1==116 and i2==118:
-                            print("116,118",cosine,"np.dot(v1, v2)",np.dot(v1, v2))
-                            print()
+                        if i1==325 and i2==326:
+                            print("325,326",cosine,"np.dot(v1, v2)",np.dot(v1, v2))
                         # if cosine==0:
                         #     print("0:",v1,v2)
                         # if cosine<0.5:
@@ -70,6 +77,7 @@ class ExtractorWall: #所有视点,每个视点的可见特征
             for i2 in range(len(v_feature_list)):
                 if i1>=i2:
                     difference[i1][i2]=difference[i2][i1]
+        # print(325,326,difference[325][326])
         self.difference=difference
         ##########
         # name1="-101000,2286.5,8000"
@@ -96,27 +104,53 @@ class ExtractorWall: #所有视点,每个视点的可见特征
         for cid in range(cidMax+1):#遍历所有构件
             iswall[cid]=False
             vidList=[]
+            if cid==855:
+                print("cid",cid)
             for vid in self.data:
                 d=self.data[vid].data["all"]
                 if str(cid) in d:#如果视点vid能够看到构件cid
                     if not d[str(cid)]==0:
-                        
                         if self.entropy[vid]>threshold["threshold_entropy"]:#1.7:#熵过小的视点很可能是构件内部的视点
                             vidList.append(vid)
                         # else:print( "熵较小的视点:",self.entropy[vid] ,vid)
-                        if vid=="79000,2286.5,2000":print("entropy,79000,2286.5,2000:",self.entropy[vid])
+                        # if vid=="79000,2286.5,2000":print("entropy,79000,2286.5,2000:",self.entropy[vid])
+                        # if cid==855 and vid=="-63000,2286.5,10000"   : print(len(vidList)-1,vid)
+                        # if cid==855 and vid=="-63000,2286.5,8000"    : print(len(vidList)-1,vid)
+            # if cid==855:
+            #     print("cid",cid)
+            #     print("self.getDifference(vidList[60],vidList[61])",self.getDifference(vidList[60],vidList[61]))
             for i in range(len(vidList)):
                 for j in range(len(vidList)):
                     if self.getDifference(vidList[i],vidList[j])>=threshold["threshold_difference"]:
                         iswall[cid]=True
+            # if cid==855:
+            #     print("iswall[cid]",iswall[cid])
         self.iswall=iswall
         wallNumber=0
         for cid in iswall:
             if iswall[cid]:wallNumber+=1
         print("墙壁构件的个数为:",wallNumber)
+        print("iswall[855]",iswall[855])
         return iswall
     @staticmethod
     def getWall(loader_ceiling,loaderList,threshold):
+        iswallList=[]
+        for loader_addSphere in loaderList:
+            iswall=ExtractorWall(loader_ceiling,[loader_addSphere],threshold).iswall
+            iswallList.append(iswall)
+        iswall0=iswallList[0]
+        for iswall in iswallList:
+            for vid in iswall:
+                if iswall[vid]:iswall0[vid]=True
+        number=0
+        for vid in iswall0:
+            if iswall0[vid]:
+                number+=1
+        print("墙壁构件的总个数为:",number)
+        # print("iswall[906]",iswall[906])
+        return iswall0
+    @staticmethod
+    def getWall2(loader_ceiling,loaderList,threshold):
         iswallList=[]
         for loader_addSphere in loaderList:
             iswall=ExtractorWall(loader_ceiling,loader_addSphere,threshold).iswall
@@ -130,4 +164,5 @@ class ExtractorWall: #所有视点,每个视点的可见特征
             if iswall0[vid]:
                 number+=1
         print("墙壁构件的总个数为:",number)
+        # print("iswall[906]",iswall[906])
         return iswall0

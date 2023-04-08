@@ -1,12 +1,12 @@
 # from ViewpointList import ViewpointList
 from Loader import Loader
 from PVD import PVD
+from Blocking import Blocking
 from ExtractorWall import ExtractorWall
 import sys
 import json
 class Main: #所有视点,每个视点的可见特征
     def __init__(self,config):
-
         id=config["id"]
         loader0=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id)
         # loader0.c_all["src"]["Building_new"]["entropy"]={}
@@ -15,22 +15,23 @@ class Main: #所有视点,每个视点的可见特征
         loader_addSphere=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id)
         loader_ceiling=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_2",id)
         loader_shifting=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id)
-        iswall=ExtractorWall.getWall(
+        iswall=ExtractorWall(
             loader_ceiling,
             [loader_addSphere,loader_shifting] ,
             config['getwall']
-        )
+        ).iswall
+        loader0.c_all["src"]["Building_new"]["iswall"]=iswall
+        loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
+            loader_ceiling,
+            [loader_addSphere,loader_shifting]
+        ).result
         isdoor=loader0.c_all["src"]["Building_new"]["isdoor"]
         loader0.savePVD(PVD(
             loader0,
             loader_ceiling,
             iswall,
             isdoor))
-
-        loader0.configCSave()        
-        
-
-        
+        loader0.configCSave()                
     def blocking(self):
         v_feature_list=[]
         v_feature_list_tag={}

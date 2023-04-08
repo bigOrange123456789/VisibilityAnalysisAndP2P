@@ -62,16 +62,16 @@ export class Loader{
         
         this.scene.add(this.camera)
 
-        // this.playerControl=new PlayerControl(this.camera)
-        // this.playerControl.target.set(
-        //     this.config.camera.target.x,
-        //     this.config.camera.target.y,
-        //     this.config.camera.target.z
-        // )
-        // this.playerControl.mode.set("viewpoint")
-        // this.playerControl.speed.moveBoard=100
+        this.playerControl=new PlayerControl(this.camera)
+        this.playerControl.target.set(
+            this.config.camera.target.x,
+            this.config.camera.target.y,
+            this.config.camera.target.z
+        )
+        this.playerControl.mode.set("viewpoint")
+        this.playerControl.speed.moveBoard=100
 
-        this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
+        // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
 
 

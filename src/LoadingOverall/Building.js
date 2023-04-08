@@ -7,17 +7,18 @@ import { Array3D } from './Array3D.js'
 import { SamplePointList } from './SamplePointList.js'
 export class Building{
     constructor(scene){
-        
         this.scene=scene
         
         this.config=config.src.Building_new
         window.config0=this.config
         this.parentGroup = new THREE.Group()
-        this.parentGroup.scale.set(
-            this.config.parentGroup.scale.x,
-            this.config.parentGroup.scale.y,
-            this.config.parentGroup.scale.z
-        )
+
+        if(this.config.parentGroup&&this.config.parentGroup.scale)
+            this.parentGroup.scale.set(
+                this.config.parentGroup.scale.x,
+                this.config.parentGroup.scale.y,
+                this.config.parentGroup.scale.z
+            )
         scene.add(this.parentGroup)
         this.meshes=[]
         this.load0(this.config.path)
@@ -47,23 +48,24 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        new SamplePointList(
-            this.config.createSphere,
-            this.parentGroup,
-            this.meshes,
-            this.config.entropy
-            )
+        // new SamplePointList(
+        //     this.config.createSphere,
+        //     this.parentGroup,
+        //     this.meshes,
+        //     this.config.entropy
+        //     )
         
-        // this.createCube2(this.config.createSphere)
+        this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
 
         // this.createSphere1(this.config.createSphere)
         // this.createSphere2(this.config.createSphere)//展示凸局域分布情况 //不显示核视点 每一块视点使用不同颜色
         // this.wallShow()
-        this.doorTwinkle()
+        // this.doorTwinkle()
     }
     doorTwinkle(){
         const self=this
+        if(self.config.isdoor)
         setInterval(()=>{
             self.meshes
             for(let i=0;i<self.meshes.length;i++){
@@ -141,7 +143,8 @@ export class Building{
                         const p=self.kernelPosition[i]
                         if( (p[0]+","+p[1]+",-10")==name)flag=true
                     }
-                    if(flag){//
+                    if(false){
+                    //if(flag){//
                     // if(name==self.config["kernelPosition"]){
                         geometry = new THREE.SphereGeometry( c.r, 32, 16 );
                         material = new THREE.MeshBasicMaterial( {color:0xff0000} );
@@ -210,8 +213,8 @@ export class Building{
                     var geometry,material
                     geometry = new THREE.BoxGeometry(size, size, size);
                     material = new THREE.MeshBasicMaterial( {
-                            opacity: 0.3, 
-                            transparent: true
+                            // opacity: 0.3, 
+                            // transparent: true
                     } );
                     material.color.r=color[0]
                     material.color.g=color[1]
@@ -255,6 +258,7 @@ export class Building{
             mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
             mesh.material.opacity=0.1
             mesh.material.transparent=true
+            mesh.visible=false
         }
     }
     wallShow(){
@@ -352,8 +356,8 @@ export class Building{
                     meshes[i].visible = self.InY(meshes[i],a,b)
                 }
             }
-            // self.wallShow()
-            self.modelShow()
+            self.wallShow()
+            // self.modelShow()
             //test(450,3400);//test(50,3400);// test(50,3400);
 
             const save = function(index){
