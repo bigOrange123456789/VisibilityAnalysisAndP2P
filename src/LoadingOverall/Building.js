@@ -48,14 +48,15 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy,
+            this.config.visibleArea
+            )
         
-        this.createCube2(this.config.createSphere)
+        // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
 
         // this.createSphere1(this.config.createSphere)
@@ -356,8 +357,8 @@ export class Building{
                     meshes[i].visible = self.InY(meshes[i],a,b)
                 }
             }
-            self.wallShow()
-            // self.modelShow()
+            // self.wallShow()
+            self.modelShow()
             //test(450,3400);//test(50,3400);// test(50,3400);
 
             const save = function(index){

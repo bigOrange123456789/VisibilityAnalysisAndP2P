@@ -3,6 +3,7 @@ from Loader import Loader
 from PVD import PVD
 from Blocking import Blocking
 from ExtractorWall import ExtractorWall
+from VisibleArea   import VisibleArea
 import sys
 import json
 class Main: #所有视点,每个视点的可见特征
@@ -12,25 +13,41 @@ class Main: #所有视点,每个视点的可见特征
         # loader0.c_all["src"]["Building_new"]["entropy"]={}
         loader0.saveVVD()
         loader0.c_all["src"]["Building_new"]
-        loader_addSphere=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id)
+        loader_addSphere_list=[
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand0",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand1",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand2",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand3",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand4",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand5",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand6",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand7",id),
+            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand8",id)
+        ]
+        print("len(loader_addSphere_list)",len(loader_addSphere_list))
         loader_ceiling=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_2",id)
-        loader_shifting=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id)
         iswall=ExtractorWall(
             loader_ceiling,
-            [loader_addSphere,loader_shifting] ,
+            [loader_addSphere_list[0] ,loader_addSphere_list[0] ],
             config['getwall']
         ).iswall
         loader0.c_all["src"]["Building_new"]["iswall"]=iswall
-        loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
-            loader_ceiling,
-            [loader_addSphere,loader_shifting]
-        ).result
         isdoor=loader0.c_all["src"]["Building_new"]["isdoor"]
         loader0.savePVD(PVD(
             loader0,
             loader_ceiling,
             iswall,
             isdoor))
+        # loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
+        #     loader_ceiling,
+        #     [loader_addSphere_list[0] ,loader_addSphere_list[0] ],
+        # ).result
+        loader0.c_all["src"]["Building_new"]["visibleArea"]=VisibleArea(
+            loader_ceiling,
+            loader_addSphere_list
+        ).list
         loader0.configCSave()                
     def blocking(self):
         v_feature_list=[]
