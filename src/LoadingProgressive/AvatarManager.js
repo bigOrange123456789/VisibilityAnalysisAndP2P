@@ -11,7 +11,34 @@ export class AvatarManager {
         // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
         // this.sum_count = 0; //当前row_index前面行的人数总和
         // this.row_count = 0; //当前行的可放置人数
+        this.initPos()
         this.init()
+    }
+    initPos(){
+        const c={
+            "x": [
+                -121000,
+                117000,
+                2000
+            ],
+            "y": [
+                2286.5,
+                2286.5,
+                2000
+            ],
+            "z": [
+                -4000,
+                16000,
+                2000
+            ]
+        }
+        this.poslist=[]
+        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                    this.poslist.push([x,y,z])
+                }
+
     }
     async init() {
         var pathAnima = "assets/animation_man_A.bin"
@@ -43,7 +70,7 @@ export class AvatarManager {
 
                 animPathPre: "assets/animation_man02.bin",
                 // assets: {assets/animation_man02.bin: {…}}
-                count: 10,
+                count: self.poslist.length,
                 lod_avatarCount:  [200, 900, 3240, 8800, 12600],
                 lod_distance:  [5000, 15000, 30000, 60000, 100000],
                 lod_geometry:  [20, 15, 1, 0, 0],
@@ -78,10 +105,15 @@ export class AvatarManager {
                 useColorTag:  ["CloM_B_kuzi_geo", "CloM_B_waitao_geo"],
             })
             for (var i00 = 0; i00 < crowd.count; i00++) {
-                crowd.setPosition(i00,[i00*1500-50,0,0])
-                crowd.setSpeed(i00, 1)
-                crowd.setScale(i00, [1000,1000,1000])
-                crowd.setObesity(i00, 1)
+                const p=self.poslist[i00]//[i00*1500-50,100,0]
+                crowd.setPosition(i00,[
+                    p[0]+Math.random()*500,
+                    p[1]-2000,
+                    p[2]+Math.random()*500])
+                crowd.setRotation(i00,[0,Math.random()*3,0])
+                crowd.setSpeed(i00, 0.8+0.4*Math.random())
+                crowd.setScale(i00, [700,700,700])
+                crowd.setObesity(i00, 0.8+0.4*Math.random())
             }
             crowd.init(scenes)
             self.scene.add(crowd)
