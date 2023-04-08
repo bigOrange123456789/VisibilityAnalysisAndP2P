@@ -7,6 +7,7 @@ import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import config from '../../config/configOP.json'
 import {Panel } from './Panel.js'
+import {AvatarManager } from './AvatarManager.js'
 export class Loader{
     constructor(body){
         this.config=config.src.main
@@ -16,6 +17,7 @@ export class Loader{
         this.panel=new Panel(this)
         this.initScene()
         this.building=new Building(this.scene,this.camera)
+        new AvatarManager(this.scene,this.camera)
         
     }
     async initScene(){
