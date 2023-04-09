@@ -44,10 +44,14 @@ class Main: #所有视点,每个视点的可见特征
         #     loader_ceiling,
         #     [loader_addSphere_list[0] ,loader_addSphere_list[0] ],
         # ).result
-        loader0.c_all["src"]["Building_new"]["visibleArea"]=VisibleArea(
+        visibleArea=VisibleArea(
             loader_ceiling,
             loader_addSphere_list
-        ).list
+        ).list#loader0.c_all["src"]["Building_new"]["visibleArea"]
+        # print("visibleArea",visibleArea)
+        json.dump(#loader0.c_all["src"]["Building_new"]["visibleArea"]
+            visibleArea, 
+            open("../dist/assets/VisibleArea.json",'w'))
         loader0.configCSave()                
     def blocking(self):
         v_feature_list=[]

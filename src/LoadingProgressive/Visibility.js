@@ -16,7 +16,7 @@ export class Visibility{
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading
         this.dynamicLoading()//加载和预加载
-        // this.culling()//遮挡剔除和视锥剔除
+        this.culling()//遮挡剔除和视锥剔除
     }
     getDirection(){
         var d=this.camera.getWorldDirection()
@@ -119,6 +119,10 @@ export class Visibility{
                 this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
                 this.meshes[i].visible= this.vd[i]>0
             } 
+            window.visibleArea={}
+            for(let i=0;i<visualList0["a"].length;i++){
+                window.visibleArea[visualList0["a"][i]]=true
+            }
         }
     }
     request(posIndex){

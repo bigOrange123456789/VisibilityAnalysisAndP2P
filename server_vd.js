@@ -58,6 +58,12 @@ function getPosIndex(vid){
   var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
   return index// return [xi,yi,zi,index]
 } 
+let VisibleArea
+require('jsonfile').readFile(
+  'dist/assets/VisibleArea.json', 
+  (err, jsonData)=>{
+    VisibleArea=jsonData
+  })
 const databaseEvd={}
 const databasePvd={}
 require('jsonfile').readFile(
@@ -72,7 +78,8 @@ require('jsonfile').readFile(
           "3":d["3"],
           "4":d["4"],
           "5":d["5"],
-          "6":d["6"]
+          "6":d["6"],
+          "a":VisibleArea[vid]//visible area
         }
         databasePvd[getPosIndex(vid)]=d["pvd"]
       }
