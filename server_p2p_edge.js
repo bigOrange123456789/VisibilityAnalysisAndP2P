@@ -10,11 +10,15 @@ io.sockets.on('connection', socket=> {
   socket.on('updateIoList', data => {
     updateIoList(data.ioUrlList)
   })
-  socket.on('edge2edge', data => {
-    send2Page(data)
+  socket.on('groupId', data => {
+    socket.groupId=data
   })
-  socket.on('send', message=> {
-    socket.broadcast.emit('receive', message)
+  socket.on('edge2edge', data => {
+    send2Client(data)
+  })
+  socket.on('client2edge', message=> {
+    message.originId=socket.id
+    send2Client(message)//socket.broadcast.emit('edge2client', message)
     send2Edge(message)
   })
 })
@@ -26,13 +30,15 @@ function updateIoList(ioUrlList ){
 }
 function send2Edge(data){
   ioList.forEach(io => {
-    io.emit('edge2edge', data);
+      io.emit('edge2edge', data);
   })
 }
-function send2Page(data){
+function send2Client(data){
   const connectedClients = io.sockets.sockets
   for (const id in connectedClients) {
     const socket=connectedClients[id]
-    socket.emit('receive',data)
+    if(data.groupId==socket.groupId)//同一个分组
+    if(data.originId!==socket.id)//不能原路返回
+    socket.emit('edge2client',data)
   }
 }

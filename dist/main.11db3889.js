@@ -41383,7 +41383,7 @@ module.exports = {
       "urlVdServer": "http://150.158.24.191:8091"
     },
     "P2P": {
-      "urlP2pServer": ["http://114.80.207.60:8011", "http://1.13.198.213:8011"]
+      "urlP2pServer": "http://47.122.19.36:8010"
     },
     "Detection": {
       "urlDetectionServer": "http://43.138.54.47:9999"
@@ -41669,30 +41669,47 @@ var P2P = /*#__PURE__*/function () {
     this.useP2P = true;
     if (new URLSearchParams(window.location.search).has("useP2P")) this.useP2P = new URLSearchParams(window.location.search).get('useP2P');
     console.log("useP2P:", this.useP2P);
-    // if(this.useP2P)alert("使用P2P")
-    // else alert("不用P2P")
-    var self = this;
+    if (this.useP2P) alert("使用P2P");else alert("不用P2P");
     this.parse = function (data) {
       return console.log(data);
     };
-    var urlP2p = _configOP.default.src.P2P.urlP2pServer;
-    this.socketURL = urlP2p[Math.floor(Math.random() * urlP2p.length)]; //"http://114.80.207.60:8011"//this.urlP2pServer
+    this.socketURL = _configOP.default.src.P2P.urlP2pServer; //"http://114.80.207.60:8011"//this.urlP2pServer
     console.log("this.socketURL", this.socketURL);
     if (this.useP2P) {
-      this.socket = this.initSocket(this.socketURL);
-      this.socket.on('receive', function (data) {
-        return self.parse(data);
-      });
+      this.init_p2p_controller(this.socketURL);
     }
   }
   _createClass(P2P, [{
-    key: "initSocket",
-    value: function initSocket(socketURL) {
+    key: "init_p2p_controller",
+    value: function init_p2p_controller(socketURL) {
+      var _this = this;
       var scope = this;
       var socket = io.connect(socketURL, {
         transports: ['websocket', 'xhr-polling', 'jsonp-polling']
       });
-      socket.on('receive', function (data) {
+      socket.emit('addUser', {});
+      socket.on('userConfig', function (data) {
+        console.log(data);
+        scope.config = data;
+        var edgeURL = "http://" + data.edgeIp + ":8011";
+        _this.socket = _this.init_p2p_edge(edgeURL);
+      });
+    }
+  }, {
+    key: "updateGroupId",
+    value: function updateGroupId(groupId) {
+      this.config.groupId = groupId;
+      this.socket.emit("groupId", this.config.groupId);
+    }
+  }, {
+    key: "init_p2p_edge",
+    value: function init_p2p_edge(socketURL) {
+      var scope = this;
+      var socket = io.connect(socketURL, {
+        transports: ['websocket', 'xhr-polling', 'jsonp-polling']
+      });
+      socket.emit("groupId", scope.config.groupId);
+      socket.on('edge2client', function (data) {
         scope.parse(data);
       });
       return socket;
@@ -41700,7 +41717,10 @@ var P2P = /*#__PURE__*/function () {
   }, {
     key: "send",
     value: function send(message) {
-      if (this.useP2P) this.socket.emit('send', message);
+      if (this.useP2P && this.socket) {
+        message.groupId = this.config.groupId;
+        this.socket.emit('client2edge', message);
+      }
     }
   }]);
   return P2P;
@@ -41777,7 +41797,7 @@ var Detection = /*#__PURE__*/function () {
         var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
         var str = String.fromCharCode.apply(null, unitArray); //解析为文本
         console.log(str);
-        // alert("测试完成，感谢您的配合！")
+        alert("测试完成，感谢您的配合！");
         //window.opener = null;//为了不出现提示框
         //window.close();//关闭窗口//完成测试，关闭窗口
         // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
@@ -52340,7 +52360,7 @@ var Loader = /*#__PURE__*/function () {
     this.panel = new _Panel.Panel(this);
     this.initScene();
     this.building = new _Building.Building(this.scene, this.camera);
-    // new AvatarManager(this.scene,this.camera)
+    new _AvatarManager.AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
     key: "initScene",

@@ -15,3 +15,21 @@ ioList.forEach(io => {
   io.emit('updateIoList', {"ioUrlList":io.ioUrlList})
   console.log({"ioUrlList":io.ioUrlList})
 })
+///////////////////////////////
+const groupNum=2;
+var nodeStatic = require('node-static')
+var http = require('http')
+var fileServer = new(nodeStatic.Server)()
+var app = http.createServer(function(req, res) {
+  fileServer.serve(req, res)
+}).listen(8010)
+var io = require('socket.io').listen(app)
+io.sockets.on('connection', socket=> {
+  socket.on('addUser', data => {
+    const edgeIp=ioUrlList[Math.floor(Math.random() * ioUrlList.length)]
+    socket.emit('userConfig', {
+      "edgeIp":edgeIp,
+      "groupId":Math.floor(Math.random() * groupNum)
+    });
+  })
+})

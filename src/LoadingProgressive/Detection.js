@@ -55,7 +55,7 @@ export class Detection {//需要服务器
             var unitArray=new Uint8Array(oReq.response) //网络传输基于unit8Array
             var str=String.fromCharCode.apply(null,unitArray)//解析为文本
             console.log(str)
-            // alert("测试完成，感谢您的配合！")
+            alert("测试完成，感谢您的配合！")
             //window.opener = null;//为了不出现提示框
             //window.close();//关闭窗口//完成测试，关闭窗口
             // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
