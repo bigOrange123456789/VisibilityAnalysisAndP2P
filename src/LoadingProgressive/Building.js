@@ -145,23 +145,27 @@ export class Building{
             console.error(error);
         });
     }
-    loadZip(id,cb){
+    loadZipOld(id,cb){
         this.detection.receivePack("server")
         if(this.meshes_request[id])return
         this.meshes_request[id]=true
         const self=this
         var url=self.config.path+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
-		    new ZipLoader().load( url,()=>{
+            const zipLoader=new ZipLoader()
+		    zipLoader.load( url,()=>{
 		    },()=>{
 			    console.log("加载失败："+id)
 			    setTimeout(()=>{//重新请求
 			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
 		    }).then( ( zip )=>{//解析压缩包
-			    self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
-			    resolve({//查看文件是否存在？以及路径
-				    fileUrl: zip.find( /\.(gltf|glb)$/i )
-			    });
+                console.log(zipLoader.baseUrl,zipLoader.buffer)
+                new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
+                    self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
+                    resolve({//查看文件是否存在？以及路径
+                        fileUrl: zip.find( /\.(gltf|glb)$/i )
+                    });
+                },()=>{});
 		    });
 	    } ).then( function ( configJson ) {
 		    const loader = new GLTFLoader(self.loaderZip);
@@ -176,7 +180,47 @@ export class Building{
 		    });
 	    } );
     }
-    p2pParse(message){
+    loadZip(id,cb){
+        this.detection.receivePack("server")
+        if(this.meshes_request[id])return
+        this.meshes_request[id]=true
+        const self=this
+        var url=self.config.path+id+".zip"
+	    new Promise( function( resolve, reject ) {//加载资源压缩包
+            const zipLoader=new ZipLoader()
+		    zipLoader.load( url,()=>{
+		    },()=>{
+			    console.log("加载失败："+id)
+			    setTimeout(()=>{//重新请求
+			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
+		    }).then( ( zip )=>{//解析压缩包
+                // console.log(zipLoader.baseUrl,zipLoader.buffer)
+                self.p2p.send({
+                    cid:id,
+                    baseUrl:zipLoader.baseUrl,
+                    buffer:zipLoader.buffer
+                })
+                new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
+                    self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
+                    resolve({//查看文件是否存在？以及路径
+                        fileUrl: zip.find( /\.(gltf|glb)$/i )
+                    });
+                },()=>{});
+		    });
+	    } ).then( function ( configJson ) {
+		    const loader = new GLTFLoader(self.loaderZip);
+		    loader.load(configJson.fileUrl[0], (gltf) => {
+                // self.p2p.send({cid:id,myArray:loader.myArray})
+                gltf.scene.traverse(o=>{
+                    if(o instanceof THREE.Mesh){                    
+                        self.addMesh(id,o)
+                    }
+                })
+                if(cb)cb()
+		    });
+	    } );
+    }
+    p2pParseOld(message){
         this.detection.receivePack("p2p")
         const cid=message.cid
         const myArray=message.myArray
@@ -195,6 +239,30 @@ export class Building{
                         }
                 })
 			})
+    }
+    p2pParse(message){
+        this.detection.receivePack("p2p")
+        const cid=message.cid
+        if(this.meshes[cid]||this.meshes_request[cid])return
+		else this.meshes_request[cid]=true
+        const self=this
+		new Promise( function( resolve, reject ) {//加载资源压缩包
+            new ZipLoader().parse(message.baseUrl,message.buffer).then( ( zip )=>{//解析压缩包
+                self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
+                resolve({//查看文件是否存在？以及路径
+                    fileUrl: zip.find( /\.(gltf|glb)$/i )
+                });
+            },()=>{});
+	    } ).then( function ( configJson ) {
+		    const loader = new GLTFLoader(self.loaderZip);
+		    loader.load(configJson.fileUrl[0], (gltf) => {
+                gltf.scene.traverse(o=>{
+                    if(o instanceof THREE.Mesh){                    
+                        self.addMesh(cid,o)
+                    }
+                })
+		    });
+	    } );
     }
     load0(){
         const self=this

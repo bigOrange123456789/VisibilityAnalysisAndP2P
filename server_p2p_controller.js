@@ -13,7 +13,6 @@ for(let i=0;i<ioUrlList.length;i++){
 }
 ioList.forEach(io => {
   io.emit('updateIoList', {"ioUrlList":io.ioUrlList})
-  console.log({"ioUrlList":io.ioUrlList})
 })
 ///////////////////////////////
 const groupNum=2;

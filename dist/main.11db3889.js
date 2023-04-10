@@ -41447,7 +41447,7 @@ var Visibility = /*#__PURE__*/function () {
     this.prePoint2 = ""; //视点变化就进行可见性剔除
     this.loading = loading;
     this.dynamicLoading(); //加载和预加载
-    // this.culling()//遮挡剔除和视锥剔除
+    this.culling(); //遮挡剔除和视锥剔除
   }
   _createClass(Visibility, [{
     key: "getDirection",
@@ -44079,6 +44079,7 @@ Object.assign(ZipLoader.prototype, {
     var scope = this;
     var promise = _jszip.default.external.Promise;
     var baseUrl = 'blob:' + _three.LoaderUtils.extractUrlBase(url);
+    scope.baseUrl = baseUrl;
     return new promise(function (resolve, reject) {
       // console.log("url",url)
       // console.log("crossOrigin",scope.crossOrigin)
@@ -44128,6 +44129,14 @@ Object.assign(ZipLoader.prototype, {
         loader.load(url, resolve, onProgress, reject);
       }
     }).then(function (buffer) {
+      scope.buffer = buffer;
+    });
+  },
+  parse: function parse(baseUrl, buffer, onerror) {
+    var promise = _jszip.default.external.Promise;
+    return new promise(function (resolve, reject) {
+      resolve(buffer);
+    }).then(function (buffer) {
       return _jszip.default.loadAsync(buffer);
     }).then(function (zip) {
       var fileMap = {};
@@ -44160,7 +44169,7 @@ Object.assign(ZipLoader.prototype, {
           return files;
         }
       };
-    }).catch(onError);
+    }).catch(onerror);
   }
 });
 },{"three":"node_modules/three/build/three.module.js","jszip":"node_modules/jszip/dist/jszip.min.js"}],"src/LoadingProgressive/Building.js":[function(require,module,exports) {
@@ -44312,8 +44321,8 @@ var Building = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "loadZip",
-    value: function loadZip(id, cb) {
+    key: "loadZipOld",
+    value: function loadZipOld(id, cb) {
       this.detection.receivePack("server");
       if (this.meshes_request[id]) return;
       this.meshes_request[id] = true;
@@ -44321,17 +44330,22 @@ var Building = /*#__PURE__*/function () {
       var url = self.config.path + id + ".zip";
       new Promise(function (resolve, reject) {
         //加载资源压缩包
-        new _ziploader.ZipLoader().load(url, function () {}, function () {
+        var zipLoader = new _ziploader.ZipLoader();
+        zipLoader.load(url, function () {}, function () {
           console.log("加载失败：" + id);
           setTimeout(function () {//重新请求
           }, 1000 * (0.5 * Math.random() + 1)); //1~1.5秒后重新加载
         }).then(function (zip) {
           //解析压缩包
-          self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
-          resolve({
-            //查看文件是否存在？以及路径
-            fileUrl: zip.find(/\.(gltf|glb)$/i)
-          });
+          console.log(zipLoader.baseUrl, zipLoader.buffer);
+          new _ziploader.ZipLoader().parse(zipLoader.baseUrl, zipLoader.buffer).then(function (zip) {
+            //解析压缩包
+            self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
+            resolve({
+              //查看文件是否存在？以及路径
+              fileUrl: zip.find(/\.(gltf|glb)$/i)
+            });
+          }, function () {});
         });
       }).then(function (configJson) {
         var loader = new _GLTFLoader.GLTFLoader(self.loaderZip);
@@ -44350,8 +44364,53 @@ var Building = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "p2pParse",
-    value: function p2pParse(message) {
+    key: "loadZip",
+    value: function loadZip(id, cb) {
+      this.detection.receivePack("server");
+      if (this.meshes_request[id]) return;
+      this.meshes_request[id] = true;
+      var self = this;
+      var url = self.config.path + id + ".zip";
+      new Promise(function (resolve, reject) {
+        //加载资源压缩包
+        var zipLoader = new _ziploader.ZipLoader();
+        zipLoader.load(url, function () {}, function () {
+          console.log("加载失败：" + id);
+          setTimeout(function () {//重新请求
+          }, 1000 * (0.5 * Math.random() + 1)); //1~1.5秒后重新加载
+        }).then(function (zip) {
+          //解析压缩包
+          // console.log(zipLoader.baseUrl,zipLoader.buffer)
+          self.p2p.send({
+            cid: id,
+            baseUrl: zipLoader.baseUrl,
+            buffer: zipLoader.buffer
+          });
+          new _ziploader.ZipLoader().parse(zipLoader.baseUrl, zipLoader.buffer).then(function (zip) {
+            //解析压缩包
+            self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
+            resolve({
+              //查看文件是否存在？以及路径
+              fileUrl: zip.find(/\.(gltf|glb)$/i)
+            });
+          }, function () {});
+        });
+      }).then(function (configJson) {
+        var loader = new _GLTFLoader.GLTFLoader(self.loaderZip);
+        loader.load(configJson.fileUrl[0], function (gltf) {
+          // self.p2p.send({cid:id,myArray:loader.myArray})
+          gltf.scene.traverse(function (o) {
+            if (o instanceof THREE.Mesh) {
+              self.addMesh(id, o);
+            }
+          });
+          if (cb) cb();
+        });
+      });
+    }
+  }, {
+    key: "p2pParseOld",
+    value: function p2pParseOld(message) {
       this.detection.receivePack("p2p");
       var cid = message.cid;
       var myArray = message.myArray;
@@ -44364,6 +44423,34 @@ var Building = /*#__PURE__*/function () {
           if (o instanceof THREE.Mesh) {
             self.addMesh(cid, o);
           }
+        });
+      });
+    }
+  }, {
+    key: "p2pParse",
+    value: function p2pParse(message) {
+      this.detection.receivePack("p2p");
+      var cid = message.cid;
+      if (this.meshes[cid] || this.meshes_request[cid]) return;else this.meshes_request[cid] = true;
+      var self = this;
+      new Promise(function (resolve, reject) {
+        //加载资源压缩包
+        new _ziploader.ZipLoader().parse(message.baseUrl, message.buffer).then(function (zip) {
+          //解析压缩包
+          self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
+          resolve({
+            //查看文件是否存在？以及路径
+            fileUrl: zip.find(/\.(gltf|glb)$/i)
+          });
+        }, function () {});
+      }).then(function (configJson) {
+        var loader = new _GLTFLoader.GLTFLoader(self.loaderZip);
+        loader.load(configJson.fileUrl[0], function (gltf) {
+          gltf.scene.traverse(function (o) {
+            if (o instanceof THREE.Mesh) {
+              self.addMesh(cid, o);
+            }
+          });
         });
       });
     }
@@ -52360,7 +52447,7 @@ var Loader = /*#__PURE__*/function () {
     this.panel = new _Panel.Panel(this);
     this.initScene();
     this.building = new _Building.Building(this.scene, this.camera);
-    new _AvatarManager.AvatarManager(this.scene, this.camera);
+    // new AvatarManager(this.scene,this.camera)
   }
   _createClass(Loader, [{
     key: "initScene",
@@ -52465,7 +52552,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62685" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61493" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
