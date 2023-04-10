@@ -25,10 +25,97 @@ var app = http.createServer(function(req, res) {
 var io = require('socket.io').listen(app)
 io.sockets.on('connection', socket=> {
   socket.on('addUser', data => {
-    const edgeIp=ioUrlList[Math.floor(Math.random() * ioUrlList.length)]
+    socket.feature=data.feature
+    socket.edgeIp=ioUrlList[Math.floor(Math.random() * ioUrlList.length)]
+    socket.groupId=Math.floor(Math.random() * groupNum)
     socket.emit('userConfig', {
-      "edgeIp":edgeIp,
-      "groupId":Math.floor(Math.random() * groupNum)
+      "edgeIp":socket.edgeIp,
+      "groupId":socket.groupId
     });
   })
+  socket.on('updateFeature', data => {
+    socket.feature=data.feature
+  })
 })
+///////////////////////////////////
+setInterval(()=>{
+  const data=[]
+  const socketList=[]
+  const connectedClients = io.sockets.sockets
+  for (const id in connectedClients) {
+    const socket=connectedClients[id]
+    socketList.push(socket)
+    data.push(socket.feature)    
+  }
+  const groupIdList=kmeans(data, groupNum, 100)
+  for(let i=0;i<socketList.length;i++){
+    const socket=socketList[i]
+    socket.groupId=groupIdList[i]
+    socket.emit('userConfigUpdate', {
+      "edgeIp":socket.edgeIp,
+      "groupId":socket.groupId
+    });
+  }
+},20*1000)
+///////////////////////////////////
+function kmeans(data, k, maxIter) {
+  // 随机初始化质心
+  let centroids = [];
+  for (let i = 0; i < k; i++) {
+    centroids.push(data[Math.floor(Math.random() * data.length)]);
+  }
+
+  for (let iter = 0; iter < maxIter; iter++) {
+    // 分配每个样本点到最近的质心所属的簇
+    let clusters = new Array(k).fill().map(() => []);
+    for (let i = 0; i < data.length; i++) {
+      let minDist = Infinity, minIdx = -1;
+      for (let j = 0; j < k; j++) {
+        let dist = euclideanDist(data[i], centroids[j]);
+        if (dist < minDist) {
+          minDist = dist;
+          minIdx = j;
+        }
+      }
+      clusters[minIdx].push(data[i]);
+    }
+
+    // 重新计算每个簇的质心
+    let newCentroids = [];
+    for (let i = 0; i < k; i++) {
+      let cluster = clusters[i];
+      if (cluster.length === 0) {
+        newCentroids.push(centroids[i]);
+      } else {
+        let sum = cluster.reduce((acc, cur) => acc.map((d, idx) => d + cur[idx]));
+        newCentroids.push(sum.map(d => d / cluster.length));
+      }
+    }
+
+    // 判断是否收敛
+    if (centroids.every((d, idx) => euclideanDist(d, newCentroids[idx]) < 1e-6)) {
+      break;
+    } else {
+      centroids = newCentroids;
+    }
+  }
+
+  // 返回簇的标号
+  return data.map(point => {
+    let minDist = Infinity, minIdx = -1;
+    for (let j = 0; j < k; j++) {
+      let dist = euclideanDist(point, centroids[j]);
+      if (dist < minDist) {
+        minDist = dist;
+        minIdx = j;
+      }
+    }
+    return minIdx;
+  });
+}
+function euclideanDist(a, b) {
+  if(a&&b){
+    sum = a.reduce((acc, cur, idx) => acc + (cur - b[idx]) ** 2, 0);
+    return Math.sqrt(sum);
+  }else return 0
+}

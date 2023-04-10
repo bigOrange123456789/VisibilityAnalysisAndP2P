@@ -17,7 +17,7 @@ export class Loader{
         this.panel=new Panel(this)
         this.initScene()
         this.building=new Building(this.scene,this.camera)
-        // new AvatarManager(this.scene,this.camera)
+        new AvatarManager(this.scene,this.camera)
         
     }
     async initScene(){

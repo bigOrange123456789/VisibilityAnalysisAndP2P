@@ -41664,12 +41664,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var P2P = /*#__PURE__*/function () {
-  function P2P() {
+  function P2P(camera) {
     _classCallCheck(this, P2P);
     this.useP2P = true;
     if (new URLSearchParams(window.location.search).has("useP2P")) this.useP2P = new URLSearchParams(window.location.search).get('useP2P');
     console.log("useP2P:", this.useP2P);
     if (this.useP2P) alert("使用P2P");else alert("不用P2P");
+    this.camera = camera;
     this.parse = function (data) {
       return console.log(data);
     };
@@ -41687,13 +41688,25 @@ var P2P = /*#__PURE__*/function () {
       var socket = io.connect(socketURL, {
         transports: ['websocket', 'xhr-polling', 'jsonp-polling']
       });
-      socket.emit('addUser', {});
+      socket.emit('addUser', {
+        feature: [scope.camera.position.x, scope.camera.position.y, scope.camera.position.z]
+      });
       socket.on('userConfig', function (data) {
-        console.log(data);
         scope.config = data;
         var edgeURL = "http://" + data.edgeIp + ":8011";
         _this.socket = _this.init_p2p_edge(edgeURL);
       });
+      socket.on('userConfigUpdate', function (data) {
+        scope.config = data;
+        // const edgeURL="http://"+data.edgeIp+":8011"
+        console.log(data);
+        scope.socket.emit("groupId", scope.config.groupId);
+      });
+      setInterval(function () {
+        socket.emit('updateFeature', {
+          feature: [scope.camera.position.x, scope.camera.position.y, scope.camera.position.z]
+        });
+      }, 10 * 1000); //每隔10s更新一次特征
     }
   }, {
     key: "updateGroupId",
@@ -44214,7 +44227,7 @@ var Building = /*#__PURE__*/function () {
     this.meshes_request = {};
     this.doorTwinkle();
     this.createFloor();
-    this.p2p = new _P2P.P2P();
+    this.p2p = new _P2P.P2P(camera);
     this.p2p.parse = function (message) {
       self.p2pParse(message);
     };
@@ -52447,7 +52460,7 @@ var Loader = /*#__PURE__*/function () {
     this.panel = new _Panel.Panel(this);
     this.initScene();
     this.building = new _Building.Building(this.scene, this.camera);
-    // new AvatarManager(this.scene,this.camera)
+    new _AvatarManager.AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
     key: "initScene",

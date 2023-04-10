@@ -1,12 +1,13 @@
 import config from '../../config/configOP.json'
 export class P2P{
-    constructor(){
+    constructor(camera){
         this.useP2P=true
         if(new URLSearchParams(window.location.search).has("useP2P"))
             this.useP2P=new URLSearchParams(window.location.search).get('useP2P')
         console.log("useP2P:",this.useP2P)
         if(this.useP2P)alert("使用P2P")
         else alert("不用P2P")
+        this.camera=camera
         this.parse=data=>console.log(data)
         this.socketURL=config.src.P2P.urlP2pServer//"http://114.80.207.60:8011"//this.urlP2pServer
         console.log("this.socketURL",this.socketURL)
@@ -17,13 +18,25 @@ export class P2P{
     init_p2p_controller(socketURL){
         var scope=this
         var socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
-        socket.emit('addUser',{})
+        socket.emit('addUser',{
+            feature:[scope.camera.position.x,scope.camera.position.y,scope.camera.position.z]
+        })
         socket.on('userConfig',  data=> {
-            console.log(data)
             scope.config=data
             const edgeURL="http://"+data.edgeIp+":8011"
             this.socket = this.init_p2p_edge(edgeURL)
         })
+        socket.on('userConfigUpdate',  data=> {
+            scope.config=data
+            // const edgeURL="http://"+data.edgeIp+":8011"
+            console.log(data)
+            scope.socket.emit("groupId",scope.config.groupId)
+        })
+        setInterval(()=>{
+            socket.emit('updateFeature',{
+                feature:[scope.camera.position.x,scope.camera.position.y,scope.camera.position.z]
+            })
+        },10*1000)//每隔10s更新一次特征
     }
     updateGroupId(groupId){
         this.config.groupId=groupId

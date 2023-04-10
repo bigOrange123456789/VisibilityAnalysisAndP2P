@@ -30,7 +30,7 @@ export class Building{
         
         this.doorTwinkle()
         this.createFloor()
-        this.p2p=new P2P()
+        this.p2p=new P2P(camera)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
 
