@@ -10,9 +10,7 @@ class Main: #所有视点,每个视点的可见特征
     def __init__(self,config):
         id=config["id"]
         loader0=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id)
-        # loader0.c_all["src"]["Building_new"]["entropy"]={}
         loader0.saveVVD()
-        loader0.c_all["src"]["Building_new"]
         loader_addSphere_list=[
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id),
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id),
@@ -40,16 +38,12 @@ class Main: #所有视点,每个视点的可见特征
             loader_ceiling,
             iswall,
             isdoor))
-        # loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
-        #     loader_ceiling,
-        #     [loader_addSphere_list[0] ,loader_addSphere_list[0] ],
-        # ).result
-        visibleArea=VisibleArea(
+        loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
             loader_ceiling,
-            loader_addSphere_list
-        ).list#loader0.c_all["src"]["Building_new"]["visibleArea"]
-        # print("visibleArea",visibleArea)
-        json.dump(#loader0.c_all["src"]["Building_new"]["visibleArea"]
+            loader_addSphere_list,
+        ).result
+        visibleArea=VisibleArea(loader_ceiling,loader_addSphere_list).list
+        json.dump(
             visibleArea, 
             open("../dist/assets/VisibleArea.json",'w'))
         loader0.configCSave()                

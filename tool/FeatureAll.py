@@ -57,7 +57,8 @@ class FeatureAll: #所有视点,每个视点的可见特征
         for idv in self.featureAll:
             feature=self.featureAll[idv]
             for i in range(len(feature)):
-                feature[i]=feature[i]**p
+                if not feature[i]==0:
+                    feature[i]=feature[i]**p
         return self
     def toPostion(self):
         self.featureAll={}

@@ -66,42 +66,35 @@ class Loader: #所有视点,每个视点的可见特征
         self.c=self.c_all["src"]["Building_new"]#["createSphere"]
         return self.c_all
     def configCSave(self):
-        self.coarseVVD()
         self.coarseIsdoor()
         self.coarseIswall()
-        json.dump(
-            self.c_all["src"]["SamplePointList"]["vvd"], 
-            open(
-            "../dist/assets/configVVD.json", # "../config/configVVD.json", 
-            'w'))
-        self.c_all["src"]["SamplePointList"]["vvd"]={}
         self.c_all["src"]["Building_new"]=self.c
         path="../config/config"+str(self.id)+".json"
-        json.dump(self.c_all, open(path, 'w'), indent=4 )
         json.dump(self.c_all, open("../config/config.json", 'w'))
-
         json.dump(self.c_all, open(path, 'w'), indent=4 )
     def saveVVD(self):
         vvd={}
         for vid in self.data:
             vvd[vid]=self.data[vid].data
-        self.c_all["src"]["SamplePointList"]["vvd"]=vvd
+        vvd=self.coarseVVD(vvd)
+        json.dump(vvd,open( "../dist/assets/configVVD.json",'w'))
     def savePVD(self,pvd):
+        vvd=json.load(open("../dist/assets/configVVD.json", 'r'))
         f=pvd.f.featureAll
-        for vid in self.c_all["src"]["SamplePointList"]["vvd"]:
+        for vid in f:
             pvd0={}
             for cid in range(self.componentIdMax+1):
                 if not f[vid][cid]==0:
                     pvd0[cid]=f[vid][cid]
-            # print(self.c_all["src"]["SamplePointList"]["vvd"]["vid"])
-            self.c_all["src"]["SamplePointList"]["vvd"][vid]["pvd"]=pvd0
-    def coarseVVD(self):
-        vvd=self.c_all["src"]["SamplePointList"]["vvd"]
+            vvd[vid]["pvd"]=pvd0
+        json.dump(vvd,open( "../dist/assets/configVVD.json",'w'))
+    def coarseVVD(self,vvd):
         for vid in vvd:
             for direction in vvd[vid]:
                 for cid in vvd[vid][direction]:
                     d=vvd[vid][direction][cid]
                     vvd[vid][direction][cid]=float('{:.3e}'.format(d))
+        return vvd
     def coarseIsdoor(self):
         isdoor=self.c_all["src"]["Building_new"]["isdoor"]
         for cid in isdoor:

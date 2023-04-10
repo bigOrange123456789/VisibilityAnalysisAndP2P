@@ -3,21 +3,52 @@ import * as THREE from "three";
 import * as dat from "dat.gui";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 export class SamplePointList{
-    constructor(createSphere,parentGroup,meshes,entropy,visibleArea){
+    constructor(createSphere,parentGroup,meshes,entropy){
         this.createSphere=createSphere
-        this.visibleArea=visibleArea
         // console.log("visibleArea",visibleArea)
         window.showVDbyColor="evd"
         const self=this
-        this.loadConfig(
-            // "configVVD.json",
-            "assets/configVVD.json",
-            c=>{
-                document.getElementById("LoadProgress").innerHTML=""
-                config.src.SamplePointList["vvd"]=c
-                self.init(createSphere,parentGroup,meshes,entropy)
-            }
-        )
+        function load1(cb){
+            self.loadConfig(
+                "assets/configVVD.json",
+                c=>{
+                    console.log(1)
+                    document.getElementById("LoadProgress").innerHTML="参数加载中(VisibleArea)。。。。。"
+                    self.vvd=c
+                    if(cb)cb()
+                }
+            )
+        }
+        function load2(cb){
+            self.loadConfig(
+                "assets/VisibleArea.json",
+                c=>{
+                    console.log(2)
+                    document.getElementById("LoadProgress").innerHTML="参数加载中(voxel)。。。。。"
+                    self.visibleArea=c
+                    if(cb)cb()
+                }
+            )
+        }
+        function load3(cb){
+            self.loadConfig(
+                "assets/voxel.json",
+                c=>{
+                    console.log(3)
+                    document.getElementById("LoadProgress").innerHTML=""
+                    self.voxel=c
+                    window.voxel=c
+                    if(cb)cb()
+                }
+            )
+        }
+        load1(()=>{
+            load2(()=>{
+                load3(()=>{
+                    self.init(createSphere,parentGroup,meshes,entropy)
+                })
+            })
+        })
     }
     getPosIndex(x,y,z){
         x=parseInt(x)
@@ -99,7 +130,7 @@ export class SamplePointList{
         xhr.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
                 var json_data = JSON.parse(xhr.responseText);
-                console.log(json_data)
+                // console.log(json_data)
                 cb(json_data)
             }
         };
@@ -225,9 +256,28 @@ export class SamplePointList{
     createList(c){
         let self=this
         const list=[]
+        const list2=[]
+        let i=0
+        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2]){
+            list2.push([])
+            let j=0
+            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2]){
+                list2[i].push([])
+                let k=0
+                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                    list2[i][j].push(0)
+                    k++
+                }
+                j++
+            }
+            i++
+        }
         const index=0
-        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+        i=0
+        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2]){
+            let j=0
+            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2]){
+                let k=0
                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
                     let geometry = new THREE.SphereGeometry( 
                             c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
@@ -239,10 +289,20 @@ export class SamplePointList{
                     sphere.position.set(x,y,z)
                     sphere.name=x+","+y+","+z
                     sphere.visibleArea=self.visibleArea[sphere.name]
-                    sphere.vvd=self.config.vvd[sphere.name]
+                    sphere.vvd=self.vvd[sphere.name]
                     list.push(sphere)
                     self.parentGroup.add( sphere )
+                    list2[i][j][k]=sphere
+                    if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
+                    k++
                 }
+                j++
+            }
+            i++
+        }
+        self.list2=list2
+
+        
         return list
     }
     eventListening(){

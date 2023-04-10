@@ -124,6 +124,7 @@ export class Building{
         // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
 
         this.meshes[id]=mesh
+        mesh.visible=false
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
     }

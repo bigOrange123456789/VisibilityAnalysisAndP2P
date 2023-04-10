@@ -7,8 +7,9 @@ class Blocking:
         f1=FeatureAll(loader_addSphere_list[0]).toSplice(dim0,dim1-dim0)
         for i in range(len(loader_addSphere_list)-1):
             f_temp=FeatureAll(loader_addSphere_list[i+1]).toSplice(dim0,dim1-dim0)
-            f1=FeatureAll.mul(f1,f_temp)
-        f1=f1.toPow(0.5)
+            f1=FeatureAll.add(f1,f_temp)
+        f1=f1.toSgn()
+        # f1=f1.toPow(1/len(loader_addSphere_list))
 
         # print()
         # self.block=self.blocking2(
