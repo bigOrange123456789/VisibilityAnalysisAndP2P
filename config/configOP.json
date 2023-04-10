@@ -1317,7 +1317,10 @@
             "urlVdServer":"http://150.158.24.191:8091"
         },
         "P2P":{
-            "urlP2pServer":"http://114.80.207.60:8011"
+            "urlP2pServer":[
+                "http://114.80.207.60:8011",
+                "http://1.13.198.213:8011"
+            ]
         },
         "Detection":{
             "urlDetectionServer":"http://43.138.54.47:9999"

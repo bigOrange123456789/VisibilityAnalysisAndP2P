@@ -89,56 +89,6 @@ class Main: #所有视点,每个视点的可见特征
         # self.c["blocking"]=result
         return result   
             
-    def blocking2(self,k):
-        v_feature_list=[]
-        v_feature_list_tag={}
-        v_feature_list_tag_inv={}
-        i=0
-        for vid in self.featureAllA:
-            feature=[]
-            featureA=self.featureAllA[vid]
-            featureB=self.featureAllB[vid]
-            # for j in range(len(featureA)):
-            #     a=featureA[j]
-            #     b=featureB[j]
-            #     if not b==0:b=1
-            #     feature.append(a+b)
-            for j in range(len(featureA)):
-                a=featureA[j]
-                feature.append(a)
-            for j in range(len(featureB)):
-                b=featureB[j]
-                if not b==0:b=1
-                feature.append(b)
-            for j in range(3):
-                pos=int(vid.split(",")[j])
-                feature.append(pos/100)
-
-            v_feature_list.append(feature)
-            v_feature_list_tag[vid]=i
-            v_feature_list_tag_inv[i]=vid
-            i=i+1
-        print("采样点的个数为:",i)
-        dataSet=v_feature_list
-        import numpy as np
-        data=np.array(dataSet)
-        #k= 7#int(np.shape(dataSet)[0]/step)#质心个数
-        step=int(np.shape(dataSet)[0]/k)
-        centers = data[ (np.array(range(k))*step).tolist(),:]             #np.mat(np.zeros((k, n)))#用于存储所有质心
-        for i in range(4000): # 首先利用广播机制计算每个样本到簇中心的距离，之后根据最小距离重新归类
-            classifications = np.argmin(((data[:, :, None] - centers.T[None, :, :])**2).sum(axis=1), axis=1)#计算每个元素最近的质心
-            new_centers = np.array([data[classifications == j, :].mean(axis=0) for j in range(k)])# 对每个新的簇计算簇中心
-            if (new_centers == centers).all():
-                print("聚类结果已经收敛")
-                break# 簇中心不再移动的话，结束循环
-            else: centers = new_centers
-        classlist=classifications[:, None].tolist()
-        result={}
-        for i in range(len(classlist)):
-            vid=v_feature_list_tag_inv[i]
-            result[vid]=classlist[i][0]
-        return result# return  centers.tolist(), classifications[:, None].tolist()#return  centers.tolist(), classifications.tolist()
-    
     def getKernelView(self,feature_all1,feature_all2):
         block2Kernel={}
         for vID in self.block:
