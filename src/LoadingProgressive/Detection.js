@@ -35,7 +35,8 @@ export class Detection {//需要服务器
     }
     receivePack(type){
         if(type=="p2p")this.count_pack_p2p++
-        else this.count_pack_server++
+        else if(type=="server")this.count_pack_server++
+        else console.log("error:receivePack type")
     }
     receiveMesh(mesh){
         if(mesh.originType=="cloud")this.count_mesh_server++
@@ -69,7 +70,7 @@ export class Detection {//需要服务器
             count_mesh_p2p  :this.count_mesh_p2p,
             count_mesh_server:this.count_mesh_server,
 
-            count_mesh_p2p_NotUsed:this.ount_mesh_p2p_NotUsed(),
+            count_mesh_p2p_NotUsed:this.count_mesh_p2p_NotUsed(),
             count_mesh_server_NotUsed:this.count_mesh_server_NotUsed(),
 
             frameCount:this.frameCount,//测试所用的帧数
@@ -89,7 +90,7 @@ export class Detection {//需要服务器
             console.log(str)
             alert("测试完成，感谢您的配合！")
             //window.opener = null;//为了不出现提示框
-            //window.close();//关闭窗口//完成测试，关闭窗口
+            window.close();//关闭窗口//完成测试，关闭窗口
             // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
         };
         oReq.send(JSON.stringify(data));//发送请求

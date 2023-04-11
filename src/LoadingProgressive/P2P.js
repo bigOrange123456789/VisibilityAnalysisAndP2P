@@ -9,7 +9,7 @@ export class P2P{
         else alert("不用P2P")
         this.camera=camera
         this.parse=data=>console.log(data)
-        this.socketURL=config.src.P2P.urlP2pServer//"http://114.80.207.60:8011"//this.urlP2pServer
+        this.socketURL=config.src.P2P.urlP2pControllerServer//"http://114.80.207.60:8011"//this.urlP2pServer
         console.log("this.socketURL",this.socketURL)
         if(this.useP2P){
             this.init_p2p_controller(this.socketURL)

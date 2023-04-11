@@ -41383,10 +41383,10 @@ module.exports = {
       "urlVdServer": "http://150.158.24.191:8091"
     },
     "P2P": {
-      "urlP2pServer": "http://47.122.19.36:8010"
+      "urlP2pControllerServer": "http://139.196.217.153:8010"
     },
     "Detection": {
-      "urlDetectionServer": "http://43.138.54.47:9999"
+      "urlDetectionServer": "http://123.57.58.224:9999"
     },
     "SamplePointList": {
       "vvd": {}
@@ -41676,7 +41676,7 @@ var P2P = /*#__PURE__*/function () {
     this.parse = function (data) {
       return console.log(data);
     };
-    this.socketURL = _configOP.default.src.P2P.urlP2pServer; //"http://114.80.207.60:8011"//this.urlP2pServer
+    this.socketURL = _configOP.default.src.P2P.urlP2pControllerServer; //"http://114.80.207.60:8011"//this.urlP2pServer
     console.log("this.socketURL", this.socketURL);
     if (this.useP2P) {
       this.init_p2p_controller(this.socketURL);
@@ -41788,7 +41788,7 @@ var Detection = /*#__PURE__*/function () {
   _createClass(Detection, [{
     key: "receivePack",
     value: function receivePack(type) {
-      if (type == "p2p") this.count_pack_p2p++;else this.count_pack_server++;
+      if (type == "p2p") this.count_pack_p2p++;else if (type == "server") this.count_pack_server++;else console.log("error:receivePack type");
     }
   }, {
     key: "receiveMesh",
@@ -41824,7 +41824,7 @@ var Detection = /*#__PURE__*/function () {
         count_pack_server: this.count_pack_server,
         count_mesh_p2p: this.count_mesh_p2p,
         count_mesh_server: this.count_mesh_server,
-        count_mesh_p2p_NotUsed: this.ount_mesh_p2p_NotUsed(),
+        count_mesh_p2p_NotUsed: this.count_mesh_p2p_NotUsed(),
         count_mesh_server_NotUsed: this.count_mesh_server_NotUsed(),
         frameCount: this.frameCount,
         //测试所用的帧数
@@ -41847,7 +41847,7 @@ var Detection = /*#__PURE__*/function () {
         console.log(str);
         alert("测试完成，感谢您的配合！");
         //window.opener = null;//为了不出现提示框
-        //window.close();//关闭窗口//完成测试，关闭窗口
+        window.close(); //关闭窗口//完成测试，关闭窗口
         // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
       };
 
@@ -44372,8 +44372,8 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "loadZip",
     value: function loadZip(id, cb) {
-      this.detection.receivePack("server");
       if (this.meshes_request[id]) return;
+      this.detection.receivePack("server");
       this.meshes_request[id] = true;
       var self = this;
       var url = self.config.path + id + ".zip";

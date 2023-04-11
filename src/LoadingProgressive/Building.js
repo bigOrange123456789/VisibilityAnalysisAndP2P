@@ -148,8 +148,8 @@ export class Building{
         });
     }
     loadZip(id,cb){
-        this.detection.receivePack("server")
         if(this.meshes_request[id])return
+        this.detection.receivePack("server")
         this.meshes_request[id]=true
         const self=this
         var url=self.config.path+id+".zip"
