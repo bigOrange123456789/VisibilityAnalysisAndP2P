@@ -45,6 +45,12 @@ setInterval(()=>{
   for (const id in connectedClients) {
     const socket=connectedClients[id]
     socketList.push(socket)
+    if(socket.feature){
+      for(let i=0;i<socket.feature.length;i++)
+        if(!socket.feature[i])socket.feature[i]=0
+    }else{
+      socket.feature=[0,0,0]
+    }
     data.push(socket.feature)    
   }
   const groupIdList=kmeans(data, groupNum, 100)
@@ -88,7 +94,8 @@ function kmeans(data, k, maxIter) {
         newCentroids.push(centroids[i]);
       } else {
         let sum = cluster.reduce((acc, cur) => acc.map((d, idx) => d + cur[idx]));
-        newCentroids.push(sum.map(d => d / cluster.length));
+        if(sum)//sum不知道为啥有时为空
+          newCentroids.push(sum.map(d => d / cluster.length));
       }
     }
 

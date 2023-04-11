@@ -118,6 +118,7 @@ export class Visibility{
                 const vd6=i in visualList0["6"]?visualList0["6"][i]:0
                 this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
                 this.meshes[i].visible= this.vd[i]>0
+                this.meshes[i].used=true//这个mesh被使用了
             } 
             window.visibleArea={}
             for(let i=0;i<visualList0["a"].length;i++){

@@ -41590,7 +41590,9 @@ var Visibility = /*#__PURE__*/function () {
           var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
           this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
           this.meshes[i].visible = this.vd[i] > 0;
+          this.meshes[i].used = true; //这个mesh被使用了
         }
+
         window.visibleArea = {};
         for (var _i = 0; _i < visualList0["a"].length; _i++) {
           window.visibleArea[visualList0["a"][_i]] = true;
@@ -41756,15 +41758,18 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var Detection = /*#__PURE__*/function () {
   //需要服务器
-  function Detection() {
+  function Detection(meshes) {
     _classCallCheck(this, Detection);
+    this.meshes = meshes;
     this.dectionURL = _configOP.default.src.Detection.urlDetectionServer;
     this.date = [new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getSeconds(), new Date().getMilliseconds()];
     // this.time0=performance.now()
 
-    this.count_p2p = 0; //P2P加载数量
-    this.count_server = 0; //服务器获取数量
+    this.count_pack_p2p = 0; //P2P加载数量
+    this.count_pack_server = 0; //服务器获取数量
 
+    this.count_mesh_p2p = 0;
+    this.count_mesh_server = 0;
     this.close = false;
     this.pack_circumstances = {};
     var scope = this;
@@ -41783,25 +41788,55 @@ var Detection = /*#__PURE__*/function () {
   _createClass(Detection, [{
     key: "receivePack",
     value: function receivePack(type) {
-      if (type == "p2p") this.count_p2p++;else this.count_server++;
+      if (type == "p2p") this.count_pack_p2p++;else this.count_pack_server++;
+    }
+  }, {
+    key: "receiveMesh",
+    value: function receiveMesh(mesh) {
+      if (mesh.originType == "cloud") this.count_mesh_server++;else if (mesh.originType = "edgeP2P") this.count_mesh_p2p++;else console.log("error:mesh.originType");
+    }
+  }, {
+    key: "count_mesh_p2p_NotUsed",
+    value: function count_mesh_p2p_NotUsed() {
+      var count = 0;
+      for (var id in this.meshes) {
+        var mesh = this.meshes[id];
+        if (mesh.originType = "edgeP2P" && !mesh.used) count++;
+      }
+      return count;
+    }
+  }, {
+    key: "count_mesh_server_NotUsed",
+    value: function count_mesh_server_NotUsed() {
+      var count = 0;
+      for (var id in this.meshes) {
+        var mesh = this.meshes[id];
+        if (mesh.originType = "cloud" && !mesh.used) count++;
+      }
+      return count;
     }
   }, {
     key: "finish",
     value: function finish() {
-      console.log("count_p2p:", this.count_p2p, "count_server:", this.count_server);
       this.close = true;
       var data = {
-        count_p2p: this.count_p2p,
-        count_server: this.count_server,
-        url: window.location.href,
-        //地址以及参数
-        date: this.date,
-        //测试日期
+        count_pack_p2p: this.count_pack_p2p,
+        count_pack_server: this.count_pack_server,
+        count_mesh_p2p: this.count_mesh_p2p,
+        count_mesh_server: this.count_mesh_server,
+        count_mesh_p2p_NotUsed: this.ount_mesh_p2p_NotUsed(),
+        count_mesh_server_NotUsed: this.count_mesh_server_NotUsed(),
         frameCount: this.frameCount,
         //测试所用的帧数
-        testTime: this.testTime //测试时间
+        testTime: this.testTime,
+        //测试时间
+
+        url: window.location.href,
+        //地址以及参数
+        date: this.date //测试日期
       };
 
+      console.log(data);
       var oReq = new XMLHttpRequest();
       oReq.open("POST", this.dectionURL, true);
       oReq.responseType = "arraybuffer";
@@ -44215,7 +44250,6 @@ var Building = /*#__PURE__*/function () {
     _classCallCheck(this, Building);
     document.getElementById("LoadProgress").innerHTML = "";
     var self = this;
-    this.detection = new _Detection.Detection();
     this.scene = scene;
     this.config = _configOP.default.src.Building_new;
     this.NumberOfComponents = this.config.NumberOfComponents;
@@ -44225,6 +44259,7 @@ var Building = /*#__PURE__*/function () {
     scene.add(this.parentGroup);
     this.meshes = {};
     this.meshes_request = {};
+    this.detection = new _Detection.Detection(this.meshes);
     this.doorTwinkle();
     this.createFloor();
     this.p2p = new _P2P.P2P(camera);
@@ -44288,6 +44323,7 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "addMesh",
     value: function addMesh(id, mesh) {
+      this.detection.receiveMesh(mesh);
       // console.log(id,mesh.name)
       // mesh=new THREE.Mesh(
       //     mesh.geometry,
@@ -44334,49 +44370,6 @@ var Building = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "loadZipOld",
-    value: function loadZipOld(id, cb) {
-      this.detection.receivePack("server");
-      if (this.meshes_request[id]) return;
-      this.meshes_request[id] = true;
-      var self = this;
-      var url = self.config.path + id + ".zip";
-      new Promise(function (resolve, reject) {
-        //加载资源压缩包
-        var zipLoader = new _ziploader.ZipLoader();
-        zipLoader.load(url, function () {}, function () {
-          console.log("加载失败：" + id);
-          setTimeout(function () {//重新请求
-          }, 1000 * (0.5 * Math.random() + 1)); //1~1.5秒后重新加载
-        }).then(function (zip) {
-          //解析压缩包
-          console.log(zipLoader.baseUrl, zipLoader.buffer);
-          new _ziploader.ZipLoader().parse(zipLoader.baseUrl, zipLoader.buffer).then(function (zip) {
-            //解析压缩包
-            self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
-            resolve({
-              //查看文件是否存在？以及路径
-              fileUrl: zip.find(/\.(gltf|glb)$/i)
-            });
-          }, function () {});
-        });
-      }).then(function (configJson) {
-        var loader = new _GLTFLoader.GLTFLoader(self.loaderZip);
-        loader.load(configJson.fileUrl[0], function (gltf) {
-          self.p2p.send({
-            cid: id,
-            myArray: loader.myArray
-          });
-          gltf.scene.traverse(function (o) {
-            if (o instanceof THREE.Mesh) {
-              self.addMesh(id, o);
-            }
-          });
-          if (cb) cb();
-        });
-      });
-    }
-  }, {
     key: "loadZip",
     value: function loadZip(id, cb) {
       this.detection.receivePack("server");
@@ -44393,7 +44386,6 @@ var Building = /*#__PURE__*/function () {
           }, 1000 * (0.5 * Math.random() + 1)); //1~1.5秒后重新加载
         }).then(function (zip) {
           //解析压缩包
-          // console.log(zipLoader.baseUrl,zipLoader.buffer)
           self.p2p.send({
             cid: id,
             baseUrl: zipLoader.baseUrl,
@@ -44414,28 +44406,11 @@ var Building = /*#__PURE__*/function () {
           // self.p2p.send({cid:id,myArray:loader.myArray})
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
+              o.originType = "cloud";
               self.addMesh(id, o);
             }
           });
           if (cb) cb();
-        });
-      });
-    }
-  }, {
-    key: "p2pParseOld",
-    value: function p2pParseOld(message) {
-      this.detection.receivePack("p2p");
-      var cid = message.cid;
-      var myArray = message.myArray;
-      // console.log("p2p",cid)
-      if (this.meshes[cid] || this.meshes_request[cid]) return;else this.meshes_request[cid] = true;
-      var self = this;
-      new _GLTFLoader.GLTFLoader(this.loaderZip).parse(myArray, "./", function (gltf) {
-        // console.log("用P2P解析成功！",gltf)
-        gltf.scene.traverse(function (o) {
-          if (o instanceof THREE.Mesh) {
-            self.addMesh(cid, o);
-          }
         });
       });
     }
@@ -44461,6 +44436,7 @@ var Building = /*#__PURE__*/function () {
         loader.load(configJson.fileUrl[0], function (gltf) {
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
+              o.originType = "edgeP2P";
               self.addMesh(cid, o);
             }
           });

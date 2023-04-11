@@ -11,7 +11,6 @@ export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
-        this.detection=new Detection()
         this.scene=scene
         
         this.config=config.src.Building_new
@@ -27,6 +26,8 @@ export class Building{
         scene.add(this.parentGroup)
         this.meshes={}
         this.meshes_request={}
+
+        this.detection=new Detection(this.meshes)
         
         this.doorTwinkle()
         this.createFloor()
@@ -101,6 +102,7 @@ export class Building{
         },500)
     }
     addMesh(id,mesh){
+        this.detection.receiveMesh(mesh)
         // console.log(id,mesh.name)
         // mesh=new THREE.Mesh(
         //     mesh.geometry,
@@ -145,41 +147,6 @@ export class Building{
             console.error(error);
         });
     }
-    loadZipOld(id,cb){
-        this.detection.receivePack("server")
-        if(this.meshes_request[id])return
-        this.meshes_request[id]=true
-        const self=this
-        var url=self.config.path+id+".zip"
-	    new Promise( function( resolve, reject ) {//加载资源压缩包
-            const zipLoader=new ZipLoader()
-		    zipLoader.load( url,()=>{
-		    },()=>{
-			    console.log("加载失败："+id)
-			    setTimeout(()=>{//重新请求
-			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
-		    }).then( ( zip )=>{//解析压缩包
-                console.log(zipLoader.baseUrl,zipLoader.buffer)
-                new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
-                    self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
-                    resolve({//查看文件是否存在？以及路径
-                        fileUrl: zip.find( /\.(gltf|glb)$/i )
-                    });
-                },()=>{});
-		    });
-	    } ).then( function ( configJson ) {
-		    const loader = new GLTFLoader(self.loaderZip);
-		    loader.load(configJson.fileUrl[0], (gltf) => {
-                self.p2p.send({cid:id,myArray:loader.myArray})
-                gltf.scene.traverse(o=>{
-                    if(o instanceof THREE.Mesh){                    
-                        self.addMesh(id,o)
-                    }
-                })
-                if(cb)cb()
-		    });
-	    } );
-    }
     loadZip(id,cb){
         this.detection.receivePack("server")
         if(this.meshes_request[id])return
@@ -194,7 +161,6 @@ export class Building{
 			    setTimeout(()=>{//重新请求
 			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
 		    }).then( ( zip )=>{//解析压缩包
-                // console.log(zipLoader.baseUrl,zipLoader.buffer)
                 self.p2p.send({
                     cid:id,
                     baseUrl:zipLoader.baseUrl,
@@ -213,32 +179,13 @@ export class Building{
                 // self.p2p.send({cid:id,myArray:loader.myArray})
                 gltf.scene.traverse(o=>{
                     if(o instanceof THREE.Mesh){                    
+                        o.originType="cloud"
                         self.addMesh(id,o)
                     }
                 })
                 if(cb)cb()
 		    });
 	    } );
-    }
-    p2pParseOld(message){
-        this.detection.receivePack("p2p")
-        const cid=message.cid
-        const myArray=message.myArray
-        // console.log("p2p",cid)
-        if(this.meshes[cid]||this.meshes_request[cid])return
-		else this.meshes_request[cid]=true
-        const self=this
-		new GLTFLoader(this.loaderZip).parse(
-            myArray,
-            "./",
-            gltf=>{
-					// console.log("用P2P解析成功！",gltf)
-					gltf.scene.traverse(o=>{
-                        if(o instanceof THREE.Mesh){                    
-                            self.addMesh(cid,o)
-                        }
-                })
-			})
     }
     p2pParse(message){
         this.detection.receivePack("p2p")
@@ -258,6 +205,7 @@ export class Building{
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 gltf.scene.traverse(o=>{
                     if(o instanceof THREE.Mesh){                    
+                        o.originType="edgeP2P"
                         self.addMesh(cid,o)
                     }
                 })

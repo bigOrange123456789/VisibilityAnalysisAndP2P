@@ -1,6 +1,7 @@
 import config from '../../config/configOP.json'
 export class Detection {//需要服务器
-    constructor() {
+    constructor(meshes) {
+        this.meshes=meshes
         this.dectionURL=config.src.Detection.urlDetectionServer
         this.date=[
             new Date().getMonth(),
@@ -11,8 +12,11 @@ export class Detection {//需要服务器
         ]
         // this.time0=performance.now()
 
-        this.count_p2p=0//P2P加载数量
-        this.count_server=0//服务器获取数量
+        this.count_pack_p2p=0//P2P加载数量
+        this.count_pack_server=0//服务器获取数量
+
+        this.count_mesh_p2p=0
+        this.count_mesh_server=0
         
         this.close=false
         this.pack_circumstances={}
@@ -30,24 +34,52 @@ export class Detection {//需要服务器
         },scope.testTime*1000)
     }
     receivePack(type){
-        if(type=="p2p")this.count_p2p++
-        else this.count_server++
+        if(type=="p2p")this.count_pack_p2p++
+        else this.count_pack_server++
+    }
+    receiveMesh(mesh){
+        if(mesh.originType=="cloud")this.count_mesh_server++
+        else if(mesh.originType="edgeP2P")this.count_mesh_p2p++
+        else console.log("error:mesh.originType")
+    }
+    count_mesh_p2p_NotUsed(){
+        let count=0
+        for(let id in this.meshes){
+            const mesh=this.meshes[id]
+            if(mesh.originType="edgeP2P"&&!mesh.used)
+                count++
+        }
+        return count
+    }
+    count_mesh_server_NotUsed(){
+        let count=0
+        for(let id in this.meshes){
+            const mesh=this.meshes[id]
+            if(mesh.originType="cloud"&&!mesh.used)
+                count++
+        }
+        return count
     }
     finish(){
-        console.log(
-            "count_p2p:"   ,this.count_p2p,
-            "count_server:",this.count_server
-        )
         this.close=true
         var data={
-            count_p2p  :this.count_p2p,
-            count_server:this.count_server,
+            count_pack_p2p  :this.count_pack_p2p,
+            count_pack_server:this.count_pack_server,
 
-            url:window.location.href,//地址以及参数
-            date:this.date,         //测试日期
+            count_mesh_p2p  :this.count_mesh_p2p,
+            count_mesh_server:this.count_mesh_server,
+
+            count_mesh_p2p_NotUsed:this.ount_mesh_p2p_NotUsed(),
+            count_mesh_server_NotUsed:this.count_mesh_server_NotUsed(),
+
             frameCount:this.frameCount,//测试所用的帧数
             testTime:this.testTime,//测试时间
+            
+            url:window.location.href,//地址以及参数
+            date:this.date,         //测试日期
+            
         }
+        console.log(data)
         var oReq = new XMLHttpRequest();
         oReq.open("POST", this.dectionURL, true);
         oReq.responseType = "arraybuffer";
