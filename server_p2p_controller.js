@@ -18,7 +18,7 @@ ioList.forEach(io => {
   io.emit('updateIoList', {"ioUrlList":io.ioUrlList})
 })
 ///////////////////////////////
-const groupNum=2;
+let groupNum=2;
 var nodeStatic = require('node-static')
 var http = require('http')
 var fileServer = new(nodeStatic.Server)()
@@ -42,6 +42,7 @@ io.sockets.on('connection', socket=> {
 })
 ///////////////////////////////////
 setInterval(()=>{
+  groupNum=Math.ceil(io.engine.clientsCount/5)//五个用户一组
   const data=[]
   const socketList=[]
   const connectedClients = io.sockets.sockets
