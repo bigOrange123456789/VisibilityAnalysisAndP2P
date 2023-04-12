@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VisibilityAnalysisAndP2P</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <style>
+    </style>
+    <script src="http://youku3d.com/smart3d/lib/socket.io.js"></script>
+    <script src="http://youku3d.com/smart3d/lib/adapter.js"></script>
+    <script>
+        const socketURL="114.80.207.60:8091"
+        var socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
+        function send1(num,port){
+            socket.emit('page2server',{num:num,port:port,p2p:true})
+        }
+        function send2(num,port){
+            socket.emit('page2server',{num:num,port:port,p2p:false})
+        }
+        window.socket=socket
+        socket.on('server2page',  data=> {
+            location.href="http://42.192.188.161:"+data.port+"/?useP2P="+data.p2p+"&autoMove=true&back=http://114.80.207.60:8080"
+        })
+        socket.on("userCount",  data=> {
+            console.log("userCount",data)
+        })
+    </script>
+</head>
+<body>
+</body>

@@ -126,13 +126,13 @@ export class Building{
         // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
 
         this.meshes[id]=mesh
-        // mesh.visible=false
+        mesh.visible=false
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
     }
     loadGLB(id,cb){
         if(this.meshes_request[id])return
-        this.meshes_request[id]=true
+        this.meshes_request[id]=performance.now()//true
         var self=this
         const loader = new GLTFLoader();
         loader.load(self.config.path+id+".glb", gltf=>{
@@ -150,7 +150,7 @@ export class Building{
     loadZip(id,cb){
         if(this.meshes_request[id])return
         this.detection.receivePack("server")
-        this.meshes_request[id]=true
+        this.meshes_request[id]=performance.now()//true
         const self=this
         var url=self.config.path+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
@@ -179,6 +179,7 @@ export class Building{
                 // self.p2p.send({cid:id,myArray:loader.myArray})
                 gltf.scene.traverse(o=>{
                     if(o instanceof THREE.Mesh){                    
+                        o.LoadDelay=performance.now()-self.meshes_request[id]
                         o.originType="cloud"
                         self.addMesh(id,o)
                     }
@@ -204,7 +205,8 @@ export class Building{
 		    const loader = new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 gltf.scene.traverse(o=>{
-                    if(o instanceof THREE.Mesh){                    
+                    if(o instanceof THREE.Mesh){           
+                        o.LoadDelay=0         
                         o.originType="edgeP2P"
                         self.addMesh(cid,o)
                     }

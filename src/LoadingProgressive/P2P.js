@@ -3,10 +3,12 @@ export class P2P{
     constructor(camera){
         this.useP2P=true
         if(new URLSearchParams(window.location.search).has("useP2P"))
-            this.useP2P=new URLSearchParams(window.location.search).get('useP2P')
+            this.useP2P=new URLSearchParams(window.location.search).get('useP2P')=="true"
         console.log("useP2P:",this.useP2P)
-        if(this.useP2P)alert("使用P2P")
-        else alert("不用P2P")
+        window.useP2P=this.useP2P
+        if(!new URLSearchParams(window.location.search).has("autoMove"))
+            if(this.useP2P)alert("使用P2P")
+            else alert("不用P2P")
         this.camera=camera
         this.parse=data=>console.log(data)
         this.socketURL=config.src.P2P.urlP2pControllerServer//"http://114.80.207.60:8011"//this.urlP2pServer

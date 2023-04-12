@@ -17,6 +17,41 @@ export class Visibility{
         this.loading=loading
         this.dynamicLoading()//加载和预加载
         this.culling()//遮挡剔除和视锥剔除
+
+        if(new URLSearchParams(window.location.search).has("autoMove"))
+            if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
+                areaInf.min
+                const g=(a,b)=>{return Math.random() * (b-a)+a}
+                const start=[
+                    g(areaInf.min[0],areaInf.max[0]),
+                    g(areaInf.min[1],areaInf.max[1]),
+                    g(areaInf.min[2],areaInf.max[2])
+                ]
+                camera.position.x=start[0]
+                camera.position.y
+                camera.position.z=start[1]
+                const end=[
+                    g(areaInf.min[0],areaInf.max[0]),
+                    g(areaInf.min[1],areaInf.max[1]),
+                    g(areaInf.min[2],areaInf.max[2])
+                ]
+                camera.lookAt(
+                    end[0],
+                    camera.position.y,
+                    end[2]
+                )
+                const time=60*1000/10
+                const step=[
+                    (end[0]-start[0])/time,
+                    (end[1]-start[1])/time,
+                    (end[2]-start[2])/time
+                ]
+                console.log(start,end)
+                setInterval(()=>{
+                    camera.position.x+=step[0]
+                    camera.position.z+=step[2]
+                },10)//60*1000
+            }
     }
     getDirection(){
         var d=this.camera.getWorldDirection()

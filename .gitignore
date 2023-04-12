@@ -7,6 +7,8 @@
 # 忽略 /dist/ 目录及其下的所有文件
 /dist/
 
-
 # 不忽略 /dist/assets/ 目录及其下的所有文件
 ! /dist/assets/ 
+
+# 忽略 /dist/ 目录及其下的所有文件
+/test/data/

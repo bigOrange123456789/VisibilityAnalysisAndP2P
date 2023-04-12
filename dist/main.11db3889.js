@@ -41448,6 +41448,26 @@ var Visibility = /*#__PURE__*/function () {
     this.loading = loading;
     this.dynamicLoading(); //加载和预加载
     this.culling(); //遮挡剔除和视锥剔除
+
+    if (new URLSearchParams(window.location.search).has("autoMove")) if (new URLSearchParams(window.location.search).get('autoMove') == "true") {
+      areaInf.min;
+      var g = function g(a, b) {
+        return Math.random() * (b - a) + a;
+      };
+      var start = [g(areaInf.min[0], areaInf.max[0]), g(areaInf.min[1], areaInf.max[1]), g(areaInf.min[2], areaInf.max[2])];
+      camera.position.x = start[0];
+      camera.position.y;
+      camera.position.z = start[1];
+      var end = [g(areaInf.min[0], areaInf.max[0]), g(areaInf.min[1], areaInf.max[1]), g(areaInf.min[2], areaInf.max[2])];
+      camera.lookAt(end[0], camera.position.y, end[2]);
+      var time = 60 * 1000 / 10;
+      var step = [(end[0] - start[0]) / time, (end[1] - start[1]) / time, (end[2] - start[2]) / time];
+      console.log(start, end);
+      setInterval(function () {
+        camera.position.x += step[0];
+        camera.position.z += step[2];
+      }, 10); //60*1000
+    }
   }
   _createClass(Visibility, [{
     key: "getDirection",
@@ -41669,9 +41689,10 @@ var P2P = /*#__PURE__*/function () {
   function P2P(camera) {
     _classCallCheck(this, P2P);
     this.useP2P = true;
-    if (new URLSearchParams(window.location.search).has("useP2P")) this.useP2P = new URLSearchParams(window.location.search).get('useP2P');
+    if (new URLSearchParams(window.location.search).has("useP2P")) this.useP2P = new URLSearchParams(window.location.search).get('useP2P') == "true";
     console.log("useP2P:", this.useP2P);
-    if (this.useP2P) alert("使用P2P");else alert("不用P2P");
+    window.useP2P = this.useP2P;
+    if (!new URLSearchParams(window.location.search).has("autoMove")) if (this.useP2P) alert("使用P2P");else alert("不用P2P");
     this.camera = camera;
     this.parse = function (data) {
       return console.log(data);
@@ -41764,6 +41785,7 @@ var Detection = /*#__PURE__*/function () {
     this.dectionURL = _configOP.default.src.Detection.urlDetectionServer;
     this.date = [new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getSeconds(), new Date().getMilliseconds()];
     // this.time0=performance.now()
+    // this.
 
     this.count_pack_p2p = 0; //P2P加载数量
     this.count_pack_server = 0; //服务器获取数量
@@ -41786,6 +41808,28 @@ var Detection = /*#__PURE__*/function () {
     }, scope.testTime * 1000);
   }
   _createClass(Detection, [{
+    key: "getLoadDelay",
+    value: function getLoadDelay() {
+      var delay = 0;
+      var delayMax = 0;
+      var count = 0;
+      for (var id in this.meshes) {
+        var mesh = this.meshes[id];
+        if (mesh.used) {
+          //延迟只统计被使用过的对象
+          if (mesh.LoadDelay > delayMax) {
+            delayMax = mesh.LoadDelay;
+          }
+          delay += mesh.LoadDelay;
+          count++;
+        }
+      }
+      return {
+        "ave": delay / count,
+        "max": delayMax
+      };
+    }
+  }, {
     key: "receivePack",
     value: function receivePack(type) {
       if (type == "p2p") this.count_pack_p2p++;else if (type == "server") this.count_pack_server++;else console.log("error:receivePack type");
@@ -41826,6 +41870,7 @@ var Detection = /*#__PURE__*/function () {
         count_mesh_server: this.count_mesh_server,
         count_mesh_p2p_NotUsed: this.count_mesh_p2p_NotUsed(),
         count_mesh_server_NotUsed: this.count_mesh_server_NotUsed(),
+        loadDelay: this.getLoadDelay(),
         frameCount: this.frameCount,
         //测试所用的帧数
         testTime: this.testTime,
@@ -41833,9 +41878,11 @@ var Detection = /*#__PURE__*/function () {
 
         url: window.location.href,
         //地址以及参数
-        date: this.date //测试日期
-      };
+        date: this.date,
+        //测试日期
 
+        useP2P: window.useP2P
+      };
       console.log(data);
       var oReq = new XMLHttpRequest();
       oReq.open("POST", this.dectionURL, true);
@@ -41845,9 +41892,14 @@ var Detection = /*#__PURE__*/function () {
         var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
         var str = String.fromCharCode.apply(null, unitArray); //解析为文本
         console.log(str);
-        alert("测试完成，感谢您的配合！");
+        if (!new URLSearchParams(window.location.search).has("autoMove")) alert("测试完成，感谢您的配合！");
+        setTimeout(function () {
+          if (new URLSearchParams(window.location.search).has("back")) location.href = new URLSearchParams(window.location.search).get('back');
+          // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
+        }, 100);
+        // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
         //window.opener = null;//为了不出现提示框
-        window.close(); //关闭窗口//完成测试，关闭窗口
+        // window.close();//关闭窗口//完成测试，关闭窗口
         // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
       };
 
@@ -44346,7 +44398,7 @@ var Building = /*#__PURE__*/function () {
       // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
 
       this.meshes[id] = mesh;
-      // mesh.visible=false
+      mesh.visible = false;
       this.parentGroup.add(mesh);
       this.visibiity.prePoint2 = ""; //重新进行可见剔除
     }
@@ -44354,7 +44406,7 @@ var Building = /*#__PURE__*/function () {
     key: "loadGLB",
     value: function loadGLB(id, cb) {
       if (this.meshes_request[id]) return;
-      this.meshes_request[id] = true;
+      this.meshes_request[id] = performance.now(); //true
       var self = this;
       var loader = new _GLTFLoader.GLTFLoader();
       loader.load(self.config.path + id + ".glb", function (gltf) {
@@ -44374,7 +44426,7 @@ var Building = /*#__PURE__*/function () {
     value: function loadZip(id, cb) {
       if (this.meshes_request[id]) return;
       this.detection.receivePack("server");
-      this.meshes_request[id] = true;
+      this.meshes_request[id] = performance.now(); //true
       var self = this;
       var url = self.config.path + id + ".zip";
       new Promise(function (resolve, reject) {
@@ -44406,6 +44458,7 @@ var Building = /*#__PURE__*/function () {
           // self.p2p.send({cid:id,myArray:loader.myArray})
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
+              o.LoadDelay = performance.now() - self.meshes_request[id];
               o.originType = "cloud";
               self.addMesh(id, o);
             }
@@ -44436,6 +44489,7 @@ var Building = /*#__PURE__*/function () {
         loader.load(configJson.fileUrl[0], function (gltf) {
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
+              o.LoadDelay = 0;
               o.originType = "edgeP2P";
               self.addMesh(cid, o);
             }
@@ -52436,7 +52490,7 @@ var Loader = /*#__PURE__*/function () {
     this.panel = new _Panel.Panel(this);
     this.initScene();
     this.building = new _Building.Building(this.scene, this.camera);
-    new _AvatarManager.AvatarManager(this.scene, this.camera);
+    if (!new URLSearchParams(window.location.search).has("autoMove")) new _AvatarManager.AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
     key: "initScene",
@@ -52541,7 +52595,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61493" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64792" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
