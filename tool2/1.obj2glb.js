@@ -1,6 +1,6 @@
 
-const path1="F:/gitHubRepositories/vk-precompute-main/model6/obj/"
-const path2="F:/gitHubRepositories/temp4/VisibleEntropy/dist/assets/space6GLB/"
+const path1="F:/gitHubRepositories/vk-precompute-main/model7/obj/"
+const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB/"
 // const FileProcessor = require('./FileProcessor');
 // const fp=FileProcessor()
 const obj2gltf = require('obj2gltf');
@@ -21,7 +21,7 @@ function process(index){
     });
 }
 let index=0
-const number=1278
+const number=8437
 const interval=setInterval(()=>{
     process(index)
     console.log(index)

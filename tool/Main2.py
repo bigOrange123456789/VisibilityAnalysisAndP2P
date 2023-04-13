@@ -11,6 +11,7 @@ class Main: #所有视点,每个视点的可见特征
         id=config["id"]
         loader0=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id)
         loader0.saveVVD()
+        # return
         loader_addSphere_list=[
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id),
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id),

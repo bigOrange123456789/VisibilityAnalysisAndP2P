@@ -11,7 +11,6 @@ export class Loader{
         this.config=config.src.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
-        window.addEventListener('resize', this.resize.bind(this), false)
         this.initScene()
         // this.addMyUI()
         new Panel()
@@ -60,7 +59,7 @@ export class Loader{
         // this.camera = new THREE.PerspectiveCamera(90,this.body.clientWidth/this.body.clientHeight,0.01,5000)
         this.camera = new THREE.PerspectiveCamera(
             90,
-            this.body.clientWidth/this.body.clientHeight,
+            1,//this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
         // this.camera.up.set(0,0,1)
@@ -123,13 +122,6 @@ export class Loader{
         // let endTime = Date.now()
         // console.log("main时间", endTime - startTime)
         requestAnimationFrame(this.animate)
-    }
-    resize(){
-        this.canvas.width = 800//window.innerWidth;//this.body.clientWidth
-        this.canvas.height = 800//window.innerHeight;//this.body.clientHeight
-        this.camera.aspect = 1//this.canvas.width/this.canvas.height;//clientWidth / clientHeight
-        this.camera.updateProjectionMatrix()
-        this.renderer.setSize(800,800)//(this.canvas.width, this.canvas.height)
     }
 }
 document.addEventListener('DOMContentLoaded', () => {

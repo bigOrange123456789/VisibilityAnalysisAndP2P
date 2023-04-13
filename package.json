@@ -26,6 +26,7 @@
     "dat.gui": "^0.7.9",
     "file-saver": "^2.0.5",
     "jszip": "^3.10.1",
+    "node-geolocation": "^1.15.14",
     "node-static": "^0.7.11",
     "obj2gltf": "^3.1.6",
     "socket.io": "^2.0.4",

@@ -1,3 +1,29 @@
+class EdgeNetController{
+  constructor(){
+    this.edgeSeverList={
+      "NanJing":{
+        "ip":"47.122.19.36",
+        "neighbour":["HanZhou","ShangHai","ChengDu"]
+      },
+      "HangZhou":{
+        "ip":"120.55.83.175",
+        "neighbour":["ShangHai","NanJing","GuangZhou"]
+      },
+      "ChengDu":{
+        "ip":"47.109.92.188",
+        "neighbour":["NanJing","GuangZhou"]
+      },
+      "GuangZhou":{
+        "ip":"8.134.117.255",
+        "neighbour":["ChengDu","HangZhou"]
+      },
+      "ShangHai":{
+        "ip":"106.14.198.71",
+        "neighbour":["NanJing","HangZhou"]
+      }
+    }
+  }
+}
 const ioUrlList = [
   "47.122.19.36",
   "120.55.83.175",
@@ -5,6 +31,42 @@ const ioUrlList = [
   "8.134.117.255",
   "106.14.198.71"
 ]
+const edgeSeverList={
+  "NanJing":{
+    "ip":"47.122.19.36",
+    "neighbour":["HanZhou","ShangHai","ChengDu"]
+  },
+  "HangZhou":{
+    "ip":"120.55.83.175",
+    "neighbour":["ShangHai","NanJing","GuangZhou"]
+  },
+  "ChengDu":{
+    "ip":"47.109.92.188",
+    "neighbour":["NanJing","GuangZhou"]
+  },
+  "GuangZhou":{
+    "ip":"8.134.117.255",
+    "neighbour":["ChengDu","HangZhou"]
+  },
+  "ShangHai":{
+    "ip":"106.14.198.71",
+    "neighbour":["NanJing","HangZhou"]
+  }
+}
+
+for(let id in edgeSeverList){
+  const edgeSever=edgeSeverList[id]
+  const neighbourIpList=[]
+  for(let i=0;i<edgeSever.neighbour;i++){
+    const neighbourId=edgeSever.neighbour[i]
+    const neighbourIp=edgeSeverList[neighbourId].ip
+    neighbourIpList.push(neighbourIp)
+  }
+  edgeSever.neighbourIpList
+  edgeSever.io=require('socket.io-client')("http://"+ioUrlList[i]+":8011")
+  edgeSever.io.emit('updateIoList', {"ioUrlList":neighbourIpList})
+}
+
 let ioList=[]
 for(let i=0;i<ioUrlList.length;i++){
   let ioList0=[]

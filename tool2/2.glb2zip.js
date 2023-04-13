@@ -104,8 +104,8 @@ class FileProcessor{
     }
 }
 
-const path1="F:/gitHubRepositories/temp4/VisibleEntropy/dist/assets/space6GLB/"
-const path2="F:/gitHubRepositories/temp4/VisibleEntropy/dist/assets/space6Zip/"
+const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB/"
+const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7Zip/"
 var fp=new FileProcessor()
 var all=fp.fs.readdirSync(path1)
 var i=0;

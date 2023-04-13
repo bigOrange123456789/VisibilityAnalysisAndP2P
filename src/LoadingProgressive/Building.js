@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import {GLTFLoader} from "../../lib/threejs/GLTFLoader"
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 import { saveAs } from 'file-saver';
 import config from '../../config/configOP.json'

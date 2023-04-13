@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 import { saveAs } from 'file-saver';
 import config from '../../config/config.json'
 import { Array3D } from './Array3D.js'
@@ -48,14 +49,14 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy
+            )
         
-        this.createCube2(this.config.createSphere)
+        // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
 
         // this.createSphere1(this.config.createSphere)
@@ -289,6 +290,7 @@ export class Building{
         loadingManager.itemStart =()=>{document.getElementById("LoadProgress").innerHTML="场景模型加载中。。"}
         loadingManager.itemEnd =()=>{document.getElementById("LoadProgress").innerHTML="正在加载参数。。"}
         const loader = new GLTFLoader(loadingManager);
+        console.log("path",path)
         loader.load(path, function (gltf) {
             let matrices_all=""
             gltf.scene.traverse(o=>{
@@ -371,8 +373,22 @@ export class Building{
                     },100)
                 }
             }
+            const save2 = function(index){
+                console.log(index);
+                self.saveMesh2(meshes[index],index+".gltf")
+                if(index+1>=meshes.length) {
+                    console.log("finish!")
+                }else{
+                    setTimeout(()=>{
+                        save2(index+1)
+                    },100)
+                }
+            }
             window.save=()=>{
                 save(0)
+            }
+            window.save2=()=>{
+                save2(0)
             }
             window.downloadAll=()=>{
                 const scene=new THREE.Scene()
@@ -395,10 +411,6 @@ export class Building{
     }
     saveMesh(mesh,name){
         const scene=new THREE.Scene()
-        // mesh.geometry.attributes.normal=null
-        // mesh.geometry.attributes={
-        //     position:mesh.geometry.attributes.position
-        // }
         scene.add(mesh)
         scene.traverse(o=>{
             if(o instanceof THREE.Mesh)
@@ -409,6 +421,25 @@ export class Building{
         // 将数据保存为OBJ文件
         const blob = new Blob([objData], { type: 'textain' });
         saveAs(blob, name);
+    }
+    saveMesh2(mesh,name){
+        const scene=new THREE.Scene()
+        scene.add(mesh)
+        
+        // 创建 GLTFExporter 对象
+        const exporter = new GLTFExporter();
+
+        // 导出 glTF 文件
+        exporter.parse(scene, (result) => {
+            // 将导出的数据存储为二进制文件
+            const blob = new Blob([result], { type: 'model/gltf-binary' });
+
+            // 创建链接，并下载文件
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = name
+            link.click();
+        });
     }
     InY(mesh,ymin,ymax){
         var box = new THREE.Box3().setFromObject(mesh)

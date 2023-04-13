@@ -13,11 +13,29 @@ export class P2P{
         this.parse=data=>console.log(data)
         this.socketURL=config.src.P2P.urlP2pControllerServer//"http://114.80.207.60:8011"//this.urlP2pServer
         console.log("this.socketURL",this.socketURL)
+        const self=this
         if(this.useP2P){
-            this.init_p2p_controller(this.socketURL)
+            this.geolocation(location=>{
+                self.init_p2p_controller(self.socketURL,location)
+            })
         }
     }
-    init_p2p_controller(socketURL){
+    geolocation(cb){
+        var geolocation = new BMap.Geolocation();
+        geolocation.getCurrentPosition(function(r){
+            const status=this.getStatus()
+            let location
+            if( status== BMAP_STATUS_SUCCESS){
+                location= [r.point.lat,r.point.lng]
+            }else {
+                console.log('failed'+status)
+                location= [31,121]//上海
+            }
+            if(cb)cb(location)
+        },{enableHighAccuracy: true})        
+    }
+    init_p2p_controller(socketURL,location){
+        console.log("location:",location)
         var scope=this
         var socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
         socket.emit('addUser',{
