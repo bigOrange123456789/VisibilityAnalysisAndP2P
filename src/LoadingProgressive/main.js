@@ -17,8 +17,8 @@ export class Loader{
         this.panel=new Panel(this)
         this.initScene()
         this.building=new Building(this.scene,this.camera)
-        if(!new URLSearchParams(window.location.search).has("autoMove"))
-            new AvatarManager(this.scene,this.camera)
+        // if(!new URLSearchParams(window.location.search).has("autoMove"))
+        //     new AvatarManager(this.scene,this.camera)
         
     }
     async initScene(){
@@ -47,7 +47,7 @@ export class Loader{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            50,
+            (config["FlipY"]?-1:1)*50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
@@ -67,7 +67,7 @@ export class Loader{
         
         this.scene.add(this.camera)
 
-        this.playerControl=new PlayerControl(this.camera)
+        this.playerControl=new PlayerControl(this.camera,config["FlipY"])
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
@@ -80,11 +80,13 @@ export class Loader{
         // this.orbitControl.target = camera_tar[id].clone()
 
 
-        new LightProducer(this.scene,this.config.camera.target)
+        this.light=new LightProducer().scene
+        this.scene.add(this.light)
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
     }
     animate(){
+        this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
         this.stats.update()
         this.renderer.render(this.scene,this.camera)
         requestAnimationFrame(this.animate)

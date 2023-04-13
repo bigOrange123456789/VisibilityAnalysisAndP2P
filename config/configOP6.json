@@ -1,8 +1,8 @@
 {
-    "FlipY":true,
+    "FlipY":false,
     "src": {
         "Building_new": {
-            "path": "assets/space7Zip/",
+            "path": "assets/space6Zip/",
             "NumberOfComponents":8437,
             "parentGroup": {
                 "scale": {
@@ -13,18 +13,18 @@
             },
             "createSphere": {
                 "x": [
-                    -124000,
-                    126000,
+                    -121000,
+                    117000,
                     2000
                 ],
                 "y": [
-                    -19000,
-                    3000,
+                    2286,
+                    2286,
                     2000
                 ],
                 "z": [
-                    -20000,
-                    24000,
+                    -4000,
+                    16000,
                     2000
                 ],
                 "r": 250
@@ -1315,8 +1315,8 @@
             "block2Kernel": {}
         },
         "Visibility":{
-            "componentNum":8437,
-            "urlVdServer":"http://localhost:8091"
+            "componentNum":1278,
+            "urlVdServer":"http://39.98.206.0:8091"
         },
         "P2P":{
             "urlP2pControllerServer":"http://139.196.217.153:8010"

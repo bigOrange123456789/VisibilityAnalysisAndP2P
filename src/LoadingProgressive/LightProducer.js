@@ -1,8 +1,12 @@
 import * as THREE from "three";
 class LightProducer{
-    constructor(scene,target){
+    constructor(){
+        var scene=new THREE.Object3D()
         this.scene=scene
+
+
         // Lights 
+        const x=0.
         const ambient = new THREE.AmbientLight( 0xffffff ,0.8);//new THREE.AmbientLight( 0xffffff ,.8);
         scene.add( ambient );
         ambient.name="ambient"
@@ -16,22 +20,22 @@ class LightProducer{
         window.light=light
         // return
 
-        const Light3 = new THREE.DirectionalLight( 0xcffffff,0.5 );
+        const Light3 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
         Light3.rotation.set(Math.PI*3/4,0,0)
-        Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+        // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
         light.add( Light3 )
 
-        const Light4 = new THREE.PointLight( 0xcffffff,0.5 );
+        const Light4 = new THREE.PointLight( 0xcffffff,x+0.5 );
         Light4.rotation.set(0,0,Math.PI/2)
-        Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
+        // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
         light.add( Light4 )
 
-        const Light2 = new THREE.DirectionalLight( 0xcffffff,0.5 );
+        // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
         // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
-        Light2.rotation.set(0,0,Math.PI/2)
-        Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
-        light.add( Light2 )
-        Light2.name="dirLight2"
+        // // Light2.rotation.set(0,0,Math.PI/2)
+        // // Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+        // light.add( Light2 )
+        // Light2.name="dirLight2"
 
 
         //创建区域光 

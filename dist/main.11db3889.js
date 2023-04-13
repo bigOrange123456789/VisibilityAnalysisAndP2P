@@ -36029,7 +36029,7 @@ var Enum = /*#__PURE__*/function () {
   }]);
   return Enum;
 }();
-var PlayerControl = /*#__PURE__*/_createClass(function PlayerControl(camera) {
+var PlayerControl = /*#__PURE__*/_createClass(function PlayerControl(camera, FlipY) {
   _classCallCheck(this, PlayerControl);
   this.target = new Vector3(0, 0, 0);
   this.up = new Vector3(0, 1, 0);
@@ -36061,7 +36061,7 @@ var PlayerControl = /*#__PURE__*/_createClass(function PlayerControl(camera) {
     //手机双指下的前进后退速度(相机中心)
     movePhone1: 0.05,
     //手机双指下的前进后退速度(物体中心)
-    rotateMouse: 0.001,
+    rotateMouse: 0.001 * 0.5,
     //鼠标拖拽下的旋转速度
     rotatePhone: 0.04 //手机滑动下的旋转速度
   };
@@ -36081,12 +36081,12 @@ var PlayerControl = /*#__PURE__*/_createClass(function PlayerControl(camera) {
     //手机双指下的前进后退速度(相机中心)
     movePhone1: 0.05,
     //手机双指下的前进后退速度(物体中心)
-    rotateMouse: 0.004,
-    //鼠标拖拽下的旋转速度
+    rotateMouse: 0.001,
+    //0.004,//鼠标拖拽下的旋转速度
     rotatePhone: 0.04 //手机滑动下的旋转速度
   };
 
-  var controller = new PlayerControl0(camera, this.speed, this.target, this.up);
+  var controller = new PlayerControl0(camera, this.speed, this.target, this.up, FlipY);
   this.mode = controller.mode;
   function tool() {
     requestAnimationFrame(tool);
@@ -36096,8 +36096,9 @@ var PlayerControl = /*#__PURE__*/_createClass(function PlayerControl(camera) {
 });
 exports.PlayerControl = PlayerControl;
 var PlayerControl0 = /*#__PURE__*/function () {
-  function PlayerControl0(camera, speed, center, up) {
+  function PlayerControl0(camera, speed, center, up, FlipY) {
     _classCallCheck(this, PlayerControl0);
+    this.FlipY = FlipY;
     document.oncontextmenu = function () {
       return false;
     }; //关闭鼠标右键弹窗
@@ -36155,6 +36156,8 @@ var PlayerControl0 = /*#__PURE__*/function () {
         console.log("," + s);
         autoPath.push(s);
       } else if (event.key === "V") alert(autoPath);
+      scope.dposition.up = scope.dposition.up * (scope.FlipY ? -1 : 1);
+      scope.dposition.left = scope.dposition.left * (scope.FlipY ? -1 : 1);
     };
     myKeyboardManager.onKeyUp = function (event) {
       if (event.key === "ArrowUp" || event.key === "w" || event.key === "W") scope.dposition.forward = 0; //forward(step);
@@ -40438,10 +40441,11 @@ var global = arguments[3];
 
 },{}],"config/configOP.json":[function(require,module,exports) {
 module.exports = {
+  "FlipY": true,
   "src": {
     "Building_new": {
-      "path": "assets/space6Zip/",
-      "NumberOfComponents": 1278,
+      "path": "assets/space7Zip/",
+      "NumberOfComponents": 8437,
       "parentGroup": {
         "scale": {
           "x": 1,
@@ -40450,9 +40454,9 @@ module.exports = {
         }
       },
       "createSphere": {
-        "x": [-121000, 117000, 2000],
-        "y": [2286.5, 2286.5, 2000],
-        "z": [-4000, 16000, 2000],
+        "x": [-124000, 126000, 2000],
+        "y": [-19000, 3000, 2000],
+        "z": [-20000, 24000, 2000],
         "r": 250
       },
       "kernelPosition": "-110,40,-10",
@@ -41741,7 +41745,8 @@ module.exports = {
       "block2Kernel": {}
     },
     "Visibility": {
-      "urlVdServer": "http://150.158.24.191:8091"
+      "componentNum": 8437,
+      "urlVdServer": "http://localhost:8091"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -41793,14 +41798,17 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Visibility = /*#__PURE__*/function () {
   function Visibility(areaInf, camera, loading, meshes) {
     _classCallCheck(this, Visibility);
-    this.urlVdServer = _configOP.default.src.Visibility.urlVdServer; //"http://150.158.24.191:8091"
+    this.config = _configOP.default.src.Visibility;
+    this.urlVdServer = this.config.urlVdServer; //"http://150.158.24.191:8091"
     console.log("urlVdServer", this.urlVdServer);
-    areaInf["min"][1] -= 0.5;
-    areaInf["max"][1] -= 0.5;
+    // areaInf["min"][1]-=0.5
+    // areaInf["max"][1]-=0.5
+    areaInf["min"][1] = Math.floor(areaInf["min"][1]);
+    areaInf["max"][1] = Math.floor(areaInf["max"][1]);
     this.areaInf = areaInf;
     this.camera = camera;
     this.meshes = meshes; //用于可见性剔除剔除
-    this.componentNum = 1278;
+    this.componentNum = this.config.componentNum; //8437//1278
     this.vd = new Array(this.componentNum); //{}//当前每个构件的可见度
     this.visualList = {}; //用于视点的可见资源列表
     this.visualList_request = {}; //记录资源列表的请求是否已经发送
@@ -41975,7 +41983,7 @@ var Visibility = /*#__PURE__*/function () {
         }
 
         window.visibleArea = {};
-        for (var _i = 0; _i < visualList0["a"].length; _i++) {
+        if (visualList0["a"]) for (var _i = 0; _i < visualList0["a"].length; _i++) {
           window.visibleArea[visualList0["a"][_i]] = true;
         }
       }
@@ -41993,6 +42001,12 @@ var Visibility = /*#__PURE__*/function () {
           var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
           var str = String.fromCharCode.apply(null, unitArray);
           scope.visualList[posIndex] = JSON.parse(str);
+          // var test=scope.visualList[posIndex]
+          // console.log(test)
+          // console.log(scope.visualList[posIndex])
+          // window.test=scope.visualList[posIndex]
+          // console.log("test[all]",Object.keys(test["all"]))
+          // console.log("test[1]"  ,Object.keys(test["1"]))
           scope.getList();
         };
         oReq.send(JSON.stringify(posIndex)); //发送请求
@@ -42025,6 +42039,7 @@ var Visibility = /*#__PURE__*/function () {
       var zi = dl[2] == 0 ? 0 : Math.round((z - min[2]) / dl[2]);
       var s = step;
       var index = xi * (s[1] + 1) * (s[2] + 1) + yi * (s[2] + 1) + zi;
+      // console.log([xi,yi,zi,index])
       return [xi, yi, zi, index];
     }
   }]);
@@ -44694,10 +44709,11 @@ var Building = /*#__PURE__*/function () {
     this.parentGroup.scale.set(this.config.parentGroup.scale.x, this.config.parentGroup.scale.y, this.config.parentGroup.scale.z);
     scene.add(this.parentGroup);
     this.meshes = {};
+    window.meshes = this.meshes;
     this.meshes_request = {};
     this.detection = new _Detection.Detection(this.meshes);
     this.doorTwinkle();
-    this.createFloor();
+    // this.createFloor()
     this.p2p = new _P2P.P2P(camera);
     this.p2p.parse = function (message) {
       self.p2pParse(message);
@@ -44706,12 +44722,6 @@ var Building = /*#__PURE__*/function () {
 
     // this.load0()
     var c = this.config.createSphere;
-    c = {
-      "x": [-121000, 117000, 2000],
-      "y": [2286.5, 2286.5, 2000],
-      "z": [-4000, 16000, 2000],
-      "r": 250
-    };
     this.visibiity = new _Visibility.Visibility({
       "min": [c.x[0], c.y[0], c.z[0]],
       "max": [c.x[1], c.y[1], c.z[1]],
@@ -44738,7 +44748,8 @@ var Building = /*#__PURE__*/function () {
       var flag = false;
       setInterval(function () {
         for (var id in self.meshes) {
-          if (self.config.isdoor["" + id] == 1) {
+          if (self.meshes[id].visible) if (self.meshes[id].name.split("FM甲").length > 1) {
+            //if(self.config.isdoor[""+id]==1){
             var color = self.meshes[id].material.color;
             if (flag) {
               if (color.r > 0.6) color.r -= 0.5;
@@ -44760,29 +44771,16 @@ var Building = /*#__PURE__*/function () {
     key: "addMesh",
     value: function addMesh(id, mesh) {
       this.detection.receiveMesh(mesh);
-      // console.log(id,mesh.name)
-      // mesh=new THREE.Mesh(
-      //     mesh.geometry,
-      //     new THREE.MeshPhongMaterial( {
-      //         color:0x0ff0f0,
-      //         transparent:true,
-      //         opacity:1
-      //     } )
-      // )
-      // console.log(mesh)
-      // mesh.visible=false
       mesh.myId = id;
-      var t = mesh.myId * 256 * 256 * 256 / 2665;
+      var t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
       mesh.material.color.r = 0.5 * (t & 0xff) / 255;
       mesh.material.color.g = 0.5 * ((t & 0xff00) >> 8) / 255;
       mesh.material.color.b = 0.5 * ((t & 0xff0000) >> 16) / 255;
-      mesh.material.transparent = true;
-      mesh.material.opacity = 1;
-
-      // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
-
+      // mesh.geometry.computeFaceNormals()
+      // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
+      mesh.geometry.computeVertexNormals();
       this.meshes[id] = mesh;
-      mesh.visible = false;
+      // mesh.visible=false
       this.parentGroup.add(mesh);
       this.visibiity.prePoint2 = ""; //重新进行可见剔除
     }
@@ -44959,10 +44957,13 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var LightProducer = /*#__PURE__*/function () {
-  function LightProducer(scene, target) {
+  function LightProducer() {
     _classCallCheck(this, LightProducer);
+    var scene = new THREE.Object3D();
     this.scene = scene;
+
     // Lights 
+    var x = 0.;
     var ambient = new THREE.AmbientLight(0xffffff, 0.8); //new THREE.AmbientLight( 0xffffff ,.8);
     scene.add(ambient);
     ambient.name = "ambient";
@@ -44976,20 +44977,21 @@ var LightProducer = /*#__PURE__*/function () {
     window.light = light;
     // return
 
-    var Light3 = new THREE.DirectionalLight(0xcffffff, 0.5);
+    var Light3 = new THREE.DirectionalLight(0xcffffff, x + 0.5);
     Light3.rotation.set(Math.PI * 3 / 4, 0, 0);
-    Light3.position.set(35606.39387447974, 10386.419503473677, 14736.423572);
+    // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
     light.add(Light3);
-    var Light4 = new THREE.PointLight(0xcffffff, 0.5);
+    var Light4 = new THREE.PointLight(0xcffffff, x + 0.5);
     Light4.rotation.set(0, 0, Math.PI / 2);
-    Light4.position.set(79878.19719674486, 15386.419503473677, 2313.777302798459);
+    // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
     light.add(Light4);
-    var Light2 = new THREE.DirectionalLight(0xcffffff, 0.5);
+
+    // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
     // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
-    Light2.rotation.set(0, 0, Math.PI / 2);
-    Light2.position.set(35606.39387447974, 10386.419503473677, 14736.423572);
-    light.add(Light2);
-    Light2.name = "dirLight2";
+    // // Light2.rotation.set(0,0,Math.PI/2)
+    // // Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+    // light.add( Light2 )
+    // Light2.name="dirLight2"
 
     //创建区域光 
     // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
@@ -52874,7 +52876,8 @@ var Loader = /*#__PURE__*/function () {
     this.panel = new _Panel.Panel(this);
     this.initScene();
     this.building = new _Building.Building(this.scene, this.camera);
-    if (!new URLSearchParams(window.location.search).has("autoMove")) new _AvatarManager.AvatarManager(this.scene, this.camera);
+    // if(!new URLSearchParams(window.location.search).has("autoMove"))
+    //     new AvatarManager(this.scene,this.camera)
   }
   _createClass(Loader, [{
     key: "initScene",
@@ -52903,13 +52906,13 @@ var Loader = /*#__PURE__*/function () {
               statsContainer.appendChild(this.stats.domElement);
               this.body.appendChild(statsContainer);
               this.scene = new THREE.Scene();
-              this.camera = new THREE.PerspectiveCamera(50, this.body.clientWidth / this.body.clientHeight, this.config.camera.near, this.config.camera.far);
+              this.camera = new THREE.PerspectiveCamera((_configOP.default["FlipY"] ? -1 : 1) * 50, this.body.clientWidth / this.body.clientHeight, this.config.camera.near, this.config.camera.far);
               window.camera = this.camera;
               this.camera.position.set(this.config.camera.position.x, this.config.camera.position.y, this.config.camera.position.z);
               this.camera.rotation.set(this.config.camera.rotation.x, this.config.camera.rotation.y, this.config.camera.rotation.z);
               window.camera = this.camera;
               this.scene.add(this.camera);
-              this.playerControl = new _PlayerControl.PlayerControl(this.camera);
+              this.playerControl = new _PlayerControl.PlayerControl(this.camera, _configOP.default["FlipY"]);
               this.playerControl.target.set(this.config.camera.target.x, this.config.camera.target.y, this.config.camera.target.z);
               this.playerControl.mode.set("viewpoint");
               this.playerControl.speed.moveBoard = 100;
@@ -52917,10 +52920,11 @@ var Loader = /*#__PURE__*/function () {
               // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
               // this.orbitControl.target = camera_tar[id].clone()
 
-              new _LightProducer.LightProducer(this.scene, this.config.camera.target);
+              this.light = new _LightProducer.LightProducer().scene;
+              this.scene.add(this.light);
               this.animate = this.animate.bind(this);
               requestAnimationFrame(this.animate);
-            case 27:
+            case 28:
             case "end":
               return _context.stop();
           }
@@ -52934,6 +52938,7 @@ var Loader = /*#__PURE__*/function () {
   }, {
     key: "animate",
     value: function animate() {
+      this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.stats.update();
       this.renderer.render(this.scene, this.camera);
       requestAnimationFrame(this.animate);

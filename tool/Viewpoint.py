@@ -40,6 +40,10 @@ class Viewpoint:#单个视点的可见度信息
                 pre=""
             elif pre=="first":
                 name=arr[0]
+                # print(name)
+                # if name=="-116000 1000 12000":
+                #     print(path)
+                #     exit(0)
                 name=name.split(" ")
                 self.name=name[0]+","+name[1]+","+name[2]
                 self.position=[float(name[0]),float(name[1]),float(name[2])]

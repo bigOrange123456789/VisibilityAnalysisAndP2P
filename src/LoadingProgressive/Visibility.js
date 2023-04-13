@@ -1,14 +1,17 @@
 import config from '../../config/configOP.json'
 export class Visibility{
     constructor(areaInf,camera,loading,meshes) {
-        this.urlVdServer=config.src.Visibility.urlVdServer//"http://150.158.24.191:8091"
+        this.config=config.src.Visibility
+        this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
-        areaInf["min"][1]-=0.5
-        areaInf["max"][1]-=0.5
+        // areaInf["min"][1]-=0.5
+        // areaInf["max"][1]-=0.5
+        areaInf["min"][1]=Math.floor(areaInf["min"][1])
+        areaInf["max"][1]=Math.floor(areaInf["max"][1])
         this.areaInf=areaInf
         this.camera=camera
         this.meshes=meshes//用于可见性剔除剔除
-        this.componentNum=1278
+        this.componentNum=this.config.componentNum//8437//1278
         this.vd=new Array(this.componentNum)//{}//当前每个构件的可见度
         this.visualList={}//用于视点的可见资源列表
         this.visualList_request={}//记录资源列表的请求是否已经发送
@@ -156,9 +159,10 @@ export class Visibility{
                 this.meshes[i].used=true//这个mesh被使用了
             } 
             window.visibleArea={}
-            for(let i=0;i<visualList0["a"].length;i++){
-                window.visibleArea[visualList0["a"][i]]=true
-            }
+            if(visualList0["a"])
+                for(let i=0;i<visualList0["a"].length;i++){
+                    window.visibleArea[visualList0["a"][i]]=true
+                }
         }
     }
     request(posIndex){
@@ -171,6 +175,12 @@ export class Visibility{
                 var unitArray=new Uint8Array(oReq.response) //网络传输基于unit8Array
                 var str=String.fromCharCode.apply(null,unitArray)
                 scope.visualList[posIndex]=JSON.parse(str)
+                // var test=scope.visualList[posIndex]
+                // console.log(test)
+                // console.log(scope.visualList[posIndex])
+                // window.test=scope.visualList[posIndex]
+                // console.log("test[all]",Object.keys(test["all"]))
+                // console.log("test[1]"  ,Object.keys(test["1"]))
                 scope.getList()
             }
             oReq.send(JSON.stringify(posIndex));//发送请求
@@ -205,6 +215,7 @@ export class Visibility{
         var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
         var s=step
         var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
+        // console.log([xi,yi,zi,index])
         return [xi,yi,zi,index]
     } 
 }

@@ -25,36 +25,19 @@ export class Building{
         )
         scene.add(this.parentGroup)
         this.meshes={}
+        window.meshes=this.meshes
         this.meshes_request={}
 
         this.detection=new Detection(this.meshes)
         
         this.doorTwinkle()
-        this.createFloor()
+        // this.createFloor()
         this.p2p=new P2P(camera)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
 
         // this.load0()
         let c=this.config.createSphere
-        c={
-            "x": [
-                -121000,
-                117000,
-                2000
-            ],
-            "y": [
-                2286.5,
-                2286.5,
-                2000
-            ],
-            "z": [
-                -4000,
-                16000,
-                2000
-            ],
-            "r": 250
-        }
         this.visibiity=new Visibility(
             {
                 "min": [c.x[0],c.y[0],c.z[0]],
@@ -84,7 +67,8 @@ export class Building{
         let flag=false
         setInterval(()=>{
             for(let id in self.meshes){
-                if(self.config.isdoor[""+id]==1){
+                if(self.meshes[id].visible)
+                if(self.meshes[id].name.split("FM甲").length>1){//if(self.config.isdoor[""+id]==1){
                     const color=self.meshes[id].material.color
                     if(flag){
                         if(color.r>0.6)color.r-=0.5
@@ -103,30 +87,18 @@ export class Building{
     }
     addMesh(id,mesh){
         this.detection.receiveMesh(mesh)
-        // console.log(id,mesh.name)
-        // mesh=new THREE.Mesh(
-        //     mesh.geometry,
-        //     new THREE.MeshPhongMaterial( {
-        //         color:0x0ff0f0,
-        //         transparent:true,
-        //         opacity:1
-        //     } )
-        // )
-        // console.log(mesh)
-        // mesh.visible=false
         mesh.myId=id
 
-        let t=mesh.myId*256*256*256/2665
+        let t=mesh.myId*256*256*256/8431 ///2665
         mesh.material.color.r=0.5*((t&0xff)    )/255
         mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
         mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
-        mesh.material.transparent=true
-        mesh.material.opacity    =1
-
-        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
+        // mesh.geometry.computeFaceNormals()
+        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
+        mesh.geometry.computeVertexNormals()
 
         this.meshes[id]=mesh
-        mesh.visible=false
+        // mesh.visible=false
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
     }
