@@ -21,7 +21,7 @@ areaInf={
   "min": [areaInf.x[0],areaInf.y[0],areaInf.z[0]],
   "max": [areaInf.x[1],areaInf.y[1],areaInf.z[1]],
   "step": [
-      (areaInf.x[1]-areaInf.x[0])/areaInf.x[2],
+      (areaInf.x[1]-areaInf.x[0])/areaInf.x[2],//数量->长度
       (areaInf.y[1]-areaInf.y[0])/areaInf.y[2],
       (areaInf.z[1]-areaInf.z[0])/areaInf.z[2]
   ]
@@ -35,7 +35,7 @@ function getPosIndex(vid){
   const y=parseInt(arr[1])
   const z=parseInt(arr[2])
   const min =areaInf.min
-  const step=areaInf.step
+  const step=areaInf.step//数量
   const max =areaInf.max
   if(x>max[0]||y>max[1]||z>max[2]||x<min[0]||y<min[1]||z<min[2]){
       if(x>max[0])x=max[0]
@@ -51,7 +51,7 @@ function getPosIndex(vid){
       step[i]==0?0:
       (max[i]-min[i])/step[i]
   )
-  var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])
+  var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])//长度->数量
   var yi=dl[1]==0?0:Math.round((y-min[1])/dl[1])
   var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
   var s=step

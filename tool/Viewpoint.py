@@ -1,4 +1,22 @@
 class Viewpoint:#单个视点的可见度信息
+    @staticmethod
+    def merge(arr):
+        # print(arr[0])
+        # print(arr[0].data)
+        if len(arr)<1:
+            print("error",arr)
+            exit(0)
+        for tag in arr[0].data:#tag是方向
+            for i in range(len(arr)):
+                if not i==0:
+                    for vid in arr[i].data[tag]:
+                        if vid in arr[0].data[tag]:
+                            arr[0].data[tag][vid]=arr[0].data[tag][vid]=+arr[i].data[tag][vid]
+                        else                      :arr[0].data[tag][vid]=arr[i].data[tag][vid]
+        for tag in arr[0].data:
+            for vid in arr[0].data[tag]:
+                arr[0].data[tag][vid]=arr[0].data[tag][vid]/len(arr)
+        return arr[0]
     def __init__(self):
         self.name=None
         self.data={

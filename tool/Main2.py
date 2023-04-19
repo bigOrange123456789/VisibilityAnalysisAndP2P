@@ -9,9 +9,11 @@ import json
 class Main: #所有视点,每个视点的可见特征
     def __init__(self,config):
         id=config["id"]
+        # Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id).saveVVD()
+        Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id).saveVVD()
+        return
         loader0=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id)
         loader0.saveVVD()
-        # return
         loader_addSphere_list=[
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id),
             Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id),
