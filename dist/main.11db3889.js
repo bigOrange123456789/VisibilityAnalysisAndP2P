@@ -42085,6 +42085,8 @@ var P2P = /*#__PURE__*/function () {
   _createClass(P2P, [{
     key: "geolocation",
     value: function geolocation(cb) {
+      cb(null);
+      return;
       var geolocation = new BMap.Geolocation();
       geolocation.getCurrentPosition(function (r) {
         var status = this.getStatus();
@@ -49263,7 +49265,214 @@ var MyUI = /*#__PURE__*/function () {
   return MyUI;
 }();
 exports.MyUI = MyUI;
-},{"../../config/config.json":"config/config.json"}],"src/LoadingProgressive/Panel.js":[function(require,module,exports) {
+},{"../../config/config.json":"config/config.json"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveManager = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+var _autoRoam = /*#__PURE__*/new WeakMap();
+var MoveManager = /*#__PURE__*/function () {
+  function MoveManager(avatar, roamPath) {
+    _classCallCheck(this, MoveManager);
+    _defineProperty(this, "avatar", void 0);
+    _defineProperty(this, "roamPath", void 0);
+    _defineProperty(this, "myPreviewflag", void 0);
+    //确定目标节点
+    _defineProperty(this, "stopFlag", void 0);
+    //控制是否开始移动
+    _defineProperty(this, "isLoop", void 0);
+    //如果不进行循环漫游的话，第一行的初始状态就没用了
+    _defineProperty(this, "finishCb", function () {});
+    _defineProperty(this, "myMakeOneRoamStep", new MakeOneRoamStep());
+    _classPrivateFieldInitSpec(this, _autoRoam, {
+      writable: true,
+      value: function value() {
+        var scope = this;
+        autoRoam0();
+        function autoRoam0() {
+          if (!scope.stopFlag)
+            //是否停止自动漫游
+            if (scope.myMakeOneRoamStep.preview(scope.myPreviewflag, scope.avatar, scope.roamPath)) {
+              scope.myPreviewflag++;
+              if (scope.myPreviewflag === scope.roamPath.length) {
+                scope.myPreviewflag = 1;
+                if (!scope.isLoop) scope.stopFlag = true;
+                scope.finishCb();
+              }
+            }
+          requestAnimationFrame(autoRoam0);
+        }
+      }
+    });
+    var _scope = this;
+    _scope.avatar = avatar;
+    _scope.roamPath = roamPath;
+    _scope.myPreviewflag = 1; //确定目标节点
+    _scope.stopFlag = true;
+    _scope.isLoop = true; //false;//如果不进行循环漫游的话，第一行的初始状态就没用了
+
+    _scope.myMakeOneRoamStep = new MakeOneRoamStep();
+    _classPrivateFieldGet(this, _autoRoam).call(this); //创建后自动执行
+  }
+  _createClass(MoveManager, [{
+    key: "getStartPos",
+    value: function getStartPos() {
+      var mystate = this.myPreviewflag - 1;
+      if (mystate >= this.roamPath.length) 0, _readOnlyError("mystate");
+      if (mystate < 0) this.roamPath.length - 1, _readOnlyError("mystate");
+      return this.roamPath[mystate];
+    }
+  }, {
+    key: "joinPath",
+    value: function joinPath() {
+      //切换路径
+      var self = this;
+      self.stopFlag = true;
+      var endpos = this.getStartPos();
+      var camera = this.avatar;
+      var move0 = new MoveManager(camera, [[camera.position.x, camera.position.y, camera.position.z, camera.rotation.x, camera.rotation.y, camera.rotation.z, 10], [endpos[0], endpos[1], endpos[2], endpos[3], endpos[4], endpos[5], 10]]);
+      move0.isLoop = false;
+      move0.finishCb = function () {
+        self.stopFlag = false;
+      };
+      move0.stopFlag = false;
+    }
+  }]);
+  return MoveManager;
+}();
+exports.MoveManager = MoveManager;
+_defineProperty(MoveManager, "getArray", function (arr1) {
+  //通过平面位置获取输入数据
+  //arr1:  x,z
+  //arr2:  x,y,z,  a,b,c, time
+  var arr2 = [];
+  var time = 400;
+  arr2.push([arr1[0][0], 0, arr1[0][1], 0, 0, 0, time]);
+  for (var i = 1; i < arr1.length; i++) {
+    arr2.push([arr1[i][0], 0, arr1[i][1], 0, Math.atan2(arr1[i][0] - arr1[i - 1][0], arr1[i][1] - arr1[i - 1][1]), 0, time]);
+  }
+  return arr2;
+});
+var _updateParam = /*#__PURE__*/new WeakMap();
+var _initParam = /*#__PURE__*/new WeakMap();
+var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
+  _classCallCheck(this, MakeOneRoamStep);
+  _defineProperty(this, "pattern", void 0);
+  _defineProperty(this, "rectify", void 0);
+  //记录这是第几步//第一步更新参数，最后一步纠正状态
+  _defineProperty(this, "stepIndex_max", void 0);
+  _defineProperty(this, "targetStatus", void 0);
+  //目标状态
+  _defineProperty(this, "dx", void 0);
+  _defineProperty(this, "dy", void 0);
+  _defineProperty(this, "dz", void 0);
+  //一步的位移
+  _defineProperty(this, "q1", void 0);
+  _defineProperty(this, "q2", void 0);
+  _defineProperty(this, "qt", void 0);
+  _classPrivateFieldInitSpec(this, _updateParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      time = time;
+      var scope = this;
+      scope.dx = (x2 - x1) / time;
+      scope.dy = (y2 - y1) / time;
+      scope.dz = (z2 - z1) / time;
+      scope.q1 = euler2quaternion(a1, b1, c1);
+      scope.q2 = euler2quaternion(a2, b2, c2);
+      scope.qt = scope.stepIndex / scope.stepIndex_max;
+      function euler2quaternion(x, y, z) {
+        var euler = new THREE.Euler(x, y, z, 'XYZ');
+        var quaternion = new THREE.Quaternion();
+        quaternion.setFromEuler(euler);
+        return quaternion;
+      }
+      scope.targetStatus = [x2, y2, z2, a2, b2, c2];
+    }
+  });
+  _classPrivateFieldInitSpec(this, _initParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      var scope = this;
+      scope.stepIndex_max = time;
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    }
+  });
+  _defineProperty(this, "preview", function (mystate, avatar, mydata) {
+    //thisObj,time,myavatar,k//thisObj,x1,y1,z1,x2,y2,z2,time,myavatar,k
+    var scope = this;
+    var x1, y1, z1, x2, y2, z2,
+      //位置
+      a1, b1, c1, a2, b2, c2; //角度//a=c
+
+    if (mystate >= mydata.length) return;
+    var time = mydata[mystate][6];
+    //当前状态
+    x1 = avatar.position.x;
+    y1 = avatar.position.y;
+    z1 = avatar.position.z;
+    a1 = avatar.rotation.x;
+    b1 = avatar.rotation.y;
+    c1 = avatar.rotation.z;
+    //目标状态
+    x2 = mydata[mystate][0];
+    y2 = mydata[mystate][1];
+    z2 = mydata[mystate][2];
+    a2 = mydata[mystate][3];
+    b2 = mydata[mystate][4];
+    c2 = mydata[mystate][5];
+    if (scope.stepIndex === 1) {
+      //新的阶段
+      _classPrivateFieldGet(scope, _initParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    } else if (scope.rectify) {
+      //如果有路径纠正功能
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time - scope.stepIndex + 1);
+    }
+    return movetoPos(avatar, scope);
+    function movetoPos(avatar, scope) {
+      //移动
+      if (scope.stepIndex < scope.stepIndex_max) {
+        avatar.position.x += scope.dx;
+        avatar.position.y += scope.dy;
+        avatar.position.z += scope.dz;
+        avatar.quaternion.x = scope.q1.x;
+        avatar.quaternion.y = scope.q1.y;
+        avatar.quaternion.z = scope.q1.z;
+        avatar.quaternion.w = scope.q1.w;
+        avatar.quaternion.slerp(scope.q2, scope.qt);
+        scope.stepIndex++;
+        return false;
+      } else {
+        avatar.position.set(scope.targetStatus[0], scope.targetStatus[1], scope.targetStatus[2]);
+        avatar.rotation.set(scope.targetStatus[3], scope.targetStatus[4], scope.targetStatus[5]);
+        scope.stepIndex = 1;
+        return true;
+      }
+    }
+  });
+  var _scope2 = this;
+  _scope2.rectify = true; //
+  _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
+});
+},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/Panel.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -49271,6 +49480,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Panel = void 0;
 var _MyUI_sim = require("../../lib/ui/MyUI_sim.js");
+var _MoveManager = require("../../lib/playerControl/MoveManager.js");
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -49293,33 +49503,32 @@ var Panel = /*#__PURE__*/function () {
       var self = this;
       var ui = new _MyUI_sim.MyUI();
       ui.init();
-      new ui.Button('漫游路径1', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 500, function (b) {
-        //位置
-        var id = 0;
-        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
-        var wander = self.main.wanderList[id];
-        wander.stopFlag = !wander.stopFlag;
-      });
-      new ui.Button('漫游路径2', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 550, function (b) {
-        //位置
-        var id = 1;
-        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
-        var wander = self.main.wanderList[id];
-        wander.stopFlag = !wander.stopFlag;
-      });
-      new ui.Button('漫游路径3', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 600, function (b) {
-        //位置
-        var id = 2;
-        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
-        var wander = self.main.wanderList[id];
-        wander.stopFlag = !wander.stopFlag;
-      });
+      var prePathId = -1;
+      var _loop = function _loop(id) {
+        new ui.Button('漫游路径' + (id + 1), "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4,
+        //大小
+        0, 500 + id * 50, function (b) {
+          //位置
+          if (prePathId == -1 || id == prePathId) {
+            for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
+            var wander = self.main.wanderList[id];
+            wander.stopFlag = !wander.stopFlag;
+          } else {
+            for (var _i = 0; _i < self.main.wanderList.length; _i++) self.main.wanderList[_i].stopFlag = true;
+            self.main.wanderList[id].joinPath();
+          }
+          prePathId = id;
+        });
+      };
+      for (var id = 0; id < self.main.wanderList.length; id++) {
+        _loop(id);
+      }
     }
   }]);
   return Panel;
 }();
 exports.Panel = Panel;
-},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"node_modules/three/examples/jsm/loaders/TGALoader.js":[function(require,module,exports) {
+},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/three/examples/jsm/loaders/TGALoader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52840,184 +53049,7 @@ var AvatarManager = /*#__PURE__*/function () {
   return AvatarManager;
 }();
 exports.AvatarManager = AvatarManager;
-},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","process":"node_modules/process/browser.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.MoveManager = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
-function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
-function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
-function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
-var _autoRoam = /*#__PURE__*/new WeakMap();
-var MoveManager = /*#__PURE__*/_createClass(function MoveManager(avatar, roamPath) {
-  _classCallCheck(this, MoveManager);
-  _defineProperty(this, "avatar", void 0);
-  _defineProperty(this, "roamPath", void 0);
-  _defineProperty(this, "myPreviewflag", void 0);
-  //确定目标节点
-  _defineProperty(this, "stopFlag", void 0);
-  //控制是否开始移动
-  _defineProperty(this, "isLoop", void 0);
-  //如果不进行循环漫游的话，第一行的初始状态就没用了
-  _defineProperty(this, "myMakeOneRoamStep", new MakeOneRoamStep());
-  _classPrivateFieldInitSpec(this, _autoRoam, {
-    writable: true,
-    value: function value() {
-      var scope = this;
-      autoRoam0();
-      function autoRoam0() {
-        if (!scope.stopFlag)
-          //是否停止自动漫游
-          if (scope.myMakeOneRoamStep.preview(scope.myPreviewflag, scope.avatar, scope.roamPath)) {
-            scope.myPreviewflag++;
-            if (scope.myPreviewflag === scope.roamPath.length) {
-              scope.myPreviewflag = 1;
-              if (!scope.isLoop) scope.stopFlag = true;
-            }
-          }
-        requestAnimationFrame(autoRoam0);
-      }
-    }
-  });
-  var _scope = this;
-  _scope.avatar = avatar;
-  _scope.roamPath = roamPath;
-  _scope.myPreviewflag = 1; //确定目标节点
-  _scope.stopFlag = true;
-  _scope.isLoop = true; //false;//如果不进行循环漫游的话，第一行的初始状态就没用了
-
-  _scope.myMakeOneRoamStep = new MakeOneRoamStep();
-  _classPrivateFieldGet(this, _autoRoam).call(this); //创建后自动执行
-});
-exports.MoveManager = MoveManager;
-_defineProperty(MoveManager, "getArray", function (arr1) {
-  //通过平面位置获取输入数据
-  //arr1:  x,z
-  //arr2:  x,y,z,  a,b,c, time
-  var arr2 = [];
-  var time = 400;
-  arr2.push([arr1[0][0], 0, arr1[0][1], 0, 0, 0, time]);
-  for (var i = 1; i < arr1.length; i++) {
-    arr2.push([arr1[i][0], 0, arr1[i][1], 0, Math.atan2(arr1[i][0] - arr1[i - 1][0], arr1[i][1] - arr1[i - 1][1]), 0, time]);
-  }
-  return arr2;
-});
-var _updateParam = /*#__PURE__*/new WeakMap();
-var _initParam = /*#__PURE__*/new WeakMap();
-var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
-  _classCallCheck(this, MakeOneRoamStep);
-  _defineProperty(this, "pattern", void 0);
-  _defineProperty(this, "rectify", void 0);
-  //记录这是第几步//第一步更新参数，最后一步纠正状态
-  _defineProperty(this, "stepIndex_max", void 0);
-  _defineProperty(this, "targetStatus", void 0);
-  //目标状态
-  _defineProperty(this, "dx", void 0);
-  _defineProperty(this, "dy", void 0);
-  _defineProperty(this, "dz", void 0);
-  //一步的位移
-  _defineProperty(this, "q1", void 0);
-  _defineProperty(this, "q2", void 0);
-  _defineProperty(this, "qt", void 0);
-  _classPrivateFieldInitSpec(this, _updateParam, {
-    writable: true,
-    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
-      // time=time/100
-      var scope = this;
-      scope.dx = (x2 - x1) / time;
-      scope.dy = (y2 - y1) / time;
-      scope.dz = (z2 - z1) / time;
-      scope.q1 = euler2quaternion(a1, b1, c1);
-      scope.q2 = euler2quaternion(a2, b2, c2);
-      scope.qt = scope.stepIndex / scope.stepIndex_max;
-      function euler2quaternion(x, y, z) {
-        var euler = new THREE.Euler(x, y, z, 'XYZ');
-        var quaternion = new THREE.Quaternion();
-        quaternion.setFromEuler(euler);
-        return quaternion;
-      }
-      scope.targetStatus = [x2, y2, z2, a2, b2, c2];
-    }
-  });
-  _classPrivateFieldInitSpec(this, _initParam, {
-    writable: true,
-    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
-      var scope = this;
-      scope.stepIndex_max = time;
-      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
-    }
-  });
-  _defineProperty(this, "preview", function (mystate, avatar, mydata) {
-    //thisObj,time,myavatar,k//thisObj,x1,y1,z1,x2,y2,z2,time,myavatar,k
-    var scope = this;
-    var x1, y1, z1, x2, y2, z2,
-      //位置
-      a1, b1, c1, a2, b2, c2; //角度//a=c
-
-    if (mystate >= mydata.length) return;
-    var time = mydata[mystate][6];
-    //当前状态
-    x1 = avatar.position.x;
-    y1 = avatar.position.y;
-    z1 = avatar.position.z;
-    a1 = avatar.rotation.x;
-    b1 = avatar.rotation.y;
-    c1 = avatar.rotation.z;
-    //目标状态
-    x2 = mydata[mystate][0];
-    y2 = mydata[mystate][1];
-    z2 = mydata[mystate][2];
-    a2 = mydata[mystate][3];
-    b2 = mydata[mystate][4];
-    c2 = mydata[mystate][5];
-    if (scope.stepIndex === 1) {
-      //新的阶段
-      _classPrivateFieldGet(scope, _initParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
-    } else if (scope.rectify) {
-      //如果有路径纠正功能
-      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time - scope.stepIndex + 1);
-    }
-    return movetoPos(avatar, scope);
-    function movetoPos(avatar, scope) {
-      //移动
-      if (scope.stepIndex < scope.stepIndex_max) {
-        avatar.position.x += scope.dx;
-        avatar.position.y += scope.dy;
-        avatar.position.z += scope.dz;
-        avatar.quaternion.x = scope.q1.x;
-        avatar.quaternion.y = scope.q1.y;
-        avatar.quaternion.z = scope.q1.z;
-        avatar.quaternion.w = scope.q1.w;
-        avatar.quaternion.slerp(scope.q2, scope.qt);
-        scope.stepIndex++;
-        return false;
-      } else {
-        avatar.position.set(scope.targetStatus[0], scope.targetStatus[1], scope.targetStatus[2]);
-        avatar.rotation.set(scope.targetStatus[3], scope.targetStatus[4], scope.targetStatus[5]);
-        scope.stepIndex = 1;
-        return true;
-      }
-    }
-  });
-  var _scope2 = this;
-  _scope2.rectify = true; //
-  _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
-});
-},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
+},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","process":"node_modules/process/browser.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -53053,12 +53085,12 @@ var Loader = /*#__PURE__*/function () {
     this.body = body;
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
-    this.panel = new _Panel.Panel(this);
     this.initScene();
+    this.initWander();
+    this.panel = new _Panel.Panel(this);
     this.building = new _Building.Building(this.scene, this.camera);
     // if(!new URLSearchParams(window.location.search).has("autoMove"))
     //     new AvatarManager(this.scene,this.camera)
-    this.initWander();
   }
   _createClass(Loader, [{
     key: "initWander",

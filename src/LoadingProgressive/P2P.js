@@ -21,6 +21,7 @@ export class P2P{
         }
     }
     geolocation(cb){
+        cb(null);return
         var geolocation = new BMap.Geolocation();
         geolocation.getCurrentPosition(function(r){
             const status=this.getStatus()
