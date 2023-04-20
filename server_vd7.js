@@ -1,4 +1,4 @@
-console.log('version:02')
+console.log('version:02(node --max_old_space_size=8192 server_vd)')
 let areaInf={
 "x": [
     -124000,
@@ -68,7 +68,7 @@ let VisibleArea
 const databaseEvd={}
 const databasePvd={}
 require('jsonfile').readFile(
-    'dist/assets/configVVD - model7.json', 
+    'dist/assets/configVVD.json', 
     (err, jsonData)=>{
       if (err) throw err
       for(let vid in jsonData){

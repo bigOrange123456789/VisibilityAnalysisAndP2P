@@ -40444,7 +40444,7 @@ module.exports = {
   "FlipY": true,
   "src": {
     "Building_new": {
-      "path": "assets/space7Zip/",
+      "path": "assets/space7Zip_sim/",
       "NumberOfComponents": 8437,
       "parentGroup": {
         "scale": {
@@ -41746,7 +41746,7 @@ module.exports = {
     },
     "Visibility": {
       "componentNum": 8437,
-      "urlVdServer": "http://localhost:8091"
+      "urlVdServer": "http://114.80.207.60:8091"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -41761,7 +41761,7 @@ module.exports = {
       "camera": {
         "position": {
           "x": -116237.59887439065,
-          "y": 1669.743315338819,
+          "y": -1530.256684661181,
           "z": 11978.665556584478
         },
         "rotation": {
@@ -41775,7 +41775,7 @@ module.exports = {
           "z": 4122.605105589213
         },
         "near": 10,
-        "far": 5000000
+        "far": 500000
       }
     }
   }
@@ -44712,7 +44712,8 @@ var Building = /*#__PURE__*/function () {
     window.meshes = this.meshes;
     this.meshes_request = {};
     this.detection = new _Detection.Detection(this.meshes);
-    this.doorTwinkle();
+
+    // this.doorTwinkle()
     // this.createFloor()
     this.p2p = new _P2P.P2P(camera);
     this.p2p.parse = function (message) {
@@ -52984,7 +52985,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63769" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64756" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

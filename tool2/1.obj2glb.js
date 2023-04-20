@@ -1,6 +1,6 @@
 
-const path1="F:/gitHubRepositories/vk-precompute-main/model7/obj/"
-const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB/"
+const path1="F:/gitHubRepositories/vk-precompute-main/model7/obj_sim/"
+const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB_sim/"
 // const FileProcessor = require('./FileProcessor');
 // const fp=FileProcessor()
 const obj2gltf = require('obj2gltf');

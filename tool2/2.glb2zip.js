@@ -104,14 +104,14 @@ class FileProcessor{
     }
 }
 
-const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB/"
-const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7Zip/"
+const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB_sim/"
+const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7Zip_sim/"
 var fp=new FileProcessor()
 var all=fp.fs.readdirSync(path1)
 var i=0;
 var si=setInterval(()=>{
     var s=all[i];
-    console.log("s",s)
+    // console.log("s",s)
     //var arr=s.split(".gltf");
     //if(arr.length>1)
     fp.zip(
