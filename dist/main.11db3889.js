@@ -40444,7 +40444,7 @@ module.exports = {
   "FlipY": true,
   "src": {
     "Building_new": {
-      "path": "assets/space7Zip_sim/",
+      "path": "assets/space7Zip/",
       "NumberOfComponents": 8437,
       "parentGroup": {
         "scale": {
@@ -49281,7 +49281,7 @@ var Panel = /*#__PURE__*/function () {
   function Panel(main) {
     _classCallCheck(this, Panel);
     this.main = main;
-    // this.addMyUI()
+    this.addMyUI();
     // this.show
   }
   _createClass(Panel, [{
@@ -49293,25 +49293,26 @@ var Panel = /*#__PURE__*/function () {
       var self = this;
       var ui = new _MyUI_sim.MyUI();
       ui.init();
-      new ui.Button('展示模型', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 500, function (b) {
+      new ui.Button('漫游路径1', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 500, function (b) {
         //位置
-        self.main.building.modelShow();
+        var id = 0;
+        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
+        var wander = self.main.wanderList[id];
+        wander.stopFlag = !wander.stopFlag;
       });
-      new ui.Button('展示墙壁', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 550, function (b) {
+      new ui.Button('漫游路径2', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 550, function (b) {
         //位置
-        self.main.building.wallShow();
+        var id = 1;
+        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
+        var wander = self.main.wanderList[id];
+        wander.stopFlag = !wander.stopFlag;
       });
-      new ui.Button('准确可见集', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 600, function (b) {
+      new ui.Button('漫游路径3', "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4, 0, 600, function (b) {
         //位置
-        if (window.showVDbyColor == "evd") {
-          window.showVDbyColor = "pvd";
-          b.innerHTML = "潜在可见集";
-        } else {
-          window.showVDbyColor = "evd";
-          b.innerHTML = "准确可见集";
-        }
-        console.log(b);
-        window.b = b;
+        var id = 2;
+        for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
+        var wander = self.main.wanderList[id];
+        wander.stopFlag = !wander.stopFlag;
       });
     }
   }]);
@@ -52839,7 +52840,184 @@ var AvatarManager = /*#__PURE__*/function () {
   return AvatarManager;
 }();
 exports.AvatarManager = AvatarManager;
-},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","process":"node_modules/process/browser.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
+},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","process":"node_modules/process/browser.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveManager = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+var _autoRoam = /*#__PURE__*/new WeakMap();
+var MoveManager = /*#__PURE__*/_createClass(function MoveManager(avatar, roamPath) {
+  _classCallCheck(this, MoveManager);
+  _defineProperty(this, "avatar", void 0);
+  _defineProperty(this, "roamPath", void 0);
+  _defineProperty(this, "myPreviewflag", void 0);
+  //确定目标节点
+  _defineProperty(this, "stopFlag", void 0);
+  //控制是否开始移动
+  _defineProperty(this, "isLoop", void 0);
+  //如果不进行循环漫游的话，第一行的初始状态就没用了
+  _defineProperty(this, "myMakeOneRoamStep", new MakeOneRoamStep());
+  _classPrivateFieldInitSpec(this, _autoRoam, {
+    writable: true,
+    value: function value() {
+      var scope = this;
+      autoRoam0();
+      function autoRoam0() {
+        if (!scope.stopFlag)
+          //是否停止自动漫游
+          if (scope.myMakeOneRoamStep.preview(scope.myPreviewflag, scope.avatar, scope.roamPath)) {
+            scope.myPreviewflag++;
+            if (scope.myPreviewflag === scope.roamPath.length) {
+              scope.myPreviewflag = 1;
+              if (!scope.isLoop) scope.stopFlag = true;
+            }
+          }
+        requestAnimationFrame(autoRoam0);
+      }
+    }
+  });
+  var _scope = this;
+  _scope.avatar = avatar;
+  _scope.roamPath = roamPath;
+  _scope.myPreviewflag = 1; //确定目标节点
+  _scope.stopFlag = true;
+  _scope.isLoop = true; //false;//如果不进行循环漫游的话，第一行的初始状态就没用了
+
+  _scope.myMakeOneRoamStep = new MakeOneRoamStep();
+  _classPrivateFieldGet(this, _autoRoam).call(this); //创建后自动执行
+});
+exports.MoveManager = MoveManager;
+_defineProperty(MoveManager, "getArray", function (arr1) {
+  //通过平面位置获取输入数据
+  //arr1:  x,z
+  //arr2:  x,y,z,  a,b,c, time
+  var arr2 = [];
+  var time = 400;
+  arr2.push([arr1[0][0], 0, arr1[0][1], 0, 0, 0, time]);
+  for (var i = 1; i < arr1.length; i++) {
+    arr2.push([arr1[i][0], 0, arr1[i][1], 0, Math.atan2(arr1[i][0] - arr1[i - 1][0], arr1[i][1] - arr1[i - 1][1]), 0, time]);
+  }
+  return arr2;
+});
+var _updateParam = /*#__PURE__*/new WeakMap();
+var _initParam = /*#__PURE__*/new WeakMap();
+var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
+  _classCallCheck(this, MakeOneRoamStep);
+  _defineProperty(this, "pattern", void 0);
+  _defineProperty(this, "rectify", void 0);
+  //记录这是第几步//第一步更新参数，最后一步纠正状态
+  _defineProperty(this, "stepIndex_max", void 0);
+  _defineProperty(this, "targetStatus", void 0);
+  //目标状态
+  _defineProperty(this, "dx", void 0);
+  _defineProperty(this, "dy", void 0);
+  _defineProperty(this, "dz", void 0);
+  //一步的位移
+  _defineProperty(this, "q1", void 0);
+  _defineProperty(this, "q2", void 0);
+  _defineProperty(this, "qt", void 0);
+  _classPrivateFieldInitSpec(this, _updateParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      // time=time/100
+      var scope = this;
+      scope.dx = (x2 - x1) / time;
+      scope.dy = (y2 - y1) / time;
+      scope.dz = (z2 - z1) / time;
+      scope.q1 = euler2quaternion(a1, b1, c1);
+      scope.q2 = euler2quaternion(a2, b2, c2);
+      scope.qt = scope.stepIndex / scope.stepIndex_max;
+      function euler2quaternion(x, y, z) {
+        var euler = new THREE.Euler(x, y, z, 'XYZ');
+        var quaternion = new THREE.Quaternion();
+        quaternion.setFromEuler(euler);
+        return quaternion;
+      }
+      scope.targetStatus = [x2, y2, z2, a2, b2, c2];
+    }
+  });
+  _classPrivateFieldInitSpec(this, _initParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      var scope = this;
+      scope.stepIndex_max = time;
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    }
+  });
+  _defineProperty(this, "preview", function (mystate, avatar, mydata) {
+    //thisObj,time,myavatar,k//thisObj,x1,y1,z1,x2,y2,z2,time,myavatar,k
+    var scope = this;
+    var x1, y1, z1, x2, y2, z2,
+      //位置
+      a1, b1, c1, a2, b2, c2; //角度//a=c
+
+    if (mystate >= mydata.length) return;
+    var time = mydata[mystate][6];
+    //当前状态
+    x1 = avatar.position.x;
+    y1 = avatar.position.y;
+    z1 = avatar.position.z;
+    a1 = avatar.rotation.x;
+    b1 = avatar.rotation.y;
+    c1 = avatar.rotation.z;
+    //目标状态
+    x2 = mydata[mystate][0];
+    y2 = mydata[mystate][1];
+    z2 = mydata[mystate][2];
+    a2 = mydata[mystate][3];
+    b2 = mydata[mystate][4];
+    c2 = mydata[mystate][5];
+    if (scope.stepIndex === 1) {
+      //新的阶段
+      _classPrivateFieldGet(scope, _initParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    } else if (scope.rectify) {
+      //如果有路径纠正功能
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time - scope.stepIndex + 1);
+    }
+    return movetoPos(avatar, scope);
+    function movetoPos(avatar, scope) {
+      //移动
+      if (scope.stepIndex < scope.stepIndex_max) {
+        avatar.position.x += scope.dx;
+        avatar.position.y += scope.dy;
+        avatar.position.z += scope.dz;
+        avatar.quaternion.x = scope.q1.x;
+        avatar.quaternion.y = scope.q1.y;
+        avatar.quaternion.z = scope.q1.z;
+        avatar.quaternion.w = scope.q1.w;
+        avatar.quaternion.slerp(scope.q2, scope.qt);
+        scope.stepIndex++;
+        return false;
+      } else {
+        avatar.position.set(scope.targetStatus[0], scope.targetStatus[1], scope.targetStatus[2]);
+        avatar.rotation.set(scope.targetStatus[3], scope.targetStatus[4], scope.targetStatus[5]);
+        scope.stepIndex = 1;
+        return true;
+      }
+    }
+  });
+  var _scope2 = this;
+  _scope2.rectify = true; //
+  _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
+});
+},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52855,6 +53033,7 @@ var _LightProducer = require("./LightProducer.js");
 var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
 var _Panel = require("./Panel.js");
 var _AvatarManager = require("./AvatarManager.js");
+var _MoveManager = require("../../lib/playerControl/MoveManager.js");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -52879,8 +53058,14 @@ var Loader = /*#__PURE__*/function () {
     this.building = new _Building.Building(this.scene, this.camera);
     // if(!new URLSearchParams(window.location.search).has("autoMove"))
     //     new AvatarManager(this.scene,this.camera)
+    this.initWander();
   }
   _createClass(Loader, [{
+    key: "initWander",
+    value: function initWander() {
+      this.wanderList = [new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 100]]), new _MoveManager.MoveManager(this.camera, [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]]), new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, 0.39295, -1.39064, 0.38721, 100], [-110838.94, -1530.26, 10987.26, 0.10579, -0.31346, 0.03273, 100], [-110296.26, -1530.26, 8129.91, 0.09153, 0.4672, -0.04132, 100], [-112781.13, -1530.26, -349.29, 0.44064, -1.3759, 0.43331, 100]])];
+    }
+  }, {
     key: "initScene",
     value: function () {
       var _initScene = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -52960,7 +53145,7 @@ exports.Loader = Loader;
 document.addEventListener('DOMContentLoaded', function () {
   new Loader(document.body);
 });
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","../../config/configOP.json":"config/configOP.json","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","../../config/configOP.json":"config/configOP.json","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

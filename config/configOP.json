@@ -2,7 +2,7 @@
     "FlipY":true,
     "src": {
         "Building_new": {
-            "path": "assets/space7Zip_sim/",
+            "path": "assets/space7Zip/",
             "NumberOfComponents":8437,
             "parentGroup": {
                 "scale": {

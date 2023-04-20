@@ -8,6 +8,7 @@ import { LightProducer } from './LightProducer.js'
 import config from '../../config/configOP.json'
 import {Panel } from './Panel.js'
 import {AvatarManager } from './AvatarManager.js'
+import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 export class Loader{
     constructor(body){
         this.config=config.src.main
@@ -19,6 +20,30 @@ export class Loader{
         this.building=new Building(this.scene,this.camera)
         // if(!new URLSearchParams(window.location.search).has("autoMove"))
         //     new AvatarManager(this.scene,this.camera)
+        this.initWander()
+        
+    }
+    initWander() {
+        this.wanderList=[
+            new MoveManager(this.camera, [
+            [-116237.6,-1530.26,11978.66,   -0.11063,-1.49565,-0.11032, 1000]
+            ,[-54865.63,-1530.26,13039.32,  -2.1177,-1.5529,-2.11778,   1000]
+            ,[-36767.63,-1530.26,-1362.69   ,-0.00625,-1.0161,-0.00531, 1000]
+            ,[55787.57,-1530.26,-1737.73,   1.8086,-1.5059,1.80908,    1000]
+            ,[-44907.4,-1530.26,12147.79,2.04046,1.51057,-2.0412,100]
+            ]),
+            new MoveManager(this.camera, [
+                [-32115.98,-7430.26,13644.9,1.52432,-1.38584,1.52352,1000],
+                [13590.9,-7430.26,13247.66,1.52432,-1.38584,1.52352,1000],
+                [85050.92,-7430.26,12626.6,0.26428,0.39225,-0.10309,1000],
+                [85167.57,-7430.26,-1571.08,1.02457,1.26256,-1.00292,1000],
+                [11514.32,-7430.26,-2564.01,1.54904,1.39331,-1.5487,1000],
+                [-35731.63,-7430.26,-2748.36,2.87731,-0.45912,3.02224,1000]
+            ]),
+            new MoveManager(this.camera, [
+                [-116237.6,-1530.26,11978.66,0.39295,-1.39064,0.38721,100],[-110838.94,-1530.26,10987.26,0.10579,-0.31346,0.03273,100],[-110296.26,-1530.26,8129.91,0.09153,0.4672,-0.04132,100],[-112781.13,-1530.26,-349.29,0.44064,-1.3759,0.43331,100]
+            ])
+        ]
         
     }
     async initScene(){

@@ -2,7 +2,7 @@ import{MyUI} from "../../lib/ui/MyUI_sim.js"
 export class Panel{
   constructor(main){
       this.main=main
-      // this.addMyUI()
+      this.addMyUI()
       // this.show
   }
   addMyUI()
@@ -13,31 +13,38 @@ export class Panel{
     var self=this;
     var ui=new MyUI()
     ui.init()
-    new ui.Button('展示模型', "#3498DB", '#2980B9', '#01DFD7',
+    new ui.Button('漫游路径1', "#3498DB", '#2980B9', '#01DFD7',
           (width/10)/6, 150,
           width/10, (width/10)/4,
           0,500,(b)=>{//位置
-            self.main.building.modelShow()
+            const id=0
+            for(let i=0;i<self.main.wanderList.length;i++)
+              if(i!==id)self.main.wanderList[i].stopFlag=true
+            const wander=self.main.wanderList[id]
+            wander.stopFlag=!wander.stopFlag
           })
-    new ui.Button('展示墙壁', "#3498DB", '#2980B9', '#01DFD7',
+    new ui.Button('漫游路径2', "#3498DB", '#2980B9', '#01DFD7',
           (width/10)/6, 150,
           width/10, (width/10)/4,
           0,550,(b)=>{//位置
-            self.main.building.wallShow()
+            const id=1
+            for(let i=0;i<self.main.wanderList.length;i++)
+              if(i!==id)self.main.wanderList[i].stopFlag=true
+            const wander=self.main.wanderList[id]
+            wander.stopFlag=!wander.stopFlag
+
           })
-    new ui.Button('准确可见集', "#3498DB", '#2980B9', '#01DFD7',
+    new ui.Button('漫游路径3', "#3498DB", '#2980B9', '#01DFD7',
           (width/10)/6, 150,
           width/10, (width/10)/4,
           0,600,(b)=>{//位置
-            if(window.showVDbyColor=="evd"){
-              window.showVDbyColor="pvd"
-              b.innerHTML="潜在可见集"
-            }else{
-              window.showVDbyColor="evd"
-              b.innerHTML="准确可见集"
-            }
-            console.log(b)
-            window.b=b
+            const id=2
+            for(let i=0;i<self.main.wanderList.length;i++)
+              if(i!==id)self.main.wanderList[i].stopFlag=true
+            const wander=self.main.wanderList[id]
+            wander.stopFlag=!wander.stopFlag
+
           })
+
   }
 }
