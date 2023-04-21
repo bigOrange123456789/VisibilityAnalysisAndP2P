@@ -36106,6 +36106,11 @@ var PlayerControl0 = /*#__PURE__*/function () {
       //相机的初始方向是（0，0，-1）
       return new Vector3(camera.matrixWorld.elements[8] * -1, camera.matrixWorld.elements[9] * -1, camera.matrixWorld.elements[10] * -1);
     };
+    camera.getLeftDirection = function () {
+      return new Vector3(
+      //相机的左方向是（-1，0，0）
+      camera.matrixWorld.elements[0], camera.matrixWorld.elements[1], camera.matrixWorld.elements[2]);
+    };
     this.speed = speed;
     this.constraint = true;
     this.camera = camera;
@@ -36317,6 +36322,7 @@ var PlayerControl0 = /*#__PURE__*/function () {
         var direction = new Vector3(
         //相机的左方向是（-1，0，0）
         obj.matrixWorld.elements[0], 0, obj.matrixWorld.elements[2]);
+        if (scope.isCollision(-1.2 * step, direction)) return;
         obj.position.add(new Vector3().addScaledVector(direction, -step));
       }
       function forward_constraint(step, obj) {
@@ -36325,8 +36331,40 @@ var PlayerControl0 = /*#__PURE__*/function () {
         var direction = new Vector3(
         //相机的初始方向是（0，0，-1）//对y旋转-90度后相机为水平方向camera.rotation.set(0,-Math.PI/2,0);
         obj.matrixWorld.elements[8], 0, obj.matrixWorld.elements[10]);
+        if (scope.isCollision(-step, direction)) return;
         obj.position.add(new Vector3().addScaledVector(direction, -step));
       }
+    }
+  }, {
+    key: "isCollision",
+    value: function isCollision(step, direction) {
+      //碰撞检测
+      direction = direction.clone();
+      var camera = this.camera;
+      var obstacles = Object.values(window.meshes);
+      var speed = 10 * step; //>0?1400:-1400
+      // console.log(speed,direction.x,direction.multiplyScalar(speed).x)
+      // 定义一个Raycaster对象
+      var raycaster = new THREE.Raycaster();
+
+      // 计算相机移动的下一个位置
+      var nextPosition = camera.position.clone().add(direction.multiplyScalar(speed));
+
+      // 检测相机当前位置和下一个位置之间是否有障碍物
+      raycaster.set(camera.position, nextPosition.sub(camera.position).normalize());
+      var intersects = raycaster.intersectObjects(obstacles);
+
+      // 如果有障碍物，将相机移动到最近的障碍物表面
+      if (intersects.length > 0) {
+        var distance = intersects[0].distance;
+        if (distance < Math.abs(speed)) {
+          return true; // camera.position.add(camera.getWorldDirection().multiplyScalar(distance));
+        }
+      } else {
+        // camera.position.add(camera.getWorldDirection().multiplyScalar(speed));
+      }
+      // console.log(distance,speed)
+      return false;
     }
   }]);
   return PlayerControl0;
@@ -49509,7 +49547,7 @@ var Panel = /*#__PURE__*/function () {
         //大小
         0, 500 + id * 50, function (b) {
           //位置
-          if (prePathId == -1 || id == prePathId) {
+          if (id == prePathId) {
             for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
             var wander = self.main.wanderList[id];
             wander.stopFlag = !wander.stopFlag;
@@ -53095,7 +53133,7 @@ var Loader = /*#__PURE__*/function () {
   _createClass(Loader, [{
     key: "initWander",
     value: function initWander() {
-      this.wanderList = [new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 100]]), new _MoveManager.MoveManager(this.camera, [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]]), new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, 0.39295, -1.39064, 0.38721, 100], [-110838.94, -1530.26, 10987.26, 0.10579, -0.31346, 0.03273, 100], [-110296.26, -1530.26, 8129.91, 0.09153, 0.4672, -0.04132, 100], [-112781.13, -1530.26, -349.29, 0.44064, -1.3759, 0.43331, 100]])];
+      this.wanderList = [new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 1000]]), new _MoveManager.MoveManager(this.camera, [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]]), new _MoveManager.MoveManager(this.camera, [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 1000], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 1000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 1000], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 1000]])];
     }
   }, {
     key: "initScene",

@@ -20,7 +20,7 @@ export class Panel{
           (width/10)/6, 150,
           width/10, (width/10)/4,//大小
           0,500+id*50,(b)=>{//位置
-            if(prePathId==-1||id==prePathId){
+            if(id==prePathId){
               for(let i=0;i<self.main.wanderList.length;i++)
                 if(i!==id)self.main.wanderList[i].stopFlag=true
               const wander=self.main.wanderList[id]
