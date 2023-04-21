@@ -20,8 +20,8 @@ export class Loader{
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
-        // if(!new URLSearchParams(window.location.search).has("autoMove"))
-        //     new AvatarManager(this.scene,this.camera)
+        if(!new URLSearchParams(window.location.search).has("autoMove"))
+            new AvatarManager(this.scene,this.camera)
         
         
     }

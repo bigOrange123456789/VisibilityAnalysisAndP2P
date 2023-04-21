@@ -13,29 +13,75 @@ export class AvatarManager {
         this.init()
     }
     initPos(){
-        const c={
+        this.poslist=[]
+        let c={
             "x": [
-                -121000,
-                117000,
+                -124000,
+                126000,
                 2000
             ],
             "y": [
-                2286.5,
-                2286.5,
+                -1530.26+3000,
+                -1530.26+3000,
                 2000
             ],
             "z": [
-                -4000,
-                16000,
-                2000
-            ]
+                -3000,
+                        15000,
+                        2000
+            ],
         }
-        this.poslist=[]
         for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
             for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
                     this.poslist.push([x,y,z])
                 }
+                
+                c={
+                    "x": [
+                        -124000,
+                        126000,
+                        2000
+                    ],
+                    "y": [
+                        -7430.26+4000,
+                        -7430.26+4000,
+                        2000
+                    ],
+                    "z": [
+                        -3000,
+                        15000,
+                        2000
+                    ],
+                }
+                for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+                    for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+                        for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                            this.poslist.push([x,y,z])
+                        }
+            
+                        c={
+                            "x": [
+                                -124000,
+                                126000,
+                                2000
+                            ],
+                            "y": [
+                                -12230.26+3500,
+                                -12230.26+3500,
+                                2000
+                            ],
+                            "z": [
+                                -3000,
+                                15000,
+                                2000
+                            ],
+                        }
+                        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+                            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+                                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                                    this.poslist.push([x,y,z])
+                                }
 
     }
     getConfig(){
@@ -188,9 +234,9 @@ export class AvatarManager {
                     )
                 crowd.setSpeed(i00, 1+4*Math.random())
                 crowd.setScale(i00, [
-                    700,
-                    700*(1-0.2+0.2*Math.random()),
-                    700])
+                    -900,
+                    -900*(1-0.2+0.2*Math.random()),
+                    900])
                 crowd.setObesity(i00, 0.8+0.4*Math.random())
                 const j=10
                 crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")

@@ -42234,7 +42234,7 @@ var Detection = /*#__PURE__*/function () {
     this.close = false;
     this.pack_circumstances = {};
     var scope = this;
-    this.testTime = 60; //window.param.testTime;//测试时间
+    this.testTime = 90; //60//window.param.testTime;//测试时间
     this.frameCount = 0; //记录帧数量
     function testFrame() {
       scope.frameCount++;
@@ -52509,10 +52509,11 @@ var CrowdLod = /*#__PURE__*/function () {
             for (var _i2 = 0; _i2 < scope.countAll; _i2++) {
               //遍历所有化身的位置
               if (scope.crowd.lodList[_i2] == -2) continue; //lodList==-2指的是始终不显示这个化身
-              if (window.visibleArea) if (!window.visibleArea[_i2]) {
-                scope.crowd.lodList[_i2] = -1;
-                continue;
-              }
+              // if (window.visibleArea)
+              //     if(!window.visibleArea[i]){
+              //         scope.crowd.lodList[i] = -1
+              //         continue
+              //     }
               scope.crowd.lodList[_i2] = 0; //默认显示最低等级的化身
               var _p = scope.crowd.getPosition(_i2);
               var _point = new THREE.Vector3(_p[0], _p[1], _p[2]);
@@ -52927,14 +52928,30 @@ var AvatarManager = /*#__PURE__*/function () {
   _createClass(AvatarManager, [{
     key: "initPos",
     value: function initPos() {
-      var c = {
-        "x": [-121000, 117000, 2000],
-        "y": [2286.5, 2286.5, 2000],
-        "z": [-4000, 16000, 2000]
-      };
       this.poslist = [];
+      var c = {
+        "x": [-124000, 126000, 2000],
+        "y": [-1530.26 + 3000, -1530.26 + 3000, 2000],
+        "z": [-3000, 15000, 2000]
+      };
       for (var x = c.x[0]; x <= c.x[1]; x = x + c.x[2]) for (var y = c.y[0]; y <= c.y[1]; y = y + c.y[2]) for (var z = c.z[0]; z <= c.z[1]; z = z + c.z[2]) {
         this.poslist.push([x, y, z]);
+      }
+      c = {
+        "x": [-124000, 126000, 2000],
+        "y": [-7430.26 + 4000, -7430.26 + 4000, 2000],
+        "z": [-3000, 15000, 2000]
+      };
+      for (var _x = c.x[0]; _x <= c.x[1]; _x = _x + c.x[2]) for (var _y = c.y[0]; _y <= c.y[1]; _y = _y + c.y[2]) for (var _z = c.z[0]; _z <= c.z[1]; _z = _z + c.z[2]) {
+        this.poslist.push([_x, _y, _z]);
+      }
+      c = {
+        "x": [-124000, 126000, 2000],
+        "y": [-12230.26 + 3500, -12230.26 + 3500, 2000],
+        "z": [-3000, 15000, 2000]
+      };
+      for (var _x2 = c.x[0]; _x2 <= c.x[1]; _x2 = _x2 + c.x[2]) for (var _y2 = c.y[0]; _y2 <= c.y[1]; _y2 = _y2 + c.y[2]) for (var _z2 = c.z[0]; _z2 <= c.z[1]; _z2 = _z2 + c.z[2]) {
+        this.poslist.push([_x2, _y2, _z2]);
       }
     }
   }, {
@@ -53045,7 +53062,7 @@ var AvatarManager = /*#__PURE__*/function () {
             }
           }, _callee);
         }));
-        return function (_x) {
+        return function (_x3) {
           return _ref.apply(this, arguments);
         };
       }());
@@ -53071,7 +53088,7 @@ var AvatarManager = /*#__PURE__*/function () {
           crowd.setRotation(i00, [0, Math.random() * 30, 0]);
           crowd.setAnimation(i00, r(c.standAnimationList), Math.random() * 10000);
           crowd.setSpeed(i00, 1 + 4 * Math.random());
-          crowd.setScale(i00, [700, 700 * (1 - 0.2 + 0.2 * Math.random()), 700]);
+          crowd.setScale(i00, [-900, -900 * (1 - 0.2 + 0.2 * Math.random()), 900]);
           crowd.setObesity(i00, 0.8 + 0.4 * Math.random());
           var j = 10;
           crowd.setColor(i00, [j * Math.random() * 2, j * Math.random(), j * Math.random()], "CloW_A_kuzi_geo");
@@ -53127,8 +53144,7 @@ var Loader = /*#__PURE__*/function () {
     this.initWander();
     this.panel = new _Panel.Panel(this);
     this.building = new _Building.Building(this.scene, this.camera);
-    // if(!new URLSearchParams(window.location.search).has("autoMove"))
-    //     new AvatarManager(this.scene,this.camera)
+    if (!new URLSearchParams(window.location.search).has("autoMove")) new _AvatarManager.AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
     key: "initWander",
