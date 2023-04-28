@@ -7,6 +7,7 @@ export class Panel{
   constructor(){
       this.camera=window.camera
       this.addMyUI()
+      window.p=this
   }
   addMyUI()
   {
@@ -703,5 +704,60 @@ export class Panel{
     link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
     link.download =name?name:"test.json";
     link.click();
+  }
+  computeOptStep(x1,x2,y1,y2,z1,z2){//计算采样密度
+        var n=30000//145000//70000
+        function getNumber(x,y,z,d){
+            return ((x[1]-x[0])/d+1)*((y[1]-y[0])/d+1)*((z[1]-z[0])/d+1)
+        }
+        var x=[x1,x2]
+        var y=[y1,y2]
+        var z=[z1,z2]
+        var min_i=0.5
+        var min_v=Math.abs(n-getNumber(x,y,z,min_i))
+        for(var i=min_i;i<=100;i+=0.5)
+            if(min_v>Math.abs(n-getNumber(x,y,z,i))){
+              min_v=Math.abs(n-getNumber(x,y,z,i))
+              min_i=i
+            }	
+        var d=min_i
+        var add=[
+                (d-(x[1]-x[0])%d)%d,
+                (d-(y[1]-y[0])%d)%d,
+                (d-(z[1]-z[0])%d)%d
+            ]
+        var x_new=[
+            x1-add[0]/2,
+            x2+add[0]/2
+        ]
+        var y_new=[
+            y1-add[1]/2,
+            y2+add[1]/2
+        ]
+        var z_new=[
+            z1-add[2]/2,
+            z2+add[2]/2
+        ]
+
+        var result={
+            "i":d,
+            "v":min_v,
+            "add":add,
+            "new":{
+                "number":getNumber(x_new,y_new,z_new,d),
+                "v":Math.abs(n-getNumber(x_new,y_new,z_new,d)),
+                "mod step":[
+                    (x_new[1]-x_new[0])%d,
+                    (y_new[1]-y_new[0])%d,
+                    (z_new[1]-z_new[0])%d
+                ],
+                "step":d,
+                "x":x_new,
+                "y":y_new,
+                "z":z_new,
+            },
+        }
+        console.log(result)
+        return result
   }
 }

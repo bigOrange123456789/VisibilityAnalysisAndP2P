@@ -34,6 +34,7 @@ export class Loader{
         ////////////////////////////////////////////////////////////////////////
 
         this.renderer.setSize(800,800)//(this.body.clientWidth,this.body.clientHeight)
+        // console.log(this.renderer.domElement.width)
         this.renderer.setPixelRatio(window.devicePixelRatio)
         window.renderer=this.renderer
         this.body.appendChild(this.renderer.domElement)

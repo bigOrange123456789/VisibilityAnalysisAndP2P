@@ -42222,7 +42222,13 @@ var Detection = /*#__PURE__*/function () {
     _classCallCheck(this, Detection);
     this.meshes = meshes;
     this.dectionURL = _configOP.default.src.Detection.urlDetectionServer;
-    this.date = [new Date().getMonth(), new Date().getDate(), new Date().getHours(), new Date().getSeconds(), new Date().getMilliseconds()];
+    this.date = [new Date().getMonth(), new Date().getDate(), new Date().getHours(),
+    //
+    new Date().getMinutes(),
+    //新添加
+    new Date().getSeconds(),
+    //1
+    new Date().getMilliseconds()];
     // this.time0=performance.now()
     // this.
 
@@ -42284,7 +42290,7 @@ var Detection = /*#__PURE__*/function () {
       var count = 0;
       for (var id in this.meshes) {
         var mesh = this.meshes[id];
-        if (mesh.originType = "edgeP2P" && !mesh.used) count++;
+        if (mesh.originType == "edgeP2P" && !mesh.used) count++;
       }
       return count;
     }
@@ -42294,7 +42300,7 @@ var Detection = /*#__PURE__*/function () {
       var count = 0;
       for (var id in this.meshes) {
         var mesh = this.meshes[id];
-        if (mesh.originType = "cloud" && !mesh.used) count++;
+        if (mesh.originType == "cloud" && !mesh.used) count++;
       }
       return count;
     }
@@ -53256,7 +53262,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64756" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62058" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

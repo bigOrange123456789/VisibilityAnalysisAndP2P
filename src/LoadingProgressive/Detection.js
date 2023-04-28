@@ -6,8 +6,9 @@ export class Detection {//需要服务器
         this.date=[
             new Date().getMonth(),
             new Date().getDate(),
-            new Date().getHours(),
-            new Date().getSeconds(),
+            new Date().getHours(),//
+            new Date().getMinutes(),//新添加
+            new Date().getSeconds(),//1
             new Date().getMilliseconds()
         ]
         // this.time0=performance.now()
@@ -67,7 +68,7 @@ export class Detection {//需要服务器
         let count=0
         for(let id in this.meshes){
             const mesh=this.meshes[id]
-            if(mesh.originType="edgeP2P"&&!mesh.used)
+            if(mesh.originType=="edgeP2P"&&!mesh.used)
                 count++
         }
         return count
@@ -76,7 +77,7 @@ export class Detection {//需要服务器
         let count=0
         for(let id in this.meshes){
             const mesh=this.meshes[id]
-            if(mesh.originType="cloud"&&!mesh.used)
+            if(mesh.originType=="cloud"&&!mesh.used)
                 count++
         }
         return count
