@@ -1313,7 +1313,8 @@
             },
             "blocking": {},
             "block2Kernel": {},
-            "updateColor":true
+            "updateColor":true,
+            "instanceUse":false
         },
         "Visibility":{
             "componentNum":8437,

@@ -31,7 +31,8 @@
             "isdoor": {},
             "blocking": {},
             "block2Kernel": {},
-            "updateColor":false
+            "updateColor":false,
+            "instanceUse":true
         },
         "Visibility":{
             "componentNum":8437,

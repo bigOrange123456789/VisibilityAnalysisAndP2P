@@ -34,12 +34,22 @@ export class Building{
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
 
-        // this.loadJson(
-        //     this.config.path+"instance_info.json",
-        //     data=>{
-        //         console.log("instance_info.json",data)
-        //     }
-        // )
+        if(this.config.instanceUse){
+            this.loadJson(
+                this.config.path+"instance_info.json",
+                data=>{
+                    self.instance_info=data
+                    self.start()
+                }
+            )
+        }else{
+            this.start()
+        }
+        
+        
+    }
+    start(){
+        const self=this
         // this.load0()
         let c=this.config.createSphere
         this.visibiity=new Visibility(
@@ -99,14 +109,15 @@ export class Building{
             mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
             mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
         }else{
-            // mesh.geometry.computeFaceNormals()
             mesh.geometry.computeVertexNormals()
-            mesh.material.depthTest=false
+            // mesh.material.depthTest=true
+            mesh.material.depthWrite=true
             mesh.material.transparent=false
+            mesh.material.side=THREE.DoubleSide
         }
-        
-        // mesh.geometry.computeFaceNormals()
-        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
+        // console.log("THREE.DoubleSide",THREE.DoubleSide)
+ 
+        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff))/255
         // mesh.geometry.computeVertexNormals()
         // mesh=new THREE.Mesh(
         //     mesh.geometry,
@@ -116,10 +127,38 @@ export class Building{
         // mesh.material.color.r=1.*((t&0xff)    )/255
         // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
         // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
-
+        
+        if(this.instance_info){
+            const instance_info=this.instance_info[id]
+            mesh=new THREE.InstancedMesh(
+                mesh.geometry,
+                mesh.material,
+                instance_info.length+1
+            )
+            for(let i=0;i<instance_info.length;i++){
+                const mat=instance_info[i]
+                mesh.setMatrixAt(
+                    i,
+                    new THREE.Matrix4().set(
+                        mat[0], mat[1], mat[2], mat[3],
+                        mat[4], mat[5], mat[6], mat[7],
+                        mat[8], mat[9], mat[10], mat[11],
+                        0, 0, 0, 1
+                    )
+                )
+            }
+            mesh.setMatrixAt(
+                instance_info.length,
+                new THREE.Matrix4().fromArray( [
+                    1,0,0,0,
+                    0,1,0,0,
+                    0,0,1,0,
+                    0,0,0,1
+                ] )
+            )
+        }
 
         this.meshes[id]=mesh
-        // mesh.visible=false
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
     }

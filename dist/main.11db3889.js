@@ -117,7 +117,76 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"node_modules/three/build/three.module.js":[function(require,module,exports) {
+})({"config/configOP8.json":[function(require,module,exports) {
+module.exports = {
+  "FlipY": false,
+  "src": {
+    "Building_new": {
+      "path": "assets/space8Zip/",
+      "NumberOfComponents": 529,
+      "parentGroup": {
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "createSphere": {
+        "x": [-815, 879, 11],
+        "y": [16, 16, 11],
+        "z": [-962, 1084, 11],
+        "r": 3
+      },
+      "kernelPosition": "-110,40,-10",
+      "entropy": {},
+      "isdoor": {},
+      "blocking": {},
+      "block2Kernel": {},
+      "updateColor": false,
+      "instanceUse": true
+    },
+    "Visibility": {
+      "componentNum": 8437,
+      "urlVdServer": "http://39.98.206.0:8092"
+    },
+    "P2P": {
+      "urlP2pControllerServer": "http://139.196.217.153:8010"
+    },
+    "Detection": {
+      "urlDetectionServer": "http://123.57.58.224:9999"
+    },
+    "SamplePointList": {
+      "vvd": {}
+    },
+    "main": {
+      "camera": {
+        "position": {
+          "x": -319.59561744433125,
+          "y": 16,
+          "z": 323.70333357412926
+        },
+        "rotation": {
+          "x": 0.029181544549116867,
+          "y": -0.5576086281997055,
+          "z": 0.015444821123026083
+        },
+        "target": {
+          "x": -22958.633680551236,
+          "y": -1213.5804965263233,
+          "z": 4122.605105589213
+        },
+        "near": 10,
+        "far": 5000000
+      },
+      "speed": {
+        "moveBoard": 1,
+        "moveWheel0": 0.002
+      },
+      "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 1000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 1000], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 1000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 1000], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 1000]]]
+    }
+  }
+};
+},{}],"node_modules/three/build/three.module.js":[function(require,module,exports) {
 var define;
 "use strict";
 
@@ -43436,24 +43505,30 @@ var Building = /*#__PURE__*/function () {
       self.p2pParse(message);
     };
     this.loaderZip = new THREE.LoadingManager();
-
-    // this.loadJson(
-    //     this.config.path+"instance_info.json",
-    //     data=>{
-    //         console.log("instance_info.json",data)
-    //     }
-    // )
-    // this.load0()
-    var c = this.config.createSphere;
-    this.visibiity = new _Visibility.Visibility({
-      "min": [c.x[0], c.y[0], c.z[0]],
-      "max": [c.x[1], c.y[1], c.z[1]],
-      "step": [(c.x[1] - c.x[0]) / c.x[2], (c.y[1] - c.y[0]) / c.y[2], (c.z[1] - c.z[0]) / c.z[2]]
-    }, camera, function (list) {
-      self.loading(list);
-    }, this.meshes);
+    if (this.config.instanceUse) {
+      this.loadJson(this.config.path + "instance_info.json", function (data) {
+        self.instance_info = data;
+        self.start();
+      });
+    } else {
+      this.start();
+    }
   }
   _createClass(Building, [{
+    key: "start",
+    value: function start() {
+      var self = this;
+      // this.load0()
+      var c = this.config.createSphere;
+      this.visibiity = new _Visibility.Visibility({
+        "min": [c.x[0], c.y[0], c.z[0]],
+        "max": [c.x[1], c.y[1], c.z[1]],
+        "step": [(c.x[1] - c.x[0]) / c.x[2], (c.y[1] - c.y[0]) / c.y[2], (c.z[1] - c.z[0]) / c.z[2]]
+      }, camera, function (list) {
+        self.loading(list);
+      }, this.meshes);
+    }
+  }, {
     key: "createFloor",
     value: function createFloor() {
       var geometry = new THREE.BoxGeometry(1000000, 500, 50000);
@@ -43502,14 +43577,15 @@ var Building = /*#__PURE__*/function () {
         mesh.material.color.g = 0.5 * ((t & 0xff00) >> 8) / 255;
         mesh.material.color.b = 0.5 * ((t & 0xff0000) >> 16) / 255;
       } else {
-        // mesh.geometry.computeFaceNormals()
         mesh.geometry.computeVertexNormals();
-        mesh.material.depthTest = false;
+        // mesh.material.depthTest=true
+        mesh.material.depthWrite = true;
         mesh.material.transparent = false;
+        mesh.material.side = THREE.DoubleSide;
       }
+      // console.log("THREE.DoubleSide",THREE.DoubleSide)
 
-      // mesh.geometry.computeFaceNormals()
-      // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
+      // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff))/255
       // mesh.geometry.computeVertexNormals()
       // mesh=new THREE.Mesh(
       //     mesh.geometry,
@@ -43520,8 +43596,16 @@ var Building = /*#__PURE__*/function () {
       // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
       // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
 
+      if (this.instance_info) {
+        var instance_info = this.instance_info[id];
+        mesh = new THREE.InstancedMesh(mesh.geometry, mesh.material, instance_info.length + 1);
+        for (var i = 0; i < instance_info.length; i++) {
+          var mat = instance_info[i];
+          mesh.setMatrixAt(i, new THREE.Matrix4().set(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], 0, 0, 0, 1));
+        }
+        mesh.setMatrixAt(instance_info.length, new THREE.Matrix4().fromArray([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
+      }
       this.meshes[id] = mesh;
-      // mesh.visible=false
       this.parentGroup.add(mesh);
       this.visibiity.prePoint2 = ""; //重新进行可见剔除
     }
@@ -43815,75 +43899,7 @@ var LightProducer = /*#__PURE__*/function () {
   return LightProducer;
 }();
 exports.LightProducer = LightProducer;
-},{"three":"node_modules/three/build/three.module.js"}],"config/configOP8.json":[function(require,module,exports) {
-module.exports = {
-  "FlipY": false,
-  "src": {
-    "Building_new": {
-      "path": "assets/space8Zip/",
-      "NumberOfComponents": 529,
-      "parentGroup": {
-        "scale": {
-          "x": 1,
-          "y": 1,
-          "z": 1
-        }
-      },
-      "createSphere": {
-        "x": [-815, 879, 11],
-        "y": [16, 16, 11],
-        "z": [-962, 1084, 11],
-        "r": 3
-      },
-      "kernelPosition": "-110,40,-10",
-      "entropy": {},
-      "isdoor": {},
-      "blocking": {},
-      "block2Kernel": {},
-      "updateColor": false
-    },
-    "Visibility": {
-      "componentNum": 8437,
-      "urlVdServer": "http://39.98.206.0:8092"
-    },
-    "P2P": {
-      "urlP2pControllerServer": "http://139.196.217.153:8010"
-    },
-    "Detection": {
-      "urlDetectionServer": "http://123.57.58.224:9999"
-    },
-    "SamplePointList": {
-      "vvd": {}
-    },
-    "main": {
-      "camera": {
-        "position": {
-          "x": -319.59561744433125,
-          "y": 16,
-          "z": 323.70333357412926
-        },
-        "rotation": {
-          "x": 0.029181544549116867,
-          "y": -0.5576086281997055,
-          "z": 0.015444821123026083
-        },
-        "target": {
-          "x": -22958.633680551236,
-          "y": -1213.5804965263233,
-          "z": 4122.605105589213
-        },
-        "near": 10,
-        "far": 5000000
-      },
-      "speed": {
-        "moveBoard": 1,
-        "moveWheel0": 0.002
-      },
-      "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 1000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 1000], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 1000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 1000], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 1000]]]
-    }
-  }
-};
-},{}],"config/config.json":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"config/config.json":[function(require,module,exports) {
 module.exports = {
   "src": {
     "Building_new": {
@@ -48036,19 +48052,19 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Loader = void 0;
+var _configOP = _interopRequireDefault(require("../../config/configOP8.json"));
 var THREE = _interopRequireWildcard(require("three"));
 var _statsModule = _interopRequireDefault(require("three/examples/jsm/libs/stats.module.js"));
 var _PlayerControl = require("../../lib/playerControl/PlayerControl.js");
 var _OrbitControls = require("three/examples/jsm/controls/OrbitControls.js");
 var _Building = require("./Building.js");
 var _LightProducer = require("./LightProducer.js");
-var _configOP = _interopRequireDefault(require("../../config/configOP8.json"));
 var _Panel = require("./Panel.js");
 var _AvatarManager = require("./AvatarManager.js");
 var _MoveManager = require("../../lib/playerControl/MoveManager.js");
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -48164,7 +48180,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.configALL = _configOP.default;
   new Loader(document.body);
 });
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","../../config/configOP8.json":"config/configOP8.json","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -48189,7 +48205,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61958" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53693" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
