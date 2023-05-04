@@ -3,7 +3,7 @@
     "src": {
         "Building_new": {
             "path": "assets/space6Zip/",
-            "NumberOfComponents":8437,
+            "NumberOfComponents":1278,
             "parentGroup": {
                 "scale": {
                     "x": 1,
@@ -18,8 +18,8 @@
                     2000
                 ],
                 "y": [
-                    2286,
-                    2286,
+                    2286.5,
+                    2286.5,
                     2000
                 ],
                 "z": [

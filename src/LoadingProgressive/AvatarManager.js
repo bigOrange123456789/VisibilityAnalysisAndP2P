@@ -9,10 +9,10 @@ export class AvatarManager {
         // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
         // this.sum_count = 0; //当前row_index前面行的人数总和
         // this.row_count = 0; //当前行的可放置人数
-        this.initPos()
+        this.initPos_old()
         this.init()
     }
-    initPos(){
+    initPos_old(){
         this.poslist=[]
         let c={
             "x": [
@@ -82,6 +82,32 @@ export class AvatarManager {
                                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
                                     this.poslist.push([x,y,z])
                                 }
+
+    }
+    initPos(){
+        this.poslist=[]
+        let c={
+            "x": [
+                -121000,
+                117000,
+                2000
+            ],
+            "y": [
+                2286,
+                2286,
+                2000
+            ],
+            "z": [
+                -4000,
+                16000,
+                2000
+            ],
+        }
+        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                    this.poslist.push([x,y,z])
+                }
 
     }
     getConfig(){

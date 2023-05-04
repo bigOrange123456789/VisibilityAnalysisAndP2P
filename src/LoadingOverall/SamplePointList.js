@@ -4,13 +4,14 @@ import * as dat from "dat.gui";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 export class SamplePointList{
     constructor(createSphere,parentGroup,meshes,entropy){
+        this.config=config.src.SamplePointList
         this.createSphere=createSphere
         // console.log("visibleArea",visibleArea)
         window.showVDbyColor="evd"
         const self=this
         function load1(cb){
             self.loadConfig(
-                "assets/configVVD.json",
+                self.config.path1,
                 c=>{
                     console.log(1)
                     document.getElementById("LoadProgress").innerHTML="参数加载中(VisibleArea)。。。。。"
@@ -21,7 +22,7 @@ export class SamplePointList{
         }
         function load2(cb){
             self.loadConfig(
-                "assets/VisibleArea.json",
+                self.config.path2,
                 c=>{
                     console.log(2)
                     document.getElementById("LoadProgress").innerHTML="参数加载中(voxel)。。。。。"
@@ -32,7 +33,7 @@ export class SamplePointList{
         }
         function load3(cb){
             self.loadConfig(
-                "assets/voxel.json",
+                self.config.path3,
                 c=>{
                     console.log(3)
                     document.getElementById("LoadProgress").innerHTML=""
@@ -43,11 +44,11 @@ export class SamplePointList{
             )
         }
         load1(()=>{
-            load2(()=>{
-                load3(()=>{
+            // load2(()=>{
+                // load3(()=>{
                     self.init(createSphere,parentGroup,meshes,entropy)
-                })
-            })
+                // })
+            // })
         })
     }
     getPosIndex(x,y,z){
@@ -288,12 +289,14 @@ export class SamplePointList{
                     const sphere = new THREE.Mesh( geometry, material );
                     sphere.position.set(x,y,z)
                     sphere.name=x+","+y+","+z
-                    sphere.visibleArea=self.visibleArea[sphere.name]
+                    if(self.visibleArea)
+                        sphere.visibleArea=self.visibleArea[sphere.name]
                     sphere.vvd=self.vvd[sphere.name]
                     list.push(sphere)
                     self.parentGroup.add( sphere )
                     list2[i][j][k]=sphere
-                    if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
+                    if(self.voxel)
+                        if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
                     k++
                 }
                 j++
@@ -338,6 +341,7 @@ export class SamplePointList{
                     if(i in sphere.vvd["4"])mesh.vvd4=sphere.vvd["4"][i];else mesh.vvd4=0
                     if(i in sphere.vvd["5"])mesh.vvd5=sphere.vvd["5"][i];else mesh.vvd5=0
                     if(i in sphere.vvd["6"])mesh.vvd6=sphere.vvd["6"][i];else mesh.vvd6=0  
+                    if(sphere.vvd["pvd"])
                     if(i in sphere.vvd["pvd"])mesh.pvd=sphere.vvd["pvd"][i];else mesh.pvd=0                    
                 }
                 self.showVDbyColor()
@@ -346,7 +350,8 @@ export class SamplePointList{
                 //     const color=s.material.color
                 //     color.g=color.b=1
                 // }
-                self.showSphere(sphere.visibleArea)
+                if(sphere.visibleArea)
+                    self.showSphere(sphere.visibleArea)
                 sphere.material.color.g=sphere.material.color.b=0
                 
                 console.log("视点球:",sphere,sphere.vvd)              

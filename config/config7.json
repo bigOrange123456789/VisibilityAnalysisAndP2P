@@ -3911,7 +3911,8 @@
                 "117000,2286.5,14000": 39,
                 "117000,2286.5,16000": 39
             },
-            "block2Kernel": {}
+            "block2Kernel": {},
+            "updateColor":true
         },
         "main": {
             "camera": {

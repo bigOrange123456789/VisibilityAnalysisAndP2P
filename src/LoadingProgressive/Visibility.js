@@ -4,6 +4,7 @@ export class Visibility{
         this.config=config.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
+        // console.log(areaInf["min"])
         // areaInf["min"][1]-=0.5
         // areaInf["max"][1]-=0.5
         areaInf["min"][1]=Math.floor(areaInf["min"][1])

@@ -7,9 +7,10 @@ export class Detection {//需要服务器
             new Date().getMonth(),
             new Date().getDate(),
             new Date().getHours(),//
-            new Date().getMinutes(),//新添加
             new Date().getSeconds(),//1
-            new Date().getMilliseconds()
+            new Date().getMilliseconds(),
+            
+            new Date().getMinutes(),//新添加
         ]
         // this.time0=performance.now()
         // this.

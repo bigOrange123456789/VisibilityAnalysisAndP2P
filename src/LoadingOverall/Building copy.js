@@ -453,29 +453,13 @@ export class Building{
     //         link.click();
     //     });
     // }
-    saveMesh2_old2(mesh,name){
+    saveMesh2(mesh,name){
         mesh.geometry.attributes.position.data = new THREE.BufferAttribute(
             new Float32Array(
                 mesh.geometry.attributes.position.data.array
             ),
             4)
         delete mesh.geometry.attributes.normal
-
-        // const scene=new THREE.Scene()
-        // scene.add(mesh)
-        // new GLTFExporter().parse(scene,function(result){
-        //     var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
-        //     let link = document.createElement('a')
-        //     link.href = URL.createObjectURL(myBlob)
-        //     link.download = name
-        //     link.click()
-        // })
-    }
-    saveMesh2_old1(mesh,name){
-        mesh.geometry.attributes.position = new THREE.BufferAttribute(
-            mesh.geometry.attributes.position.data, 
-            mesh.geometry.attributes.position.itemSize)
-        delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
 
         const scene=new THREE.Scene()
         scene.add(mesh)
@@ -487,21 +471,10 @@ export class Building{
             link.click()
         })
     }
-    saveMesh2(mesh,name){
-        const array1=mesh.geometry.attributes.position.data.array
-        const array2=[]
-        for(let i=0;i<array1.length/4;i++)
-            for(let j=0;j<3;j++){
-                array2.push(
-                    array1[4*i+j]
-                )
-            }
+    saveMesh2_old(mesh,name){
         mesh.geometry.attributes.position = new THREE.BufferAttribute(
-            new Float32Array(
-                array2//mesh.geometry.attributes.position.data.array
-            ), 
-            3//4
-        )//mesh.geometry.attributes.position.itemSize)
+            mesh.geometry.attributes.position.data, 
+            mesh.geometry.attributes.position.itemSize)
         delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
 
         const scene=new THREE.Scene()

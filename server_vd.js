@@ -67,7 +67,7 @@ require('jsonfile').readFile(
 const databaseEvd={}
 const databasePvd={}
 require('jsonfile').readFile(
-    'dist/assets/configVVD.json', 
+    'dist/assets/VisibleArea-model6.json', 
     (err, jsonData)=>{
       if (err) throw err
       for(let vid in jsonData){
