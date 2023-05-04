@@ -9,14 +9,18 @@ import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
+import { Sky } from '../../lib/threejs/Sky.js'
 export class Loader{
     constructor(body){
         this.config=window.configALL.src.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
+
+        
         
         this.initScene()
+        this.initSky()
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
@@ -113,6 +117,42 @@ export class Loader{
         this.camera.updateProjectionMatrix()
         this.renderer.setSize(this.canvas.width, this.canvas.height)
     }
+    initSky() {
+        const self=this
+        let sky = new Sky();
+        sky.scale.setScalar( 450000 );
+        this.scene.add( sky );
+        let sun = new THREE.Vector3();
+        let effectController = {
+            turbidity: 0.01,//1,//10,//光晕强度
+            rayleigh: 0.5,//1,//3,//红色强度
+            mieCoefficient: 0.0001,//0.005,//光晕强度
+            mieDirectionalG: 0.01,//0.7,//光晕强度
+            elevation: 20,//5,//2,  //俯仰角
+            azimuth: 180,      //偏航角
+            exposure: this.renderer.toneMappingExposure/100 //this.renderer.toneMappingExposure
+        }
+        function guiChanged(effectController,sun) {
+            const uniforms = sky.material.uniforms;
+            uniforms[ 'turbidity' ].value = effectController.turbidity;
+            uniforms[ 'rayleigh' ].value = effectController.rayleigh;
+            uniforms[ 'mieCoefficient' ].value = effectController.mieCoefficient;
+            uniforms[ 'mieDirectionalG' ].value = effectController.mieDirectionalG;
+
+            const phi = THREE.MathUtils.degToRad( 90 - effectController.elevation );
+            const theta = THREE.MathUtils.degToRad( effectController.azimuth );
+
+            sun.setFromSphericalCoords( 1, phi, theta );
+
+            uniforms[ 'sunPosition' ].value.copy( sun );
+
+            self.renderer.toneMappingExposure = effectController.exposure;
+            self.renderer.render( self.scene, self.camera );
+        }
+        guiChanged(effectController,sun)
+    }
+
+    
 }
 document.addEventListener('DOMContentLoaded', () => {
     window.configALL=config
