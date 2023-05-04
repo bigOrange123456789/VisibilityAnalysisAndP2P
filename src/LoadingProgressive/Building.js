@@ -96,15 +96,23 @@ export class Building{
             mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
         }else{
             // mesh.geometry.computeFaceNormals()
-            mesh.geometry.computeVertexNormals()
+            // mesh.geometry.computeVertexNormals()
+            mesh.material.depthTest=false
+            mesh.material.transparent=false
         }
-    
-
         
         // mesh.geometry.computeFaceNormals()
         // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
         // mesh.geometry.computeVertexNormals()
-        mesh=new THREE.Mesh(mesh.geometry,mesh.material)
+        mesh=new THREE.Mesh(
+            mesh.geometry,
+            new THREE.MeshBasicMaterial()
+        )
+        let t=id*256*256*256/259 ///2665
+        mesh.material.color.r=1.*((t&0xff)    )/255
+        mesh.material.color.g=1.*((t&0xff00)>>8 )/255
+        mesh.material.color.b=1.*((t&0xff0000)>>16)/255
+
 
         this.meshes[id]=mesh
         // mesh.visible=false

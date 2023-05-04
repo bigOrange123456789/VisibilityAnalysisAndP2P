@@ -40506,7 +40506,7 @@ module.exports = {
     },
     "Visibility": {
       "componentNum": 8437,
-      "urlVdServer": "http://localhost:8092"
+      "urlVdServer": "http://39.98.206.0:8092"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -40536,7 +40536,12 @@ module.exports = {
         },
         "near": 10,
         "far": 5000000
-      }
+      },
+      "speed": {
+        "moveBoard": 1,
+        "moveWheel0": 0.002
+      },
+      "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
     }
   }
 };
@@ -40577,7 +40582,7 @@ var Visibility = /*#__PURE__*/function () {
     this.prePoint2 = ""; //视点变化就进行可见性剔除
     this.loading = loading;
     this.dynamicLoading(); //加载和预加载
-    this.culling(); //遮挡剔除和视锥剔除
+    // this.culling()//遮挡剔除和视锥剔除
 
     if (new URLSearchParams(window.location.search).has("autoMove")) if (new URLSearchParams(window.location.search).get('autoMove') == "true") {
       areaInf.min;
@@ -43563,19 +43568,25 @@ var Building = /*#__PURE__*/function () {
       mesh.myId = id;
       mesh.material.side = 2;
       if (this.config.updateColor) {
-        var t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
-        mesh.material.color.r = 0.5 * (t & 0xff) / 255;
-        mesh.material.color.g = 0.5 * ((t & 0xff00) >> 8) / 255;
-        mesh.material.color.b = 0.5 * ((t & 0xff0000) >> 16) / 255;
+        var _t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
+        mesh.material.color.r = 0.5 * (_t & 0xff) / 255;
+        mesh.material.color.g = 0.5 * ((_t & 0xff00) >> 8) / 255;
+        mesh.material.color.b = 0.5 * ((_t & 0xff0000) >> 16) / 255;
       } else {
         // mesh.geometry.computeFaceNormals()
-        mesh.geometry.computeVertexNormals();
+        // mesh.geometry.computeVertexNormals()
+        mesh.material.depthTest = false;
+        mesh.material.transparent = false;
       }
 
       // mesh.geometry.computeFaceNormals()
       // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
       // mesh.geometry.computeVertexNormals()
-      mesh = new THREE.Mesh(mesh.geometry, mesh.material);
+      mesh = new THREE.Mesh(mesh.geometry, new THREE.MeshBasicMaterial());
+      var t = id * 256 * 256 * 256 / 259; ///2665
+      mesh.material.color.r = 1. * (t & 0xff) / 255;
+      mesh.material.color.g = 1. * ((t & 0xff00) >> 8) / 255;
+      mesh.material.color.b = 1. * ((t & 0xff0000) >> 16) / 255;
       this.meshes[id] = mesh;
       // mesh.visible=false
       this.parentGroup.add(mesh);
@@ -48049,7 +48060,12 @@ var Loader = /*#__PURE__*/function () {
   _createClass(Loader, [{
     key: "initWander",
     value: function initWander() {
-      this.wanderList = [new _MoveManager.MoveManager(this.camera, [[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 1000]]), new _MoveManager.MoveManager(this.camera, [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]]), new _MoveManager.MoveManager(this.camera, [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 1000], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 1000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 1000], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 1000]])];
+      this.wanderList = [];
+      for (var i = 0; i < this.config.pathList.length; i++) this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
+      if (window.location.search.split("autoMove=true").length > 1) {
+        var pathId = Math.floor(Math.random() * this.wanderList.length);
+        this.wanderList[pathId].stopFlag = false;
+      }
     }
   }, {
     key: "initScene",
@@ -48087,7 +48103,8 @@ var Loader = /*#__PURE__*/function () {
               this.playerControl = new _PlayerControl.PlayerControl(this.camera, _configOP.default["FlipY"]);
               this.playerControl.target.set(this.config.camera.target.x, this.config.camera.target.y, this.config.camera.target.z);
               this.playerControl.mode.set("viewpoint");
-              this.playerControl.speed.moveBoard = 1;
+              this.playerControl.speed.moveBoard = this.config.speed.moveBoard; //1
+              this.playerControl.speed.moveWheel0 = this.config.speed.moveWheel0; //0.01
 
               // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
               // this.orbitControl.target = camera_tar[id].clone()
@@ -48096,7 +48113,7 @@ var Loader = /*#__PURE__*/function () {
               this.scene.add(this.light);
               this.animate = this.animate.bind(this);
               requestAnimationFrame(this.animate);
-            case 28:
+            case 29:
             case "end":
               return _context.stop();
           }
@@ -48112,7 +48129,7 @@ var Loader = /*#__PURE__*/function () {
     value: function animate() {
       this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.stats.update();
-      this.renderer.render(this.scene, this.camera);
+      if (!(window.location.search.split("render=false").length > 1)) this.renderer.render(this.scene, this.camera);
       requestAnimationFrame(this.animate);
     }
   }, {
@@ -48156,7 +48173,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51110" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59746" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
