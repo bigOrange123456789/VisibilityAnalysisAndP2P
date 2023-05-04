@@ -36408,6 +36408,7 @@ var PlayerControl0 = /*#__PURE__*/function () {
     key: "isCollision",
     value: function isCollision(step, direction) {
       //碰撞检测
+      return false;
       direction = direction.clone();
       var camera = this.camera;
       var obstacles = Object.values(window.meshes);
