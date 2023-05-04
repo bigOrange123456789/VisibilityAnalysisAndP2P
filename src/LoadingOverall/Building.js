@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy
+            )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)

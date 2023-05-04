@@ -1,19 +1,16 @@
 console.log('version:02(node --max_old_space_size=8192 server_vd)')
 let areaInf={
   "x": [
-      -124000,
-      126000,
-      2000
+    -815,879,
+    11
   ],
   "y": [
-      -19000,
-      3000,
-      2000
+      16,16,
+      11
   ],
   "z": [
-      -20000,
-      24000,
-      2000
+      -962,1084,
+      11
   ]
 }
 
@@ -26,14 +23,15 @@ areaInf={
       (areaInf.z[1]-areaInf.z[0])/areaInf.z[2]
   ]
 }
+console.log("step",areaInf["step"])
 // areaInf["min"][1]-=0.5
 // areaInf["max"][1]-=0.5
 
 function getPosIndex(vid){
   const arr=vid.split(",")
-  const x=parseInt(arr[0])
-  const y=parseInt(arr[1])
-  const z=parseInt(arr[2])
+  let x=parseInt(arr[0])
+  let y=parseInt(arr[1])
+  let z=parseInt(arr[2])
   const min =areaInf.min
   const step=areaInf.step
   const max =areaInf.max
@@ -47,16 +45,17 @@ function getPosIndex(vid){
   }
   var dl=[]
   for(var i=0;i<3;i++)
-  dl.push(
-      step[i]==0?0:
-      (max[i]-min[i])/step[i]
-  )
+    dl.push(
+        step[i]==0?0:
+        (max[i]-min[i])/step[i]
+    )
   var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])
   var yi=dl[1]==0?0:Math.round((y-min[1])/dl[1])
   var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
+  // console.log(xi,yi,zi)
   var s=step
   var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
-  if(index==1350)console.log(1350,vid)//-116000,1000,12000
+  // if(index==1350)console.log(1350,vid)//-116000,1000,12000
   return index// return [xi,yi,zi,index]
 } 
 let VisibleArea
@@ -68,7 +67,7 @@ let VisibleArea
 const databaseEvd={}
 // const databasePvd={}
 require('jsonfile').readFile(
-    'dist/assets/configVVD-model7.json', 
+    'dist/assets/configVVD-model8.json', 
     (err, jsonData)=>{
       if (err) throw err
       for(let vid in jsonData){
@@ -86,14 +85,16 @@ require('jsonfile').readFile(
         // databasePvd[getPosIndex(vid)]=d["pvd"]
       }
       console.log("初始化完成")
+      console.log(8527,databaseEvd[8527])
       // var test=jsonData["-116000,1000,12000"]
       // // console.log("-116000,1000,12000",Object.keys(test["all"]))
       // for(let i=1;i<6;i++)
       //   console.log(i,Object.keys(test[""+i]))
+      console.log(Object.keys(databaseEvd).length)
 });
 
 ////////////
-const ip=8091
+const ip=8092
 const server=require('http').createServer(function (request, response) {
     let index;
     response.setHeader("Access-Control-Allow-Origin", "*");

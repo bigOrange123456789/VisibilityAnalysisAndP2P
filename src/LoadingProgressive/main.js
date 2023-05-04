@@ -20,8 +20,8 @@ export class Loader{
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
-        if(!new URLSearchParams(window.location.search).has("autoMove"))
-            new AvatarManager(this.scene,this.camera)
+        // if(!new URLSearchParams(window.location.search).has("autoMove"))
+        //     new AvatarManager(this.scene,this.camera)
         
         
     }
@@ -104,7 +104,7 @@ export class Loader{
             this.config.camera.target.z
         )
         this.playerControl.mode.set("viewpoint")
-        this.playerControl.speed.moveBoard=100
+        this.playerControl.speed.moveBoard=1
 
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
