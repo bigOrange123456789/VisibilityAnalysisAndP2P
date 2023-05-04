@@ -1,3 +1,27 @@
+const port=9999
+let id=0
+Date.prototype.Format = function(fmt) { //author: meizz 
+    var o = {        
+        "M+": this.getMonth() + 1, //月份 
+        "d+": this.getDate(), //日 
+        "h+": this.getHours(), //小时 
+        "m+": this.getMinutes(), //分 
+        "s+": this.getSeconds(), //秒 
+        "S": this.getMilliseconds() //毫秒 
+    };    
+    if (/(y+)/.test(fmt)) 
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));    
+    for (var k in o)        
+        if (new RegExp("(" + k + ")").test(fmt)) 
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));    
+    return fmt;
+}
+function getName(){
+    const name=(new Date()).Format("yyyy-MM-dd.hh-mm-ss.")+id+".json"
+    id++
+    return name
+}
+
 //localhost:8080
 var data0=""
 require('http').createServer(function (request, response) {
@@ -12,6 +36,7 @@ require('http').createServer(function (request, response) {
                 saveJson(JSON.parse(data0))//saveStr(data0)//
                 data0=""
             }catch(e){
+                console.log(1,e)
             }
         }
     });
@@ -19,12 +44,12 @@ require('http').createServer(function (request, response) {
         response.write("finish");//发送字符串
         response.end();
     });
-}).listen(9999, '0.0.0.0', function () {
-    console.log("Listening port: 9999");
+}).listen(port, '0.0.0.0', function () {
+    console.log("Listening port: "+port);
 });
 
 function saveJson(json0) {
-    var name="detection/"+Math.random()+".json"
+    var name="detection/"+getName()
     var fs=require('fs')
     try{
         fs.writeFile(name,JSON.stringify(json0 , null, "\t"), function(){});
@@ -34,13 +59,10 @@ function saveJson(json0) {
     }
 }
 function saveStr(str0) {
-    console.log("0")
-    var name="detection/"+Math.random()+".json"
+    var name="detection/"+getName()
     var fs=require('fs')
     try{
-        console.log("str0",str0)
         fs.writeFile(name,str0, function(){});
-        // fs.writeFile(name, JSON.stringify(json0 , null, "\t") , function(){});
     }catch (e) {
         console.log(2,e)
     }

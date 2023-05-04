@@ -113,7 +113,7 @@ export class Building{
             // mesh.material.depthTest=true
             mesh.material.depthWrite=true
             mesh.material.transparent=false
-            mesh.material.side=THREE.DoubleSide
+            mesh.material.side=0//THREE.DoubleSide
         }
         // console.log("THREE.DoubleSide",THREE.DoubleSide)
  

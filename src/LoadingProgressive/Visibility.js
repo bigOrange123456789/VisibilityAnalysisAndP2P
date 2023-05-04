@@ -10,7 +10,7 @@ export class Visibility{
         areaInf["max"][1]=Math.floor(areaInf["max"][1])
         this.areaInf=areaInf
         this.camera=camera
-        this.meshes=meshes//用于可见性剔除剔除
+        this.meshes=meshes//用于可见性剔除
         this.componentNum=this.config.componentNum//8437//1278
         this.vd=new Array(this.componentNum)//{}//当前每个构件的可见度
         this.visualList={}//用于视点的可见资源列表

@@ -17,7 +17,7 @@ export class Detection {//需要服务器
         this.pack_circumstances={}
         var scope=this
 
-        this.testTime=120//90//60//window.param.testTime;//测试时间
+        this.testTime=10//120//90//60//window.param.testTime;//测试时间
         this.frameCount=0;//记录帧数量
         function testFrame(){
             scope.frameCount++

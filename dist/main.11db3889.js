@@ -40573,7 +40573,7 @@ var Visibility = /*#__PURE__*/function () {
     areaInf["max"][1] = Math.floor(areaInf["max"][1]);
     this.areaInf = areaInf;
     this.camera = camera;
-    this.meshes = meshes; //用于可见性剔除剔除
+    this.meshes = meshes; //用于可见性剔除
     this.componentNum = this.config.componentNum; //8437//1278
     this.vd = new Array(this.componentNum); //{}//当前每个构件的可见度
     this.visualList = {}; //用于视点的可见资源列表
@@ -40967,7 +40967,7 @@ var Detection = /*#__PURE__*/function () {
     this.close = false;
     this.pack_circumstances = {};
     var scope = this;
-    this.testTime = 120; //90//60//window.param.testTime;//测试时间
+    this.testTime = 10; //120//90//60//window.param.testTime;//测试时间
     this.frameCount = 0; //记录帧数量
     function testFrame() {
       scope.frameCount++;
@@ -43582,7 +43582,7 @@ var Building = /*#__PURE__*/function () {
         // mesh.material.depthTest=true
         mesh.material.depthWrite = true;
         mesh.material.transparent = false;
-        mesh.material.side = THREE.DoubleSide;
+        mesh.material.side = 0; //THREE.DoubleSide
       }
       // console.log("THREE.DoubleSide",THREE.DoubleSide)
 
