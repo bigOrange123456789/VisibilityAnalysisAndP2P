@@ -40477,74 +40477,6 @@ var global = arguments[3];
 (function(a,b){if("function"==typeof define&&define.amd)define([],b);else if("undefined"!=typeof exports)b();else{b(),a.FileSaver={exports:{}}.exports}})(this,function(){"use strict";function b(a,b){return"undefined"==typeof b?b={autoBom:!1}:"object"!=typeof b&&(console.warn("Deprecated: Expected third argument to be a object"),b={autoBom:!b}),b.autoBom&&/^\s*(?:text\/\S*|application\/xml|\S*\/\S*\+xml)\s*;.*charset\s*=\s*utf-8/i.test(a.type)?new Blob(["\uFEFF",a],{type:a.type}):a}function c(a,b,c){var d=new XMLHttpRequest;d.open("GET",a),d.responseType="blob",d.onload=function(){g(d.response,b,c)},d.onerror=function(){console.error("could not download file")},d.send()}function d(a){var b=new XMLHttpRequest;b.open("HEAD",a,!1);try{b.send()}catch(a){}return 200<=b.status&&299>=b.status}function e(a){try{a.dispatchEvent(new MouseEvent("click"))}catch(c){var b=document.createEvent("MouseEvents");b.initMouseEvent("click",!0,!0,window,0,0,0,80,20,!1,!1,!1,!1,0,null),a.dispatchEvent(b)}}var f="object"==typeof window&&window.window===window?window:"object"==typeof self&&self.self===self?self:"object"==typeof global&&global.global===global?global:void 0,a=f.navigator&&/Macintosh/.test(navigator.userAgent)&&/AppleWebKit/.test(navigator.userAgent)&&!/Safari/.test(navigator.userAgent),g=f.saveAs||("object"!=typeof window||window!==f?function(){}:"download"in HTMLAnchorElement.prototype&&!a?function(b,g,h){var i=f.URL||f.webkitURL,j=document.createElement("a");g=g||b.name||"download",j.download=g,j.rel="noopener","string"==typeof b?(j.href=b,j.origin===location.origin?e(j):d(j.href)?c(b,g,h):e(j,j.target="_blank")):(j.href=i.createObjectURL(b),setTimeout(function(){i.revokeObjectURL(j.href)},4E4),setTimeout(function(){e(j)},0))}:"msSaveOrOpenBlob"in navigator?function(f,g,h){if(g=g||f.name||"download","string"!=typeof f)navigator.msSaveOrOpenBlob(b(f,h),g);else if(d(f))c(f,g,h);else{var i=document.createElement("a");i.href=f,i.target="_blank",setTimeout(function(){e(i)})}}:function(b,d,e,g){if(g=g||open("","_blank"),g&&(g.document.title=g.document.body.innerText="downloading..."),"string"==typeof b)return c(b,d,e);var h="application/octet-stream"===b.type,i=/constructor/i.test(f.HTMLElement)||f.safari,j=/CriOS\/[\d]+/.test(navigator.userAgent);if((j||h&&i||a)&&"undefined"!=typeof FileReader){var k=new FileReader;k.onloadend=function(){var a=k.result;a=j?a:a.replace(/^data:[^;]*;/,"data:attachment/file;"),g?g.location.href=a:location=a,g=null},k.readAsDataURL(b)}else{var l=f.URL||f.webkitURL,m=l.createObjectURL(b);g?g.location=m:location.href=m,g=null,setTimeout(function(){l.revokeObjectURL(m)},4E4)}});f.saveAs=g.saveAs=g,"undefined"!=typeof module&&(module.exports=g)});
 
 
-},{}],"config/configOP.json":[function(require,module,exports) {
-module.exports = {
-  "FlipY": false,
-  "src": {
-    "Building_new": {
-      "path": "assets/space8Zip/",
-      "NumberOfComponents": 529,
-      "parentGroup": {
-        "scale": {
-          "x": 1,
-          "y": 1,
-          "z": 1
-        }
-      },
-      "createSphere": {
-        "x": [-815, 879, 11],
-        "y": [16, 16, 11],
-        "z": [-962, 1084, 11],
-        "r": 3
-      },
-      "kernelPosition": "-110,40,-10",
-      "entropy": {},
-      "isdoor": {},
-      "blocking": {},
-      "block2Kernel": {},
-      "updateColor": false
-    },
-    "Visibility": {
-      "componentNum": 8437,
-      "urlVdServer": "http://39.98.206.0:8092"
-    },
-    "P2P": {
-      "urlP2pControllerServer": "http://139.196.217.153:8010"
-    },
-    "Detection": {
-      "urlDetectionServer": "http://123.57.58.224:9999"
-    },
-    "SamplePointList": {
-      "vvd": {}
-    },
-    "main": {
-      "camera": {
-        "position": {
-          "x": -319.59561744433125,
-          "y": 16,
-          "z": 323.70333357412926
-        },
-        "rotation": {
-          "x": 0.029181544549116867,
-          "y": -0.5576086281997055,
-          "z": 0.015444821123026083
-        },
-        "target": {
-          "x": -22958.633680551236,
-          "y": -1213.5804965263233,
-          "z": 4122.605105589213
-        },
-        "near": 10,
-        "far": 5000000
-      },
-      "speed": {
-        "moveBoard": 1,
-        "moveWheel0": 0.002
-      },
-      "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
-    }
-  }
-};
 },{}],"src/LoadingProgressive/Visibility.js":[function(require,module,exports) {
 "use strict";
 
@@ -40552,8 +40484,6 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Visibility = void 0;
-var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -40563,7 +40493,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Visibility = /*#__PURE__*/function () {
   function Visibility(areaInf, camera, loading, meshes) {
     _classCallCheck(this, Visibility);
-    this.config = _configOP.default.src.Visibility;
+    this.config = window.configALL.src.Visibility;
     this.urlVdServer = this.config.urlVdServer; //"http://150.158.24.191:8091"
     console.log("urlVdServer", this.urlVdServer);
     // console.log(areaInf["min"])
@@ -40812,15 +40742,13 @@ var Visibility = /*#__PURE__*/function () {
   return Visibility;
 }();
 exports.Visibility = Visibility;
-},{"../../config/configOP.json":"config/configOP.json"}],"src/LoadingProgressive/P2P.js":[function(require,module,exports) {
+},{}],"src/LoadingProgressive/P2P.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.P2P = void 0;
-var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -40842,7 +40770,7 @@ var P2P = /*#__PURE__*/function () {
     this.parse = function (data) {
       return console.log(data);
     };
-    this.socketURL = _configOP.default.src.P2P.urlP2pControllerServer; //"http://114.80.207.60:8011"//this.urlP2pServer
+    this.socketURL = window.configALL.src.P2P.urlP2pControllerServer; //"http://114.80.207.60:8011"//this.urlP2pServer
     console.log("this.socketURL", this.socketURL);
     var self = this;
     if (this.useP2P) {
@@ -40937,15 +40865,13 @@ var P2P = /*#__PURE__*/function () {
   return P2P;
 }();
 exports.P2P = P2P;
-},{"../../config/configOP.json":"config/configOP.json"}],"src/LoadingProgressive/Detection.js":[function(require,module,exports) {
+},{}],"src/LoadingProgressive/Detection.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Detection = void 0;
-var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
@@ -40958,7 +40884,7 @@ var Detection = /*#__PURE__*/function () {
     _classCallCheck(this, Detection);
     this.updateGroupList = [];
     this.meshes = meshes;
-    this.dectionURL = _configOP.default.src.Detection.urlDetectionServer;
+    this.dectionURL = window.configALL.src.Detection.urlDetectionServer;
     this.date = this.getTime();
     // this.time0=performance.now()
     // this.
@@ -41101,7 +41027,7 @@ var Detection = /*#__PURE__*/function () {
   return Detection;
 }();
 exports.Detection = Detection;
-},{"../../config/configOP.json":"config/configOP.json"}],"node_modules/base64-js/index.js":[function(require,module,exports) {
+},{}],"node_modules/base64-js/index.js":[function(require,module,exports) {
 'use strict'
 
 exports.byteLength = byteLength
@@ -43475,12 +43401,10 @@ var THREE = _interopRequireWildcard(require("three"));
 var _GLTFLoader = require("three/examples/jsm/loaders/GLTFLoader");
 var _OBJExporter = require("three/examples/jsm/exporters/OBJExporter");
 var _fileSaver = require("file-saver");
-var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
 var _Visibility = require("./Visibility.js");
 var _P2P = require("./P2P.js");
 var _Detection = require("./Detection.js");
 var _ziploader = require("../../lib/zip/ziploader.js");
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -43495,9 +43419,8 @@ var Building = /*#__PURE__*/function () {
     document.getElementById("LoadProgress").innerHTML = "";
     var self = this;
     this.scene = scene;
-    this.config = _configOP.default.src.Building_new;
+    this.config = window.configALL.src.Building_new;
     this.NumberOfComponents = this.config.NumberOfComponents;
-    window.config0 = this.config;
     this.parentGroup = new THREE.Group();
     this.parentGroup.scale.set(this.config.parentGroup.scale.x, this.config.parentGroup.scale.y, this.config.parentGroup.scale.z);
     scene.add(this.parentGroup);
@@ -43514,6 +43437,12 @@ var Building = /*#__PURE__*/function () {
     };
     this.loaderZip = new THREE.LoadingManager();
 
+    // this.loadJson(
+    //     this.config.path+"instance_info.json",
+    //     data=>{
+    //         console.log("instance_info.json",data)
+    //     }
+    // )
     // this.load0()
     var c = this.config.createSphere;
     this.visibiity = new _Visibility.Visibility({
@@ -43568,13 +43497,13 @@ var Building = /*#__PURE__*/function () {
       mesh.myId = id;
       mesh.material.side = 2;
       if (this.config.updateColor) {
-        var _t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
-        mesh.material.color.r = 0.5 * (_t & 0xff) / 255;
-        mesh.material.color.g = 0.5 * ((_t & 0xff00) >> 8) / 255;
-        mesh.material.color.b = 0.5 * ((_t & 0xff0000) >> 16) / 255;
+        var t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
+        mesh.material.color.r = 0.5 * (t & 0xff) / 255;
+        mesh.material.color.g = 0.5 * ((t & 0xff00) >> 8) / 255;
+        mesh.material.color.b = 0.5 * ((t & 0xff0000) >> 16) / 255;
       } else {
         // mesh.geometry.computeFaceNormals()
-        // mesh.geometry.computeVertexNormals()
+        mesh.geometry.computeVertexNormals();
         mesh.material.depthTest = false;
         mesh.material.transparent = false;
       }
@@ -43582,11 +43511,15 @@ var Building = /*#__PURE__*/function () {
       // mesh.geometry.computeFaceNormals()
       // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
       // mesh.geometry.computeVertexNormals()
-      mesh = new THREE.Mesh(mesh.geometry, new THREE.MeshBasicMaterial());
-      var t = id * 256 * 256 * 256 / 259; ///2665
-      mesh.material.color.r = 1. * (t & 0xff) / 255;
-      mesh.material.color.g = 1. * ((t & 0xff00) >> 8) / 255;
-      mesh.material.color.b = 1. * ((t & 0xff0000) >> 16) / 255;
+      // mesh=new THREE.Mesh(
+      //     mesh.geometry,
+      //     new THREE.MeshBasicMaterial()
+      // )
+      // let t=id*256*256*256/259 ///2665
+      // mesh.material.color.r=1.*((t&0xff)    )/255
+      // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
+      // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
+
       this.meshes[id] = mesh;
       // mesh.visible=false
       this.parentGroup.add(mesh);
@@ -43744,11 +43677,25 @@ var Building = /*#__PURE__*/function () {
       // return box.max.y<ymax && box.min.y>ymin
       return box.min.y < ymax && box.max.y > ymin; //&&box.max.z>-7766
     }
+  }, {
+    key: "loadJson",
+    value: function loadJson(path, cb) {
+      console.log(path);
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', path, true);
+      xhr.send();
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+          var json_data = JSON.parse(xhr.responseText);
+          cb(json_data);
+        }
+      };
+    }
   }]);
   return Building;
 }();
 exports.Building = Building;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","../../config/configOP.json":"config/configOP.json","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -43868,7 +43815,75 @@ var LightProducer = /*#__PURE__*/function () {
   return LightProducer;
 }();
 exports.LightProducer = LightProducer;
-},{"three":"node_modules/three/build/three.module.js"}],"config/config.json":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"config/configOP8.json":[function(require,module,exports) {
+module.exports = {
+  "FlipY": false,
+  "src": {
+    "Building_new": {
+      "path": "assets/space8Zip/",
+      "NumberOfComponents": 529,
+      "parentGroup": {
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "createSphere": {
+        "x": [-815, 879, 11],
+        "y": [16, 16, 11],
+        "z": [-962, 1084, 11],
+        "r": 3
+      },
+      "kernelPosition": "-110,40,-10",
+      "entropy": {},
+      "isdoor": {},
+      "blocking": {},
+      "block2Kernel": {},
+      "updateColor": false
+    },
+    "Visibility": {
+      "componentNum": 8437,
+      "urlVdServer": "http://39.98.206.0:8092"
+    },
+    "P2P": {
+      "urlP2pControllerServer": "http://139.196.217.153:8010"
+    },
+    "Detection": {
+      "urlDetectionServer": "http://123.57.58.224:9999"
+    },
+    "SamplePointList": {
+      "vvd": {}
+    },
+    "main": {
+      "camera": {
+        "position": {
+          "x": -319.59561744433125,
+          "y": 16,
+          "z": 323.70333357412926
+        },
+        "rotation": {
+          "x": 0.029181544549116867,
+          "y": -0.5576086281997055,
+          "z": 0.015444821123026083
+        },
+        "target": {
+          "x": -22958.633680551236,
+          "y": -1213.5804965263233,
+          "z": 4122.605105589213
+        },
+        "near": 10,
+        "far": 5000000
+      },
+      "speed": {
+        "moveBoard": 1,
+        "moveWheel0": 0.002
+      },
+      "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 1000], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 1000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 1000], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 1000], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 1000], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 1000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 1000], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 1000]]]
+    }
+  }
+};
+},{}],"config/config.json":[function(require,module,exports) {
 module.exports = {
   "src": {
     "Building_new": {
@@ -48027,7 +48042,7 @@ var _PlayerControl = require("../../lib/playerControl/PlayerControl.js");
 var _OrbitControls = require("three/examples/jsm/controls/OrbitControls.js");
 var _Building = require("./Building.js");
 var _LightProducer = require("./LightProducer.js");
-var _configOP = _interopRequireDefault(require("../../config/configOP.json"));
+var _configOP = _interopRequireDefault(require("../../config/configOP8.json"));
 var _Panel = require("./Panel.js");
 var _AvatarManager = require("./AvatarManager.js");
 var _MoveManager = require("../../lib/playerControl/MoveManager.js");
@@ -48046,7 +48061,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Loader = /*#__PURE__*/function () {
   function Loader(body) {
     _classCallCheck(this, Loader);
-    this.config = _configOP.default.src.main;
+    this.config = window.configALL.src.main;
     this.body = body;
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
@@ -48146,9 +48161,10 @@ var Loader = /*#__PURE__*/function () {
 }();
 exports.Loader = Loader;
 document.addEventListener('DOMContentLoaded', function () {
+  window.configALL = _configOP.default;
   new Loader(document.body);
 });
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","../../config/configOP.json":"config/configOP.json","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","../../config/configOP8.json":"config/configOP8.json","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -48173,7 +48189,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "59746" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61958" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

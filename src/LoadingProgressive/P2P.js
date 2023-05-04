@@ -1,4 +1,3 @@
-import config from '../../config/configOP.json'
 export class P2P{
     constructor(camera,detection){
         this.detection=detection
@@ -12,7 +11,7 @@ export class P2P{
         //     else alert("不用P2P")
         this.camera=camera
         this.parse=data=>console.log(data)
-        this.socketURL=config.src.P2P.urlP2pControllerServer//"http://114.80.207.60:8011"//this.urlP2pServer
+        this.socketURL=window.configALL.src.P2P.urlP2pControllerServer//"http://114.80.207.60:8011"//this.urlP2pServer
         console.log("this.socketURL",this.socketURL)
         const self=this
         if(this.useP2P){

@@ -5,13 +5,13 @@ import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitContro
 //RGBMLoader
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
-import config from '../../config/configOP.json'
+import config from '../../config/configOP8.json'
 import {Panel } from './Panel.js'
 import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 export class Loader{
     constructor(body){
-        this.config=config.src.main
+        this.config=window.configALL.src.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
@@ -115,5 +115,6 @@ export class Loader{
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
+    window.configALL=config
     new Loader(document.body)
 })

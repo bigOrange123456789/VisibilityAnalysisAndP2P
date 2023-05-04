@@ -2,7 +2,6 @@ import * as THREE from "three";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 import { saveAs } from 'file-saver';
-import config from '../../config/configOP.json'
 import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
@@ -13,10 +12,9 @@ export class Building{
         let self=this
         this.scene=scene
         
-        this.config=config.src.Building_new
+        this.config=window.configALL.src.Building_new
         this.NumberOfComponents=this.config.NumberOfComponents
 
-        window.config0=this.config
         this.parentGroup = new THREE.Group()
         this.parentGroup.scale.set(
             this.config.parentGroup.scale.x,
@@ -36,6 +34,12 @@ export class Building{
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
 
+        // this.loadJson(
+        //     this.config.path+"instance_info.json",
+        //     data=>{
+        //         console.log("instance_info.json",data)
+        //     }
+        // )
         // this.load0()
         let c=this.config.createSphere
         this.visibiity=new Visibility(
@@ -96,7 +100,7 @@ export class Building{
             mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
         }else{
             // mesh.geometry.computeFaceNormals()
-            // mesh.geometry.computeVertexNormals()
+            mesh.geometry.computeVertexNormals()
             mesh.material.depthTest=false
             mesh.material.transparent=false
         }
@@ -104,14 +108,14 @@ export class Building{
         // mesh.geometry.computeFaceNormals()
         // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff)    )/255
         // mesh.geometry.computeVertexNormals()
-        mesh=new THREE.Mesh(
-            mesh.geometry,
-            new THREE.MeshBasicMaterial()
-        )
-        let t=id*256*256*256/259 ///2665
-        mesh.material.color.r=1.*((t&0xff)    )/255
-        mesh.material.color.g=1.*((t&0xff00)>>8 )/255
-        mesh.material.color.b=1.*((t&0xff0000)>>16)/255
+        // mesh=new THREE.Mesh(
+        //     mesh.geometry,
+        //     new THREE.MeshBasicMaterial()
+        // )
+        // let t=id*256*256*256/259 ///2665
+        // mesh.material.color.r=1.*((t&0xff)    )/255
+        // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
+        // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
 
 
         this.meshes[id]=mesh
@@ -247,5 +251,17 @@ export class Building{
         var box = new THREE.Box3().setFromObject(mesh)
         // return box.max.y<ymax && box.min.y>ymin
         return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
+    }
+    loadJson(path,cb){
+        console.log(path)
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', path, true)
+        xhr.send()
+        xhr.onreadystatechange = ()=> {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json_data = JSON.parse(xhr.responseText)
+                cb(json_data)
+            }
+        }
     }
 }

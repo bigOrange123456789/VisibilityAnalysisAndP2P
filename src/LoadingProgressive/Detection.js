@@ -1,9 +1,8 @@
-import config from '../../config/configOP.json'
 export class Detection {//需要服务器
     constructor(meshes) {
         this.updateGroupList=[]
         this.meshes=meshes
-        this.dectionURL=config.src.Detection.urlDetectionServer
+        this.dectionURL=window.configALL.src.Detection.urlDetectionServer
         this.date=this.getTime()
         // this.time0=performance.now()
         // this.

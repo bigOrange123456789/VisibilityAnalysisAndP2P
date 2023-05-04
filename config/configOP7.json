@@ -1317,7 +1317,7 @@
         },
         "Visibility":{
             "componentNum":8437,
-            "urlVdServer":"http://localhost:8091"
+            "urlVdServer":"http://39.98.206.0:8091"
         },
         "P2P":{
             "urlP2pControllerServer":"http://139.196.217.153:8010"

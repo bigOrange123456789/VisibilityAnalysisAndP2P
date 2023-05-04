@@ -1,7 +1,6 @@
-import config from '../../config/configOP.json'
 export class Visibility{
     constructor(areaInf,camera,loading,meshes) {
-        this.config=config.src.Visibility
+        this.config=window.configALL.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
         // console.log(areaInf["min"])
