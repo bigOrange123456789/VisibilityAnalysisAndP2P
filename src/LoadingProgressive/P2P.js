@@ -1,6 +1,7 @@
 import config from '../../config/configOP.json'
 export class P2P{
-    constructor(camera){
+    constructor(camera,detection){
+        this.detection=detection
         this.useP2P=true
         if(new URLSearchParams(window.location.search).has("useP2P"))
             this.useP2P=new URLSearchParams(window.location.search).get('useP2P')=="true"
@@ -45,14 +46,19 @@ export class P2P{
         socket.on('userConfig',  data=> {
             scope.config=data
             const edgeURL="http://"+data.edgeIp+":8011"
-            this.socket = this.init_p2p_edge(edgeURL)
+            scope.socket = scope.init_p2p_edge(edgeURL)
         })
         socket.on('userConfigUpdate',  data=> {
             scope.config=data
             // const edgeURL="http://"+data.edgeIp+":8011"
             console.log(data)
-            scope.socket.emit("groupId",scope.config.groupId)
+            scope.socket.emit("groupId",10000)//scope.socket.emit("groupId",scope.config.groupId)
         })
+        window.pathId=(id)=>{
+            scope.detection.updateGroup(id)
+            scope.socket.emit("groupId",id)
+            console.log("path id",id)
+        }
         setInterval(()=>{
             socket.emit('updateFeature',{
                 feature:[scope.camera.position.x,scope.camera.position.y,scope.camera.position.z]

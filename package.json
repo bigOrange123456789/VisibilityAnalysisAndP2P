@@ -25,6 +25,7 @@
     "archiver": "^5.3.1",
     "dat.gui": "^0.7.9",
     "file-saver": "^2.0.5",
+    "gltf-pipeline": "^4.1.0",
     "jszip": "^3.10.1",
     "node-geolocation": "^1.15.14",
     "node-static": "^0.7.11",

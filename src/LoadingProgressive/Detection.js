@@ -1,17 +1,10 @@
 import config from '../../config/configOP.json'
 export class Detection {//需要服务器
     constructor(meshes) {
+        this.updateGroupList=[]
         this.meshes=meshes
         this.dectionURL=config.src.Detection.urlDetectionServer
-        this.date=[
-            new Date().getMonth(),
-            new Date().getDate(),
-            new Date().getHours(),//
-            new Date().getSeconds(),//1
-            new Date().getMilliseconds(),
-            
-            new Date().getMinutes(),//新添加
-        ]
+        this.date=this.getTime()
         // this.time0=performance.now()
         // this.
 
@@ -25,7 +18,7 @@ export class Detection {//需要服务器
         this.pack_circumstances={}
         var scope=this
 
-        this.testTime=90//60//window.param.testTime;//测试时间
+        this.testTime=120//90//60//window.param.testTime;//测试时间
         this.frameCount=0;//记录帧数量
         function testFrame(){
             scope.frameCount++
@@ -35,6 +28,23 @@ export class Detection {//需要服务器
             console.log("end")
             scope.finish()
         },scope.testTime*1000)
+    }
+    updateGroup(groupid){
+        this.updateGroupList.push([
+            groupid,
+            this.getTime()
+        ])
+    }
+    getTime(){
+        return [
+            new Date().getMonth(),
+            new Date().getDate(),
+            new Date().getHours(),//
+            new Date().getSeconds(),//1
+            new Date().getMilliseconds(),
+
+            new Date().getMinutes(),//新添加
+        ]
     }
     getLoadDelay(){
         let delay=0
@@ -86,6 +96,8 @@ export class Detection {//需要服务器
     finish(){
         this.close=true
         var data={
+            updateGroupList:this.updateGroupList,
+
             count_pack_p2p  :this.count_pack_p2p,
             count_pack_server:this.count_pack_server,
 

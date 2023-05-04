@@ -1,5 +1,4 @@
 import{MyUI} from "../../lib/ui/MyUI_sim.js"
-import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 export class Panel{
   constructor(main){
       this.main=main
@@ -8,6 +7,7 @@ export class Panel{
   }
   addMyUI()
   {
+    window.pathId=(id)=>{console.log("path id",id)}
     //完成设置个数
     var width=window.innerWidth
     var height=window.innerHeight
@@ -26,6 +26,7 @@ export class Panel{
               const wander=self.main.wanderList[id]
               wander.stopFlag=!wander.stopFlag
             }else{
+              window.pathId(id)
               for(let i=0;i<self.main.wanderList.length;i++)
                 self.main.wanderList[i].stopFlag=true
               self.main.wanderList[id].joinPath()

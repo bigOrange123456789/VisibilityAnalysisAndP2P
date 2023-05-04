@@ -1,28 +1,3 @@
-// const obj2gltf = require('obj2gltf');
-// const fs = require('fs');
-// function process(index){
-//     const inputFile  = path1+index+'.obj';
-//     const outputFile = path2+index+'.glb';
-//     obj2gltf(inputFile)
-//     .then(function(gltf) {// 将转换后的 gltf 数据写入文件中
-//         const data = Buffer.from(JSON.stringify(gltf));
-//         fs.writeFile(outputFile, data, function(err) {
-//             if (err) throw err;
-//         });
-//     })
-//     .catch(function(err) {
-//         console.error('Error:', err);
-//     });
-// }
-// let index=0
-// const number=1278
-// const interval=setInterval(()=>{
-//     process(index)
-//     console.log(index)
-//     index++
-//     if(index==number)clearInterval(interval)
-// },100)
-
 class FileProcessor{
     //构造函数
     constructor() {
@@ -102,31 +77,42 @@ class FileProcessor{
             if(i===all.length)clearInterval(si)
         },1)
     }
+    static test1(){
+        const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB_sim/"
+        const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7Zip_sim/"
+        var fp=new FileProcessor()
+        var all=fp.fs.readdirSync(path1)
+        var i=0;
+        var si=setInterval(()=>{
+            fp.zip(
+                path1+"/"+s, 
+                path2+"/"+s.split(".")[0]+".zip", 
+                (s)=> {}
+            )
+            i++;
+            process.stdout.write(i+"/"+all.length+"\r")
+            if(i===all.length)clearInterval(si)
+        },100)
+    }
+    static test2(){
+        const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8GLB/"
+        const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8Zip/"
+        var fp=new FileProcessor()
+        var all=fp.fs.readdirSync(path1)
+        var i=0;
+        var si=setInterval(()=>{
+            fp.zip(
+                path1+"/"+all[i], 
+                path2+"/"+all[i].split(".")[0]+".zip", 
+                (s)=> {}
+            )
+            i++;
+            process.stdout.write(i+"/"+all.length+"\r")
+            if(i===all.length)clearInterval(si)
+        },500)
+    }
 }
+FileProcessor.test2()
 
-const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7GLB_sim/"
-const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space7Zip_sim/"
-var fp=new FileProcessor()
-var all=fp.fs.readdirSync(path1)
-var i=0;
-var si=setInterval(()=>{
-    var s=all[i];
-    // console.log("s",s)
-    //var arr=s.split(".gltf");
-    //if(arr.length>1)
-    fp.zip(
-        path1+"/"+s, 
-        path2+"/"+s.split(".")[0]+".zip", 
-        (s)=> {}
-    )
-    i++;
-    process.stdout.write(i+"/"+all.length+"\r")
-    if(i===all.length)clearInterval(si)
-},100)
-// const FileProcessor = require('FileProcessor.js');
-// const FileProcessor = require('tool2/FileProcessor.js');
-// const fp=new FileProcessor()
-// fp.zip("./", "test.txt", cb)
-// FileProcessor.test_compress()
 
 
