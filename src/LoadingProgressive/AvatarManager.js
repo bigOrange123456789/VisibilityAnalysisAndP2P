@@ -2,6 +2,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 import { Crowd } from '../../lib/crowd/Crowd.js'//let Crowd=Pack// 
 export class AvatarManager {
     constructor(scene, camera) {
+        return
         window.scene=scene
         this.scene = scene
         this.camera = camera

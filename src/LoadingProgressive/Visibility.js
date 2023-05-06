@@ -19,42 +19,42 @@ export class Visibility{
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading
         this.dynamicLoading()//加载和预加载
-        // this.culling()//遮挡剔除和视锥剔除
+        this.culling()//遮挡剔除和视锥剔除
 
-        if(new URLSearchParams(window.location.search).has("autoMove"))
-            if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
-                areaInf.min
-                const g=(a,b)=>{return Math.random() * (b-a)+a}
-                const start=[
-                    g(areaInf.min[0],areaInf.max[0]),
-                    g(areaInf.min[1],areaInf.max[1]),
-                    g(areaInf.min[2],areaInf.max[2])
-                ]
-                camera.position.x=start[0]
-                camera.position.y
-                camera.position.z=start[1]
-                const end=[
-                    g(areaInf.min[0],areaInf.max[0]),
-                    g(areaInf.min[1],areaInf.max[1]),
-                    g(areaInf.min[2],areaInf.max[2])
-                ]
-                camera.lookAt(
-                    end[0],
-                    camera.position.y,
-                    end[2]
-                )
-                const time=60*1000/10
-                const step=[
-                    (end[0]-start[0])/time,
-                    (end[1]-start[1])/time,
-                    (end[2]-start[2])/time
-                ]
-                console.log(start,end)
-                setInterval(()=>{
-                    camera.position.x+=step[0]
-                    camera.position.z+=step[2]
-                },10)//60*1000
-            }
+        // if(new URLSearchParams(window.location.search).has("autoMove"))
+        //     if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
+        //         areaInf.min
+        //         const g=(a,b)=>{return Math.random() * (b-a)+a}
+        //         const start=[
+        //             g(areaInf.min[0],areaInf.max[0]),
+        //             g(areaInf.min[1],areaInf.max[1]),
+        //             g(areaInf.min[2],areaInf.max[2])
+        //         ]
+        //         camera.position.x=start[0]
+        //         camera.position.y
+        //         camera.position.z=start[1]
+        //         const end=[
+        //             g(areaInf.min[0],areaInf.max[0]),
+        //             g(areaInf.min[1],areaInf.max[1]),
+        //             g(areaInf.min[2],areaInf.max[2])
+        //         ]
+        //         camera.lookAt(
+        //             end[0],
+        //             camera.position.y,
+        //             end[2]
+        //         )
+        //         const time=60*1000/10
+        //         const step=[
+        //             (end[0]-start[0])/time,
+        //             (end[1]-start[1])/time,
+        //             (end[2]-start[2])/time
+        //         ]
+        //         console.log(start,end)
+        //         setInterval(()=>{
+        //             camera.position.x+=step[0]
+        //             camera.position.z+=step[2]
+        //         },10)//60*1000
+        //     }
     }
     getDirection(){
         var d=this.camera.getWorldDirection()
@@ -155,7 +155,7 @@ export class Visibility{
                 const vd5=i in visualList0["5"]?visualList0["5"][i]:0
                 const vd6=i in visualList0["6"]?visualList0["6"][i]:0
                 this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
-                this.meshes[i].visible= this.vd[i]>0
+                // this.meshes[i].visible= this.vd[i]>0
                 this.meshes[i].used=true//这个mesh被使用了
             } 
             window.visibleArea={}

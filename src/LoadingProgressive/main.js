@@ -17,26 +17,12 @@ export class Loader{
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
 
-        
-        
         this.initScene()
         this.initSky()
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
-        // if(!new URLSearchParams(window.location.search).has("autoMove"))
-        //     new AvatarManager(this.scene,this.camera)
-    }
-    initWander() {
-        this.wanderList=[]
-        for(let i=0;i<this.config.pathList.length;i++)
-            this.wanderList.push(
-                new MoveManager(this.camera, this.config.pathList[i])
-            )
-        if(window.location.search.split("autoMove=true").length>1){
-            const pathId=Math.floor(Math.random()*this.wanderList.length)
-            this.wanderList[pathId].stopFlag=false
-        }
+        new AvatarManager(this.scene,this.camera)
     }
     async initScene(){
         this.renderer = new THREE.WebGLRenderer({
@@ -101,12 +87,14 @@ export class Loader{
         this.light=new LightProducer().scene
         this.scene.add(this.light)
         this.animate = this.animate.bind(this)
+        
         requestAnimationFrame(this.animate)
     }
     animate(){
         this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
         this.stats.update()
-        if(!(window.location.search.split("render=false").length>1))
+        // console.log(this.config)
+        if(this.config.render!=="false")
             this.renderer.render(this.scene,this.camera)
         requestAnimationFrame(this.animate)
     }
@@ -118,6 +106,7 @@ export class Loader{
         this.renderer.setSize(this.canvas.width, this.canvas.height)
     }
     initSky() {
+        if(this.config.render=="false")return
         const self=this
         let sky = new Sky();
         sky.scale.setScalar( 450000 );
@@ -151,10 +140,46 @@ export class Loader{
         }
         guiChanged(effectController,sun)
     }
-
-    
+    initWander() {
+        this.wanderList=[]
+        for(let i=0;i<this.config.pathList.length;i++)
+            this.wanderList.push(
+                new MoveManager(this.camera, this.config.pathList[i])
+            )
+        if(this.config.autoMove=="true"){
+            const pathId=Math.floor(Math.random()*this.wanderList.length)
+            this.wanderList[pathId].stopFlag=false
+        }else if(this.config.autoMove!==null){
+            const pathId=parseInt(this.config.autoMove)
+            console.log(this.config.autoMove,pathId)
+            this.wanderList[pathId].stopFlag=false
+        }
+    }
 }
 document.addEventListener('DOMContentLoaded', () => {
+    const getParam=id=>{
+        id=id+"="
+        return window.location.search.split(id).length>1?
+                window.location.search.split(id)[1].split("&")[0]:
+                null
+    }
+    config.src.main.autoMove=getParam('autoMove')
+    config.src.main.render  =getParam('render')
+    config.src.Detection.backURL=getParam('backURL')
+    if(getParam('backURL')!==null){//backURL需要将autoMove参数传回
+        let backURL=getParam('backURL')
+        const add=(tag)=>{
+            const value=getParam(tag)
+            if(value!==null){
+                if(backURL.split('?').length>1)backURL+="&"
+                else backURL+="?"
+                backURL=backURL+tag+"="+value
+            }
+        }
+        add('autoMove')
+        add('userId') 
+        config.src.Detection.backURL=backURL    
+    }
     window.configALL=config
     new Loader(document.body)
 })

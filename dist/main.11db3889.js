@@ -153,7 +153,8 @@ module.exports = {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
     },
     "Detection": {
-      "urlDetectionServer": "http://123.57.58.224:9999"
+      "urlDetectionServer": "http://123.57.58.224:9999",
+      "testTime": 120
     },
     "SamplePointList": {
       "vvd": {}
@@ -40582,27 +40583,42 @@ var Visibility = /*#__PURE__*/function () {
     this.prePoint2 = ""; //视点变化就进行可见性剔除
     this.loading = loading;
     this.dynamicLoading(); //加载和预加载
-    // this.culling()//遮挡剔除和视锥剔除
+    this.culling(); //遮挡剔除和视锥剔除
 
-    if (new URLSearchParams(window.location.search).has("autoMove")) if (new URLSearchParams(window.location.search).get('autoMove') == "true") {
-      areaInf.min;
-      var g = function g(a, b) {
-        return Math.random() * (b - a) + a;
-      };
-      var start = [g(areaInf.min[0], areaInf.max[0]), g(areaInf.min[1], areaInf.max[1]), g(areaInf.min[2], areaInf.max[2])];
-      camera.position.x = start[0];
-      camera.position.y;
-      camera.position.z = start[1];
-      var end = [g(areaInf.min[0], areaInf.max[0]), g(areaInf.min[1], areaInf.max[1]), g(areaInf.min[2], areaInf.max[2])];
-      camera.lookAt(end[0], camera.position.y, end[2]);
-      var time = 60 * 1000 / 10;
-      var step = [(end[0] - start[0]) / time, (end[1] - start[1]) / time, (end[2] - start[2]) / time];
-      console.log(start, end);
-      setInterval(function () {
-        camera.position.x += step[0];
-        camera.position.z += step[2];
-      }, 10); //60*1000
-    }
+    // if(new URLSearchParams(window.location.search).has("autoMove"))
+    //     if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
+    //         areaInf.min
+    //         const g=(a,b)=>{return Math.random() * (b-a)+a}
+    //         const start=[
+    //             g(areaInf.min[0],areaInf.max[0]),
+    //             g(areaInf.min[1],areaInf.max[1]),
+    //             g(areaInf.min[2],areaInf.max[2])
+    //         ]
+    //         camera.position.x=start[0]
+    //         camera.position.y
+    //         camera.position.z=start[1]
+    //         const end=[
+    //             g(areaInf.min[0],areaInf.max[0]),
+    //             g(areaInf.min[1],areaInf.max[1]),
+    //             g(areaInf.min[2],areaInf.max[2])
+    //         ]
+    //         camera.lookAt(
+    //             end[0],
+    //             camera.position.y,
+    //             end[2]
+    //         )
+    //         const time=60*1000/10
+    //         const step=[
+    //             (end[0]-start[0])/time,
+    //             (end[1]-start[1])/time,
+    //             (end[2]-start[2])/time
+    //         ]
+    //         console.log(start,end)
+    //         setInterval(()=>{
+    //             camera.position.x+=step[0]
+    //             camera.position.z+=step[2]
+    //         },10)//60*1000
+    //     }
   }
   _createClass(Visibility, [{
     key: "getDirection",
@@ -40744,7 +40760,7 @@ var Visibility = /*#__PURE__*/function () {
           var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
           var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
           this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          this.meshes[i].visible = this.vd[i] > 0;
+          // this.meshes[i].visible= this.vd[i]>0
           this.meshes[i].used = true; //这个mesh被使用了
         }
 
@@ -40952,9 +40968,10 @@ var Detection = /*#__PURE__*/function () {
   //需要服务器
   function Detection(meshes) {
     _classCallCheck(this, Detection);
+    this.config = window.configALL.src.Detection;
     this.updateGroupList = [];
     this.meshes = meshes;
-    this.dectionURL = window.configALL.src.Detection.urlDetectionServer;
+    this.dectionURL = this.config.urlDetectionServer;
     this.date = this.getTime();
     // this.time0=performance.now()
     // this.
@@ -40962,12 +40979,16 @@ var Detection = /*#__PURE__*/function () {
     this.count_pack_p2p = 0; //P2P加载数量
     this.count_pack_server = 0; //服务器获取数量
 
+    this.count_pack_request = {
+      "glb": 0,
+      "zip": 0
+    };
     this.count_mesh_p2p = 0;
     this.count_mesh_server = 0;
     this.close = false;
     this.pack_circumstances = {};
     var scope = this;
-    this.testTime = 10; //120//90//60//window.param.testTime;//测试时间
+    this.testTime = this.config.testTime; //90//60//window.param.testTime;//测试时间
     this.frameCount = 0; //记录帧数量
     function testFrame() {
       scope.frameCount++;
@@ -40980,6 +41001,11 @@ var Detection = /*#__PURE__*/function () {
     }, scope.testTime * 1000);
   }
   _createClass(Detection, [{
+    key: "request",
+    value: function request(type) {
+      this.count_pack_request[type]++;
+    }
+  }, {
     key: "updateGroup",
     value: function updateGroup(groupid) {
       this.updateGroupList.push([groupid, this.getTime()]);
@@ -41002,8 +41028,8 @@ var Detection = /*#__PURE__*/function () {
       var count = 0;
       for (var id in this.meshes) {
         var mesh = this.meshes[id];
-        if (mesh.used) {
-          //延迟只统计被使用过的对象
+        if (mesh.originType !== "edgeP2P") {
+          //延迟只统计通过Server获取的
           if (mesh.LoadDelay > delayMax) {
             delayMax = mesh.LoadDelay;
           }
@@ -41013,7 +41039,8 @@ var Detection = /*#__PURE__*/function () {
       }
       return {
         "ave": delay / count,
-        "max": delayMax
+        "max": delayMax,
+        "count": count
       };
     }
   }, {
@@ -41047,11 +41074,59 @@ var Detection = /*#__PURE__*/function () {
       return count;
     }
   }, {
+    key: "getDeviceModel",
+    value: function getDeviceModel() {
+      var userAgent = navigator.userAgent;
+      var webLog = {
+        userAgent: userAgent,
+        isPhone: navigator.userAgent.split("Mobile").length > 1,
+        wechat: null,
+        device: null,
+        //'iPad' 'iPhone' Android
+        system: null
+      };
+      // 获取微信版本
+      var m1 = userAgent.match(/MicroMessenger.*?(?= )/);
+      if (m1 && m1.length > 0) {
+        webLog.wechat = m1[0];
+      }
+      // 苹果手机
+      if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+        // 获取设备名
+        if (userAgent.includes('iPad')) {
+          webLog.device = 'iPad';
+        } else {
+          webLog.device = 'iPhone';
+        }
+        // 获取操作系统版本
+        m1 = userAgent.match(/iPhone OS .*?(?= )/);
+        if (m1 && m1.length > 0) {
+          webLog.system = m1[0];
+        }
+      }
+      // 安卓手机
+      if (userAgent.includes('Android')) {
+        // 获取设备名
+        m1 = userAgent.match(/Android.*; ?(.*(?= Build))/);
+        if (m1 && m1.length > 1) {
+          webLog.device = m1[1];
+        }
+        // 获取操作系统版本
+        m1 = userAgent.match(/Android.*?(?=;)/);
+        if (m1 && m1.length > 0) {
+          webLog.system = m1[0];
+        }
+      }
+      return webLog;
+    }
+  }, {
     key: "finish",
     value: function finish() {
+      var self = this;
       this.close = true;
       var data = {
         updateGroupList: this.updateGroupList,
+        count_pack_request: this.count_pack_request,
         count_pack_p2p: this.count_pack_p2p,
         count_pack_server: this.count_pack_server,
         count_mesh_p2p: this.count_mesh_p2p,
@@ -41063,14 +41138,15 @@ var Detection = /*#__PURE__*/function () {
         //测试所用的帧数
         testTime: this.testTime,
         //测试时间
-
+        config: this.config,
         url: window.location.href,
         //地址以及参数
         date: this.date,
         //测试日期
-
-        useP2P: window.useP2P
+        useP2P: window.useP2P,
+        deviceModel: this.getDeviceModel() //获取设备型号
       };
+
       console.log(data);
       var oReq = new XMLHttpRequest();
       oReq.open("POST", this.dectionURL, true);
@@ -41080,11 +41156,9 @@ var Detection = /*#__PURE__*/function () {
         var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
         var str = String.fromCharCode.apply(null, unitArray); //解析为文本
         console.log(str);
-        if (!new URLSearchParams(window.location.search).has("autoMove")) alert("测试完成，感谢您的配合！");
-        setTimeout(function () {
-          if (new URLSearchParams(window.location.search).has("back")) location.href = new URLSearchParams(window.location.search).get('back');
-          // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
-        }, 100);
+        if (self.config.backURL !== null) setTimeout(function () {
+          location.href = self.config.backURL;
+        }, 100);else alert("测试完成，感谢您的配合！");
         // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
         //window.opener = null;//为了不出现提示框
         // window.close();//关闭窗口//完成测试，关闭窗口
@@ -43569,9 +43643,6 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "addMesh",
     value: function addMesh(id, mesh) {
-      this.detection.receiveMesh(mesh);
-      mesh.myId = id;
-      mesh.material.side = 2;
       if (this.config.updateColor) {
         var t = mesh.myId * 256 * 256 * 256 / 8431; ///2665
         mesh.material.color.r = 0.5 * (t & 0xff) / 255;
@@ -43598,6 +43669,7 @@ var Building = /*#__PURE__*/function () {
       // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
 
       if (this.instance_info) {
+        var mesh0 = mesh;
         var instance_info = this.instance_info[id];
         mesh = new THREE.InstancedMesh(mesh.geometry, mesh.material, instance_info.length + 1);
         for (var i = 0; i < instance_info.length; i++) {
@@ -43605,16 +43677,23 @@ var Building = /*#__PURE__*/function () {
           mesh.setMatrixAt(i, new THREE.Matrix4().set(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], 0, 0, 0, 1));
         }
         mesh.setMatrixAt(instance_info.length, new THREE.Matrix4().fromArray([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
+        mesh.used = mesh0.used;
+        mesh.LoadDelay = mesh0.LoadDelay;
+        mesh.originType = mesh0.originType;
       }
       this.meshes[id] = mesh;
       this.parentGroup.add(mesh);
       this.visibiity.prePoint2 = ""; //重新进行可见剔除
+
+      mesh.myId = id;
+      this.detection.receiveMesh(mesh);
     }
   }, {
     key: "loadGLB",
     value: function loadGLB(id, cb) {
       if (this.meshes_request[id]) return;
       this.meshes_request[id] = performance.now(); //true
+      this.detection.request("glb");
       var self = this;
       var loader = new _GLTFLoader.GLTFLoader();
       loader.load(self.config.path + id + ".glb", function (gltf) {
@@ -43635,6 +43714,7 @@ var Building = /*#__PURE__*/function () {
       if (this.meshes_request[id]) return;
       this.detection.receivePack("server");
       this.meshes_request[id] = performance.now(); //true
+      this.detection.request("zip");
       var self = this;
       var url = self.config.path + id + ".zip";
       new Promise(function (resolve, reject) {
@@ -47637,6 +47717,7 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var AvatarManager = /*#__PURE__*/function () {
   function AvatarManager(scene, camera) {
     _classCallCheck(this, AvatarManager);
+    return;
     window.scene = scene;
     this.scene = scene;
     this.camera = camera;
@@ -48168,20 +48249,9 @@ var Loader = /*#__PURE__*/function () {
     this.initWander();
     this.panel = new _Panel.Panel(this);
     this.building = new _Building.Building(this.scene, this.camera);
-    // if(!new URLSearchParams(window.location.search).has("autoMove"))
-    //     new AvatarManager(this.scene,this.camera)
+    new _AvatarManager.AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
-    key: "initWander",
-    value: function initWander() {
-      this.wanderList = [];
-      for (var i = 0; i < this.config.pathList.length; i++) this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
-      if (window.location.search.split("autoMove=true").length > 1) {
-        var pathId = Math.floor(Math.random() * this.wanderList.length);
-        this.wanderList[pathId].stopFlag = false;
-      }
-    }
-  }, {
     key: "initScene",
     value: function () {
       var _initScene = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -48243,7 +48313,8 @@ var Loader = /*#__PURE__*/function () {
     value: function animate() {
       this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.stats.update();
-      if (!(window.location.search.split("render=false").length > 1)) this.renderer.render(this.scene, this.camera);
+      // console.log(this.config)
+      if (this.config.render !== "false") this.renderer.render(this.scene, this.camera);
       requestAnimationFrame(this.animate);
     }
   }, {
@@ -48258,6 +48329,7 @@ var Loader = /*#__PURE__*/function () {
   }, {
     key: "initSky",
     value: function initSky() {
+      if (this.config.render == "false") return;
       var self = this;
       var sky = new _Sky.Sky();
       sky.scale.setScalar(450000);
@@ -48294,11 +48366,46 @@ var Loader = /*#__PURE__*/function () {
       }
       guiChanged(effectController, sun);
     }
+  }, {
+    key: "initWander",
+    value: function initWander() {
+      this.wanderList = [];
+      for (var i = 0; i < this.config.pathList.length; i++) this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
+      if (this.config.autoMove == "true") {
+        var pathId = Math.floor(Math.random() * this.wanderList.length);
+        this.wanderList[pathId].stopFlag = false;
+      } else if (this.config.autoMove !== null) {
+        var _pathId = parseInt(this.config.autoMove);
+        console.log(this.config.autoMove, _pathId);
+        this.wanderList[_pathId].stopFlag = false;
+      }
+    }
   }]);
   return Loader;
 }();
 exports.Loader = Loader;
 document.addEventListener('DOMContentLoaded', function () {
+  var getParam = function getParam(id) {
+    id = id + "=";
+    return window.location.search.split(id).length > 1 ? window.location.search.split(id)[1].split("&")[0] : null;
+  };
+  _configOP.default.src.main.autoMove = getParam('autoMove');
+  _configOP.default.src.main.render = getParam('render');
+  _configOP.default.src.Detection.backURL = getParam('backURL');
+  if (getParam('backURL') !== null) {
+    //backURL需要将autoMove参数传回
+    var backURL = getParam('backURL');
+    var add = function add(tag) {
+      var value = getParam(tag);
+      if (value !== null) {
+        if (backURL.split('?').length > 1) backURL += "&";else backURL += "?";
+        backURL = backURL + tag + "=" + value;
+      }
+    };
+    add('autoMove');
+    add('userId');
+    _configOP.default.src.Detection.backURL = backURL;
+  }
   window.configALL = _configOP.default;
   new Loader(document.body);
 });

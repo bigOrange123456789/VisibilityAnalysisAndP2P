@@ -10,17 +10,43 @@
     <script src="http://youku3d.com/smart3d/lib/socket.io.js"></script>
     <script src="http://youku3d.com/smart3d/lib/adapter.js"></script>
     <script>
-        const socketURL="175.27.190.22:8091"
-        var socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
-        function send1(num,port){
-            socket.emit('page2server',{num:num,port:port,p2p:true})
+        const renderURL="42.192.188.161:8119"
+        const socketURL=location.host
+        const getPreParam=id=>{
+            id=id+"="
+            return window.location.search.split(id).length>1?
+                    window.location.search.split(id)[1].split("&")[0]:
+                    null
         }
-        function send2(num,port){
-            socket.emit('page2server',{num:num,port:port,p2p:false})
-        }
+        const socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
         window.socket=socket
+        window.start=config0=>{
+            let config={
+                userId:socket.id,
+                useP2P:true,
+                autoMove:1,
+                render:false,
+                renderURL:renderURL
+            }
+            if(config0)
+                for(const tag in config0)
+                    config[tag]=config0[tag]
+            socket.emit('page2server',config)
+        }
+        window.start2=configList=>{
+            socket.emit('page2server',configList)
+        }
         socket.on('server2page',  data=> {
-            location.href="http://42.192.188.161:"+data.port+"/?useP2P="+data.p2p+"&autoMove=true&back=http://175.27.190.22:8080"
+            const g=id=>{
+                const value= getPreParam(id)==null  ?data[id]:getPreParam(id)
+                return id+"="+value
+            }
+            location.href="http://"+data.renderURL+"/"
+                +"?"+g("useP2P")
+                +"&"+g("autoMove")
+                +"&"+g("userId")
+                +"&"+g("render")
+                +"&backURL=http://"+location.host
         })
         socket.on("userCount",  data=> {
             console.log("userCount",data)

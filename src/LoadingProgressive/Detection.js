@@ -1,8 +1,9 @@
 export class Detection {//需要服务器
     constructor(meshes) {
+        this.config=window.configALL.src.Detection
         this.updateGroupList=[]
         this.meshes=meshes
-        this.dectionURL=window.configALL.src.Detection.urlDetectionServer
+        this.dectionURL=this.config.urlDetectionServer
         this.date=this.getTime()
         // this.time0=performance.now()
         // this.
@@ -10,14 +11,20 @@ export class Detection {//需要服务器
         this.count_pack_p2p=0//P2P加载数量
         this.count_pack_server=0//服务器获取数量
 
+        this.count_pack_request={
+            "glb":0,
+            "zip":0
+        }
+
         this.count_mesh_p2p=0
         this.count_mesh_server=0
         
         this.close=false
         this.pack_circumstances={}
-        var scope=this
+        
+        const scope=this
 
-        this.testTime=10//120//90//60//window.param.testTime;//测试时间
+        this.testTime=this.config.testTime//90//60//window.param.testTime;//测试时间
         this.frameCount=0;//记录帧数量
         function testFrame(){
             scope.frameCount++
@@ -27,6 +34,9 @@ export class Detection {//需要服务器
             console.log("end")
             scope.finish()
         },scope.testTime*1000)
+    }
+    request(type){
+        this.count_pack_request[type]++
     }
     updateGroup(groupid){
         this.updateGroupList.push([
@@ -51,7 +61,7 @@ export class Detection {//需要服务器
         let count=0
         for(let id in this.meshes){
             const mesh=this.meshes[id]
-            if(mesh.used){//延迟只统计被使用过的对象
+            if(mesh.originType!=="edgeP2P"){//延迟只统计通过Server获取的
                 if(mesh.LoadDelay>delayMax){
                     delayMax=mesh.LoadDelay
                 }
@@ -61,7 +71,8 @@ export class Detection {//需要服务器
         }
         return {
             "ave":delay/count,
-            "max":delayMax
+            "max":delayMax,
+            "count":count
         }
     }
     receivePack(type){
@@ -92,10 +103,56 @@ export class Detection {//需要服务器
         }
         return count
     }
+    getDeviceModel(){
+        let userAgent = navigator.userAgent
+        let webLog = {
+            userAgent:userAgent,
+            isPhone:navigator.userAgent.split("Mobile").length>1,
+            wechat:null,
+            device:null,//'iPad' 'iPhone' Android
+            system:null,
+        }
+        // 获取微信版本
+        let m1 = userAgent.match(/MicroMessenger.*?(?= )/)
+        if (m1 && m1.length > 0) {
+            webLog.wechat = m1[0]
+        }
+        // 苹果手机
+        if (userAgent.includes('iPhone') || userAgent.includes('iPad')) {
+            // 获取设备名
+            if (userAgent.includes('iPad')) {
+                webLog.device = 'iPad'
+            } else {
+                webLog.device = 'iPhone'
+            }
+            // 获取操作系统版本
+            m1 = userAgent.match(/iPhone OS .*?(?= )/)
+            if (m1 && m1.length > 0) {
+                webLog.system = m1[0]
+            }
+        }
+        // 安卓手机
+        if (userAgent.includes('Android')) {
+            // 获取设备名
+            m1 = userAgent.match(/Android.*; ?(.*(?= Build))/)
+            if (m1 && m1.length > 1) {
+                webLog.device = m1[1]
+            }
+            // 获取操作系统版本
+            m1 = userAgent.match(/Android.*?(?=;)/)
+            if (m1 && m1.length > 0) {
+                webLog.system = m1[0]
+            }
+        }
+        return webLog
+    }
     finish(){
+        const self=this
         this.close=true
         var data={
             updateGroupList:this.updateGroupList,
+
+            count_pack_request:this.count_pack_request,
 
             count_pack_p2p  :this.count_pack_p2p,
             count_pack_server:this.count_pack_server,
@@ -110,12 +167,13 @@ export class Detection {//需要服务器
 
             frameCount:this.frameCount,//测试所用的帧数
             testTime:this.testTime,//测试时间
+            config:this.config,
             
             url:window.location.href,//地址以及参数
             date:this.date,         //测试日期
+            useP2P:window.useP2P,
 
-            useP2P:window.useP2P
-            
+            deviceModel:this.getDeviceModel(),//获取设备型号
         }
         console.log(data)
         var oReq = new XMLHttpRequest();
@@ -125,13 +183,11 @@ export class Detection {//需要服务器
             var unitArray=new Uint8Array(oReq.response) //网络传输基于unit8Array
             var str=String.fromCharCode.apply(null,unitArray)//解析为文本
             console.log(str)
-            if(!new URLSearchParams(window.location.search).has("autoMove"))
-                alert("测试完成，感谢您的配合！")
-            setTimeout(()=>{
-                if(new URLSearchParams(window.location.search).has("back"))
-                    location.href=new URLSearchParams(window.location.search).get('back')
-                // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
-            },100)
+            if(self.config.backURL!==null)
+                setTimeout(()=>{
+                    location.href=self.config.backURL
+                },100)
+            else alert("测试完成，感谢您的配合！")
             // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
             //window.opener = null;//为了不出现提示框
             // window.close();//关闭窗口//完成测试，关闭窗口

@@ -100,9 +100,6 @@ export class Building{
         },500)
     }
     addMesh(id,mesh){
-        this.detection.receiveMesh(mesh)
-        mesh.myId=id
-        mesh.material.side=2
         if(this.config.updateColor){
             let t=mesh.myId*256*256*256/8431 ///2665
             mesh.material.color.r=0.5*((t&0xff)    )/255
@@ -129,6 +126,7 @@ export class Building{
         // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
         
         if(this.instance_info){
+            const mesh0=mesh
             const instance_info=this.instance_info[id]
             mesh=new THREE.InstancedMesh(
                 mesh.geometry,
@@ -156,15 +154,23 @@ export class Building{
                     0,0,0,1
                 ] )
             )
+            mesh.used=      mesh0.used
+            mesh.LoadDelay= mesh0.LoadDelay
+            mesh.originType=mesh0.originType
         }
 
         this.meshes[id]=mesh
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
+
+        mesh.myId=id
+        this.detection.receiveMesh(mesh)
+        
     }
     loadGLB(id,cb){
         if(this.meshes_request[id])return
         this.meshes_request[id]=performance.now()//true
+        this.detection.request("glb")
         var self=this
         const loader = new GLTFLoader();
         loader.load(self.config.path+id+".glb", gltf=>{
@@ -183,6 +189,7 @@ export class Building{
         if(this.meshes_request[id])return
         this.detection.receivePack("server")
         this.meshes_request[id]=performance.now()//true
+        this.detection.request("zip")
         const self=this
         var url=self.config.path+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包

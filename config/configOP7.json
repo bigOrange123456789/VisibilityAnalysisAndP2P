@@ -1324,7 +1324,8 @@
             "urlP2pControllerServer":"http://139.196.217.153:8010"
         },
         "Detection":{
-            "urlDetectionServer":"http://123.57.58.224:9999"
+            "urlDetectionServer":"http://123.57.58.224:9999",
+            "testTime":120
         },
         "SamplePointList": {
             "vvd": {}
