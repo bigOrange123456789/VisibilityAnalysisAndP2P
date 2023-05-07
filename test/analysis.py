@@ -1,79 +1,182 @@
 import json
 import os
 import pandas as pd
-if __name__ == "__main__":#用于测试    
-    def getRedundance(path_pre):
-        file_list=os.listdir(path_pre)
+class Analysis:
+    def __init__(self,path_pre):
+        self.path_pre=path_pre
+        self.fileList=self.load()
+        self.result={
+            "p2p"   :self.getResult(True),
+            "no-p2p":self.getResult(False),
+        }
+    def load(self):
+        fileList=[]
+        nameList=os.listdir(self.path_pre)
+        for name in nameList:
+            file=json.load(open(path_pre+name, 'r'))
+            file["fileName"]=name
+            fileList.append(file)
+        self.fileList=fileList
+        return self.fileList
+    def getNum(self,p2pFlag):
+        n=0
+        for file in self.fileList:
+            if file["useP2P"]==p2pFlag:
+                n+=1
+        return n
+    def getSum(self,p2pFlag,tagList):#tagList=["count_pack_request","zip"]
         sum=0
+        for file in self.fileList:
+            if file["useP2P"]==p2pFlag:
+                data=file
+                for t in tagList:
+                    data=data[t]
+                sum+=data
+        return sum
+    def getMax(self,p2pFlag,tagList):#tagList=["count_pack_request","zip"]
+        max=-9999999
+        for file in self.fileList:
+            if file["useP2P"]==p2pFlag:
+                data=file
+                for t in tagList:
+                    data=data[t]
+                if data>max:
+                    max=data
+        return max
+    def getResult(self,p2pFlag):
+        n0=self.getNum(p2pFlag)
+        n=n0
+        if n0==0:n=1
+        return {
+        "useP2P":p2pFlag,
+         "平均延迟":self.getSum(p2pFlag,["loadDelay","ave"])/n,
+         "最大延迟":self.getSum(p2pFlag,["loadDelay","max"])/n,
+         "服务器请求次数":self.getSum(p2pFlag,["count_pack_request","zip"])/n,
+         "服务器负载":self.getSum(p2pFlag,["count_pack_request","zip"]),
+         "服务器响应次数":self.getSum(p2pFlag,["count_pack_server"])/n,
+         "服务器功率":self.getSum(p2pFlag,["count_pack_server"]),
+         "边缘服务器负载":self.getSum(p2pFlag,["count_pack_p2p"])/n,
+         "边缘服务器功率":self.getSum(p2pFlag,["count_pack_p2p"]),
+         "加载后未使用":(
+            self.getSum(p2pFlag,["count_mesh_p2p_NotUsed"])+
+            self.getSum(p2pFlag,["count_mesh_server_NotUsed"])
+            )/(
+            self.getSum(p2pFlag,["count_mesh_p2p"])+
+            self.getSum(p2pFlag,["count_mesh_server"])
+            ),
+         "重复加载":(
+             self.getSum(p2pFlag,["count_pack_p2p"])
+            +self.getSum(p2pFlag,["count_pack_server"])
+            -self.getSum(p2pFlag,["count_mesh_p2p"])
+            -self.getSum(p2pFlag,["count_mesh_server"])
+            )/(
+             self.getSum(p2pFlag,["count_pack_p2p"])
+            +self.getSum(p2pFlag,["count_pack_server"])
+            ),
+         "FPS":
+            self.getSum(p2pFlag,["frameCount"])/
+            self.getSum(p2pFlag,["testTime"])
+         ,
+         "测试人数":n
+        }
+    
+if __name__ == "__main__":#用于测试  
+    def inTime(path_pre,useP2P,time0):
+        file_list=os.listdir(path_pre)
+        num=0
         for name in file_list:
             file=json.load(open(path_pre+name, 'r'))
-            redun=(file["count_pack_p2p"]+file["count_pack_server"]
-                   -file["count_mesh_p2p"]-file["count_mesh_server"])/(
-                file["count_pack_p2p"]+ file["count_pack_server"])
-            sum+=redun
-        return str(100*sum/len(file_list))+"%"
-    def getDelay(path_pre):
+            if file["useP2P"]==useP2P:
+                t1=[
+                    file["date"][5],
+                    file["date"][3]
+                ]
+                t2=[
+                    int(name.split('.')[1].split('-')[1]),
+                    int(name.split('.')[1].split('-')[2]),
+                ]
+                time1=t1[0]+t1[1]/60
+                time2=t2[0]+t2[1]/60
+                # print(time1,time2)
+                if time1<time0 and time0<time2:
+                    num+=1
+        return num
+    def getTimeMax(path_pre,useP2P):#完成时间
         file_list=os.listdir(path_pre)
-        sum=0
+        max=-10000
         for name in file_list:
             file=json.load(open(path_pre+name, 'r'))
-            sum+=file["loadDelay"]["ave"]
-        return sum/len(file_list)
-    def getNotUsed(path_pre):
+            if file["useP2P"]==useP2P:
+                t=[
+                    int(name.split('.')[1].split('-')[1]),
+                    int(name.split('.')[1].split('-')[2]),
+                ]
+                time0=t[0]+t[1]/60
+                if time0>max:
+                    max=time0
+        return max
+    def getTimeMin(path_pre,useP2P):#开始时间
         file_list=os.listdir(path_pre)
-        sum=0
+        min=10000
         for name in file_list:
             file=json.load(open(path_pre+name, 'r'))
-            nu=(file["count_mesh_p2p_NotUsed"]+file["count_mesh_server_NotUsed"])/(
-                file["count_mesh_p2p"]+file["count_mesh_server"])
-            sum+=nu
-        return str(100*sum/len(file_list))+"%"
-    def getFPS(path_pre):
-        file_list=os.listdir(path_pre)
-        sum=0
-        for name in file_list:
-            file=json.load(open(path_pre+name, 'r'))
-            sum+=(file["frameCount"]/file["testTime"])
-        return sum/len(file_list)
-    def f(path0):
-        file_list=os.listdir(path0)
-        result={}
-        for name in file_list:
-            result[name]=getDelay(path0+name+"/")
-        return result
+            if file["useP2P"]==useP2P:
+                t=[
+                    file["date"][5],
+                    file["date"][3]
+                ]
+                time0=t[0]+t[1]/60
+                if time0<min:
+                    min=time0
+        return min
     def save(tag,arr):
         df = pd.DataFrame(arr, columns=tag)
-        df.to_excel('data/test.xlsx', index=False)
+        df.to_excel('result.xlsx', index=False)
+    def save2(tag,arr):
+        df = pd.DataFrame(arr, columns=tag)
+        df.to_excel('result2.xlsx', index=False)
     
-    # data1= f("data/group2/")
-    # tag=[]
-    # arr=[]
+    
 
-    # arr0=[]
-    # for i in range(10):
-    #     id=str(i+1)
-    #     tag.append(id)
-    #     arr0.append(data1[id])
-    # arr.append(arr0)
 
-    # df = pd.DataFrame(arr, columns=tag)
-    # df.to_excel('data/test.xlsx', index=False)
-
-    tag=["","加载延迟","加载后未使用","重复加载","FPS"]
+    tag=[
+        "useP2P",
+         "平均延迟",
+         "最大延迟",
+         "服务器请求次数",
+         "服务器响应次数",
+         "边缘服务器负载",
+         "加载后未使用",
+         "重复加载",
+         "FPS",
+         "测试人数"
+         ]
     arr=[]
 
+    path_pre="data/detection/"
 
-    for path in ["group1","group2","group3","group4","group5","noP2P"]:
-        arr0=[
-            path,
-            getDelay("data/"+path+"/"),
-            getNotUsed("data/"+path+"/"),
-            getRedundance("data/"+path+"/"),
-            getFPS("data/"+path+"/"),
-        ]
-        arr.append(arr0)
+    anaysis=Analysis(path_pre)
+    tag=list(anaysis.result["p2p"].keys())
+    arr=[
+        list(anaysis.result["p2p"].values()),
+        list(anaysis.result["no-p2p"].values())
+    ]
+    print(tag)
+    tag.append("useP2P")
+    arr[0].append(True)
+    arr[1].append(False)
     save(tag,arr)
 
-
-    
-
+    tag=[]
+    arr=[]
+    path_pre="detection/"
+    t=min([getTimeMin(path_pre,True),getTimeMin(path_pre,False)])-5/60
+    print(t,max([getTimeMax(path_pre,True),getTimeMax(path_pre,False)]))
+    arr1=[]
+    arr2=[]
+    while t<max([getTimeMax(path_pre,True),getTimeMax(path_pre,False)])+10/60:        
+            tag.append("%.2f" % round(t, 2))
+            arr1.append(inTime(path_pre,False,t))
+            arr2.append(inTime(path_pre,True ,t))
+            t+=(1/60)
+    save2(tag,[arr1,arr2])

@@ -40,8 +40,6 @@ IndirectMaterial.pre(()=>{
 	animate();
 })
 
-
-
 /**
 * syncClientVolumeDescToServer
 */
@@ -87,6 +85,7 @@ function initRender() {
   var sptr = filestr.split('.'); 
   var folder = sptr[0];
   var sUrl = 'Models/' + folder + '/' + filestr;
+  sUrl='Models/Sponza/Sponza.glb';
   //scene loader
   const modelLoader = new GLTFLoader()
   modelLoader.load(sUrl, function(gltf) {
@@ -227,7 +226,7 @@ function animate() {
 	initScene();
 	light.init(rtxgiNetwork,scene)//initLight();
 	initCamera();
-	// new Communication(camera,rtxgiNetwork,ui,light,models)
+	new Communication(camera,rtxgiNetwork,ui,light,models)
 	initControls();
 
 	window.onresize = onWindowResize;
