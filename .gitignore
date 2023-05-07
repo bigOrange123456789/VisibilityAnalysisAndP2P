@@ -13,6 +13,9 @@
 # 不忽略 
 ! /dist/convert2.py
 
+# 不忽略 
+! /dist/shader/
+
 # 不忽略 /dist/assets/ 目录及其下的所有文件
 ! /dist/assets/ 
 

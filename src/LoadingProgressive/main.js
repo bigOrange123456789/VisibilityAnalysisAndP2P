@@ -50,7 +50,7 @@ export class Loader{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            (config["FlipY"]?-1:1)*50,
+            (config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)

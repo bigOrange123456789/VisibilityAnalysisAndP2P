@@ -176,12 +176,12 @@ module.exports = {
           "y": -1213.5804965263233,
           "z": 4122.605105589213
         },
-        "near": 10,
+        "near": 1,
         "far": 5000000
       },
       "speed": {
-        "moveBoard": 1,
-        "moveWheel0": 0.002
+        "moveBoard": 0.1,
+        "moveWheel0": 0.0002
       },
       "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
     }
@@ -43534,7 +43534,345 @@ Object.assign(ZipLoader.prototype, {
     }).catch(onerror);
   }
 });
-},{"three":"node_modules/three/build/three.module.js","jszip":"node_modules/jszip/dist/jszip.min.js"}],"src/LoadingProgressive/Building.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","jszip":"node_modules/jszip/dist/jszip.min.js"}],"lib/IndirectMaterial.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.IndirectMaterial = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
+  _inherits(IndirectMaterial, _THREE$ShaderMaterial);
+  var _super = _createSuper(IndirectMaterial);
+  function IndirectMaterial(materialOld) {
+    var _this;
+    _classCallCheck(this, IndirectMaterial);
+    var param = {
+      exposure: 2,
+      tonemapping: true,
+      gamma: true,
+      viewBias: 0.3,
+      normalBias: 0.1,
+      numIrradianceTexels: 6,
+      numDistanceTexels: 6,
+      origin: new THREE.Vector3(-0.4000000059604645, 5.400000095367432, -0.25),
+      probeGridCounts: [11, 11, 11],
+      probeGridSpacing: new THREE.Vector3(2.0399999618530273, 1, 0.8999999761581421)
+    };
+    // console.log(IndirectMaterial.prototype.probeIrradiance0)
+    IndirectMaterial.prototype.probeIrradiance0.needsUpdate = true;
+    _this = _super.call(this, {
+      //new THREE.ShaderMaterial({//
+      uniforms: {
+        //Declare texture uniform in shader
+        GBufferd: {
+          type: 't',
+          value: null
+        },
+        probeIrradiance: {
+          type: 't',
+          value: IndirectMaterial.prototype.probeIrradiance0 //null 
+        },
+
+        probeDistance: {
+          type: 't',
+          value: null
+        },
+        screenWidth: {
+          value: window.innerWidth
+        },
+        screenHeight: {
+          value: window.innerHeight
+        },
+        notCompareFlag: {
+          value: false
+        },
+        dGI: {
+          value: true
+        },
+        exposure: {
+          value: param.exposure
+        },
+        tonemapping: {
+          value: param.tonemapping
+        },
+        gamma: {
+          value: param.gamma
+        },
+        DDGIVolume: {
+          value: {
+            origin: new THREE.Vector3(0, 0, 0),
+            probeGridCounts: new Int32Array(3),
+            probeGridSpacing: new THREE.Vector3(0, 0, 0),
+            viewBias: param.viewBias,
+            normalBias: param.normalBias,
+            probeNumIrradianceTexels: param.numIrradianceTexels,
+            probeNumDistanceTexels: param.numDistanceTexels,
+            probeIrradianceEncodingGamma: 5.0
+          }
+        },
+        colorMap: {
+          type: "t",
+          value: null
+        },
+        emissiveColor: {
+          value: new THREE.Vector3(0, 0, 0)
+        },
+        emissiveMap: {
+          type: "t",
+          value: null
+        },
+        useMap: {
+          value: false
+        },
+        useEmissiveMap: {
+          value: false
+        },
+        originColor: {
+          value: new THREE.Vector3(0, 0, 0)
+        }
+      },
+      vertexShader: IndirectMaterial.prototype.vertexShader,
+      fragmentShader: IndirectMaterial.prototype.fragmentShader
+    });
+    _this.uniforms.GBufferd.value = _this._initLitRenderTarget().texture;
+    _this.uniforms.DDGIVolume.value.origin = param.origin;
+    _this.uniforms.DDGIVolume.value.probeGridCounts = param.probeGridCounts;
+    _this.uniforms.DDGIVolume.value.probeGridSpacing = param.probeGridSpacing;
+    _this.needsUpdate = true;
+    if (materialOld.color) {
+      _this.uniforms.originColor.value = materialOld.color;
+    }
+    if (materialOld.map != null) {
+      _this.uniforms.useMap.value = true;
+      materialOld.map.encoding = THREE.sRGBEncoding;
+      _this.uniforms.colorMap.value = materialOld.map;
+    }
+    if (materialOld.emissive.x != 0 && materialOld.emissive.y != 0 && materialOld.emissive.z != 0) {
+      _this.uniforms.emissiveColor.value = materialOld.emissive;
+    }
+    if (materialOld.emissiveMap != null) {
+      _this.uniforms.useEmissiveMap.value = true;
+      materialOld.emissiveMap.encoding = THREE.sRGBEncoding;
+      _this.uniforms.emissiveMap.value = node.material.emissiveMap;
+    }
+    return _this;
+  }
+  _createClass(IndirectMaterial, [{
+    key: "_initLitRenderTarget",
+    value: function _initLitRenderTarget() {
+      var litRenderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight, {
+        minFilter: THREE.NearestFilter,
+        magFilter: THREE.NearestFilter,
+        format: THREE.RGBAFormat,
+        type: THREE.FloatType
+      });
+      litRenderTarget.texture.type = 1015;
+      litRenderTarget.texture.format = 1023;
+      function onWindowResize() {
+        litRenderTarget.setSize(window.innerWidth, window.innerHeight);
+        requestAnimationFrame(onWindowResize);
+      }
+      onWindowResize();
+      return litRenderTarget;
+    }
+  }, {
+    key: "probeIrradianceUpdate",
+    value: function probeIrradianceUpdate(irradianceLoader) {
+      this.uniforms.probeIrradiance.value = irradianceLoader;
+      // if(!window.flag00){
+      // 	window.flag00=true
+      // 	this.DataTexture2Json()
+      // }
+    }
+  }, {
+    key: "DataTexture2Json",
+    value: function DataTexture2Json() {
+      var image = this.uniforms.probeIrradiance.value.image;
+      var data = [];
+      for (var i = 0; i < image.data.length; i++) data.push(image.data[i]);
+      // 将场景对象转换为 JSON 字符串
+      var J = JSON.stringify({
+        data: data,
+        height: image.height,
+        width: image.width
+      });
+      var link = document.createElement('a');
+      link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(J);
+      link.download = 'probeIrradiance.json';
+      document.body.appendChild(link);
+      link.click();
+    }
+  }, {
+    key: "Json2DataTexture",
+    value: function Json2DataTexture() {
+      var self = this;
+      new THREE.FileLoader().load('probeIrradiance.json', function (data) {
+        var J = JSON.parse(data);
+        var texture = array2Texture(J.data, J.width, J.height);
+        self.uniforms.probeIrradiance.value.image = texture;
+        // return texture
+      });
+
+      function array2Texture(array, w, h) {
+        var data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
+        data.set(array);
+        var texture = new THREE.DataTexture(data, w, h, THREE.RGBFormat,
+        // 使用RGB三个通道 //THREE.RGBAFormat 四个通道
+        THREE.FloatType);
+        texture.needsUpdate = true;
+        return texture;
+      }
+    }
+  }], [{
+    key: "loadGLSL",
+    value: function loadGLSL(name) {
+      return new Promise(function (resolve, reject) {
+        var xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          return resolve(xhr.responseText);
+        };
+        xhr.onerror = function (event) {
+          return reject(event);
+        };
+        xhr.open('GET', "./shader/" + name + ".glsl");
+        xhr.overrideMimeType("text/html;charset=utf-8");
+        xhr.send();
+      });
+    }
+  }, {
+    key: "DataTexture2Json",
+    value: function () {
+      var _DataTexture2Json = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+        var array2Texture, array2Texture_old;
+        return _regeneratorRuntime().wrap(function _callee$(_context) {
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              array2Texture_old = function _array2Texture_old(array, w, h) {
+                var data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
+                data.set(array);
+                var texture = new THREE.DataTexture(data, w, h, THREE.RGBFormat,
+                // 使用RGB三个通道 //THREE.RGBAFormat 四个通道
+                THREE.FloatType);
+                texture.needsUpdate = true;
+                return texture;
+              };
+              array2Texture = function _array2Texture(array0, w, h) {
+                var array = [];
+                for (var i = 0; i < array0.length / 3; i++) {
+                  array.push(array0[3 * i]);
+                  array.push(array0[3 * i + 1]);
+                  array.push(array0[3 * i + 2]);
+                  array.push(0);
+                }
+                var data = new Float32Array(w * h * 4); // RGB:3 RGBA:4
+                data.set(array);
+                var texture = new THREE.DataTexture(data, w, h, THREE.RGBAFormat,
+                // 使用RGB三个通道 //THREE.RGBAFormat 四个通道
+                THREE.FloatType);
+                texture.needsUpdate = true;
+                return texture;
+              };
+              return _context.abrupt("return", new Promise(function (resolve, reject) {
+                new THREE.FileLoader().load('probeIrradiance.json', function (data) {
+                  var J = JSON.parse(data);
+                  var texture = array2Texture(J.data, J.width, J.height);
+                  // self.uniforms.probeIrradiance.value.image=texture
+                  console.log(texture);
+                  resolve(texture);
+                });
+              }));
+            case 3:
+            case "end":
+              return _context.stop();
+          }
+        }, _callee);
+      }));
+      function DataTexture2Json() {
+        return _DataTexture2Json.apply(this, arguments);
+      }
+      return DataTexture2Json;
+    }()
+  }, {
+    key: "pre",
+    value: function () {
+      var _pre = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(cb) {
+        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              _context2.next = 2;
+              return IndirectMaterial.loadGLSL('indirectVS');
+            case 2:
+              IndirectMaterial.prototype.vertexShader = _context2.sent;
+              _context2.next = 5;
+              return IndirectMaterial.loadGLSL('indirectFS');
+            case 5:
+              IndirectMaterial.prototype.fragmentShader = _context2.sent;
+              _context2.next = 8;
+              return IndirectMaterial.DataTexture2Json();
+            case 8:
+              IndirectMaterial.prototype.probeIrradiance0 = _context2.sent;
+              if (cb) cb();
+            case 10:
+            case "end":
+              return _context2.stop();
+          }
+        }, _callee2);
+      }));
+      function pre(_x) {
+        return _pre.apply(this, arguments);
+      }
+      return pre;
+    }()
+  }, {
+    key: "pre_old",
+    value: function () {
+      var _pre_old = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(cb) {
+        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              IndirectMaterial.prototype.vertexShader = document.getElementById('indirectVS').textContent; //await IndirectMaterial.loadGLSL('indirectVS')//
+              IndirectMaterial.prototype.fragmentShader = document.getElementById('indirectFS').textContent; //await IndirectMaterial.loadGLSL('indirectFS')//
+              _context3.next = 4;
+              return IndirectMaterial.DataTexture2Json();
+            case 4:
+              IndirectMaterial.prototype.probeIrradiance0 = _context3.sent;
+              if (cb) cb();
+            case 6:
+            case "end":
+              return _context3.stop();
+          }
+        }, _callee3);
+      }));
+      function pre_old(_x2) {
+        return _pre_old.apply(this, arguments);
+      }
+      return pre_old;
+    }()
+  }]);
+  return IndirectMaterial;
+}(THREE.ShaderMaterial); // IndirectMaterial0.prototype.isMeshStandardMaterial = true;
+exports.IndirectMaterial = IndirectMaterial;
+},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/Building.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -43549,6 +43887,7 @@ var _Visibility = require("./Visibility.js");
 var _P2P = require("./P2P.js");
 var _Detection = require("./Detection.js");
 var _ziploader = require("../../lib/zip/ziploader.js");
+var _IndirectMaterial = require("../../lib/IndirectMaterial.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -43572,9 +43911,6 @@ var Building = /*#__PURE__*/function () {
     window.meshes = this.meshes;
     this.meshes_request = {};
     this.detection = new _Detection.Detection(this.meshes);
-
-    // this.doorTwinkle()
-    // this.createFloor()
     this.p2p = new _P2P.P2P(camera, this.detection);
     this.p2p.parse = function (message) {
       self.p2pParse(message);
@@ -43594,6 +43930,11 @@ var Building = /*#__PURE__*/function () {
     value: function start() {
       var self = this;
       // this.load0()
+      _IndirectMaterial.IndirectMaterial.pre(function () {
+        camera.position.set(0, 0, 0);
+        self.load("sponza");
+      });
+      return;
       var c = this.config.createSphere;
       this.visibiity = new _Visibility.Visibility({
         "min": [c.x[0], c.y[0], c.z[0]],
@@ -43786,6 +44127,29 @@ var Building = /*#__PURE__*/function () {
       });
     }
   }, {
+    key: "load",
+    value: function load(name) {
+      var self = this;
+      var path = self.config.path + name + ".glb";
+      console.log(path);
+      var loader = new _GLTFLoader.GLTFLoader();
+      loader.load(self.config.path + name + ".glb", function (gltf) {
+        gltf.scene.traverse(function (o) {
+          if (o instanceof THREE.Mesh) {
+            // self.scene.add(id,o)
+            o.material = new _IndirectMaterial.IndirectMaterial(o.material);
+            // o.material.Json2DataTexture()
+          }
+        });
+
+        console.log(gltf.scene);
+        self.scene.add(gltf.scene);
+        // if(cb)cb()
+      }, undefined, function (error) {
+        console.error(error);
+      });
+    }
+  }, {
     key: "load0",
     value: function load0() {
       var self = this;
@@ -43860,7 +44224,7 @@ var Building = /*#__PURE__*/function () {
   return Building;
 }();
 exports.Building = Building;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js","../../lib/IndirectMaterial.js":"lib/IndirectMaterial.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -48278,7 +48642,9 @@ var Loader = /*#__PURE__*/function () {
               statsContainer.appendChild(this.stats.domElement);
               this.body.appendChild(statsContainer);
               this.scene = new THREE.Scene();
-              this.camera = new THREE.PerspectiveCamera((_configOP.default["FlipY"] ? -1 : 1) * 50, this.body.clientWidth / this.body.clientHeight, this.config.camera.near, this.config.camera.far);
+              this.camera = new THREE.PerspectiveCamera((_configOP.default["FlipY"] ? -1 : 1) * 30,
+              //50,
+              this.body.clientWidth / this.body.clientHeight, this.config.camera.near, this.config.camera.far);
               window.camera = this.camera;
               this.camera.position.set(this.config.camera.position.x, this.config.camera.position.y, this.config.camera.position.z);
               this.camera.rotation.set(this.config.camera.rotation.x, this.config.camera.rotation.y, this.config.camera.rotation.z);
@@ -48434,7 +48800,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53693" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49895" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

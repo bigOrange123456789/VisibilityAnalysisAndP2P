@@ -65,12 +65,12 @@
                     "y": -1213.5804965263233,
                     "z": 4122.605105589213
                 },
-                "near": 10,
+                "near": 1,
                 "far": 5000000
             },
             "speed":{
-                "moveBoard":1,
-                "moveWheel0":0.002
+                "moveBoard":0.1,
+                "moveWheel0":0.0002
             },
             "pathList":[
                 [

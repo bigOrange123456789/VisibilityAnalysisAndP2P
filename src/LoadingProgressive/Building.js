@@ -6,6 +6,7 @@ import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
 import {ZipLoader } from '../../lib/zip/ziploader.js';
+import { IndirectMaterial } from '../../lib/IndirectMaterial.js'
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
@@ -28,8 +29,6 @@ export class Building{
 
         this.detection=new Detection(this.meshes)
         
-        // this.doorTwinkle()
-        // this.createFloor()
         this.p2p=new P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
@@ -51,6 +50,11 @@ export class Building{
     start(){
         const self=this
         // this.load0()
+        IndirectMaterial.pre(()=>{
+            camera.position.set(0,0,0)
+            self.load("sponza")
+        })
+        return
         let c=this.config.createSphere
         this.visibiity=new Visibility(
             {
@@ -252,6 +256,26 @@ export class Building{
                 })
 		    });
 	    } );
+    }
+    load(name){
+        const self=this
+        const path=self.config.path+name+".glb"
+        console.log(path)
+        const loader = new GLTFLoader();
+        loader.load(self.config.path+name+".glb", gltf=>{
+            gltf.scene.traverse(o=>{
+                if(o instanceof THREE.Mesh){                    
+                    // self.scene.add(id,o)
+                    o.material=new IndirectMaterial(o.material)
+                    // o.material.Json2DataTexture()
+                }
+            })
+            console.log(gltf.scene)
+            self.scene.add(gltf.scene)
+            // if(cb)cb()
+        }, undefined, function (error) {
+            console.error(error);
+        });
     }
     load0(){
         const self=this
