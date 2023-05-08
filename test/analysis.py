@@ -31,7 +31,8 @@ class Analysis:
                 data=file
                 for t in tagList:
                     data=data[t]
-                sum+=data
+                if not data==None:
+                    sum+=data
         return sum
     def getMax(self,p2pFlag,tagList):#tagList=["count_pack_request","zip"]
         max=-9999999
@@ -58,8 +59,19 @@ class Analysis:
             self.getSum(p2pFlag,["plumpness","sum"]),
             self.getSum(p2pFlag,["plumpness","num"])
          ),
+         "平均加载延迟":self.getSum(p2pFlag,["delay","load","ave"])/n,
+         "最大加载延迟":self.getSum(p2pFlag,["delay","load","max"])/n,
+
+         "平均转发延迟":self.getSum(p2pFlag,["delay","forward","ave"])/n,
+         "最大转发延迟":self.getSum(p2pFlag,["delay","forward","max"])/n,
+
+         "平均解析延迟":self.getSum(p2pFlag,["delay","parse","ave"])/n,
+         "最大解析延迟":self.getSum(p2pFlag,["delay","parse","max"])/n,
+
+         "P2P数据包平均解析延迟":self.getSum(p2pFlag,["delay","parse_edgeP2P","ave"])/n,
+         "P2P数据包最大解析延迟":self.getSum(p2pFlag,["delay","parse_edgeP2P","max"])/n,
+
          "平均延迟":self.getSum(p2pFlag,["loadDelay","ave"])/n,
-         "最大延迟":self.getSum(p2pFlag,["loadDelay","max"])/n,
          "服务器请求次数":self.getSum(p2pFlag,["count_pack_request","zip"])/n,
          "服务器负载":self.getSum(p2pFlag,["count_pack_request","zip"]),
          "服务器响应次数":self.getSum(p2pFlag,["count_pack_server"])/n,
