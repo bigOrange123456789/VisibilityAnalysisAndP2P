@@ -56,6 +56,9 @@ export class Visibility{
         //         },10)//60*1000
         //     }
     }
+    getPlumpness(){
+
+    }
     getDirection(){
         var d=this.camera.getWorldDirection()
         var d1={x: 1, y: 0, z: 0}   //  //[0,-Math.PI/2,0]
@@ -72,8 +75,7 @@ export class Visibility{
                 Math.pow(a.z,2)
             ),0.5)
             m=m/l
-            m=(m+1)/2
-            m-=0.25
+            m=2*(m+1)-1
             if(m<0)m=0
             return m
         }
@@ -119,6 +121,8 @@ export class Visibility{
 		console.log("开始动态加载资源")
     }
     getList(){
+        let vd_had=0
+        let vd_hading=0
         const posIndex=this.getPosIndex()[3]
         const visualList0=this.visualList[posIndex]
         if(visualList0){
@@ -131,7 +135,11 @@ export class Visibility{
                 const vd5=i in visualList0["5"]?visualList0["5"][i]:0
                 const vd6=i in visualList0["6"]?visualList0["6"][i]:0
                 this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
+                if(Object.keys(this.meshes).length!==0&&this.meshes[i]){
+                    vd_had+=this.vd[i]
+                }else vd_hading+=this.vd[i]
             } 
+            document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
             const list=this.vd.map((value, index) => ({ value, index }))
                 .filter(item => item.value !== 0)
                 .sort((a, b) => b.value - a.value)

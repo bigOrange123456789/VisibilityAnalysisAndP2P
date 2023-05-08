@@ -25,7 +25,7 @@ export class Building{
         scene.add(this.parentGroup)
         this.meshes={}
         window.meshes=this.meshes
-        this.meshes_request={}
+        this.meshes_info={}
 
         this.detection=new Detection(this.meshes)
         
@@ -50,11 +50,10 @@ export class Building{
     start(){
         const self=this
         // this.load0()
-        IndirectMaterial.pre(()=>{
-            camera.position.set(0,0,0)
-            self.load("sponza")
-        })
-        return
+        // IndirectMaterial.pre(()=>{
+        //     camera.position.set(0,0,0)
+        //     self.load("sponza")
+        // })
         let c=this.config.createSphere
         this.visibiity=new Visibility(
             {
@@ -158,9 +157,10 @@ export class Building{
                     0,0,0,1
                 ] )
             )
-            mesh.used=      mesh0.used
-            mesh.LoadDelay= mesh0.LoadDelay
+            mesh.used      =mesh0.used
+            mesh.LoadDelay =mesh0.LoadDelay
             mesh.originType=mesh0.originType
+            mesh.delay     =mesh0.delay
         }
 
         this.meshes[id]=mesh
@@ -172,8 +172,8 @@ export class Building{
         
     }
     loadGLB(id,cb){
-        if(this.meshes_request[id])return
-        this.meshes_request[id]=performance.now()//true
+        if(this.meshes_info[id])return
+        this.meshes_info[id]={request:performance.now()}//true
         this.detection.request("glb")
         var self=this
         const loader = new GLTFLoader();
@@ -190,9 +190,9 @@ export class Building{
         });
     }
     loadZip(id,cb){
-        if(this.meshes_request[id])return
+        if(this.meshes_info[id])return
         this.detection.receivePack("server")
-        this.meshes_request[id]=performance.now()//true
+        this.meshes_info[id]={request:performance.now()}//true
         this.detection.request("zip")
         const self=this
         var url=self.config.path+id+".zip"
@@ -204,11 +204,13 @@ export class Building{
 			    setTimeout(()=>{//重新请求
 			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
 		    }).then( ( zip )=>{//解析压缩包
+                self.meshes_info[id].loaded=performance.now()//加载完成
                 self.p2p.send({
                     cid:id,
                     baseUrl:zipLoader.baseUrl,
                     buffer:zipLoader.buffer
                 })
+                self.meshes_info[id].forwarded=performance.now()//转发完成
                 new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
                     self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
                     resolve({//查看文件是否存在？以及路径
@@ -220,10 +222,16 @@ export class Building{
 		    const loader = new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 // self.p2p.send({cid:id,myArray:loader.myArray})
+                self.meshes_info[id].parsed=performance.now()//解析完成
                 gltf.scene.traverse(o=>{
-                    if(o instanceof THREE.Mesh){                    
-                        o.LoadDelay=performance.now()-self.meshes_request[id]
-                        o.originType="cloud"
+                    if(o instanceof THREE.Mesh){  
+                        o.delay={
+                            load   :self.meshes_info[id].loaded   -self.meshes_info[id].request,
+                            forward:self.meshes_info[id].forwarded-self.meshes_info[id].loaded,
+                            parse  :self.meshes_info[id].parsed   -self.meshes_info[id].forwarded
+                        }
+                        o.LoadDelay   =self.meshes_info[id].loaded   -self.meshes_info[id].request
+                        o.originType="centerServer"
                         self.addMesh(id,o)
                     }
                 })
@@ -234,8 +242,8 @@ export class Building{
     p2pParse(message){
         this.detection.receivePack("p2p")
         const cid=message.cid
-        if(this.meshes[cid]||this.meshes_request[cid])return
-		else this.meshes_request[cid]=true
+        if(this.meshes_info[cid])return
+		else this.meshes_info[cid]={request:performance.now()}
         const self=this
 		new Promise( function( resolve, reject ) {//加载资源压缩包
             new ZipLoader().parse(message.baseUrl,message.buffer).then( ( zip )=>{//解析压缩包
@@ -248,8 +256,13 @@ export class Building{
 		    const loader = new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 gltf.scene.traverse(o=>{
-                    if(o instanceof THREE.Mesh){           
-                        o.LoadDelay=0         
+                    if(o instanceof THREE.Mesh){    
+                        o.LoadDelay   =0
+                        o.delay={
+                            load   :0,
+                            forward:0,
+                            parse  :self.meshes_info[cid].request-performance.now() 
+                        }
                         o.originType="edgeP2P"
                         self.addMesh(cid,o)
                     }

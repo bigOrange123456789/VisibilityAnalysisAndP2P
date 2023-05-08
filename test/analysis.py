@@ -43,12 +43,21 @@ class Analysis:
                 if data>max:
                     max=data
         return max
+    def div(self,a,b):
+        if b==0:
+            return 0
+        else :
+            return a/b
     def getResult(self,p2pFlag):
         n0=self.getNum(p2pFlag)
         n=n0
         if n0==0:n=1
         return {
-        "useP2P":p2pFlag,
+         "useP2P":p2pFlag,
+         "饱满度":self.div(
+            self.getSum(p2pFlag,["plumpness","sum"]),
+            self.getSum(p2pFlag,["plumpness","num"])
+         ),
          "平均延迟":self.getSum(p2pFlag,["loadDelay","ave"])/n,
          "最大延迟":self.getSum(p2pFlag,["loadDelay","max"])/n,
          "服务器请求次数":self.getSum(p2pFlag,["count_pack_request","zip"])/n,
@@ -57,26 +66,21 @@ class Analysis:
          "服务器功率":self.getSum(p2pFlag,["count_pack_server"]),
          "边缘服务器负载":self.getSum(p2pFlag,["count_pack_p2p"])/n,
          "边缘服务器功率":self.getSum(p2pFlag,["count_pack_p2p"]),
-         "加载后未使用":(
+         "加载后未使用":self.div(
             self.getSum(p2pFlag,["count_mesh_p2p_NotUsed"])+
-            self.getSum(p2pFlag,["count_mesh_server_NotUsed"])
-            )/(
+            self.getSum(p2pFlag,["count_mesh_server_NotUsed"]),
             self.getSum(p2pFlag,["count_mesh_p2p"])+
-            self.getSum(p2pFlag,["count_mesh_server"])
-            ),
-         "重复加载":(
-             self.getSum(p2pFlag,["count_pack_p2p"])
-            +self.getSum(p2pFlag,["count_pack_server"])
-            -self.getSum(p2pFlag,["count_mesh_p2p"])
-            -self.getSum(p2pFlag,["count_mesh_server"])
-            )/(
-             self.getSum(p2pFlag,["count_pack_p2p"])
-            +self.getSum(p2pFlag,["count_pack_server"])
-            ),
-         "FPS":
-            self.getSum(p2pFlag,["frameCount"])/
-            self.getSum(p2pFlag,["testTime"])
-         ,
+            self.getSum(p2pFlag,["count_mesh_server"])),
+         "重复加载":self.div(
+            self.getSum(p2pFlag,["count_pack_p2p"])+
+            self.getSum(p2pFlag,["count_pack_server"])-
+            self.getSum(p2pFlag,["count_mesh_p2p"])-
+            self.getSum(p2pFlag,["count_mesh_server"]),
+            self.getSum(p2pFlag,["count_pack_p2p"])+
+            self.getSum(p2pFlag,["count_pack_server"])),
+         "FPS":self.div(
+            self.getSum(p2pFlag,["frameCount"]),
+            self.getSum(p2pFlag,["testTime"])),
          "测试人数":n
         }
     
@@ -137,23 +141,9 @@ if __name__ == "__main__":#用于测试
         df.to_excel('result2.xlsx', index=False)
     
     
-
-
-    tag=[
-        "useP2P",
-         "平均延迟",
-         "最大延迟",
-         "服务器请求次数",
-         "服务器响应次数",
-         "边缘服务器负载",
-         "加载后未使用",
-         "重复加载",
-         "FPS",
-         "测试人数"
-         ]
     arr=[]
 
-    path_pre="data/detection/"
+    path_pre="detection/"
 
     anaysis=Analysis(path_pre)
     tag=list(anaysis.result["p2p"].keys())
@@ -161,10 +151,6 @@ if __name__ == "__main__":#用于测试
         list(anaysis.result["p2p"].values()),
         list(anaysis.result["no-p2p"].values())
     ]
-    print(tag)
-    tag.append("useP2P")
-    arr[0].append(True)
-    arr[1].append(False)
     save(tag,arr)
 
     tag=[]

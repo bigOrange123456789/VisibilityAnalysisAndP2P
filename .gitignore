@@ -23,6 +23,7 @@
 
 # 忽略 /dist/ 目录及其下的所有文件
 /test/data/
+/test/detection/
 
 # 忽略 /dist/ 目录及其下的所有文件
 /dist/assets/configVVD.json

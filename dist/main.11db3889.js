@@ -180,8 +180,8 @@ module.exports = {
         "far": 5000000
       },
       "speed": {
-        "moveBoard": 0.1,
-        "moveWheel0": 0.0002
+        "moveBoard": 1,
+        "moveWheel0": 0.002
       },
       "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
     }
@@ -40621,6 +40621,9 @@ var Visibility = /*#__PURE__*/function () {
     //     }
   }
   _createClass(Visibility, [{
+    key: "getPlumpness",
+    value: function getPlumpness() {}
+  }, {
     key: "getDirection",
     value: function getDirection() {
       var d = this.camera.getWorldDirection();
@@ -40658,8 +40661,7 @@ var Visibility = /*#__PURE__*/function () {
         var m = a.x * b.x + a.y * b.y + a.z * b.z;
         var l = Math.pow(Math.pow(a.x, 2) + Math.pow(a.y, 2) + Math.pow(a.z, 2), 0.5);
         m = m / l;
-        m = (m + 1) / 2;
-        m -= 0.25;
+        m = 2 * (m + 1) - 1;
         if (m < 0) m = 0;
         return m;
       };
@@ -40715,6 +40717,8 @@ var Visibility = /*#__PURE__*/function () {
   }, {
     key: "getList",
     value: function getList() {
+      var vd_had = 0;
+      var vd_hading = 0;
       var posIndex = this.getPosIndex()[3];
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
@@ -40727,7 +40731,11 @@ var Visibility = /*#__PURE__*/function () {
           var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
           var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
           this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (Object.keys(this.meshes).length !== 0 && this.meshes[i]) {
+            vd_had += this.vd[i];
+          } else vd_hading += this.vd[i];
         }
+        document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
           return {
             value: value,
@@ -40983,6 +40991,10 @@ var Detection = /*#__PURE__*/function () {
       "glb": 0,
       "zip": 0
     };
+    this.plumpness = {
+      sum: 0,
+      num: 0
+    };
     this.count_mesh_p2p = 0;
     this.count_mesh_server = 0;
     this.close = false;
@@ -40992,6 +41004,7 @@ var Detection = /*#__PURE__*/function () {
     this.frameCount = 0; //记录帧数量
     function testFrame() {
       scope.frameCount++;
+      scope.recordPlumpness();
       requestAnimationFrame(testFrame);
     }
     testFrame();
@@ -41001,6 +41014,16 @@ var Detection = /*#__PURE__*/function () {
     }, scope.testTime * 1000);
   }
   _createClass(Detection, [{
+    key: "recordPlumpness",
+    value: function recordPlumpness() {
+      var s = document.getElementById("plumpness").innerHTML;
+      if (s !== "") {
+        var s2 = s.split(":")[1].split("%")[0];
+        this.plumpness.num++;
+        this.plumpness.sum += parseFloat(s2);
+      }
+    }
+  }, {
     key: "request",
     value: function request(type) {
       this.count_pack_request[type]++;
@@ -41044,6 +41067,30 @@ var Detection = /*#__PURE__*/function () {
       };
     }
   }, {
+    key: "getDelay",
+    value: function getDelay(delayType, originType) {
+      var delay = 0;
+      var delayMax = 0;
+      var count = 0;
+      for (var id in this.meshes) {
+        var mesh = this.meshes[id];
+        if (mesh.originType == originType) {
+          //延迟只统计通过Server获取的
+          var delay0 = mesh.delay[delayType];
+          if (delay0 > delayMax) {
+            delayMax = delay0;
+          }
+          delay += delay0;
+          count++;
+        }
+      }
+      return {
+        "ave": delay / count,
+        "max": delayMax,
+        "count": count
+      };
+    }
+  }, {
     key: "receivePack",
     value: function receivePack(type) {
       if (type == "p2p") this.count_pack_p2p++;else if (type == "server") this.count_pack_server++;else console.log("error:receivePack type");
@@ -41051,7 +41098,7 @@ var Detection = /*#__PURE__*/function () {
   }, {
     key: "receiveMesh",
     value: function receiveMesh(mesh) {
-      if (mesh.originType == "cloud") this.count_mesh_server++;else if (mesh.originType = "edgeP2P") this.count_mesh_p2p++;else console.log("error:mesh.originType");
+      if (mesh.originType == "centerServer") this.count_mesh_server++;else if (mesh.originType == "edgeP2P") this.count_mesh_p2p++;else console.log("error:mesh.originType");
     }
   }, {
     key: "count_mesh_p2p_NotUsed",
@@ -41069,7 +41116,7 @@ var Detection = /*#__PURE__*/function () {
       var count = 0;
       for (var id in this.meshes) {
         var mesh = this.meshes[id];
-        if (mesh.originType == "cloud" && !mesh.used) count++;
+        if (mesh.originType == "centerServer" && !mesh.used) count++;
       }
       return count;
     }
@@ -41134,6 +41181,12 @@ var Detection = /*#__PURE__*/function () {
         count_mesh_p2p_NotUsed: this.count_mesh_p2p_NotUsed(),
         count_mesh_server_NotUsed: this.count_mesh_server_NotUsed(),
         loadDelay: this.getLoadDelay(),
+        delay: {
+          load: this.getDelay("load", "centerServer"),
+          forward: this.getDelay("forward", "centerServer"),
+          parse: this.getDelay("parse", "centerServer"),
+          parse_edgeP2P: this.getDelay("parse", "edgeP2P")
+        },
         frameCount: this.frameCount,
         //测试所用的帧数
         testTime: this.testTime,
@@ -41144,6 +41197,9 @@ var Detection = /*#__PURE__*/function () {
         date: this.date,
         //测试日期
         useP2P: window.useP2P,
+        plumpness: this.plumpness,
+        //饱满度
+
         deviceModel: this.getDeviceModel() //获取设备型号
       };
 
@@ -51180,7 +51236,7 @@ var Building = /*#__PURE__*/function () {
     scene.add(this.parentGroup);
     this.meshes = {};
     window.meshes = this.meshes;
-    this.meshes_request = {};
+    this.meshes_info = {};
     this.detection = new _Detection.Detection(this.meshes);
     this.p2p = new _P2P.P2P(camera, this.detection);
     this.p2p.parse = function (message) {
@@ -51201,11 +51257,10 @@ var Building = /*#__PURE__*/function () {
     value: function start() {
       var self = this;
       // this.load0()
-      _IndirectMaterial.IndirectMaterial.pre(function () {
-        camera.position.set(0, 0, 0);
-        self.load("sponza");
-      });
-      return;
+      // IndirectMaterial.pre(()=>{
+      //     camera.position.set(0,0,0)
+      //     self.load("sponza")
+      // })
       var c = this.config.createSphere;
       this.visibiity = new _Visibility.Visibility({
         "min": [c.x[0], c.y[0], c.z[0]],
@@ -51292,6 +51347,7 @@ var Building = /*#__PURE__*/function () {
         mesh.used = mesh0.used;
         mesh.LoadDelay = mesh0.LoadDelay;
         mesh.originType = mesh0.originType;
+        mesh.delay = mesh0.delay;
       }
       this.meshes[id] = mesh;
       this.parentGroup.add(mesh);
@@ -51303,8 +51359,10 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "loadGLB",
     value: function loadGLB(id, cb) {
-      if (this.meshes_request[id]) return;
-      this.meshes_request[id] = performance.now(); //true
+      if (this.meshes_info[id]) return;
+      this.meshes_info[id] = {
+        request: performance.now()
+      }; //true
       this.detection.request("glb");
       var self = this;
       var loader = new _GLTFLoader.GLTFLoader();
@@ -51323,9 +51381,11 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "loadZip",
     value: function loadZip(id, cb) {
-      if (this.meshes_request[id]) return;
+      if (this.meshes_info[id]) return;
       this.detection.receivePack("server");
-      this.meshes_request[id] = performance.now(); //true
+      this.meshes_info[id] = {
+        request: performance.now()
+      }; //true
       this.detection.request("zip");
       var self = this;
       var url = self.config.path + id + ".zip";
@@ -51338,11 +51398,13 @@ var Building = /*#__PURE__*/function () {
           }, 1000 * (0.5 * Math.random() + 1)); //1~1.5秒后重新加载
         }).then(function (zip) {
           //解析压缩包
+          self.meshes_info[id].loaded = performance.now(); //加载完成
           self.p2p.send({
             cid: id,
             baseUrl: zipLoader.baseUrl,
             buffer: zipLoader.buffer
           });
+          self.meshes_info[id].forwarded = performance.now(); //转发完成
           new _ziploader.ZipLoader().parse(zipLoader.baseUrl, zipLoader.buffer).then(function (zip) {
             //解析压缩包
             self.loaderZip.setURLModifier(zip.urlResolver); //装载资源
@@ -51356,10 +51418,16 @@ var Building = /*#__PURE__*/function () {
         var loader = new _GLTFLoader.GLTFLoader(self.loaderZip);
         loader.load(configJson.fileUrl[0], function (gltf) {
           // self.p2p.send({cid:id,myArray:loader.myArray})
+          self.meshes_info[id].parsed = performance.now(); //解析完成
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
-              o.LoadDelay = performance.now() - self.meshes_request[id];
-              o.originType = "cloud";
+              o.delay = {
+                load: self.meshes_info[id].loaded - self.meshes_info[id].request,
+                forward: self.meshes_info[id].forwarded - self.meshes_info[id].loaded,
+                parse: self.meshes_info[id].parsed - self.meshes_info[id].forwarded
+              };
+              o.LoadDelay = self.meshes_info[id].loaded - self.meshes_info[id].request;
+              o.originType = "centerServer";
               self.addMesh(id, o);
             }
           });
@@ -51372,7 +51440,9 @@ var Building = /*#__PURE__*/function () {
     value: function p2pParse(message) {
       this.detection.receivePack("p2p");
       var cid = message.cid;
-      if (this.meshes[cid] || this.meshes_request[cid]) return;else this.meshes_request[cid] = true;
+      if (this.meshes_info[cid]) return;else this.meshes_info[cid] = {
+        request: performance.now()
+      };
       var self = this;
       new Promise(function (resolve, reject) {
         //加载资源压缩包
@@ -51390,6 +51460,11 @@ var Building = /*#__PURE__*/function () {
           gltf.scene.traverse(function (o) {
             if (o instanceof THREE.Mesh) {
               o.LoadDelay = 0;
+              o.delay = {
+                load: 0,
+                forward: 0,
+                parse: self.meshes_info[cid].request - performance.now()
+              };
               o.originType = "edgeP2P";
               self.addMesh(cid, o);
             }

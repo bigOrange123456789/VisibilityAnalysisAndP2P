@@ -15,6 +15,10 @@ export class Detection {//需要服务器
             "glb":0,
             "zip":0
         }
+        this.plumpness={
+            sum:0,
+            num:0
+        }
 
         this.count_mesh_p2p=0
         this.count_mesh_server=0
@@ -28,12 +32,21 @@ export class Detection {//需要服务器
         this.frameCount=0;//记录帧数量
         function testFrame(){
             scope.frameCount++
+            scope.recordPlumpness()
             requestAnimationFrame(testFrame);
         }testFrame()
         setTimeout(()=>{
             console.log("end")
             scope.finish()
         },scope.testTime*1000)
+    }
+    recordPlumpness(){
+        let s=document.getElementById("plumpness").innerHTML
+        if(s!==""){
+            let s2=s.split(":")[1].split("%")[0]
+            this.plumpness.num++
+            this.plumpness.sum+=parseFloat(s2)
+        }
     }
     request(type){
         this.count_pack_request[type]++
@@ -75,14 +88,35 @@ export class Detection {//需要服务器
             "count":count
         }
     }
+    getDelay(delayType,originType){
+        let delay=0
+        let delayMax=0
+        let count=0
+        for(let id in this.meshes){
+            const mesh=this.meshes[id]
+            if(mesh.originType==originType){//延迟只统计通过Server获取的
+                const delay0=mesh.delay[delayType]
+                if(delay0>delayMax){
+                    delayMax=delay0
+                }
+                delay+=delay0
+                count++
+            }
+        }
+        return {
+            "ave":delay/count,
+            "max":delayMax,
+            "count":count
+        }
+    }
     receivePack(type){
         if(type=="p2p")this.count_pack_p2p++
         else if(type=="server")this.count_pack_server++
         else console.log("error:receivePack type")
     }
     receiveMesh(mesh){
-        if(mesh.originType=="cloud")this.count_mesh_server++
-        else if(mesh.originType="edgeP2P")this.count_mesh_p2p++
+        if(mesh.originType=="centerServer")this.count_mesh_server++
+        else if(mesh.originType=="edgeP2P")this.count_mesh_p2p++
         else console.log("error:mesh.originType")
     }
     count_mesh_p2p_NotUsed(){
@@ -98,7 +132,7 @@ export class Detection {//需要服务器
         let count=0
         for(let id in this.meshes){
             const mesh=this.meshes[id]
-            if(mesh.originType=="cloud"&&!mesh.used)
+            if(mesh.originType=="centerServer"&&!mesh.used)
                 count++
         }
         return count
@@ -164,6 +198,12 @@ export class Detection {//需要服务器
             count_mesh_server_NotUsed:this.count_mesh_server_NotUsed(),
 
             loadDelay:this.getLoadDelay(),
+            delay:{
+                load:this.getDelay("load","centerServer"),
+                forward:this.getDelay("forward","centerServer"),
+                parse:this.getDelay("parse","centerServer"),
+                parse_edgeP2P:this.getDelay("parse","edgeP2P"),
+            },
 
             frameCount:this.frameCount,//测试所用的帧数
             testTime:this.testTime,//测试时间
@@ -172,6 +212,8 @@ export class Detection {//需要服务器
             url:window.location.href,//地址以及参数
             date:this.date,         //测试日期
             useP2P:window.useP2P,
+
+            plumpness:this.plumpness,//饱满度
 
             deviceModel:this.getDeviceModel(),//获取设备型号
         }

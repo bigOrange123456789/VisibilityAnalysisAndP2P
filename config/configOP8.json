@@ -69,8 +69,8 @@
                 "far": 5000000
             },
             "speed":{
-                "moveBoard":0.1,
-                "moveWheel0":0.0002
+                "moveBoard":1,
+                "moveWheel0":0.002
             },
             "pathList":[
                 [
