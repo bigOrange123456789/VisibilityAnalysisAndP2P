@@ -1,4 +1,5 @@
-import config from '../../config/configOP8.json'
+import config_haiNing from '../../config/configOP7.json';
+import config_gkd     from '../../config/configOP8.json';
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
@@ -50,7 +51,7 @@ export class Loader{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            (config["FlipY"]?-1:1)*30,//50,
+            (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
@@ -70,7 +71,7 @@ export class Loader{
         
         this.scene.add(this.camera)
 
-        this.playerControl=new PlayerControl(this.camera,config["FlipY"])
+        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"])
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
@@ -163,6 +164,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 window.location.search.split(id)[1].split("&")[0]:
                 null
     }
+    const config=
+        getParam('scene')=="haiNing"?config_haiNing:
+        config_gkd
     config.src.main.autoMove=getParam('autoMove')
     config.src.main.render  =getParam('render')
     config.src.Detection.backURL=getParam('backURL')

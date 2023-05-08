@@ -104,7 +104,8 @@ export class Building{
     }
     addMesh(id,mesh){
         if(this.config.updateColor){
-            let t=mesh.myId*256*256*256/8431 ///2665
+            mesh.geometry.computeVertexNormals()
+            let t=id*256*256*256/8431 ///2665
             mesh.material.color.r=0.5*((t&0xff)    )/255
             mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
             mesh.material.color.b=0.5*((t&0xff0000)>>16)/255

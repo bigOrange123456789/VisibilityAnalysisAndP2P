@@ -1,5 +1,4 @@
 {
-    "FlipY":true,
     "src": {
         "Building_new": {
             "path": "assets/space7Zip/",
@@ -1331,6 +1330,7 @@
             "vvd": {}
         },
         "main": {
+            "FlipY":true,
             "camera": {
                 "position": {
                     "x":-116237.6,"y":-1530.26,"z":11978.66
