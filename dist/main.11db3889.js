@@ -57456,6 +57456,7 @@ document.addEventListener('DOMContentLoaded', function () {
   config.src.main.autoMove = getParam('autoMove');
   config.src.main.render = getParam('render');
   config.src.Detection.backURL = getParam('backURL');
+  if (getParam('testTime')) config.src.Detection.testTime = getParam('testTime');
   if (getParam('backURL') !== null) {
     //backURL需要将autoMove参数传回
     var backURL = getParam('backURL');
