@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        new SamplePointList(
-            this.config.createSphere,
-            this.parentGroup,
-            this.meshes,
-            this.config.entropy
-            )
+        // new SamplePointList(
+        //     this.config.createSphere,
+        //     this.parentGroup,
+        //     this.meshes,
+        //     this.config.entropy
+        //     )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -314,9 +314,69 @@ export class Building{
                     }
 
                     
-                    mesh.material.opacity=1
-                    mesh.material.transparent=true
+                    // mesh.material.opacity=1
+                    // mesh.material.transparent=true
 
+                    // 获取材质对象
+                    if (mesh.material.map) {//水彩风场景
+                        var canvas=new PicHandle().getCanvas( mesh.material.map.image);
+                        const color=self.getColor(canvas)
+                        mesh.material = new THREE.MeshStandardMaterial({ 
+                            color:color ,
+                            alphaTest: 0,
+                            alphaToCoverage: false,
+                            aoMapIntensity: 1,
+                            blendDst: 205,
+                            blendEquation: 100,
+                            blendSrc: 204,
+                            blending: 1,
+                            bumpScale: 1,
+                            clipIntersection: false,
+                            clipShadows: false,
+                            colorWrite: true,
+                            defines: {STANDARD: ""},
+                            depthFunc: 3,
+                            depthTest: true,
+                            depthWrite: true,
+                            displacementBias: 0,
+                            displacementScale: 1,
+                            dithering: false,
+                            emissive: 0,
+                            emissiveIntensity: 1,
+                            envMapIntensity: 1,
+                            flatShading: false,
+                            fog: true,
+                            lightMapIntensity: 1,
+                            metalness: 1,
+                            morphNormals: false,
+                            morphTargets: false,
+                            normalMapType: 0,
+                            opacity: 1,
+                            polygonOffset: false,
+                            polygonOffsetFactor: 0,
+                            polygonOffsetUnits: 0,
+                            premultipliedAlpha: false,
+                            refractionRatio: 0.98,
+                            roughness: 1,
+                            side: 0,
+                            skinning: false,
+                            stencilFail: 7680,
+                            stencilFunc: 519,
+                            stencilFuncMask: 255,
+                            stencilRef: 0,
+                            stencilWrite: false,
+                            stencilWriteMask: 255,
+                            stencilZFail: 7680,
+                            stencilZPass: 7680,
+                            toneMapped: true,
+                            transparent: false,
+                            vertexColors: false,
+                            vertexTangents: false,
+                            visible: true,
+                            wireframe: false,
+                        })
+                        // mesh.geometry.computeVertexNormals()
+                    }
 
                     // console.log(mesh.material.color)
                     self.meshes.push(mesh)
@@ -401,6 +461,9 @@ export class Building{
             }
             window.save2=()=>{
                 save2(0)
+            }
+            window.save3=()=>{
+                self.saveMesh3(self.scene,"all.gltf")
             }
             window.downloadAll=()=>{
                 const scene=new THREE.Scene()
@@ -514,9 +577,110 @@ export class Building{
             link.click()
         })
     }
+    mesh2load(mesh){
+        const array1=mesh.geometry.attributes.position.data.array
+        const array2=[]
+        for(let i=0;i<array1.length/4;i++)
+            for(let j=0;j<3;j++){
+                array2.push(
+                    array1[4*i+j]
+                )
+            }
+        mesh.geometry.attributes.position = new THREE.BufferAttribute(
+            new Float32Array(
+                array2//mesh.geometry.attributes.position.data.array
+            ), 
+            3//4
+        )//mesh.geometry.attributes.position.itemSize)
+        delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
+        return mesh
+    }
+    saveMesh3(scene0,name){
+        const scene=new THREE.Scene()
+        const arr=Object.values(this.meshes)
+        for(let i=0;i<arr.length;i++){
+            scene.add(this.mesh2load(arr[i]))
+        }
+        // const self=this
+        // let scene=new THREE.Scene()
+        // scene0.traverse(o=>{
+        //     if(o instanceof THREE.Mesh)
+        //         scene.add(self.mesh2load(o))
+        // })
+        new GLTFExporter().parse(scene,function(result){
+            var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+            let link = document.createElement('a')
+            link.href = URL.createObjectURL(myBlob)
+            link.download = name
+            link.click()
+        })
+    }
     InY(mesh,ymin,ymax){
         var box = new THREE.Box3().setFromObject(mesh)
         // return box.max.y<ymax && box.min.y>ymin
         return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
     }
+    getColor(canvas) {//取100个点求平均值
+        var ctx=canvas.getContext( "2d" );  //设置画布类型2d
+        var r=0,g=0,b=0,n=0;
+        var dy=canvas.height<20?canvas.height:Math.floor(canvas.height/10);
+        var dx=canvas.width<20?canvas.width:Math.floor(canvas.width/10);
+        for( var y = 0; y < canvas.height; y+=dy )
+            for( var x = 0; x < canvas.width ; x+=dx ) {
+                // 获取当前位置的元素
+                var pixel = ctx.getImageData( x, y, 1, 1 );//获取一个像素点的数据
+                r+=pixel.data[0];
+                g+=pixel.data[1];
+                b+=pixel.data[2];
+                n++;
+            }
+        //n=canvas.height*canvas.width;
+        r=Math.floor(r/n);
+        g=Math.floor(g/n);
+        b=Math.floor(b/n);
+        var color=(r*256*256+g*256+b);//.toString(16);
+        console.log(color.toString(16));
+        return color;
+    }
+}
+
+function PicHandle() {//只服务于MaterialHandle对象
+    this.image;
+    this.h;
+    this.w;
+    this.compressionRatio=0.1;//0-1
+}
+PicHandle.prototype={
+    getCanvas:function (image) {
+        var flipY = true;
+        var canvas =  document.createElement( 'canvas' );
+        //计算画布的宽、高
+        canvas.width = image.width*this.compressionRatio;
+        canvas.height = image.height*this.compressionRatio;
+
+        var ctx = canvas.getContext( '2d' );
+
+        if ( flipY === true ) {
+            ctx.translate( 0, canvas.height );
+            ctx.scale( 1, - 1 );
+        }
+        //将image画到画布上
+        ctx.drawImage( image, 0, 0, canvas.width, canvas.height );
+
+
+        /*var ctx=this.canvas.getContext( "2d" );  //设置画布类型2d
+        ctx.fillStyle = "#FFFFFF";//白色
+        for( var y = 0; y < this.canvas.height; y++ ) {
+            for( var x = 0; x < this.canvas.width ; x++ ) {
+                // 获取当前位置的元素
+                var pixel = ctx.getImageData( x, y, 1, 1 );//获取一个像素点的数据
+                // 判断透明度不为0
+                if( pixel.data[0] +pixel.data[1] +pixel.data[2] >100) {//如果颜色较亮
+                    ctx.fillRect(x,y,1,1);
+                }
+            }
+        }*/
+        return canvas;
+    },
+
 }

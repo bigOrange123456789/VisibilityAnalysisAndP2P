@@ -470,9 +470,9 @@
             );
 
 		vec3 irradiance = DDGIGetVolumeIrradiance(worldPos.xyz,surfaceBias,normal,DDGIVolume);
-		vec3 irradianceColor = 1. * irradiance * GetBaseColor().rgb ;
+		vec3 irradianceColor = (1. * irradiance+0.5) * GetBaseColor().rgb ;
 
-        vec3 test=texture2DLodEXT(probeIrradiance,vec2(0.,0.),0.).rgb;
+        // vec3 test=texture2DLodEXT(probeIrradiance,vec2(0.,0.),0.).rgb;
 			
 		gl_FragColor = vec4(irradianceColor,1.);
     }

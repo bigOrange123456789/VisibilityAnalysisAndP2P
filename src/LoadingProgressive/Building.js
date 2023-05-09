@@ -14,6 +14,7 @@ export class Building{
         this.scene=scene
         
         this.config=window.configALL.src.Building_new
+        this.config.useIndirectMaterial=true
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()
@@ -38,14 +39,27 @@ export class Building{
                 this.config.path+"instance_info.json",
                 data=>{
                     self.instance_info=data
-                    self.start()
+                    self.start0()
                 }
             )
         }else{
-            this.start()
+            this.start0()
         }
         
         
+    }
+    loadConfigInstance(cb){
+
+    }
+    start0(){
+        const self=this
+        if(this.config.useIndirectMaterial){
+            IndirectMaterial.pre(()=>{
+                self.start()
+            })
+        }else{
+            this.start()
+        }
     }
     start(){
         const self=this
@@ -54,6 +68,7 @@ export class Building{
         //     camera.position.set(0,0,0)
         //     self.load("sponza")
         // })
+        // return
         let c=this.config.createSphere
         this.visibiity=new Visibility(
             {
@@ -115,6 +130,9 @@ export class Building{
             mesh.material.depthWrite=true
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
+        }
+        if(this.config.useIndirectMaterial){
+            mesh.material=new IndirectMaterial(mesh.material)
         }
         // console.log("THREE.DoubleSide",THREE.DoubleSide)
  
@@ -280,6 +298,7 @@ export class Building{
             gltf.scene.traverse(o=>{
                 if(o instanceof THREE.Mesh){                    
                     // self.scene.add(id,o)
+                    // console.log(o.material)
                     o.material=new IndirectMaterial(o.material)
                     // o.material.Json2DataTexture()
                 }

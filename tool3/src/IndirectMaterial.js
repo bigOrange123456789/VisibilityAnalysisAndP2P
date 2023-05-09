@@ -1,76 +1,90 @@
-const loadGLSL=name=>{
-	return new Promise((resolve, reject) => {
-			let xhr = new XMLHttpRequest();
-			xhr.onload=()=>resolve(xhr.responseText)
-			xhr.onerror =  event => reject(event);
-			xhr.open('GET',"./shader/"+name+".glsl" )
-			xhr.overrideMimeType("text/html;charset=utf-8")
-			xhr.send()
-		})
-}
 import * as THREE from '../build/three.module'
-async function DataTexture2Json(){
-	return new Promise( (resolve, reject) => { 
-		new THREE.FileLoader().load(
-			'probeIrradiance.json',
-			data => {
-				const J=JSON.parse( data )
-				const texture=array2Texture(J.data, J.width,J.height)
-				// self.uniforms.probeIrradiance.value.image=texture
-				console.log(texture)
-				resolve(texture)
-			}
-		)
-	} );
-	function array2Texture(array0, w,h) {
-		const array=[]
-		for(let i=0;i<array0.length/3;i++){
-			array.push(array0[3*i  ])
-			array.push(array0[3*i+1])
-			array.push(array0[3*i+2])
-			array.push(0)
-		}
-		let data = new Float32Array(w * h * 4); // RGB:3 RGBA:4
-		data.set(array);
-		let texture = new THREE.DataTexture(
-			data, w, h, 
-			THREE.RGBAFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
-			THREE.FloatType);
-		texture.needsUpdate = true;
-		return texture;
-	}
-	function array2Texture_old(array, w,h) {
-		let data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
-		data.set(array);
-		let texture = new THREE.DataTexture(
-			data, w, h, 
-			THREE.RGBFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
-			THREE.FloatType);
-		texture.needsUpdate = true;
-		return texture;
-	}
-}
 export class IndirectMaterial extends THREE.ShaderMaterial {
+	static loadGLSL(name){
+		return new Promise((resolve, reject) => {
+				let xhr = new XMLHttpRequest();
+				xhr.onload=()=>resolve(xhr.responseText)
+				xhr.onerror =  event => reject(event);
+				xhr.open('GET',"./shader/"+name+".glsl" )
+				xhr.overrideMimeType("text/html;charset=utf-8")
+				xhr.send()
+			})
+	}
+	static async Json2Texture(){
+		return new Promise( (resolve, reject) => { 
+			new THREE.FileLoader().load(
+				'probeIrradiance.json',
+				data => {
+					const J=JSON.parse( data )
+					const texture=array2Texture(J.data, J.width,J.height)
+					// self.uniforms.probeIrradiance.value.image=texture
+					console.log(texture)
+					resolve(texture)
+				}
+			)
+		} );
+		function array2Texture(array0, w,h) {
+			const array=[]
+			for(let i=0;i<array0.length/3;i++){
+				array.push(array0[3*i  ])
+				array.push(array0[3*i+1])
+				array.push(array0[3*i+2])
+				array.push(0)
+			}
+			let data = new Float32Array(w * h * 4); // RGB:3 RGBA:4
+			data.set(array);
+			let texture = new THREE.DataTexture(
+				data, w, h, 
+				THREE.RGBAFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
+				THREE.FloatType);
+			texture.needsUpdate = true;
+			return texture;
+		}
+		function array2Texture_old(array, w,h) {
+			let data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
+			data.set(array);
+			let texture = new THREE.DataTexture(
+				data, w, h, 
+				THREE.RGBFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
+				THREE.FloatType);
+			texture.needsUpdate = true;
+			return texture;
+		}
+	}
+	static async Hdr2Texture(){
+		return new Promise( (resolve, reject) => { 
+			var xhr = new XMLHttpRequest();
+			xhr.open('GET', 'probeIrradiance.hdr', true);
+			xhr.responseType = 'arraybuffer';
+			xhr.onload = function() {
+				var buffer = xhr.response;
+				// 解析HDR文件
+				var loader = new RGBELoader();
+				var texture = loader.parse(buffer);
+				resolve(texture)
+			};
+			xhr.send();
+		} )
+	}
 	static async pre(cb){
-		IndirectMaterial.prototype.vertexShader  = await loadGLSL('indirectVS')//document.getElementById('indirectVS').innerHTML
-		IndirectMaterial.prototype.fragmentShader= await loadGLSL('indirectFS')//document.getElementById('indirectFS').innerHTML
-		IndirectMaterial.prototype.probeIrradiance0=await DataTexture2Json()
-		console.log(IndirectMaterial.prototype)
+		IndirectMaterial.prototype.vertexShader  = await IndirectMaterial.loadGLSL('indirectVS')//document.getElementById('indirectVS').innerHTML
+		IndirectMaterial.prototype.fragmentShader= await IndirectMaterial.loadGLSL('indirectFS')//document.getElementById('indirectFS').innerHTML
+		IndirectMaterial.prototype.probeIrradiance0=await IndirectMaterial.Json2Texture()
 		if(cb)cb()
 	}
-    constructor(materialOld) {
-		const param={
-			exposure:2,
-			tonemapping:true,
-			gamma:true,
-			viewBias:0.3,
-			normalBias:0.1,
-			numIrradianceTexels:6,
-			numDistanceTexels:6,
-			origin:new THREE.Vector3 (-0.4000000059604645,  5.400000095367432,  -0.25) ,
-			probeGridCounts:[11, 11, 11],
-			probeGridSpacing:new THREE.Vector3( 2.0399999618530273,  1,  0.8999999761581421)
-		}
+    constructor(materialOld,param) {
+		// const param={
+		// 	exposure:2,
+		// 	tonemapping:true,
+		// 	gamma:true,
+		// 	viewBias:0.3,
+		// 	normalBias:0.1,
+		// 	numIrradianceTexels:6,
+		// 	numDistanceTexels:6,
+		// 	origin:new THREE.Vector3 (-0.4000000059604645,  5.400000095367432,  -0.25) ,
+		// 	probeGridCounts:[11, 11, 11],
+		// 	probeGridSpacing:new THREE.Vector3( 2.0399999618530273,  1,  0.8999999761581421)
+		// }
 		// console.log(IndirectMaterial.prototype.probeIrradiance0)
 		IndirectMaterial.prototype.probeIrradiance0.needsUpdate = true;
 		super({//new THREE.ShaderMaterial({//
@@ -134,6 +148,18 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 			materialOld.emissiveMap.encoding = THREE.sRGBEncoding
 			this.uniforms.emissiveMap.value = node.material.emissiveMap;
 		}
+		this.param={
+			exposure:param.exposure,
+			tonemapping:param.tonemapping,
+			gamma:param.gamma,
+			viewBias:param.viewBias,
+			normalBias:param.normalBias,
+			numIrradianceTexels:param.numIrradianceTexels,
+			numDistanceTexels:param.numDistanceTexels,
+			origin:param.origin ,
+			probeGridCounts:param.probeGridCounts,
+			probeGridSpacing:param.probeGridSpacing
+		}
     }
 	_initLitRenderTarget(){
 		const litRenderTarget = new THREE.WebGLRenderTarget(
@@ -158,6 +184,7 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 	}
 	probeIrradianceUpdate(irradianceLoader){
 		this.uniforms.probeIrradiance.value = irradianceLoader
+		window.irradianceLoader=irradianceLoader
 		// if(!window.flag00){
 		// 	window.flag00=true
 		// 	this.DataTexture2Json()
@@ -165,42 +192,25 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 	}
 	DataTexture2Json(){
 		const image=this.uniforms.probeIrradiance.value.image
+		let k0=0
+		for(let k=image.data.length-1;k>=0&&image.data[k]==0;k++,k0++);
+		console.log("k0",k0)
 		const data=[]
-		for(let i=0;i<image.data.length;i++)
-			data.push(image.data[i])
+		for(let i=0;i<image.data.length-k0;i++)
+			data.push(image.data[i]==0?0:parseFloat(image.data[i].toFixed(7)))
 		// 将场景对象转换为 JSON 字符串
 		const J= JSON.stringify({
+			param:this.param,
 			data:data,
 			height:image.height,
 			width:image.width
 		});
+		console.log(this.param,J)
 		const link = document.createElement('a');
 		link.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(J);
 		link.download = 'probeIrradiance.json';
 		document.body.appendChild(link);
 		link.click();
-	}
-	Json2DataTexture(){
-		const self=this
-		new THREE.FileLoader().load(
-			'probeIrradiance.json',
-			 data => {
-				const J=JSON.parse( data )
-				const texture=array2Texture(J.data, J.width,J.height)
-				self.uniforms.probeIrradiance.value.image=texture
-				// return texture
-			}
-		)
-		function array2Texture(array, w,h) {
-            let data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
-            data.set(array);
-            let texture = new THREE.DataTexture(
-				data, w, h, 
-				THREE.RGBFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
-				THREE.FloatType);
-            texture.needsUpdate = true;
-            return texture;
-        }
 	}
 }
 // IndirectMaterial0.prototype.isMeshStandardMaterial = true;

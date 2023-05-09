@@ -85,16 +85,18 @@ function initRender() {
   var sptr = filestr.split('.'); 
   var folder = sptr[0];
   var sUrl = 'Models/' + folder + '/' + filestr;
-  sUrl='Models/Sponza/Sponza.glb';
+//   sUrl='Models/Sponza/Sponza.glb';
   //scene loader
   const modelLoader = new GLTFLoader()
   modelLoader.load(sUrl, function(gltf) {
     gltf.scene.traverse(function(node) {
       if (node.isMesh) {
+		node.geometry.computeVertexNormals()
         node.castShadow = true
         node.receiveShadow = true
-		let indirectMaterial = new IndirectMaterial(node.material)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
+		let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
         node.litMaterial = node.material
+		window.material=indirectMaterial
         node.diffuseMaterial = node.material
 		node.indirectMaterial = indirectMaterial
 		node.material=node.indirectMaterial
@@ -120,7 +122,7 @@ function initCamera() {
     rtxgiNetwork.cameraFov,
     window.innerWidth / window.innerHeight,
     0.1,
-    1000
+    100000
   )
   camera.position.x = rtxgiNetwork.cameraPosition.x;
   camera.position.y = rtxgiNetwork.cameraPosition.y;
