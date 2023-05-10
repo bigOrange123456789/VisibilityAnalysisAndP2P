@@ -1421,7 +1421,8 @@ module.exports = {
       "blocking": {},
       "block2Kernel": {},
       "updateColor": true,
-      "instanceUse": false
+      "instanceUse": false,
+      "useIndirectMaterial": false
     },
     "Visibility": {
       "componentNum": 8437,
@@ -1458,10 +1459,7 @@ module.exports = {
         "near": 10,
         "far": 5000000
       },
-      "speed": {
-        "moveBoard": 100,
-        "moveWheel0": 1
-      },
+      "speed": 1,
       "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 500], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 2000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 500], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 500], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000], [-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 500]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 500], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 2000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 500], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 2000]]]
     }
   }
@@ -1491,7 +1489,8 @@ module.exports = {
       "blocking": {},
       "block2Kernel": {},
       "updateColor": false,
-      "instanceUse": true
+      "instanceUse": true,
+      "useIndirectMaterial": false
     },
     "Visibility": {
       "componentNum": 8437,
@@ -1528,10 +1527,7 @@ module.exports = {
         "near": 1,
         "far": 5000000
       },
-      "speed": {
-        "moveBoard": 1,
-        "moveWheel0": 0.002
-      },
+      "speed": 1,
       "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
     }
   }
@@ -52590,7 +52586,6 @@ var Building = /*#__PURE__*/function () {
     var self = this;
     this.scene = scene;
     this.config = window.configALL.src.Building_new;
-    this.config.useIndirectMaterial = true;
     this.NumberOfComponents = this.config.NumberOfComponents;
     this.parentGroup = new THREE.Group();
     this.parentGroup.scale.set(this.config.parentGroup.scale.x, this.config.parentGroup.scale.y, this.config.parentGroup.scale.z);
@@ -52604,29 +52599,31 @@ var Building = /*#__PURE__*/function () {
       self.p2pParse(message);
     };
     this.loaderZip = new THREE.LoadingManager();
-    if (this.config.instanceUse) {
-      this.loadJson(this.config.path + "instance_info.json", function (data) {
-        self.instance_info = data;
-        self.start0();
+    self.loadConfigInstance(function () {
+      self.loadConfigIndirect(function () {
+        self.start();
       });
-    } else {
-      this.start0();
-    }
+    });
   }
   _createClass(Building, [{
     key: "loadConfigInstance",
-    value: function loadConfigInstance(cb) {}
-  }, {
-    key: "start0",
-    value: function start0() {
+    value: function loadConfigInstance(cb) {
       var self = this;
-      if (this.config.useIndirectMaterial) {
-        _IndirectMaterial.IndirectMaterial.pre(function () {
-          self.start();
+      if (this.config.instanceUse) {
+        this.loadJson(this.config.path + "instance_info.json", function (data) {
+          self.instance_info = data;
+          cb();
         });
-      } else {
-        this.start();
-      }
+      } else cb();
+    }
+  }, {
+    key: "loadConfigIndirect",
+    value: function loadConfigIndirect(cb) {
+      if (this.config.instanceUse) {
+        _IndirectMaterial.IndirectMaterial.pre(function () {
+          cb();
+        });
+      } else cb();
     }
   }, {
     key: "start",
@@ -52845,7 +52842,7 @@ var Building = /*#__PURE__*/function () {
               o.delay = {
                 load: 0,
                 forward: 0,
-                parse: self.meshes_info[cid].request - performance.now()
+                parse: performance.now() - self.meshes_info[cid].request
               };
               o.originType = "edgeP2P";
               self.addMesh(cid, o);
@@ -61213,12 +61210,14 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Loader = /*#__PURE__*/function () {
   function Loader(body) {
     _classCallCheck(this, Loader);
+    this.speed = 1;
     this.config = window.configALL.src.main;
     this.body = body;
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
     this.initScene();
     this.initSky();
+    this.setSpeed();
     this.initWander();
     this.panel = new _Panel.Panel(this);
     this.building = new _Building.Building(this.scene, this.camera);
@@ -61262,8 +61261,8 @@ var Loader = /*#__PURE__*/function () {
               this.playerControl = new _PlayerControl.PlayerControl(this.camera, this.config["FlipY"]);
               this.playerControl.target.set(this.config.camera.target.x, this.config.camera.target.y, this.config.camera.target.z);
               this.playerControl.mode.set("viewpoint");
-              this.playerControl.speed.moveBoard = this.config.speed.moveBoard; //1
-              this.playerControl.speed.moveWheel0 = this.config.speed.moveWheel0; //0.01
+              this.playerControl.speed.moveBoard = this.config.speed; //this.config.speed.moveBoard//1
+              this.playerControl.speed.moveWheel0 = this.config.speed * 0.01; //this.config.speed.moveWheel0//0.01
 
               // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
               // this.orbitControl.target = camera_tar[id].clone()
@@ -61342,10 +61341,19 @@ var Loader = /*#__PURE__*/function () {
       guiChanged(effectController, sun);
     }
   }, {
+    key: "setSpeed",
+    value: function setSpeed() {
+      for (var i = 0; i < this.config.pathList.length; i++) for (var j = 0; j < this.config.pathList[i].length; j++) {
+        this.config.pathList[i][j][6] /= this.speed;
+      }
+    }
+  }, {
     key: "initWander",
     value: function initWander() {
       this.wanderList = [];
-      for (var i = 0; i < this.config.pathList.length; i++) this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
+      for (var i = 0; i < this.config.pathList.length; i++) {
+        this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
+      }
       if (this.config.autoMove == "true") {
         var pathId = Math.floor(Math.random() * this.wanderList.length);
         this.wanderList[pathId].stopFlag = false;
@@ -61365,6 +61373,7 @@ document.addEventListener('DOMContentLoaded', function () {
     return window.location.search.split(id).length > 1 ? window.location.search.split(id)[1].split("&")[0] : null;
   };
   var config = getParam('scene') == "haiNing" ? _configOP.default : _configOP2.default;
+  config.src.main.speed = getParam('speed') ? getParam('speed') : config.src.main.speed;
   config.src.main.autoMove = getParam('autoMove');
   config.src.main.render = getParam('render');
   config.src.Detection.backURL = getParam('backURL');

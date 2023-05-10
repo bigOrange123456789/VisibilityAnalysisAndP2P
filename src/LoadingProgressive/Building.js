@@ -14,7 +14,6 @@ export class Building{
         this.scene=scene
         
         this.config=window.configALL.src.Building_new
-        this.config.useIndirectMaterial=true
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()
@@ -33,33 +32,31 @@ export class Building{
         this.p2p=new P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
-
+        
+        self.loadConfigInstance(()=>{
+            self.loadConfigIndirect(()=>{
+                self.start()
+            })
+        })
+    }
+    loadConfigInstance(cb){
+        const self=this
         if(this.config.instanceUse){
             this.loadJson(
                 this.config.path+"instance_info.json",
                 data=>{
                     self.instance_info=data
-                    self.start0()
+                    cb()
                 }
             )
-        }else{
-            this.start0()
-        }
-        
-        
+        }else cb()
     }
-    loadConfigInstance(cb){
-
-    }
-    start0(){
-        const self=this
-        if(this.config.useIndirectMaterial){
+    loadConfigIndirect(cb){
+        if(this.config.instanceUse){
             IndirectMaterial.pre(()=>{
-                self.start()
+                cb()
             })
-        }else{
-            this.start()
-        }
+        }else cb()
     }
     start(){
         const self=this
@@ -280,7 +277,7 @@ export class Building{
                         o.delay={
                             load   :0,
                             forward:0,
-                            parse  :self.meshes_info[cid].request-performance.now() 
+                            parse  :performance.now()-self.meshes_info[cid].request
                         }
                         o.originType="edgeP2P"
                         self.addMesh(cid,o)

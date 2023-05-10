@@ -1,8 +1,3 @@
-        //precision highp float;
-
-      //#extension GL_EXT_shader_texture_lod : enable
-      //#extension GL_OES_standard_derivatives : enable
-
       #define PI 3.1415926535897932f
 
       #define RTXGI_COORDINATE_SYSTEM_LEFT 0
@@ -28,24 +23,11 @@
       varying vec3 vNormal;
       varying vec2 vuv;
       //uniform mat4 worldView;
-      uniform sampler2D GBufferd;
       uniform sampler2D probeIrradiance;
-      uniform sampler2D probeDistance;
-
-      uniform bool notCompareFlag;
-      uniform bool dGI;
-	  uniform float exposure;
-	  uniform bool tonemapping;
-	  uniform bool gamma;
-
-      uniform float screenWidth;
-      uniform float screenHeight;
 
       uniform sampler2D colorMap;
-      uniform vec3 emissiveColor;
       uniform sampler2D emissiveMap;
       uniform bool useMap;
-      uniform bool useEmissiveMap;
 	  uniform vec3 originColor;
 
       struct DDGIVolumeDescGPU
@@ -61,9 +43,7 @@
       };
       uniform DDGIVolumeDescGPU DDGIVolume;
 
-	/**
-	* DDGIGetSurfaceBias
-	*/
+
     vec3 DDGIGetSurfaceBias(vec3 surfaceNormal, vec3 cameraDirection, DDGIVolumeDescGPU DDGIVolume)
     {
         return (surfaceNormal * DDGIVolume.normalBias) + (-cameraDirection * DDGIVolume.viewBias);
@@ -91,18 +71,6 @@
     }
 
 	/**
-	* LessThan
-	*/
-    vec3 LessThan(vec3 f, float value)
-    {
-        return vec3(
-            (f.x < value) ? 1.f : 0.f,
-            (f.y < value) ? 1.f : 0.f,
-            (f.z < value) ? 1.f : 0.f
-		);
-    }
-
-	/**
 	 * lerp
 	*/
 	vec3 lerp(vec3 a, vec3 b, vec3 c)
@@ -113,82 +81,6 @@
 		return vec3(lerpx, lerpy, lerpz);
 	}
 
-	/**
-	 * SRGBToLinear
-	*/
-	vec3 SRGBToLinear(vec3 rgb)
-	{
-		rgb = clamp(rgb, 0.f, 1.f);
-		return lerp(
-            pow((rgb + 0.055f) / 1.055f, vec3(2.4f)),
-            rgb * 12.92f,
-            LessThan(rgb, 0.04045f)
-        );
-	}
-
-	/**
-	 * saturate
-	*/
-	vec3 saturate(vec3 rgb)
-	{
-		return clamp(rgb,0.f,1.f);
-	}
-
-	/**
-	 * ACESFilm
-	*/
-    vec3 ACESFilm(vec3 x)
-    {
-        float a = 2.51f;
-        float b = 0.03f;
-        float c = 2.43f;
-        float d = 0.59f;
-        float e = 0.14f;
-        return saturate((x*(a*x + b)) / (x*(c*x + d) + e));
-    }
-	
-	/**
-	* RTXGIQuaternionRotate
-	*/
-	vec3 RTXGIQuaternionRotate(vec3 v, vec4 q)
-	{
-		vec3 b = q.xyz;
-		float b2 = dot(b, b);
-		return (v * (q.w * q.w - b2) + b * (dot(v, b) * 2.f) + cross(b, v) * (q.w * 2.f));
-	}
-	
-	/**
-	* DDGIGetVolumeBlendWeight
-	* Computes a blending weight for the given volume for blending between multiple volumes.
-	* Return value of 1.0 means full contribution from this volume while 0.0 means no contribution.
-	*/
-    //float DDGIGetVolumeBlendWeight(vec3 worldPosition, DDGIVolumeDescGPU volume)
-    //{
-        // Start fully weighted
-        //初始值为1
-        //float volumeBlendWeight = 1.f;
-
-        // Shift from [-n/2, n/2] to [0, n]
-        //坐标系转换
-        //vec3 position = (worldPosition - volume.origin) + (volume.probeGridSpacing * vec3(volume.probeGridCounts - 1)) * 0.5f;
-        //vec3 probeCoords = (position / volume.probeGridSpacing);
-
-
-        //将值映射到0，1范围用于混合
-        // Map numbers over the max to the range 0 to 1 for blending
-        //vec3 overProbeMax = (vec3(volume.probeGridCounts) - vec3(1.f,1.f,1.f)) - probeCoords;
-
-        // Use the geometric mean across all axes for weight
-        //volumeBlendWeight *= clamp(probeCoords.x, 0.f, 1.f);
-        //volumeBlendWeight *= clamp(probeCoords.y, 0.f, 1.f);
-        //volumeBlendWeight *= clamp(probeCoords.z, 0.f, 1.f);
-        //volumeBlendWeight *= clamp(overProbeMax.x, 0.f, 1.f);
-        //volumeBlendWeight *= clamp(overProbeMax.y, 0.f, 1.f);
-        //volumeBlendWeight *= clamp(overProbeMax.z, 0.f, 1.f);
-
-        //return volumeBlendWeight;
-        //return 1.f;
-      //}
 
     /**
     * Computes the world space position of a probe at the given 3D grid coordinates.
@@ -299,33 +191,25 @@
         vec3 worldPosition,
         vec3 surfaceBias,
         vec3 direction,
-        DDGIVolumeDescGPU volume){
-        //初始irradiance和累计权重皆为0
-        vec3 irradiance = vec3(0.f, 0.f, 0.f);
-        float  accumulatedWeights = 0.f;
+        DDGIVolumeDescGPU volume
+    ){
+        vec3 irradiance = vec3(0.f, 0.f, 0.f);//初始irradiance为0
+        float  accumulatedWeights = 0.f;//初始累计权重为0
 
-        //偏移世界坐标
-        // Bias the world space position
-        vec3 biasedWorldPosition = (worldPosition + surfaceBias);
+        vec3 biasedWorldPosition = (worldPosition + surfaceBias);//偏移世界坐标
 
-
-        //获得最近的基础Probe的3d网格坐标，世界坐标取整转换到网格坐标（也包含由[-2/n,2/n]转换到[0,n]坐标）
-        // Get the 3D grid coordinates of the base probe (near the biased world position)
+        //获得最近的基础Probe的3d网格坐标，世界坐标取整转换到网格坐标（也包含由[-2/n,2/n]转换到[0,n]坐标） // Get the 3D grid coordinates of the base probe (near the biased world position)
         ivec3 baseProbeCoords = DDGIGetBaseProbeGridCoords(biasedWorldPosition, volume.origin, volume.probeGridCounts, volume.probeGridSpacing);
 
-        //得到基础probe的世界坐标（包含减去半轴还原到偏移之前的坐标）
-        // Get the world space position of the base probe
+        //得到基础probe的世界坐标（包含减去半轴还原到偏移之前的坐标） // Get the world space position of the base probe
         vec3 baseProbeWorldPosition = DDGIGetProbeWorldPosition(baseProbeCoords, volume.origin, volume.probeGridCounts, volume.probeGridSpacing);
 
-        //将点和计算得到的相邻基础probe距离偏差进行归一化
-        // Clamp the distance between the given point and the base probe's world position (on each axis) to [0, 1]
+        //将点和计算得到的相邻基础probe距离偏差进行归一化  // Clamp the distance between the given point and the base probe's world position (on each axis) to [0, 1]
         vec3 alpha = clamp(((biasedWorldPosition - baseProbeWorldPosition) / volume.probeGridSpacing), vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
 
-        //在周围八个Probe中循环，并累计他们的贡献
-        // Iterate over the 8 closest probes and accumulate their contributions
+        //在周围八个Probe中循环，并累计他们的贡献 // Iterate over the 8 closest probes and accumulate their contributions
         for(int probeIndex = 0; probeIndex < 8; probeIndex++)
         {
-
             //得到相邻的Probe的offset
             // Compute the offset to the adjacent probe in grid coordinates by
             // sourcing the offsets from the bits of the loop index: x = bit 0, y = bit 1, z = bit 2
@@ -336,27 +220,23 @@
             // Clamp to the grid boundaries
             ivec3 adjacentProbeCoords = clamp(baseProbeCoords + adjacentProbeOffset, ivec3(0, 0, 0), volume.probeGridCounts - ivec3(1, 1, 1));
 
-            //获得相邻Probe的世界坐标位置（包含减去半轴还原到偏移之前的坐标）
-            // Get the adjacent probe's world position
+            //获得相邻Probe的世界坐标位置（包含减去半轴还原到偏移之前的坐标）// Get the adjacent probe's world position
             vec3 adjacentProbeWorldPosition = DDGIGetProbeWorldPosition(adjacentProbeCoords, volume.origin, volume.probeGridCounts, volume.probeGridSpacing);
 
-            //得到相邻的Probe的索引（用于贴图采样）
-            // Get the adjacent probe's index (used for texture lookups)
+            //得到相邻的Probe的索引（用于贴图采样）    // Get the adjacent probe's index (used for texture lookups)
             int adjacentProbeIndex = DDGIGetProbeIndex(adjacentProbeCoords, volume.probeGridCounts);
 
             //计算偏移后和未偏移的渲染点到相邻Probe的距离
             // Compute the distance and direction from the (biased and non-biased) shading point and the adjacent probe
             vec3 worldPosToAdjProbe = normalize(adjacentProbeWorldPosition - worldPosition);//当前点到附近probe的向量
             vec3 biasedPosToAdjProbe = normalize(adjacentProbeWorldPosition - biasedWorldPosition);//偏移后的当前点到probe的向量
-            float  biasedPosToAdjProbeDist = length(adjacentProbeWorldPosition - biasedWorldPosition);//偏移后的当前点到相邻probe的距离
-
+            
             //计算基于到每个相邻probe的距离用于平滑在probe间平滑转换，根据偏移后世界坐标和计算得到的基础probe的偏差计算三线性平滑系数
             // Compute trilinear weights based on the distance to each adjacent probe
             // to smoothly transition between probes. adjacentProbeOffset is binary, so we're
             // using a 1-alpha when adjacentProbeOffset = 0 and alpha when adjacentProbeOffset = 1.
             vec3 trilinear = max(vec3(0.001f,0.001f,0.001f), lerp(vec3(1.f,1.f,1.f) - alpha, alpha, vec3(adjacentProbeOffset)));
             float  trilinearWeight = (trilinear.x * trilinear.y * trilinear.z);
-            float  weight = 1.f;
 
             // A naive soft backface weight would ignore a probe when
             // it is behind the surface. That's good for walls, but for
@@ -365,49 +245,15 @@
             // to the point. We instead use a "wrap shading" test. The small
             // offset at the end reduces the "going to zero" impact.
             float wrapShading = (dot(worldPosToAdjProbe, direction) + 1.f) * 0.5f;//将偏移前的点世界坐标到相邻probe的方向向量与当前点的向量点乘
-            weight *= (wrapShading * wrapShading) + 0.2f;
+            float  weight = (wrapShading * wrapShading) + 0.2f;
 
-            //计算相邻probe的纹理坐标，以及用纹理坐标采样出滤波后距离
-            // Compute the texture coordinates of this adjacent probe and sample the probe's filtered distance
+            //计算相邻probe的纹理坐标，以及用纹理坐标采样出滤波后距离  // Compute the texture coordinates of this adjacent probe and sample the probe's filtered distance
             vec2 octantCoords = DDGIGetOctahedralCoordinates(-biasedPosToAdjProbe);
 
             vec2 probeTextureCoords = DDGIGetProbeUV(adjacentProbeIndex, octantCoords, volume.probeGridCounts, volume.probeNumDistanceTexels);
             probeTextureCoords.y = 1.0f- probeTextureCoords.y;
-            vec2 filteredDistance = 2.f * texture2DLodEXT(probeDistance,probeTextureCoords, 0.f).rg;
-
-            float meanDistanceToSurface = filteredDistance.x;
-            float variance = abs((filteredDistance.x * filteredDistance.x) - filteredDistance.y);//|x*x-y|
-
-            float chebyshevWeight = 1.f;
-            if(biasedPosToAdjProbeDist > meanDistanceToSurface) //偏移后的当前点到相邻probe的距离大于平均距离，即在阴影中，In "shadow"
-            {
-                // v must be greater than 0, which is guaranteed by the if condition above.
-                float v = biasedPosToAdjProbeDist - meanDistanceToSurface;//求距离差，因上述if条件保证，结果一定大于0
-                chebyshevWeight = variance / (variance + (v * v));
-
-                //强调权重的差异
-                // Increase the contrast in the weight
-                chebyshevWeight = max((chebyshevWeight * chebyshevWeight * chebyshevWeight), 0.f);
-            }
-
-            //避免因为没有probe可以照到导致的0值
-            // Avoid visibility weights ever going all the way to zero because
-            // when *no* probe has visibility we need a fallback value
-            weight *= max(0.05f, chebyshevWeight);
-
-            //避免权重为0
-            // Avoid a weight of zero
-            weight = max(0.000001f, weight);
-            // A small amount of light is visible due to logarithmic perception, so
-            // crush tiny weights but keep the curve continuous
-            const float crushThreshold = 0.2f;
-            if (weight < crushThreshold)
-            {
-                weight *= (weight * weight) * (1.f / (crushThreshold * crushThreshold));
-            }
 
             //应用三线性权重
-            // Apply the trilinear weights
             weight *= trilinearWeight;
 
             //采样probe irradiance
@@ -416,10 +262,9 @@
 
             probeTextureCoords = DDGIGetProbeUV(adjacentProbeIndex, octantCoords, volume.probeGridCounts, volume.probeNumIrradianceTexels);
 
-            //probeTextureCoords = probeTextureCoords * probeTextureCoords *probeTextureCoords*probeTextureCoords*probeTextureCoords;accuUV += probeTextureCoords;
-            float tempx = probeTextureCoords.x;
             probeTextureCoords.y = 1.0f- probeTextureCoords.y;
-            vec3 probeIrradiance = texture2DLodEXT(probeIrradiance,probeTextureCoords, 0.f).rgb;
+            // vec3 probeIrradiance = texture2DLodEXT(probeIrradiance,probeTextureCoords, 0.f).rgb;
+            vec3 probeIrradiance = texture2D(probeIrradiance,probeTextureCoords).rgb;
             // Decode the tone curve, but leave a gamma = 2 curve to approximate sRGB blending
             vec3 exponent = vec3(volume.probeIrradianceEncodingGamma * 0.5f);
             probeIrradiance = pow(probeIrradiance, exponent);
@@ -447,9 +292,10 @@
         if(useMap)
         {
             baseColor = texture2DLodEXT(colorMap,vuv, 0.f);
+            // baseColor = texture2D(colorMap,vuv*10000.);
         }        
         vec3 emissive = vec3(0,0,0);
-        if(useEmissiveMap)
+        if(false)//if(useEmissiveMap)
         {
              emissive = texture2DLodEXT(emissiveMap,vuv, 0.f).rgb;
         }
@@ -459,10 +305,9 @@
 
 	void main(void)
     {
-		vec4 worldPos = vPosition;
-		vec3 normal = vNormal;
-
-		vec3 cameraDirection = normalize(worldPos.xyz - cameraPosition);
+		vec4 worldPos = vPosition;//需要渲染的那个点的位置
+		vec3 normal = vNormal;//那个点的法向量
+		vec3 cameraDirection = normalize(worldPos.xyz - cameraPosition);//视线方向
 		vec3 surfaceBias = DDGIGetSurfaceBias(
             normal, 
             cameraDirection, 
@@ -470,11 +315,12 @@
             );
 
 		vec3 irradiance = DDGIGetVolumeIrradiance(worldPos.xyz,surfaceBias,normal,DDGIVolume);
-		vec3 irradianceColor = (1. * irradiance+0.5) * GetBaseColor().rgb ;
+		vec3 irradianceColor = (1. * irradiance+0.) * GetBaseColor().rgb ;
+        // vec3 irradianceColor = irradiance * GetBaseColor().rgb ;
 
         // vec3 test=texture2DLodEXT(probeIrradiance,vec2(0.,0.),0.).rgb;
 			
 		gl_FragColor = vec4(irradianceColor,1.);
+        // if (vuv.x+vuv.y==0.)
+        //     gl_FragColor = vec4(1.,0.,0.,1.);
     }
-
-

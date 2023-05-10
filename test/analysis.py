@@ -55,6 +55,11 @@ class Analysis:
         if n0==0:n=1
         return {
          "useP2P":p2pFlag,
+         "服务器请求率":self.div(
+            self.getSum(p2pFlag,["count_mesh_server"])-self.getSum(p2pFlag,["count_mesh_server_NotUsed"]),
+            self.getSum(p2pFlag,["count_mesh_server"])+self.getSum(p2pFlag,["count_mesh_p2p"])-
+            self.getSum(p2pFlag,["count_mesh_p2p_NotUsed"])-self.getSum(p2pFlag,["count_mesh_server_NotUsed"])
+         ),
          "饱满度":self.div(
             self.getSum(p2pFlag,["plumpness","sum"]),
             self.getSum(p2pFlag,["plumpness","num"])
@@ -71,7 +76,7 @@ class Analysis:
          "P2P数据包平均解析延迟":self.getSum(p2pFlag,["delay","parse_edgeP2P","ave"])/n,
          "P2P数据包最大解析延迟":self.getSum(p2pFlag,["delay","parse_edgeP2P","max"])/n,
 
-         "平均延迟":self.getSum(p2pFlag,["loadDelay","ave"])/n,
+         #"平均延迟":self.getSum(p2pFlag,["loadDelay","ave"])/n,
          "服务器请求次数":self.getSum(p2pFlag,["count_pack_request","zip"])/n,
          "服务器负载":self.getSum(p2pFlag,["count_pack_request","zip"]),
          "服务器响应次数":self.getSum(p2pFlag,["count_pack_server"])/n,

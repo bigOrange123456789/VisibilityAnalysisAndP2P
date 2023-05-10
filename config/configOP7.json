@@ -1313,7 +1313,8 @@
             "blocking": {},
             "block2Kernel": {},
             "updateColor":true,
-            "instanceUse":false
+            "instanceUse":false,
+            "useIndirectMaterial":false
         },
         "Visibility":{
             "componentNum":8437,
@@ -1346,10 +1347,7 @@
                 "near": 10,
                 "far": 5000000
             },
-            "speed":{
-                "moveBoard":100,
-                "moveWheel0":1
-            },
+            "speed":1,
             "pathList":[
                 [
                     [-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000]

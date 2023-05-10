@@ -13,6 +13,7 @@ import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { Sky } from '../../lib/threejs/Sky.js'
 export class Loader{
     constructor(body){
+        this.speed=1
         this.config=window.configALL.src.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
@@ -20,6 +21,7 @@ export class Loader{
 
         this.initScene()
         this.initSky()
+        this.setSpeed()
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
@@ -78,8 +80,8 @@ export class Loader{
             this.config.camera.target.z
         )
         this.playerControl.mode.set("viewpoint")
-        this.playerControl.speed.moveBoard=this.config.speed.moveBoard//1
-        this.playerControl.speed.moveWheel0=this.config.speed.moveWheel0//0.01
+        this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
+        this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
 
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
@@ -141,12 +143,19 @@ export class Loader{
         }
         guiChanged(effectController,sun)
     }
+    setSpeed(){
+        for(let i=0;i<this.config.pathList.length;i++)
+            for(let j=0;j<this.config.pathList[i].length;j++){
+                this.config.pathList[i][j][6]/=this.speed
+            }
+    }
     initWander() {
         this.wanderList=[]
-        for(let i=0;i<this.config.pathList.length;i++)
+        for(let i=0;i<this.config.pathList.length;i++){
             this.wanderList.push(
                 new MoveManager(this.camera, this.config.pathList[i])
             )
+        }
         if(this.config.autoMove=="true"){
             const pathId=Math.floor(Math.random()*this.wanderList.length)
             this.wanderList[pathId].stopFlag=false
@@ -167,6 +176,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const config=
         getParam('scene')=="haiNing"?config_haiNing:
         config_gkd
+    config.src.main.speed       =getParam('speed')?getParam('speed'):config.src.main.speed
     config.src.main.autoMove    =getParam('autoMove')
     config.src.main.render      =getParam('render')
     config.src.Detection.backURL=getParam('backURL')

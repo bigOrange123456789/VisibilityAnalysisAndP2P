@@ -228,7 +228,7 @@ export class Detection {//需要服务器
             if(self.config.backURL!==null)
                 setTimeout(()=>{
                     location.href=self.config.backURL
-                },100)
+                },Math.random()*10*1000)
             else alert("测试完成，感谢您的配合！")
             // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
             //window.opener = null;//为了不出现提示框
