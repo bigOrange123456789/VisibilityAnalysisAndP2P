@@ -41928,7 +41928,7 @@ var Visibility = /*#__PURE__*/function () {
     this.prePoint2 = ""; //视点变化就进行可见性剔除
     this.loading = loading;
     this.dynamicLoading(); //加载和预加载
-    this.culling(); //遮挡剔除和视锥剔除
+    // this.culling()//遮挡剔除和视锥剔除
 
     // if(new URLSearchParams(window.location.search).has("autoMove"))
     //     if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
@@ -42068,17 +42068,17 @@ var Visibility = /*#__PURE__*/function () {
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
         var d = this.getDirection();
-        for (var i = 0; i < this.componentNum; i++) {
-          var vd1 = i in visualList0["1"] ? visualList0["1"][i] : 0;
-          var vd2 = i in visualList0["2"] ? visualList0["2"][i] : 0;
-          var vd3 = i in visualList0["3"] ? visualList0["3"][i] : 0;
-          var vd4 = i in visualList0["4"] ? visualList0["4"][i] : 0;
-          var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
-          var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
-          this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (Object.keys(this.meshes).length !== 0 && this.meshes[i]) {
-            vd_had += this.vd[i];
-          } else vd_hading += this.vd[i];
+        for (var _i = 0; _i < this.componentNum; _i++) {
+          var vd1 = _i in visualList0["1"] ? visualList0["1"][_i] : 0;
+          var vd2 = _i in visualList0["2"] ? visualList0["2"][_i] : 0;
+          var vd3 = _i in visualList0["3"] ? visualList0["3"][_i] : 0;
+          var vd4 = _i in visualList0["4"] ? visualList0["4"][_i] : 0;
+          var vd5 = _i in visualList0["5"] ? visualList0["5"][_i] : 0;
+          var vd6 = _i in visualList0["6"] ? visualList0["6"][_i] : 0;
+          this.vd[_i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i]) {
+            vd_had += this.vd[_i];
+          } else vd_hading += this.vd[_i];
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -42087,13 +42087,26 @@ var Visibility = /*#__PURE__*/function () {
             index: index
           };
         }).filter(function (item) {
-          return item.value !== 0;
+          return item.value > 0;
         }).sort(function (a, b) {
           return b.value - a.value;
-        }).map(function (value, index) {
-          return value.index;
         });
-        if (list.length > 0) this.loading(list);
+        var i = 0;
+        for (var sum = 0; i < list.length && sum < 4 * Math.PI / 300; i++, sum = sum + list[list.length - 1 - i].value);
+        console.log(i);
+        var list2 = [];
+        for (var j = 0; j < list.length - i; j++) list2.push(list[j].index);
+        if (list2.length > 0) this.loading(list2);
+        // list.filter((value, index) => index<list.length-i )
+        // console.log(list.length)
+        // list=list.map((value, index) => value.index )
+        // if(list.length>0)this.loading(list)
+
+        // const list=this.vd.map((value, index) => ({ value, index }))
+        //     .filter(item => item.value > 4*Math.PI/600)
+        //     .sort((a, b) => b.value - a.value)
+        //     .map((value, index) => value.index )
+        // if(list.length>0)this.loading(list)
       } else {
         this.request(posIndex);
       }
@@ -42118,8 +42131,8 @@ var Visibility = /*#__PURE__*/function () {
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i = 0; _i < visualList0["a"].length; _i++) {
-          window.visibleArea[visualList0["a"][_i]] = true;
+        if (visualList0["a"]) for (var _i2 = 0; _i2 < visualList0["a"].length; _i2++) {
+          window.visibleArea[visualList0["a"][_i2]] = true;
         }
       }
     }
@@ -42197,14 +42210,16 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var P2P = /*#__PURE__*/function () {
   function P2P(camera, detection) {
     _classCallCheck(this, P2P);
+    var scope = this;
+    this.pageId;
+    this.config = {
+      groupId: -1
+    };
     this.detection = detection;
     this.useP2P = true;
     if (new URLSearchParams(window.location.search).has("useP2P")) this.useP2P = new URLSearchParams(window.location.search).get('useP2P') == "true";
     console.log("useP2P:", this.useP2P);
     window.useP2P = this.useP2P;
-    // if(!new URLSearchParams(window.location.search).has("autoMove"))
-    //     if(this.useP2P)alert("使用P2P")
-    //     else alert("不用P2P")
     this.camera = camera;
     this.parse = function (data) {
       return console.log(data);
@@ -42217,6 +42232,10 @@ var P2P = /*#__PURE__*/function () {
         self.init_p2p_controller(self.socketURL, location);
       });
     }
+    window.updateGroupId = function (groupId) {
+      scope.config.groupId = groupId;
+      scope.updateGroupId();
+    };
   }
   _createClass(P2P, [{
     key: "geolocation",
@@ -42253,20 +42272,13 @@ var P2P = /*#__PURE__*/function () {
       socket.on('userConfig', function (data) {
         scope.config = data;
         var edgeURL = "http://" + data.edgeIp + ":8011";
+        scope.pageId = socket.id;
         scope.socket = scope.init_p2p_edge(edgeURL);
       });
       socket.on('userConfigUpdate', function (data) {
         scope.config = data;
-        // const edgeURL="http://"+data.edgeIp+":8011"
-        console.log(data);
-        scope.socket.emit("groupId", 10000); //scope.socket.emit("groupId",scope.config.groupId)
+        scope.updateGroupId();
       });
-
-      window.pathId = function (id) {
-        scope.detection.updateGroup(id);
-        scope.socket.emit("groupId", id);
-        console.log("path id", id);
-      };
       setInterval(function () {
         socket.emit('updateFeature', {
           feature: [scope.camera.position.x, scope.camera.position.y, scope.camera.position.z]
@@ -42275,9 +42287,13 @@ var P2P = /*#__PURE__*/function () {
     }
   }, {
     key: "updateGroupId",
-    value: function updateGroupId(groupId) {
-      this.config.groupId = groupId;
-      this.socket.emit("groupId", this.config.groupId);
+    value: function updateGroupId() {
+      if (typeof window.pathId !== "undefined") this.config.groupId = window.pathId;else this.config.groupId = 1000;
+      console.log(this.config.groupId);
+      if (this.socket) this.socket.emit("pageConfig", {
+        pageId: this.pageId,
+        groupId: this.config.groupId
+      });
     }
   }, {
     key: "init_p2p_edge",
@@ -42286,10 +42302,22 @@ var P2P = /*#__PURE__*/function () {
       var socket = io.connect(socketURL, {
         transports: ['websocket', 'xhr-polling', 'jsonp-polling']
       });
-      socket.emit("groupId", scope.config.groupId);
+      socket.emit('pageId', this.pageId);
       socket.on('edge2client', function (data) {
         scope.parse(data);
       });
+      socket.on('connect', function () {
+        scope.socket = socket;
+        scope.updateGroupId();
+        console.log('连接已建立');
+        // 在连接建立后进行相关操作
+      });
+
+      socket.on('disconnect', function () {
+        console.log('连接已断开');
+        // 在连接断开时进行相关操作
+      });
+
       return socket;
     }
   }, {
@@ -42559,7 +42587,7 @@ var Detection = /*#__PURE__*/function () {
         console.log(str);
         if (self.config.backURL !== null) setTimeout(function () {
           location.href = self.config.backURL;
-        }, 100);else alert("测试完成，感谢您的配合！");
+        }, Math.random() * 10 * 1000);else alert("测试完成，感谢您的配合！");
         // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
         //window.opener = null;//为了不出现提示框
         // window.close();//关闭窗口//完成测试，关闭窗口
@@ -52619,7 +52647,7 @@ var Building = /*#__PURE__*/function () {
   }, {
     key: "loadConfigIndirect",
     value: function loadConfigIndirect(cb) {
-      if (this.config.instanceUse) {
+      if (this.config.useIndirectMaterial) {
         _IndirectMaterial.IndirectMaterial.pre(function () {
           cb();
         });
@@ -57296,42 +57324,45 @@ var Panel = /*#__PURE__*/function () {
   function Panel(main) {
     _classCallCheck(this, Panel);
     this.main = main;
+    this.prePathId = -1;
     this.addMyUI();
     // this.show
   }
   _createClass(Panel, [{
     key: "addMyUI",
     value: function addMyUI() {
-      window.pathId = function (id) {
-        console.log("path id", id);
-      };
       //完成设置个数
       var width = window.innerWidth;
       var height = window.innerHeight;
       var self = this;
       var ui = new _MyUI_sim.MyUI();
       ui.init();
-      var prePathId = -1;
       var _loop = function _loop(id) {
-        new ui.Button('漫游路径' + (id + 1), "#3498DB", '#2980B9', '#01DFD7', width / 10 / 6, 150, width / 10, width / 10 / 4,
+        new ui.Button('漫游路径' + (id + 1), "#3498DB", '#2980B9', 0x01DFD7, width / 10 / 6, 150, width / 10, width / 10 / 4,
         //大小
         0, 500 + id * 50, function (b) {
           //位置
-          if (id == prePathId) {
-            for (var i = 0; i < self.main.wanderList.length; i++) if (i !== id) self.main.wanderList[i].stopFlag = true;
-            var wander = self.main.wanderList[id];
-            wander.stopFlag = !wander.stopFlag;
-          } else {
-            window.pathId(id);
-            for (var _i = 0; _i < self.main.wanderList.length; _i++) self.main.wanderList[_i].stopFlag = true;
-            self.main.wanderList[id].joinPath();
-          }
-          prePathId = id;
+          self.setWander(id);
         });
       };
       for (var id = 0; id < self.main.wanderList.length; id++) {
         _loop(id);
       }
+    }
+  }, {
+    key: "setWander",
+    value: function setWander(id) {
+      if (id == this.prePathId) {
+        for (var i = 0; i < this.main.wanderList.length; i++) if (i !== id) this.main.wanderList[i].stopFlag = true;
+        var wander = this.main.wanderList[id];
+        wander.stopFlag = !wander.stopFlag;
+      } else {
+        for (var _i = 0; _i < this.main.wanderList.length; _i++) this.main.wanderList[_i].stopFlag = true;
+        this.main.wanderList[id].joinPath();
+      }
+      window.pathId = id;
+      if (window.updateGroupId) window.updateGroupId(id);
+      this.prePathId = id;
     }
   }]);
   return Panel;
@@ -61354,14 +61385,20 @@ var Loader = /*#__PURE__*/function () {
       for (var i = 0; i < this.config.pathList.length; i++) {
         this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
       }
-      if (this.config.autoMove == "true") {
-        var pathId = Math.floor(Math.random() * this.wanderList.length);
-        this.wanderList[pathId].stopFlag = false;
-      } else if (this.config.autoMove !== null) {
-        var _pathId = parseInt(this.config.autoMove);
-        console.log(this.config.autoMove, _pathId);
-        this.wanderList[_pathId].stopFlag = false;
-      }
+      var self = this;
+      setTimeout(function () {
+        if (self.config.autoMove == "true") {
+          var pathId = Math.floor(Math.random() * self.wanderList.length);
+          // this.wanderList[pathId].stopFlag=false
+          // window.pathId=pathId
+          self.panel.setWander(pathId);
+        } else if (self.config.autoMove !== null) {
+          var _pathId = parseInt(self.config.autoMove);
+          // this.wanderList[pathId].stopFlag=false
+          // window.pathId=pathId
+          self.panel.setWander(_pathId);
+        }
+      }, 100);
     }
   }]);
   return Loader;
@@ -61377,7 +61414,7 @@ document.addEventListener('DOMContentLoaded', function () {
   config.src.main.autoMove = getParam('autoMove');
   config.src.main.render = getParam('render');
   config.src.Detection.backURL = getParam('backURL');
-  if (getParam('testTime')) config.src.Detection.testTime = getParam('testTime');
+  if (getParam('testTime')) config.src.Detection.testTime = parseFloat(getParam('testTime'));
   if (getParam('backURL') !== null) {
     //backURL需要将autoMove参数传回
     var backURL = getParam('backURL');
@@ -61420,7 +61457,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "63119" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61544" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

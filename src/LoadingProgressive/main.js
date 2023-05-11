@@ -156,14 +156,21 @@ export class Loader{
                 new MoveManager(this.camera, this.config.pathList[i])
             )
         }
-        if(this.config.autoMove=="true"){
-            const pathId=Math.floor(Math.random()*this.wanderList.length)
-            this.wanderList[pathId].stopFlag=false
-        }else if(this.config.autoMove!==null){
-            const pathId=parseInt(this.config.autoMove)
-            console.log(this.config.autoMove,pathId)
-            this.wanderList[pathId].stopFlag=false
-        }
+        const self=this
+        setTimeout(()=>{
+            if(self.config.autoMove=="true"){
+                const pathId=Math.floor(Math.random()*self.wanderList.length)
+                // this.wanderList[pathId].stopFlag=false
+                // window.pathId=pathId
+                self.panel.setWander(pathId)
+            }else if(self.config.autoMove!==null){
+                const pathId=parseInt(self.config.autoMove)
+                // this.wanderList[pathId].stopFlag=false
+                // window.pathId=pathId
+                self.panel.setWander(pathId)
+            }
+        },100)
+        
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
@@ -181,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
     config.src.main.render      =getParam('render')
     config.src.Detection.backURL=getParam('backURL')
     if(getParam('testTime'))
-        config.src.Detection.testTime=getParam('testTime')
+        config.src.Detection.testTime=parseFloat(getParam('testTime'))
     if(getParam('backURL')!==null){//backURL需要将autoMove参数传回
         let backURL=getParam('backURL')
         const add=(tag)=>{

@@ -15,6 +15,8 @@ class Analysis:
         for name in nameList:
             file=json.load(open(path_pre+name, 'r'))
             file["fileName"]=name
+            # if len(file["url"].split("autoMove=true"))>1 and len(file["url"].split("scene=gkd"))>1:
+            #     fileList.append(file)
             fileList.append(file)
         self.fileList=fileList
         return self.fileList
@@ -32,7 +34,8 @@ class Analysis:
                 for t in tagList:
                     data=data[t]
                 if not data==None:
-                    sum+=data
+                    # print(p2pFlag,tagList,data,file["fileName"],sum,data,type(data))
+                    sum+=float(data)
         return sum
     def getMax(self,p2pFlag,tagList):#tagList=["count_pack_request","zip"]
         max=-9999999
@@ -169,6 +172,7 @@ if __name__ == "__main__":#用于测试
         list(anaysis.result["no-p2p"].values())
     ]
     save(tag,arr)
+    print(123)
 
     tag=[]
     arr=[]

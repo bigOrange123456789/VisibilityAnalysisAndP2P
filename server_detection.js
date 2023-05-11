@@ -36,7 +36,7 @@ require('http').createServer(function (request, response) {
                 saveJson(JSON.parse(data0))//saveStr(data0)//
                 data0=""
             }catch(e){
-                console.log(1,e)
+                // console.log(1,e)
             }
         }
     });

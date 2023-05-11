@@ -52,7 +52,7 @@ export class Building{
         }else cb()
     }
     loadConfigIndirect(cb){
-        if(this.config.instanceUse){
+        if(this.config.useIndirectMaterial){
             IndirectMaterial.pre(()=>{
                 cb()
             })

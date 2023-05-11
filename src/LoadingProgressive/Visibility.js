@@ -19,7 +19,7 @@ export class Visibility{
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading
         this.dynamicLoading()//加载和预加载
-        this.culling()//遮挡剔除和视锥剔除
+        // this.culling()//遮挡剔除和视锥剔除
 
         // if(new URLSearchParams(window.location.search).has("autoMove"))
         //     if(new URLSearchParams(window.location.search).get('autoMove')=="true"){
@@ -140,11 +140,29 @@ export class Visibility{
                 }else vd_hading+=this.vd[i]
             } 
             document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
-            const list=this.vd.map((value, index) => ({ value, index }))
-                .filter(item => item.value !== 0)
+            
+            let list=this.vd.map((value, index) => ({ value, index }))
+                .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
-                .map((value, index) => value.index )
-            if(list.length>0)this.loading(list)
+            let i=0  
+            for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
+            console.log(i)
+            const list2=[]
+            for(let j=0;j<list.length-i;j++)
+                list2.push(
+                    list[j].index
+                )
+            if(list2.length>0)this.loading(list2)
+            // list.filter((value, index) => index<list.length-i )
+            // console.log(list.length)
+            // list=list.map((value, index) => value.index )
+            // if(list.length>0)this.loading(list)
+
+            // const list=this.vd.map((value, index) => ({ value, index }))
+            //     .filter(item => item.value > 4*Math.PI/600)
+            //     .sort((a, b) => b.value - a.value)
+            //     .map((value, index) => value.index )
+            // if(list.length>0)this.loading(list)
         }else{
             this.request(posIndex)
         }
