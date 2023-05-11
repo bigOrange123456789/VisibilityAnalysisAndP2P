@@ -19,7 +19,7 @@ export class Visibility{
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading
         this.dynamicLoading()//加载和预加载
-        // this.culling()//遮挡剔除和视锥剔除
+        this.culling()//遮挡剔除和视锥剔除
 
         // if(new URLSearchParams(window.location.search).has("autoMove"))
         //     if(new URLSearchParams(window.location.search).get('autoMove')=="true"){

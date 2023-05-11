@@ -21,6 +21,7 @@ class PageList{
       this.pageOwn[pageId]={}
   }
   _nonRepeated(socket,packId){
+    return true
     if(typeof packId !== 'number')
       return false
     const pageId=socket.pageId

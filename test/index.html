@@ -18,7 +18,8 @@
     <script src="./socket.io.js"></script>
     <script src="./adapter.js"></script>
     <script>
-        const renderURL="42.192.188.161:8119"
+        // const renderURL="localhost:2002"
+        const renderURL="42.192.188.161:8106"
         const socketURL=location.host
         const getPreParam=id=>{
             id=id+"="
@@ -124,6 +125,20 @@
                 testTime:2*60,
                 userId:socket.id,
                 render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start7=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:false,
                 renderURL:renderURL,
             }
             socket.emit('page2server',config)

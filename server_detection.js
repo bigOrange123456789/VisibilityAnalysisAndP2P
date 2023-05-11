@@ -1,3 +1,4 @@
+require('fs').mkdir("detection", ()=>{})
 const port=9999
 let id=0
 Date.prototype.Format = function(fmt) { //author: meizz 

@@ -86,12 +86,12 @@ class Analysis:
          "服务器功率":self.getSum(p2pFlag,["count_pack_server"]),
          "边缘服务器负载":self.getSum(p2pFlag,["count_pack_p2p"])/n,
          "边缘服务器功率":self.getSum(p2pFlag,["count_pack_p2p"]),
-         "加载后未使用":self.div(
+         "加载后未使用%":self.div(
             self.getSum(p2pFlag,["count_mesh_p2p_NotUsed"])+
             self.getSum(p2pFlag,["count_mesh_server_NotUsed"]),
             self.getSum(p2pFlag,["count_mesh_p2p"])+
             self.getSum(p2pFlag,["count_mesh_server"])),
-         "重复加载":self.div(
+         "重复加载%":self.div(
             self.getSum(p2pFlag,["count_pack_p2p"])+
             self.getSum(p2pFlag,["count_pack_server"])-
             self.getSum(p2pFlag,["count_mesh_p2p"])-

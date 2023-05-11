@@ -48,6 +48,7 @@ export class P2P{
         })
         socket.on('userConfig',  data=> {
             scope.config=data
+            // data.edgeIp="localhost"
             const edgeURL="http://"+data.edgeIp+":8011"
             scope.pageId=socket.id
             scope.socket = scope.init_p2p_edge(edgeURL)
