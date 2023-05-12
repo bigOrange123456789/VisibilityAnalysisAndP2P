@@ -28,7 +28,7 @@ class Loader: #所有视点,每个视点的可见特征
             # v.getEntropy()
             v.path=path
             database[v.name]=v
-        print()
+            # print("\t\t\t\t\tv.name",v.name)
         return database#database的冗余去除
     def pos2pos(self,arr):
         x=int(arr[0])

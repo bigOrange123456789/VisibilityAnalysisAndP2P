@@ -9,47 +9,11 @@ import json
 class Main: #所有视点,每个视点的可见特征
     def __init__(self,config):
         id=config["id"]
-        # Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id).saveVVD()
-        Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id).saveVVD()
-        return
-        loader0=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id),id)
-        loader0.saveVVD()
-        loader_addSphere_list=[
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_1",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_shifting",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand0",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand1",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand2",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand3",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand4",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand5",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand6",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand7",id),
-            Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_rand8",id)
-        ]
-        print("len(loader_addSphere_list)",len(loader_addSphere_list))
-        loader_ceiling=Loader("F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_2",id)
-        iswall=ExtractorWall(
-            loader_ceiling,
-            [loader_addSphere_list[0] ,loader_addSphere_list[0] ],
-            config['getwall']
-        ).iswall
-        loader0.c_all["src"]["Building_new"]["iswall"]=iswall
-        isdoor=loader0.c_all["src"]["Building_new"]["isdoor"]
-        loader0.savePVD(PVD(
-            loader0,
-            loader_ceiling,
-            iswall,
-            isdoor))
-        loader0.c_all["src"]["Building_new"]["blocking"]=Blocking(
-            loader_ceiling,
-            loader_addSphere_list,
-        ).result
-        visibleArea=VisibleArea(loader_ceiling,loader_addSphere_list).list
-        json.dump(
-            visibleArea, 
-            open("../dist/assets/VisibleArea.json",'w'))
-        loader0.configCSave()                
+        loader=Loader("F:/result_gkd1_anNing",id)
+        for vid in loader.data:
+            loader.data[vid].data["all"]={}
+        loader.saveVVD()
+           
     def blocking(self):
         v_feature_list=[]
         v_feature_list_tag={}
@@ -139,5 +103,6 @@ class Main: #所有视点,每个视点的可见特征
         print(tabulate(similarity))
         return similarity
 if __name__ == "__main__":#用于测试
-    config=json.load(open(sys.argv[1], 'r'))
+    #config=json.load(open(sys.argv[1], 'r'))
+    config={"id":8}
     Main(config)
