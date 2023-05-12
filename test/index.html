@@ -135,6 +135,7 @@
                 autoMove:1,
                 useP2P:true,
                 speed:1,
+                maxBackDelay:10,
                 
                 testTime:2*60,
                 userId:socket.id,
@@ -142,6 +143,35 @@
                 renderURL:renderURL,
             }
             socket.emit('page2server',config)
+        }
+        window.start8=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                maxBackDelay:0,
+                
+                testTime:0,
+                userId:socket.id,
+                render:false,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start9=()=>{
+            window.socket.emit('page2server',{
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                maxBackDelay:100,
+                
+                testTime:60,
+                userId:socket.id,
+                render:false,
+                renderURL:renderURL,
+            })
         }
         socket.on('server2page',  data=> {
             const g=id=>{
@@ -154,6 +184,7 @@
                 +"&"+g("useP2P")
                 +"&"+g("speed")
 
+                +"&"+g("maxBackDelay")
                 +"&"+g("testTime")
                 +"&"+g("userId")
                 +"&"+g("render")

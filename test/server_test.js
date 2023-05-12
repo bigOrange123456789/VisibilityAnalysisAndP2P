@@ -56,9 +56,13 @@ function test(n){//npm install puppeteer
       const browser = browsers[i];
       const page = await browser.newPage();
       await page.goto('http://localhost:'+port);
+      console.log(i)
+      // setTimeout(()=>{
+      //   test(n-1)
+      // },1000)
       // 在每个浏览器窗口中执行其他操作
     }
     // 关闭所有浏览器窗口
     // await Promise.all(browsers.map(browser => browser.close()));
   })();
-}test(100)
+}test(2)

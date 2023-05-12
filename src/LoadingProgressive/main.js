@@ -189,6 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
     config.src.Detection.backURL=getParam('backURL')
     if(getParam('testTime'))
         config.src.Detection.testTime=parseFloat(getParam('testTime'))
+    if(getParam('maxBackDelay'))
+        config.src.Detection.maxBackDelay=parseFloat(getParam('maxBackDelay'))
     if(getParam('backURL')!==null){//backURL需要将autoMove参数传回
         let backURL=getParam('backURL')
         const add=(tag)=>{

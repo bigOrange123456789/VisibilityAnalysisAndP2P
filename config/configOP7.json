@@ -1325,7 +1325,8 @@
         },
         "Detection":{
             "urlDetectionServer":"http://123.57.58.224:9999",
-            "testTime":120
+            "testTime":120,
+            "maxBackDelay":10
         },
         "SamplePointList": {
             "vvd": {}

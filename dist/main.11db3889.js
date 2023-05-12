@@ -1433,7 +1433,8 @@ module.exports = {
     },
     "Detection": {
       "urlDetectionServer": "http://123.57.58.224:9999",
-      "testTime": 120
+      "testTime": 120,
+      "maxBackDelay": 10
     },
     "SamplePointList": {
       "vvd": {}
@@ -1501,7 +1502,8 @@ module.exports = {
     },
     "Detection": {
       "urlDetectionServer": "http://123.57.58.224:9999",
-      "testTime": 120
+      "testTime": 120,
+      "maxBackDelay": 10
     },
     "SamplePointList": {
       "vvd": {}
@@ -42585,23 +42587,23 @@ var Detection = /*#__PURE__*/function () {
 
       console.log(data);
       var oReq = new XMLHttpRequest();
-      oReq.open("POST", this.dectionURL, true);
+      oReq.open("POST", self.dectionURL, true);
       oReq.responseType = "arraybuffer";
       oReq.onload = function () {
         //接收数据
         var unitArray = new Uint8Array(oReq.response); //网络传输基于unit8Array
         var str = String.fromCharCode.apply(null, unitArray); //解析为文本
         console.log(str);
-        if (self.config.backURL !== null) setTimeout(function () {
-          location.href = self.config.backURL;
-        }, Math.random() * 10 * 1000);else alert("测试完成，感谢您的配合！");
+        if (self.config.backURL !== null) location.href = self.config.backURL;else alert("测试完成，感谢您的配合！");
         // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
         //window.opener = null;//为了不出现提示框
         // window.close();//关闭窗口//完成测试，关闭窗口
         // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
       };
 
-      oReq.send(JSON.stringify(data)); //发送请求
+      setTimeout(function () {
+        oReq.send(JSON.stringify(data)); //返回实验结果
+      }, Math.random() * self.config.maxBackDelay * 1000);
     }
   }]);
   return Detection;
@@ -61443,6 +61445,7 @@ document.addEventListener('DOMContentLoaded', function () {
   config.src.main.render = getParam('render');
   config.src.Detection.backURL = getParam('backURL');
   if (getParam('testTime')) config.src.Detection.testTime = parseFloat(getParam('testTime'));
+  if (getParam('maxBackDelay')) config.src.Detection.maxBackDelay = parseFloat(getParam('maxBackDelay'));
   if (getParam('backURL') !== null) {
     //backURL需要将autoMove参数传回
     var backURL = getParam('backURL');
@@ -61485,7 +61488,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61544" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62224" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

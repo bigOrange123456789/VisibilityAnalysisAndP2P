@@ -219,22 +219,22 @@ export class Detection {//需要服务器
         }
         console.log(data)
         var oReq = new XMLHttpRequest();
-        oReq.open("POST", this.dectionURL, true);
+        oReq.open("POST", self.dectionURL, true);
         oReq.responseType = "arraybuffer";
         oReq.onload = function () {//接收数据
             var unitArray=new Uint8Array(oReq.response) //网络传输基于unit8Array
             var str=String.fromCharCode.apply(null,unitArray)//解析为文本
             console.log(str)
             if(self.config.backURL!==null)
-                setTimeout(()=>{
                     location.href=self.config.backURL
-                },Math.random()*10*1000)
             else alert("测试完成，感谢您的配合！")
             // window.location.href="https://smart3d.tongji.edu.cn/cn/index.htm"
             //window.opener = null;//为了不出现提示框
             // window.close();//关闭窗口//完成测试，关闭窗口
             // window.location.href="http://58.34.91.211:28081/?scene=KaiLiNan&useP2P=true&useP2P=true&needDetection=true&onlyP2P=true"
         };
-        oReq.send(JSON.stringify(data));//发送请求
+        setTimeout(()=>{
+            oReq.send(JSON.stringify(data));//返回实验结果
+        },Math.random()*self.config.maxBackDelay*1000)
     }
 }

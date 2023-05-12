@@ -99,6 +99,54 @@ class Viewpoint:#单个视点的可见度信息
                         # print(d[componetId])
                         all[componetId]=d[componetId]
             self.data["all"]=all
+    def load3(self,path):
+        # arr=path.split("/")
+        # name=arr[len(arr)-1].split(".json")[0]
+        # # print(name)
+        # self.name=name
+        # import json
+        # with open(path, 'r') as f:
+        #     json_data = json.load(f)
+        #     self.data=json_data
+        #     all={}
+        #     # print(path)
+        #     for direction in self.data:
+        #         d=self.data[direction]
+        #         for componetId in d:
+        #             if componetId in all:
+        #                 all[componetId]+=d[componetId]
+        #             else:
+        #                 # print(type(componetId))
+        #                 # print(componetId)
+        #                 # print(d)
+        #                 # print(d[componetId])
+        #                 all[componetId]=d[componetId]
+        #     self.data["all"]=all
+        def test(d):
+            if d==None:
+                return {}
+            d2={}
+            for i in d:
+                i2=i.split(",")[0]
+                d2[i2]=0
+            for i in d:
+                i2=i.split(",")[0]
+                d2[i2]+=d[i]
+            return d2
+        import json
+        position = {}
+        with open(path) as f:
+                    json_data = json.load(f)
+                    
+                    position[str(1+1)]=test(json_data[0])
+                    position[str(1+0)]=test(json_data[1])
+
+                    position[str(1+3)]=test(json_data[2])
+                    position[str(1+2)]=test(json_data[3])
+
+                    position[str(1+5)]=test(json_data[4])
+                    position[str(1+4)]=test(json_data[5])
+        self.data["all"]=position
     def save(self,path_pre):
         import json
         json_str = json.dumps(self.data)
