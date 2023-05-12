@@ -146,7 +146,7 @@ export class Visibility{
                 .sort((a, b) => b.value - a.value)
             let i=0  
             for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-            console.log(i)
+            console.log("不加载数量:",i)
             const list2=[]
             for(let j=0;j<list.length-i;j++)
                 list2.push(
@@ -181,7 +181,14 @@ export class Visibility{
                 const vd5=i in visualList0["5"]?visualList0["5"][i]:0
                 const vd6=i in visualList0["6"]?visualList0["6"][i]:0
                 this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
-                // this.meshes[i].visible= this.vd[i]>0
+                if(this.meshes[i].lod){
+                    for(let j=0;j<this.meshes[i].lod.length;j++)    
+                        this.meshes[i].lod[j].visible=false
+                    if(this.vd[i]>Math.PI/(6*400))this.meshes[i].lod[1].visible=true//this.meshes[i].lod[0].visible=true
+                    else if(this.vd[i]>0)         this.meshes[i].lod[0].visible=true
+                }else{
+                    this.meshes[i].visible= this.vd[i]>0
+                }
                 this.meshes[i].used=true//这个mesh被使用了
             } 
             window.visibleArea={}

@@ -255,6 +255,7 @@ export class SamplePointList{
         return arrowHelper
     }
     createList(c){
+        console.log(c)
         let self=this
         const list=[]
         const list2=[]
@@ -273,7 +274,7 @@ export class SamplePointList{
             }
             i++
         }
-        const index=0
+        let index=0
         i=0
         for(let x=c.x[0];x<=c.x[1];x=x+c.x[2]){
             let j=0
@@ -294,6 +295,7 @@ export class SamplePointList{
                     sphere.vvd=self.vvd[sphere.name]
                     list.push(sphere)
                     self.parentGroup.add( sphere )
+                    index++
                     list2[i][j][k]=sphere
                     if(self.voxel)
                         if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
@@ -303,6 +305,7 @@ export class SamplePointList{
             }
             i++
         }
+        console.log("index",index)
         self.list2=list2
 
         

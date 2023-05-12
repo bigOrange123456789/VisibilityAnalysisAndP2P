@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy
+            )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -299,11 +299,13 @@ export class Building{
         console.log("path",path)
         loader.load(path, function (gltf) {
             let matrices_all=""
+            let colorList=[]
             gltf.scene.traverse(o=>{
                 if(o instanceof THREE.Mesh){                    
                     const mesh=o
                     // console.log()
                     mesh.myId=self.meshes.length
+                    colorList.push(self.getColor2(mesh))
                     
                     if(self.config.updateColor){
                         let t=mesh.myId*256*256*256/2665
@@ -318,7 +320,7 @@ export class Building{
                     // mesh.material.transparent=true
 
                     // 获取材质对象
-                    if (mesh.material.map) {//水彩风场景
+                    if(false)if (mesh.material.map) {//水彩风场景
                         var canvas=new PicHandle().getCanvas( mesh.material.map.image);
                         const color=self.getColor(canvas)
                         mesh.material = new THREE.MeshStandardMaterial({ 
@@ -384,6 +386,8 @@ export class Building{
                     matrices_all=matrices_all+"[], "
                 }
             })
+            console.log("colorList",colorList)
+            self.saveJson(colorList,"colorList.json")
             // self.config.isdoor={}
             // for(let i=0;i<self.meshes.length;i++){
             //     self.config.isdoor[""+i]=
@@ -601,12 +605,6 @@ export class Building{
         for(let i=0;i<arr.length;i++){
             scene.add(this.mesh2load(arr[i]))
         }
-        // const self=this
-        // let scene=new THREE.Scene()
-        // scene0.traverse(o=>{
-        //     if(o instanceof THREE.Mesh)
-        //         scene.add(self.mesh2load(o))
-        // })
         new GLTFExporter().parse(scene,function(result){
             var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
             let link = document.createElement('a')
@@ -614,6 +612,15 @@ export class Building{
             link.download = name
             link.click()
         })
+    }
+    saveJson(data,name){
+        const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
+        
+        const myBlob = new Blob([jsonData], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(myBlob)
+        link.download = name
+        link.click()
     }
     InY(mesh,ymin,ymax){
         var box = new THREE.Box3().setFromObject(mesh)
@@ -639,8 +646,15 @@ export class Building{
         g=Math.floor(g/n);
         b=Math.floor(b/n);
         var color=(r*256*256+g*256+b);//.toString(16);
-        console.log(color.toString(16));
+        // console.log(color.toString(16));
         return color;
+    }
+    getColor2(mesh){
+        if(mesh.material.map){
+            let canvas=new PicHandle().getCanvas( mesh.material.map.image);
+            return this.getColor(canvas)
+        }else return 0xFFFFFF
+        
     }
 }
 

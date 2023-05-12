@@ -42,10 +42,14 @@ export class Building{
     loadConfigInstance(cb){
         const self=this
         if(this.config.instanceUse){
+            this.parentGroup2=new THREE.Group()//用于Lod
+            this.parentGroup.add(this.parentGroup2)
             this.loadJson(
-                this.config.path+"instance_info.json",
+                this.config.path+"info.json",
                 data=>{
-                    self.instance_info=data
+                    console.log(data)
+                    self.instance_info=data.instanceMatrix
+                    self.colorList=data.colorList
                     cb()
                 }
             )
@@ -114,6 +118,55 @@ export class Building{
             flag=!flag 
         },500)
     }
+    getInstancedMesh(geometry,material,instance_info){
+        const mesh=new THREE.InstancedMesh(
+            geometry,
+            material,
+            instance_info.length+1
+        )
+        for(let i=0;i<instance_info.length;i++){
+            const mat=instance_info[i]
+            mesh.setMatrixAt(
+                i,
+                new THREE.Matrix4().set(
+                    mat[0], mat[1], mat[2], mat[3],
+                    mat[4], mat[5], mat[6], mat[7],
+                    mat[8], mat[9], mat[10], mat[11],
+                    0, 0, 0, 1
+                )
+            )
+        }
+        return mesh
+    }
+    getInstancedMesh(geometry,material,instance_info){
+        const mesh=new THREE.InstancedMesh(
+            geometry,
+            material,
+            instance_info.length+1
+        )
+        for(let i=0;i<instance_info.length;i++){
+            const mat=instance_info[i]
+            mesh.setMatrixAt(
+                i,
+                new THREE.Matrix4().set(
+                    mat[0], mat[1], mat[2], mat[3],
+                    mat[4], mat[5], mat[6], mat[7],
+                    mat[8], mat[9], mat[10], mat[11],
+                    0, 0, 0, 1
+                )
+            )
+        }
+        mesh.setMatrixAt(
+            instance_info.length,
+            new THREE.Matrix4().fromArray( [
+                1,0,0,0,
+                0,1,0,0,
+                0,0,1,0,
+                0,0,0,1
+            ] )
+        )
+        return mesh
+    }
     addMesh(id,mesh){
         if(this.config.updateColor){
             mesh.geometry.computeVertexNormals()
@@ -143,43 +196,33 @@ export class Building{
         // mesh.material.color.r=1.*((t&0xff)    )/255
         // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
         // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
-        
         if(this.instance_info){
+            mesh.materialOld=mesh.material
+            const color=this.colorList[id]
             const mesh0=mesh
             const instance_info=this.instance_info[id]
-            mesh=new THREE.InstancedMesh(
-                mesh.geometry,
-                mesh.material,
-                instance_info.length+1
-            )
-            for(let i=0;i<instance_info.length;i++){
-                const mat=instance_info[i]
-                mesh.setMatrixAt(
-                    i,
-                    new THREE.Matrix4().set(
-                        mat[0], mat[1], mat[2], mat[3],
-                        mat[4], mat[5], mat[6], mat[7],
-                        mat[8], mat[9], mat[10], mat[11],
-                        0, 0, 0, 1
-                    )
-                )
-            }
-            mesh.setMatrixAt(
-                instance_info.length,
-                new THREE.Matrix4().fromArray( [
-                    1,0,0,0,
-                    0,1,0,0,
-                    0,0,1,0,
-                    0,0,0,1
-                ] )
-            )
+            const geometry=mesh.geometry
+            const mesh2=this.getInstancedMesh(geometry,mesh.material,instance_info)
+            mesh2.visible=false
+            mesh=this.getInstancedMesh(
+                geometry,
+                new THREE.MeshStandardMaterial({ 
+                    color:color ,
+                    metalness: 0.5
+                }),
+                instance_info)
+            
+            mesh.lod=[mesh,mesh2]
+            this.parentGroup2.add(mesh2)
             mesh.used      =mesh0.used
             mesh.LoadDelay =mesh0.LoadDelay
             mesh.originType=mesh0.originType
             mesh.delay     =mesh0.delay
         }
 
-        this.meshes[id]=mesh
+        setTimeout(()=>{
+            self.meshes[id]=mesh
+        },1000)
         this.parentGroup.add(mesh)
         this.visibiity.prePoint2=""//重新进行可见剔除
 

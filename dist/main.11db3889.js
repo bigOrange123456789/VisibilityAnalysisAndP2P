@@ -42093,7 +42093,7 @@ var Visibility = /*#__PURE__*/function () {
         });
         var i = 0;
         for (var sum = 0; i < list.length && sum < 4 * Math.PI / 300; i++, sum = sum + list[list.length - 1 - i].value);
-        console.log(i);
+        console.log("不加载数量:", i);
         var list2 = [];
         for (var j = 0; j < list.length - i; j++) list2.push(list[j].index);
         if (list2.length > 0) this.loading(list2);
@@ -42126,7 +42126,13 @@ var Visibility = /*#__PURE__*/function () {
           var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
           var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
           this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          // this.meshes[i].visible= this.vd[i]>0
+          if (this.meshes[i].lod) {
+            for (var j = 0; j < this.meshes[i].lod.length; j++) this.meshes[i].lod[j].visible = false;
+            if (this.vd[i] > Math.PI / (6 * 400)) this.meshes[i].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
+            else if (this.vd[i] > 0) this.meshes[i].lod[0].visible = true;
+          } else {
+            this.meshes[i].visible = this.vd[i] > 0;
+          }
           this.meshes[i].used = true; //这个mesh被使用了
         }
 
@@ -52639,8 +52645,12 @@ var Building = /*#__PURE__*/function () {
     value: function loadConfigInstance(cb) {
       var self = this;
       if (this.config.instanceUse) {
-        this.loadJson(this.config.path + "instance_info.json", function (data) {
-          self.instance_info = data;
+        this.parentGroup2 = new THREE.Group(); //用于Lod
+        this.parentGroup.add(this.parentGroup2);
+        this.loadJson(this.config.path + "info.json", function (data) {
+          console.log(data);
+          self.instance_info = data.instanceMatrix;
+          self.colorList = data.colorList;
           cb();
         });
       } else cb();
@@ -52711,6 +52721,17 @@ var Building = /*#__PURE__*/function () {
       }, 500);
     }
   }, {
+    key: "getInstancedMesh",
+    value: function getInstancedMesh(geometry, material, instance_info) {
+      var mesh = new THREE.InstancedMesh(geometry, material, instance_info.length + 1);
+      for (var i = 0; i < instance_info.length; i++) {
+        var mat = instance_info[i];
+        mesh.setMatrixAt(i, new THREE.Matrix4().set(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], 0, 0, 0, 1));
+      }
+      mesh.setMatrixAt(instance_info.length, new THREE.Matrix4().fromArray([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
+      return mesh;
+    }
+  }, {
     key: "addMesh",
     value: function addMesh(id, mesh) {
       if (this.config.updateColor) {
@@ -52742,22 +52763,28 @@ var Building = /*#__PURE__*/function () {
       // mesh.material.color.r=1.*((t&0xff)    )/255
       // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
       // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
-
       if (this.instance_info) {
+        mesh.materialOld = mesh.material;
+        var color = this.colorList[id];
         var mesh0 = mesh;
         var instance_info = this.instance_info[id];
-        mesh = new THREE.InstancedMesh(mesh.geometry, mesh.material, instance_info.length + 1);
-        for (var i = 0; i < instance_info.length; i++) {
-          var mat = instance_info[i];
-          mesh.setMatrixAt(i, new THREE.Matrix4().set(mat[0], mat[1], mat[2], mat[3], mat[4], mat[5], mat[6], mat[7], mat[8], mat[9], mat[10], mat[11], 0, 0, 0, 1));
-        }
-        mesh.setMatrixAt(instance_info.length, new THREE.Matrix4().fromArray([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]));
+        var geometry = mesh.geometry;
+        var mesh2 = this.getInstancedMesh(geometry, mesh.material, instance_info);
+        mesh2.visible = false;
+        mesh = this.getInstancedMesh(geometry, new THREE.MeshStandardMaterial({
+          color: color,
+          metalness: 0.5
+        }), instance_info);
+        mesh.lod = [mesh, mesh2];
+        this.parentGroup2.add(mesh2);
         mesh.used = mesh0.used;
         mesh.LoadDelay = mesh0.LoadDelay;
         mesh.originType = mesh0.originType;
         mesh.delay = mesh0.delay;
       }
-      this.meshes[id] = mesh;
+      setTimeout(function () {
+        self.meshes[id] = mesh;
+      }, 1000);
       this.parentGroup.add(mesh);
       this.visibiity.prePoint2 = ""; //重新进行可见剔除
 
@@ -53112,10 +53139,10 @@ module.exports = {
         }
       },
       "createSphere": {
-        "x": [-815, 879, 11],
-        "y": [16, 16, 11],
-        "z": [-962, 1084, 11],
-        "r": 3
+        "x": [-880, 880, 110],
+        "y": [-110, 440, 110],
+        "z": [-990, 1100, 110],
+        "r": 30
       },
       "kernelPosition": "-110,40,-10",
       "entropy": {},
