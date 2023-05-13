@@ -1,5 +1,5 @@
 export class Visibility{
-    constructor(areaInf,camera,loading,meshes) {
+    constructor(camera,loading,meshes) {
         this.config=window.configALL.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
@@ -78,6 +78,7 @@ export class Visibility{
             })
             this.visualList_request[i]={}
         }
+        console.log("this.areaInfList",this.areaInfList)
         return this.areaInfList
     }
     getDirection(){
@@ -219,54 +220,6 @@ export class Visibility{
             // if(list.length>0)this.loading(list)
         }
     }
-    getListOld(){
-        let vd_had=0
-        let vd_hading=0
-        const arr=this.getPosIndex()[4]
-        const posIndex=this.getPosIndex()[3]
-        const visualList0=this.visualList[posIndex]
-        if(visualList0){
-            const d=this.getDirection()
-            for(let i=0;i<this.componentNum;i++){
-                const vd1=i in visualList0["1"]?visualList0["1"][i]:0
-                const vd2=i in visualList0["2"]?visualList0["2"][i]:0
-                const vd3=i in visualList0["3"]?visualList0["3"][i]:0
-                const vd4=i in visualList0["4"]?visualList0["4"][i]:0
-                const vd5=i in visualList0["5"]?visualList0["5"][i]:0
-                const vd6=i in visualList0["6"]?visualList0["6"][i]:0
-                this.vd[i]=vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5]
-                if(Object.keys(this.meshes).length!==0&&this.meshes[i]){
-                    vd_had+=this.vd[i]
-                }else vd_hading+=this.vd[i]
-            } 
-            document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
-            
-            // let list=this.vd.map((value, index) => ({ value, index }))
-            //     .filter(item => item.value > 0)
-            //     .sort((a, b) => b.value - a.value)
-            // let i=0  
-            // for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-            // console.log("不加载数量:",i)
-            // const list2=[]
-            // for(let j=0;j<list.length-i;j++)
-            //     list2.push(
-            //         list[j].index
-            //     )
-            // if(list2.length>0)this.loading(list2)
-            list.filter((value, index) => index<list.length-i )
-            console.log(list.length)
-            list=list.map((value, index) => value.index )
-            if(list.length>0)this.loading(list)
-
-            const list=this.vd.map((value, index) => ({ value, index }))
-                .filter(item => item.value > 4*Math.PI/600)
-                .sort((a, b) => b.value - a.value)
-                .map((value, index) => value.index )
-            if(list.length>0)this.loading(list)
-        }else{
-            this.request(posIndex)
-        }
-    }
     showOnlyEvs(){
         const posIndex=this.getPosIndex()[3]
         const visualList0=this.visualList[posIndex]
@@ -327,7 +280,32 @@ export class Visibility{
             this.visualList_request[areaId][posIndex]=true//已经完成了请求
         }
     }
-    getPosIndex(){
+    setArea(){
+        if(this.areaInfList.length<=1)return
+        const k=2
+        const areaInf=this.areaInfList[0]
+        const c=this.camera
+        var x=c.position.x
+        var y=c.position.y
+        var z=c.position.z
+        let min =areaInf.min
+        let max =areaInf.max
+        let step=[
+           (max[0]-min[0])/areaInf.step[0],
+           (max[0]-min[0])/areaInf.step[0],
+           (max[0]-min[0])/areaInf.step[0] 
+        ]
+        if( x<=max[0]+step[0]*k&&
+            y<=max[1]+step[1]*k&&
+            z<=max[2]+step[2]*k&&
+            x>=min[0]-step[0]*k&&
+            y>=min[1]-step[1]*k&&
+            z>=min[2]-step[2]*k){
+              this.areaInf=this.areaInfList[0]
+        }else this.areaInf=this.areaInfList[1]
+    }
+    getPosIndex(){//加载和剔除都调用这个函数
+        this.setArea()
         const self=this
         let min =this.areaInf.min
         let step=this.areaInf.step

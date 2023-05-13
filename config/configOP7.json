@@ -1317,7 +1317,28 @@
             "useIndirectMaterial":false
         },
         "Visibility":{
+            "areaInfList":[
+                {
+                    "x": [
+                        -124000,
+                        126000,
+                        2000
+                    ],
+                    "y": [
+                        -19000,
+                        3000,
+                        2000
+                    ],
+                    "z": [
+                        -20000,
+                        24000,
+                        2000
+                    ],
+                    "r": 250
+                }
+            ],
             "componentNum":8437,
+            "sceneId":"haiNing",
             "urlVdServer":"http://39.98.206.0:8091"
         },
         "P2P":{

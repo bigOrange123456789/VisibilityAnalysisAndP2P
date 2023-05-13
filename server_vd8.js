@@ -76,6 +76,10 @@ class VD{
     return vdList
   } 
   static getEvd(info,vdList){
+    if(typeof info.sceneId=="undefined"||typeof info.areaId=="undefined"){
+      console.log("系统版本未更新")
+      return null
+    }
     const id=info.sceneId+"&"+info.areaId
     const posIndex=info.posIndex
     for(let i=0;i<vdList.length;i++){
@@ -102,6 +106,23 @@ const configList=[
         11
     ],
     path:"dist/assets/configVVD-model8.json"
+  },
+  {
+    sceneId:"gkd",
+    areaId:1,
+    "x": [
+      -880,880,
+      110
+    ],
+    "y": [
+      -110,440,
+      110
+    ],
+    "z": [
+      -990,1100,
+      110
+    ],
+    path:"dist/assets/configVVD-model8_1.json"
   }
 ]
 const vdList=VD.getVdList(configList)
@@ -135,7 +156,7 @@ server.on('error',()=>{
   console.log('服务发送错误')
 })
 server.on('connection',()=>{
-  console.log('服务连接')
+  // console.log('服务连接')
 })
 server.on('timeout',()=>{
   // console.log("监听超时")

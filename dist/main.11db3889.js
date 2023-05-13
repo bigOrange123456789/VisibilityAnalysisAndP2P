@@ -1425,7 +1425,14 @@ module.exports = {
       "useIndirectMaterial": false
     },
     "Visibility": {
+      "areaInfList": [{
+        "x": [-124000, 126000, 2000],
+        "y": [-19000, 3000, 2000],
+        "z": [-20000, 24000, 2000],
+        "r": 250
+      }],
       "componentNum": 8437,
+      "sceneId": "haiNing",
       "urlVdServer": "http://39.98.206.0:8091"
     },
     "P2P": {
@@ -1508,7 +1515,7 @@ module.exports = {
       }],
       "componentNum": 8437,
       "sceneId": "gkd",
-      "urlVdServer": "http://localhost:8092"
+      "urlVdServer": "http://39.98.206.0:8092"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -1543,7 +1550,7 @@ module.exports = {
         "far": 5000000
       },
       "speed": 1,
-      "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 1000], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 1000], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 1000], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 1000], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 100], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 1000]]]
+      "pathList": [[[-319.6, 16, 323.7, 0.02918, -0.55761, 0.01544, 1000], [591.93, 16, 822.12, -0.10697, -0.13106, -0.01404, 1000], [582.89, 16, 276.7, -0.91251, 1.36726, 0.90238, 1000], [-280.14, 16, -348.47, -2.94175, 0.65863, 3.01825, 1000], [-513.14, 16, 218.88, -1.88176, -1.34183, -1.88954, 1000]], [[-189.95, 16, 100.24, 0.23055, -1.0422, 0.19998, 400], [-225.81, 16, 127.96, -0.40937, 1.18932, 0.38282, 400], [-213.92, 16, 124.52, 2.76118, 0.32149, -3.01591, 400], [-202.68, 16, 148.35, 2.98131, -0.69426, 3.03852, 400], [-180.49, 16, 137.66, 2.85998, -1.06578, 2.89362, 400]], [[367.2, 16, 158.85, -0.05537, 0.19391, 0.01067, 500], [99.57, 16, 6.67, -0.04714, -0.69825, -0.03032, 500], [115.29, 16, -89.77, -0.0476, -0.83023, -0.03514, 500], [206.55, 16, -231.95, -0.05909, -0.58999, -0.03291, 500], [220.24, 16, -245.17, -3.1263, 0.39615, 3.13568, 500], [375.49, 16, -135.39, -2.98791, 1.23755, 2.99623, 500]], [[-319.6, 109, 323.7, -0.29508, -0.42497, -0.12467, 500], [-409, 194, -124.99, -2.06887, -0.63945, -2.30981, 500], [12.18, 51, -249.16, -2.89361, 0.51577, 3.01735, 500], [175.03, 160, 161.54, -1.0049, 0.93136, 0.9012, 500], [-127.59, 203, 342.06, -0.71629, 0.08492, 0.0737, 500]], [[-54.24, 67.47, 536.29, -0.35898, -0.91304, -0.28866, 1000], [15.42, 116.47, 426.93, -1.05329, -0.72979, -0.86409, 1000], [119.47, 91.47, 261.82, -2.72287, -0.25226, -3.03097, 1000], [400.55, 35.47, 387.25, -2.90946, 0.99669, 2.94563, 1000], [443.93, 104.47, 628.71, -0.57412, 0.94628, 0.48321, 1000], [302.1, 49.47, 735.77, -0.11218, 0.23612, 0.02634, 1000]]]
     }
   }
 };
@@ -41916,14 +41923,13 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Visibility = void 0;
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var Visibility = /*#__PURE__*/function () {
-  function Visibility(areaInf, camera, loading, meshes) {
+  function Visibility(camera, loading, meshes) {
     _classCallCheck(this, Visibility);
     this.config = window.configALL.src.Visibility;
     this.urlVdServer = this.config.urlVdServer; //"http://150.158.24.191:8091"
@@ -41990,16 +41996,17 @@ var Visibility = /*#__PURE__*/function () {
     value: function initAreaInfList() {
       this.areaInfList = [];
       this.visualList_request = {}; //记录资源列表的请求是否已经发送
-      for (var _i = 0; _i < this.config.areaInfList.length; _i++) {
-        var c = this.config.areaInfList[_i];
+      for (var i = 0; i < this.config.areaInfList.length; i++) {
+        var c = this.config.areaInfList[i];
         this.areaInfList.push({
           "min": [c.x[0], c.y[0], c.z[0]],
           "max": [c.x[1], c.y[1], c.z[1]],
           "step": [(c.x[1] - c.x[0]) / c.x[2], (c.y[1] - c.y[0]) / c.y[2], (c.z[1] - c.z[0]) / c.z[2]],
-          areaId: _i
+          areaId: i
         });
-        this.visualList_request[_i] = {};
+        this.visualList_request[i] = {};
       }
+      console.log("this.areaInfList", this.areaInfList);
       return this.areaInfList;
     }
   }, {
@@ -42103,8 +42110,8 @@ var Visibility = /*#__PURE__*/function () {
       var posIndexAll = this.getPosIndex();
       var arr = posIndexAll[5];
       var loaded = true;
-      for (var _i2 = 0; _i2 < arr.length; _i2++) {
-        var posIndex0 = arr[_i2][3];
+      for (var i = 0; i < arr.length; i++) {
+        var posIndex0 = arr[i][3];
         if (!this.visualList[posIndex0]) {
           loaded = false;
           this.request(posIndex0);
@@ -42115,31 +42122,31 @@ var Visibility = /*#__PURE__*/function () {
       if (loaded) {
         // const posIndex=posIndexAll[3]
         var d = this.getDirection();
-        var _loop = function _loop(_i3) {
+        var _loop = function _loop(_i) {
           var getVD = function getVD(j) {
             var posIndex = arr[j][3];
             var weight = arr[j][4];
             var visualList0 = self.visualList[posIndex];
-            var vd1 = _i3 in visualList0["1"] ? visualList0["1"][_i3] : 0;
-            var vd2 = _i3 in visualList0["2"] ? visualList0["2"][_i3] : 0;
-            var vd3 = _i3 in visualList0["3"] ? visualList0["3"][_i3] : 0;
-            var vd4 = _i3 in visualList0["4"] ? visualList0["4"][_i3] : 0;
-            var vd5 = _i3 in visualList0["5"] ? visualList0["5"][_i3] : 0;
-            var vd6 = _i3 in visualList0["6"] ? visualList0["6"][_i3] : 0;
+            var vd1 = _i in visualList0["1"] ? visualList0["1"][_i] : 0;
+            var vd2 = _i in visualList0["2"] ? visualList0["2"][_i] : 0;
+            var vd3 = _i in visualList0["3"] ? visualList0["3"][_i] : 0;
+            var vd4 = _i in visualList0["4"] ? visualList0["4"][_i] : 0;
+            var vd5 = _i in visualList0["5"] ? visualList0["5"][_i] : 0;
+            var vd6 = _i in visualList0["6"] ? visualList0["6"][_i] : 0;
             // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
             return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
           };
 
           // this.vd[i]=getVD(posIndex)//posIndexAll[3]
-          _this2.vd[_i3] = 0;
+          _this2.vd[_i] = 0;
           for (var _j = 0; _j < arr.length; _j++) {
             // console.log()
-            _this2.vd[_i3] += getVD(_j);
+            _this2.vd[_i] += getVD(_j);
           }
-          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i3]) vd_had += _this2.vd[_i3];else vd_hading += _this2.vd[_i3];
+          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i]) vd_had += _this2.vd[_i];else vd_hading += _this2.vd[_i];
         };
-        for (var _i3 = 0; _i3 < this.componentNum; _i3++) {
-          _loop(_i3);
+        for (var _i = 0; _i < this.componentNum; _i++) {
+          _loop(_i);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -42153,12 +42160,12 @@ var Visibility = /*#__PURE__*/function () {
           return b.value - a.value;
         });
         if (false) {
-          var _i4 = 0;
+          var _i2 = 0;
           // console.log(list,list.length)
-          for (var sum = 0; _i4 < list.length && sum < 4 * Math.PI / 300; _i4++, sum = sum + list[list.length - 1 - _i4].value); //console.log(i);
-          console.log("不加载数量:", _i4);
+          for (var sum = 0; _i2 < list.length && sum < 4 * Math.PI / 300; _i2++, sum = sum + list[list.length - 1 - _i2].value); //console.log(i);
+          console.log("不加载数量:", _i2);
           var list2 = [];
-          for (var j = 0; j < list.length - _i4; j++) list2.push(list[j].index);
+          for (var j = 0; j < list.length - _i2; j++) list2.push(list[j].index);
           list = list2;
         } else {
           list = list.map(function (value, index) {
@@ -42179,94 +42186,33 @@ var Visibility = /*#__PURE__*/function () {
       }
     }
   }, {
-    key: "getListOld",
-    value: function getListOld() {
-      var vd_had = 0;
-      var vd_hading = 0;
-      var arr = this.getPosIndex()[4];
-      var posIndex = this.getPosIndex()[3];
-      var visualList0 = this.visualList[posIndex];
-      if (visualList0) {
-        var d = this.getDirection();
-        for (var _i5 = 0; _i5 < this.componentNum; _i5++) {
-          var vd1 = _i5 in visualList0["1"] ? visualList0["1"][_i5] : 0;
-          var vd2 = _i5 in visualList0["2"] ? visualList0["2"][_i5] : 0;
-          var vd3 = _i5 in visualList0["3"] ? visualList0["3"][_i5] : 0;
-          var vd4 = _i5 in visualList0["4"] ? visualList0["4"][_i5] : 0;
-          var vd5 = _i5 in visualList0["5"] ? visualList0["5"][_i5] : 0;
-          var vd6 = _i5 in visualList0["6"] ? visualList0["6"][_i5] : 0;
-          this.vd[_i5] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i5]) {
-            vd_had += this.vd[_i5];
-          } else vd_hading += this.vd[_i5];
-        }
-        document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
-
-        // let list=this.vd.map((value, index) => ({ value, index }))
-        //     .filter(item => item.value > 0)
-        //     .sort((a, b) => b.value - a.value)
-        // let i=0  
-        // for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-        // console.log("不加载数量:",i)
-        // const list2=[]
-        // for(let j=0;j<list.length-i;j++)
-        //     list2.push(
-        //         list[j].index
-        //     )
-        // if(list2.length>0)this.loading(list2)
-        list.filter(function (value, index) {
-          return index < list.length - i;
-        });
-        console.log(list.length);
-        list.map(function (value, index) {
-          return value.index;
-        }), _readOnlyError("list");
-        if (list.length > 0) this.loading(list);
-        var list = this.vd.map(function (value, index) {
-          return {
-            value: value,
-            index: index
-          };
-        }).filter(function (item) {
-          return item.value > 4 * Math.PI / 600;
-        }).sort(function (a, b) {
-          return b.value - a.value;
-        }).map(function (value, index) {
-          return value.index;
-        });
-        if (list.length > 0) this.loading(list);
-      } else {
-        this.request(posIndex);
-      }
-    }
-  }, {
     key: "showOnlyEvs",
     value: function showOnlyEvs() {
       var posIndex = this.getPosIndex()[3];
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
         var d = this.getDirection();
-        for (var _i6 = 0; _i6 < this.componentNum; _i6++) if (this.meshes[_i6]) {
-          var vd1 = _i6 in visualList0["1"] ? visualList0["1"][_i6] : 0;
-          var vd2 = _i6 in visualList0["2"] ? visualList0["2"][_i6] : 0;
-          var vd3 = _i6 in visualList0["3"] ? visualList0["3"][_i6] : 0;
-          var vd4 = _i6 in visualList0["4"] ? visualList0["4"][_i6] : 0;
-          var vd5 = _i6 in visualList0["5"] ? visualList0["5"][_i6] : 0;
-          var vd6 = _i6 in visualList0["6"] ? visualList0["6"][_i6] : 0;
-          this.vd[_i6] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (this.meshes[_i6].lod) {
-            for (var j = 0; j < this.meshes[_i6].lod.length; j++) this.meshes[_i6].lod[j].visible = false;
-            if (this.vd[_i6] > Math.PI / (6 * 400)) this.meshes[_i6].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
-            else if (this.vd[_i6] > 0) this.meshes[_i6].lod[0].visible = true;
+        for (var i = 0; i < this.componentNum; i++) if (this.meshes[i]) {
+          var vd1 = i in visualList0["1"] ? visualList0["1"][i] : 0;
+          var vd2 = i in visualList0["2"] ? visualList0["2"][i] : 0;
+          var vd3 = i in visualList0["3"] ? visualList0["3"][i] : 0;
+          var vd4 = i in visualList0["4"] ? visualList0["4"][i] : 0;
+          var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
+          var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
+          this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (this.meshes[i].lod) {
+            for (var j = 0; j < this.meshes[i].lod.length; j++) this.meshes[i].lod[j].visible = false;
+            if (this.vd[i] > Math.PI / (6 * 400)) this.meshes[i].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
+            else if (this.vd[i] > 0) this.meshes[i].lod[0].visible = true;
           } else {
-            this.meshes[_i6].visible = this.vd[_i6] > 0;
+            this.meshes[i].visible = this.vd[i] > 0;
           }
-          this.meshes[_i6].used = true; //这个mesh被使用了
+          this.meshes[i].used = true; //这个mesh被使用了
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i7 = 0; _i7 < visualList0["a"].length; _i7++) {
-          window.visibleArea[visualList0["a"][_i7]] = true;
+        if (visualList0["a"]) for (var _i3 = 0; _i3 < visualList0["a"].length; _i3++) {
+          window.visibleArea[visualList0["a"][_i3]] = true;
         }
       }
     }
@@ -42304,9 +42250,28 @@ var Visibility = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "setArea",
+    value: function setArea() {
+      if (this.areaInfList.length <= 1) return;
+      var k = 2;
+      var areaInf = this.areaInfList[0];
+      var c = this.camera;
+      var x = c.position.x;
+      var y = c.position.y;
+      var z = c.position.z;
+      var min = areaInf.min;
+      var max = areaInf.max;
+      var step = [(max[0] - min[0]) / areaInf.step[0], (max[0] - min[0]) / areaInf.step[0], (max[0] - min[0]) / areaInf.step[0]];
+      if (x <= max[0] + step[0] * k && y <= max[1] + step[1] * k && z <= max[2] + step[2] * k && x >= min[0] - step[0] * k && y >= min[1] - step[1] * k && z >= min[2] - step[2] * k) {
+        this.areaInf = this.areaInfList[0];
+      } else this.areaInf = this.areaInfList[1];
+    }
+  }, {
     key: "getPosIndex",
     value: function getPosIndex() {
       var _this3 = this;
+      //加载和剔除都调用这个函数
+      this.setArea();
       var self = this;
       var min = this.areaInf.min;
       var step = this.areaInf.step;
@@ -42346,12 +42311,12 @@ var Visibility = /*#__PURE__*/function () {
       var y = c.position.y;
       var z = c.position.z;
       var arr = [];
-      for (var _i8 = -1; _i8 < 2; _i8 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i8 * dl[0], y + j * dl[1], z + k * dl[2]));
+      for (var _i4 = -1; _i4 < 2; _i4 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i4 * dl[0], y + j * dl[1], z + k * dl[2]));
       var a0 = getPosIndex0(x, y, z);
       arr.push(a0);
       var sum = 0;
-      for (var _i9 = 0; _i9 < arr.length; _i9++) sum += arr[_i9][4];
-      if (sum !== 0) for (var _i10 = 0; _i10 < arr.length; _i10++) arr[_i10][4] / sum;
+      for (var _i5 = 0; _i5 < arr.length; _i5++) sum += arr[_i5][4];
+      if (sum !== 0) for (var _i6 = 0; _i6 < arr.length; _i6++) arr[_i6][4] / sum;
       a0.push(arr);
       return a0;
     }
@@ -53117,13 +53082,8 @@ var Building = /*#__PURE__*/function () {
       //     self.load("sponza")
       // })
       // return
-      var c = this.config.createSphere;
-      this.visibiity = new _Visibility.Visibility({
-        "min": [c.x[0], c.y[0], c.z[0]],
-        "max": [c.x[1], c.y[1], c.z[1]],
-        "step": [(c.x[1] - c.x[0]) / c.x[2], (c.y[1] - c.y[0]) / c.y[2], (c.z[1] - c.z[0]) / c.z[2]]
-      }, camera, function (list) {
-        self.loading(list);
+      this.visibiity = new _Visibility.Visibility(camera, function (list) {
+        return self.loading(list);
       }, this.meshes);
     }
   }, {

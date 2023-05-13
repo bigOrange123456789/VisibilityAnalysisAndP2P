@@ -93,21 +93,9 @@ export class Building{
         //     self.load("sponza")
         // })
         // return
-        let c=this.config.createSphere
         this.visibiity=new Visibility(
-            {
-                "min": [c.x[0],c.y[0],c.z[0]],
-                "max": [c.x[1],c.y[1],c.z[1]],
-                "step": [
-                    (c.x[1]-c.x[0])/c.x[2],
-                    (c.y[1]-c.y[0])/c.y[2],
-                    (c.z[1]-c.z[0])/c.z[2]
-                ]
-            },
             camera,
-            list=>{
-                self.loading(list)
-            },
+            list=>self.loading(list),
             this.meshes
         )
     }
