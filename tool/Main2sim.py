@@ -12,6 +12,8 @@ class Main: #所有视点,每个视点的可见特征
         loader=Loader("F:/result_gkd1_anNing",id)
         for vid in loader.data:
             loader.data[vid].data["all"]={}
+        # loader.repeat8()
+        # loader.removeRedundancy()
         loader.saveVVD()
            
     def blocking(self):

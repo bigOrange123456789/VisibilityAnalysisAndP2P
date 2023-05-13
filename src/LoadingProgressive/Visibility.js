@@ -121,8 +121,79 @@ export class Visibility{
 		console.log("开始动态加载资源")
     }
     getList(){
+        const self=this
         let vd_had=0
         let vd_hading=0
+        const posIndexAll=this.getPosIndex()
+        const arr=posIndexAll[5]
+        let loaded=true
+        for(let i=0;i<arr.length;i++){
+            const posIndex0=arr[i][3]
+            if(!this.visualList[posIndex0]){
+                loaded=false
+                this.request(posIndex0)
+            }
+        }
+        // window.arr=arr
+        // console.log(arr)
+        if(loaded){
+            // const posIndex=posIndexAll[3]
+            const d=this.getDirection()
+            for(let i=0;i<this.componentNum;i++){
+                const getVD=(j)=>{
+                    const posIndex=arr[j][3]
+                    const weight=arr[j][4]
+                    const visualList0=self.visualList[posIndex] 
+                    const vd1=i in visualList0["1"]?visualList0["1"][i]:0
+                    const vd2=i in visualList0["2"]?visualList0["2"][i]:0
+                    const vd3=i in visualList0["3"]?visualList0["3"][i]:0
+                    const vd4=i in visualList0["4"]?visualList0["4"][i]:0
+                    const vd5=i in visualList0["5"]?visualList0["5"][i]:0
+                    const vd6=i in visualList0["6"]?visualList0["6"][i]:0
+                    // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
+                    return (vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5])*weight
+                }
+                
+                // this.vd[i]=getVD(posIndex)//posIndexAll[3]
+                this.vd[i]=0
+                for(let j=0;j<arr.length;j++){
+                    // console.log()
+                    this.vd[i]+=getVD(j)
+                }
+                if(Object.keys(this.meshes).length!==0&&this.meshes[i]){
+                    vd_had+=this.vd[i]
+                }else vd_hading+=this.vd[i]
+            } 
+            document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
+            
+            let list=this.vd.map((value, index) => ({ value, index }))
+                .filter(item => item.value > 0)
+                .sort((a, b) => b.value - a.value)
+            let i=0  
+            for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
+            // console.log("不加载数量:",i)
+            const list2=[]
+            for(let j=0;j<list.length-i;j++)
+                list2.push(
+                    list[j].index
+                )
+            if(list2.length>0)this.loading(list2)
+            // list.filter((value, index) => index<list.length-i )
+            // console.log(list.length)
+            // list=list.map((value, index) => value.index )
+            // if(list.length>0)this.loading(list)
+
+            // const list=this.vd.map((value, index) => ({ value, index }))
+            //     .filter(item => item.value > 4*Math.PI/600)
+            //     .sort((a, b) => b.value - a.value)
+            //     .map((value, index) => value.index )
+            // if(list.length>0)this.loading(list)
+        }
+    }
+    getListOld(){
+        let vd_had=0
+        let vd_hading=0
+        const arr=this.getPosIndex()[4]
         const posIndex=this.getPosIndex()[3]
         const visualList0=this.visualList[posIndex]
         if(visualList0){
@@ -141,28 +212,28 @@ export class Visibility{
             } 
             document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
             
-            let list=this.vd.map((value, index) => ({ value, index }))
-                .filter(item => item.value > 0)
-                .sort((a, b) => b.value - a.value)
-            let i=0  
-            for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-            console.log("不加载数量:",i)
-            const list2=[]
-            for(let j=0;j<list.length-i;j++)
-                list2.push(
-                    list[j].index
-                )
-            if(list2.length>0)this.loading(list2)
-            // list.filter((value, index) => index<list.length-i )
-            // console.log(list.length)
-            // list=list.map((value, index) => value.index )
-            // if(list.length>0)this.loading(list)
-
-            // const list=this.vd.map((value, index) => ({ value, index }))
-            //     .filter(item => item.value > 4*Math.PI/600)
+            // let list=this.vd.map((value, index) => ({ value, index }))
+            //     .filter(item => item.value > 0)
             //     .sort((a, b) => b.value - a.value)
-            //     .map((value, index) => value.index )
-            // if(list.length>0)this.loading(list)
+            // let i=0  
+            // for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
+            // console.log("不加载数量:",i)
+            // const list2=[]
+            // for(let j=0;j<list.length-i;j++)
+            //     list2.push(
+            //         list[j].index
+            //     )
+            // if(list2.length>0)this.loading(list2)
+            list.filter((value, index) => index<list.length-i )
+            console.log(list.length)
+            list=list.map((value, index) => value.index )
+            if(list.length>0)this.loading(list)
+
+            const list=this.vd.map((value, index) => ({ value, index }))
+                .filter(item => item.value > 4*Math.PI/600)
+                .sort((a, b) => b.value - a.value)
+                .map((value, index) => value.index )
+            if(list.length>0)this.loading(list)
         }else{
             this.request(posIndex)
         }
@@ -221,34 +292,75 @@ export class Visibility{
         }
     }
     getPosIndex(){
+        const self=this
         let min =this.areaInf.min
         let step=this.areaInf.step
         let max =this.areaInf.max
+        var dl=[]
+        for(var i=0;i<3;i++)
+            dl.push(
+                 step[i]==0?0:
+                (max[i]-min[i])/step[i]
+            )    
+        // console.log(dl)
+        const distanceMax=Math.pow(
+            Math.pow(dl[0],2)+
+            Math.pow(dl[1],2)+
+            Math.pow(dl[2],2)
+            ,0.5) 
+        const getPosIndex0=(x,y,z)=>{
+            if(x>max[0]||y>max[1]||z>max[2]||x<min[0]||y<min[1]||z<min[2]){
+                this.border=true//视点在采样区域之外
+                if(x>max[0])x=max[0]
+                if(y>max[1])y=max[1]
+                if(z>max[2])z=max[2]
+                if(x<min[0])x=min[0]
+                if(y<min[1])y=min[1]
+                if(z<min[2])z=min[2]
+            }else this.border=false
+            const x2=self.camera.position.x
+            const y2=self.camera.position.y
+            const z2=self.camera.position.z
+            
+            var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])
+            var yi=dl[1]==0?0:Math.round((y-min[1])/dl[1])
+            var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
+            const x3=min[0]+dl[0]*xi
+            const y3=min[1]+dl[1]*yi
+            const z3=min[2]+dl[2]*zi
+            window.pos=[x3,y3,z3]
+            var s=step
+            var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
+            var weight=1-Math.pow(
+                Math.pow(x2-x3,2)+
+                Math.pow(y2-y3,2)+
+                Math.pow(z2-z3,2)
+                ,0.5) /distanceMax
+                // console.log([x2,y2,z2],[x3,y3,z3],weight)
+            return [xi,yi,zi,index,Math.max(weight,0.000001)]
+        }
         const c=this.camera
         var x=c.position.x
         var y=c.position.y
         var z=c.position.z
-        if(x>max[0]||y>max[1]||z>max[2]||x<min[0]||y<min[1]||z<min[2]){
-            this.border=true//视点在采样区域之外
-            if(x>max[0])x=max[0]
-            if(y>max[1])y=max[1]
-            if(z>max[2])z=max[2]
-            if(x<min[0])x=min[0]
-            if(y<min[1])y=min[1]
-            if(z<min[2])z=min[2]
-        }else this.border=false
-        var dl=[]
-        for(var i=0;i<3;i++)
-            dl.push(
-                step[i]==0?0:
-                (max[i]-min[i])/step[i]
-            )
-        var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])
-        var yi=dl[1]==0?0:Math.round((y-min[1])/dl[1])
-        var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
-        var s=step
-        var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
-        // console.log([xi,yi,zi,index])
-        return [xi,yi,zi,index]
+        const arr=[]
+        for(let i=-1;i<2;i+=2)
+            for(let j=-1;j<2;j+=2)
+                for(let k=-1;k<2;k+=2)
+                    arr.push(
+                        getPosIndex0(
+                            x+i*dl[0],
+                            y+j*dl[1],
+                            z+k*dl[2])
+                    )
+        let a0=getPosIndex0(x,y,z)
+        arr.push(a0)
+        let sum=0
+        for(let i=0;i<arr.length;i++)sum+=arr[i][4]
+        if(sum!==0)
+            for(let i=0;i<arr.length;i++)arr[i][4]/sum
+        
+        a0.push(arr)
+        return a0
     } 
 }

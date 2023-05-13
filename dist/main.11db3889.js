@@ -41903,6 +41903,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Visibility = void 0;
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
@@ -42064,23 +42065,52 @@ var Visibility = /*#__PURE__*/function () {
   }, {
     key: "getList",
     value: function getList() {
+      var _this2 = this;
+      var self = this;
       var vd_had = 0;
       var vd_hading = 0;
-      var posIndex = this.getPosIndex()[3];
-      var visualList0 = this.visualList[posIndex];
-      if (visualList0) {
+      var posIndexAll = this.getPosIndex();
+      var arr = posIndexAll[5];
+      var loaded = true;
+      for (var _i = 0; _i < arr.length; _i++) {
+        var posIndex0 = arr[_i][3];
+        if (!this.visualList[posIndex0]) {
+          loaded = false;
+          this.request(posIndex0);
+        }
+      }
+      // window.arr=arr
+      // console.log(arr)
+      if (loaded) {
+        // const posIndex=posIndexAll[3]
         var d = this.getDirection();
-        for (var _i = 0; _i < this.componentNum; _i++) {
-          var vd1 = _i in visualList0["1"] ? visualList0["1"][_i] : 0;
-          var vd2 = _i in visualList0["2"] ? visualList0["2"][_i] : 0;
-          var vd3 = _i in visualList0["3"] ? visualList0["3"][_i] : 0;
-          var vd4 = _i in visualList0["4"] ? visualList0["4"][_i] : 0;
-          var vd5 = _i in visualList0["5"] ? visualList0["5"][_i] : 0;
-          var vd6 = _i in visualList0["6"] ? visualList0["6"][_i] : 0;
-          this.vd[_i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i]) {
-            vd_had += this.vd[_i];
-          } else vd_hading += this.vd[_i];
+        var _loop = function _loop(_i2) {
+          var getVD = function getVD(j) {
+            var posIndex = arr[j][3];
+            var weight = arr[j][4];
+            var visualList0 = self.visualList[posIndex];
+            var vd1 = _i2 in visualList0["1"] ? visualList0["1"][_i2] : 0;
+            var vd2 = _i2 in visualList0["2"] ? visualList0["2"][_i2] : 0;
+            var vd3 = _i2 in visualList0["3"] ? visualList0["3"][_i2] : 0;
+            var vd4 = _i2 in visualList0["4"] ? visualList0["4"][_i2] : 0;
+            var vd5 = _i2 in visualList0["5"] ? visualList0["5"][_i2] : 0;
+            var vd6 = _i2 in visualList0["6"] ? visualList0["6"][_i2] : 0;
+            // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
+            return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
+          };
+
+          // this.vd[i]=getVD(posIndex)//posIndexAll[3]
+          _this2.vd[_i2] = 0;
+          for (var _j = 0; _j < arr.length; _j++) {
+            // console.log()
+            _this2.vd[_i2] += getVD(_j);
+          }
+          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i2]) {
+            vd_had += _this2.vd[_i2];
+          } else vd_hading += _this2.vd[_i2];
+        };
+        for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
+          _loop(_i2);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -42093,11 +42123,11 @@ var Visibility = /*#__PURE__*/function () {
         }).sort(function (a, b) {
           return b.value - a.value;
         });
-        var i = 0;
-        for (var sum = 0; i < list.length && sum < 4 * Math.PI / 300; i++, sum = sum + list[list.length - 1 - i].value);
-        console.log("不加载数量:", i);
+        var _i3 = 0;
+        for (var sum = 0; _i3 < list.length && sum < 4 * Math.PI / 300; _i3++, sum = sum + list[list.length - 1 - _i3].value);
+        // console.log("不加载数量:",i)
         var list2 = [];
-        for (var j = 0; j < list.length - i; j++) list2.push(list[j].index);
+        for (var j = 0; j < list.length - _i3; j++) list2.push(list[j].index);
         if (list2.length > 0) this.loading(list2);
         // list.filter((value, index) => index<list.length-i )
         // console.log(list.length)
@@ -42109,6 +42139,65 @@ var Visibility = /*#__PURE__*/function () {
         //     .sort((a, b) => b.value - a.value)
         //     .map((value, index) => value.index )
         // if(list.length>0)this.loading(list)
+      }
+    }
+  }, {
+    key: "getListOld",
+    value: function getListOld() {
+      var vd_had = 0;
+      var vd_hading = 0;
+      var arr = this.getPosIndex()[4];
+      var posIndex = this.getPosIndex()[3];
+      var visualList0 = this.visualList[posIndex];
+      if (visualList0) {
+        var d = this.getDirection();
+        for (var _i4 = 0; _i4 < this.componentNum; _i4++) {
+          var vd1 = _i4 in visualList0["1"] ? visualList0["1"][_i4] : 0;
+          var vd2 = _i4 in visualList0["2"] ? visualList0["2"][_i4] : 0;
+          var vd3 = _i4 in visualList0["3"] ? visualList0["3"][_i4] : 0;
+          var vd4 = _i4 in visualList0["4"] ? visualList0["4"][_i4] : 0;
+          var vd5 = _i4 in visualList0["5"] ? visualList0["5"][_i4] : 0;
+          var vd6 = _i4 in visualList0["6"] ? visualList0["6"][_i4] : 0;
+          this.vd[_i4] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i4]) {
+            vd_had += this.vd[_i4];
+          } else vd_hading += this.vd[_i4];
+        }
+        document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
+
+        // let list=this.vd.map((value, index) => ({ value, index }))
+        //     .filter(item => item.value > 0)
+        //     .sort((a, b) => b.value - a.value)
+        // let i=0  
+        // for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
+        // console.log("不加载数量:",i)
+        // const list2=[]
+        // for(let j=0;j<list.length-i;j++)
+        //     list2.push(
+        //         list[j].index
+        //     )
+        // if(list2.length>0)this.loading(list2)
+        list.filter(function (value, index) {
+          return index < list.length - i;
+        });
+        console.log(list.length);
+        list.map(function (value, index) {
+          return value.index;
+        }), _readOnlyError("list");
+        if (list.length > 0) this.loading(list);
+        var list = this.vd.map(function (value, index) {
+          return {
+            value: value,
+            index: index
+          };
+        }).filter(function (item) {
+          return item.value > 4 * Math.PI / 600;
+        }).sort(function (a, b) {
+          return b.value - a.value;
+        }).map(function (value, index) {
+          return value.index;
+        });
+        if (list.length > 0) this.loading(list);
       } else {
         this.request(posIndex);
       }
@@ -42120,27 +42209,27 @@ var Visibility = /*#__PURE__*/function () {
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
         var d = this.getDirection();
-        for (var i = 0; i < this.componentNum; i++) if (this.meshes[i]) {
-          var vd1 = i in visualList0["1"] ? visualList0["1"][i] : 0;
-          var vd2 = i in visualList0["2"] ? visualList0["2"][i] : 0;
-          var vd3 = i in visualList0["3"] ? visualList0["3"][i] : 0;
-          var vd4 = i in visualList0["4"] ? visualList0["4"][i] : 0;
-          var vd5 = i in visualList0["5"] ? visualList0["5"][i] : 0;
-          var vd6 = i in visualList0["6"] ? visualList0["6"][i] : 0;
-          this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (this.meshes[i].lod) {
-            for (var j = 0; j < this.meshes[i].lod.length; j++) this.meshes[i].lod[j].visible = false;
-            if (this.vd[i] > Math.PI / (6 * 400)) this.meshes[i].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
-            else if (this.vd[i] > 0) this.meshes[i].lod[0].visible = true;
+        for (var _i5 = 0; _i5 < this.componentNum; _i5++) if (this.meshes[_i5]) {
+          var vd1 = _i5 in visualList0["1"] ? visualList0["1"][_i5] : 0;
+          var vd2 = _i5 in visualList0["2"] ? visualList0["2"][_i5] : 0;
+          var vd3 = _i5 in visualList0["3"] ? visualList0["3"][_i5] : 0;
+          var vd4 = _i5 in visualList0["4"] ? visualList0["4"][_i5] : 0;
+          var vd5 = _i5 in visualList0["5"] ? visualList0["5"][_i5] : 0;
+          var vd6 = _i5 in visualList0["6"] ? visualList0["6"][_i5] : 0;
+          this.vd[_i5] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (this.meshes[_i5].lod) {
+            for (var j = 0; j < this.meshes[_i5].lod.length; j++) this.meshes[_i5].lod[j].visible = false;
+            if (this.vd[_i5] > Math.PI / (6 * 400)) this.meshes[_i5].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
+            else if (this.vd[_i5] > 0) this.meshes[_i5].lod[0].visible = true;
           } else {
-            this.meshes[i].visible = this.vd[i] > 0;
+            this.meshes[_i5].visible = this.vd[_i5] > 0;
           }
-          this.meshes[i].used = true; //这个mesh被使用了
+          this.meshes[_i5].used = true; //这个mesh被使用了
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i2 = 0; _i2 < visualList0["a"].length; _i2++) {
-          window.visibleArea[visualList0["a"][_i2]] = true;
+        if (visualList0["a"]) for (var _i6 = 0; _i6 < visualList0["a"].length; _i6++) {
+          window.visibleArea[visualList0["a"][_i6]] = true;
         }
       }
     }
@@ -42172,31 +42261,54 @@ var Visibility = /*#__PURE__*/function () {
   }, {
     key: "getPosIndex",
     value: function getPosIndex() {
+      var _this3 = this;
+      var self = this;
       var min = this.areaInf.min;
       var step = this.areaInf.step;
       var max = this.areaInf.max;
+      var dl = [];
+      for (var i = 0; i < 3; i++) dl.push(step[i] == 0 ? 0 : (max[i] - min[i]) / step[i]);
+      // console.log(dl)
+      var distanceMax = Math.pow(Math.pow(dl[0], 2) + Math.pow(dl[1], 2) + Math.pow(dl[2], 2), 0.5);
+      var getPosIndex0 = function getPosIndex0(x, y, z) {
+        if (x > max[0] || y > max[1] || z > max[2] || x < min[0] || y < min[1] || z < min[2]) {
+          _this3.border = true; //视点在采样区域之外
+          if (x > max[0]) x = max[0];
+          if (y > max[1]) y = max[1];
+          if (z > max[2]) z = max[2];
+          if (x < min[0]) x = min[0];
+          if (y < min[1]) y = min[1];
+          if (z < min[2]) z = min[2];
+        } else _this3.border = false;
+        var x2 = self.camera.position.x;
+        var y2 = self.camera.position.y;
+        var z2 = self.camera.position.z;
+        var xi = dl[0] == 0 ? 0 : Math.round((x - min[0]) / dl[0]);
+        var yi = dl[1] == 0 ? 0 : Math.round((y - min[1]) / dl[1]);
+        var zi = dl[2] == 0 ? 0 : Math.round((z - min[2]) / dl[2]);
+        var x3 = min[0] + dl[0] * xi;
+        var y3 = min[1] + dl[1] * yi;
+        var z3 = min[2] + dl[2] * zi;
+        window.pos = [x3, y3, z3];
+        var s = step;
+        var index = xi * (s[1] + 1) * (s[2] + 1) + yi * (s[2] + 1) + zi;
+        var weight = 1 - Math.pow(Math.pow(x2 - x3, 2) + Math.pow(y2 - y3, 2) + Math.pow(z2 - z3, 2), 0.5) / distanceMax;
+        // console.log([x2,y2,z2],[x3,y3,z3],weight)
+        return [xi, yi, zi, index, Math.max(weight, 0.000001)];
+      };
       var c = this.camera;
       var x = c.position.x;
       var y = c.position.y;
       var z = c.position.z;
-      if (x > max[0] || y > max[1] || z > max[2] || x < min[0] || y < min[1] || z < min[2]) {
-        this.border = true; //视点在采样区域之外
-        if (x > max[0]) x = max[0];
-        if (y > max[1]) y = max[1];
-        if (z > max[2]) z = max[2];
-        if (x < min[0]) x = min[0];
-        if (y < min[1]) y = min[1];
-        if (z < min[2]) z = min[2];
-      } else this.border = false;
-      var dl = [];
-      for (var i = 0; i < 3; i++) dl.push(step[i] == 0 ? 0 : (max[i] - min[i]) / step[i]);
-      var xi = dl[0] == 0 ? 0 : Math.round((x - min[0]) / dl[0]);
-      var yi = dl[1] == 0 ? 0 : Math.round((y - min[1]) / dl[1]);
-      var zi = dl[2] == 0 ? 0 : Math.round((z - min[2]) / dl[2]);
-      var s = step;
-      var index = xi * (s[1] + 1) * (s[2] + 1) + yi * (s[2] + 1) + zi;
-      // console.log([xi,yi,zi,index])
-      return [xi, yi, zi, index];
+      var arr = [];
+      for (var _i7 = -1; _i7 < 2; _i7 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i7 * dl[0], y + j * dl[1], z + k * dl[2]));
+      var a0 = getPosIndex0(x, y, z);
+      arr.push(a0);
+      var sum = 0;
+      for (var _i8 = 0; _i8 < arr.length; _i8++) sum += arr[_i8][4];
+      if (sum !== 0) for (var _i9 = 0; _i9 < arr.length; _i9++) arr[_i9][4] / sum;
+      a0.push(arr);
+      return a0;
     }
   }]);
   return Visibility;
@@ -52750,6 +52862,9 @@ var Building = /*#__PURE__*/function () {
         mesh.material.side = 0; //THREE.DoubleSide
       }
 
+      mesh.material = new THREE.MeshBasicMaterial({
+        color: id
+      });
       if (this.config.useIndirectMaterial) {
         mesh.material = new _IndirectMaterial.IndirectMaterial(mesh.material);
       }
@@ -61488,7 +61603,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62224" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58857" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

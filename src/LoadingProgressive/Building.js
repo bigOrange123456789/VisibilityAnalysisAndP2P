@@ -136,26 +136,6 @@ export class Building{
                 )
             )
         }
-        return mesh
-    }
-    getInstancedMesh(geometry,material,instance_info){
-        const mesh=new THREE.InstancedMesh(
-            geometry,
-            material,
-            instance_info.length+1
-        )
-        for(let i=0;i<instance_info.length;i++){
-            const mat=instance_info[i]
-            mesh.setMatrixAt(
-                i,
-                new THREE.Matrix4().set(
-                    mat[0], mat[1], mat[2], mat[3],
-                    mat[4], mat[5], mat[6], mat[7],
-                    mat[8], mat[9], mat[10], mat[11],
-                    0, 0, 0, 1
-                )
-            )
-        }
         mesh.setMatrixAt(
             instance_info.length,
             new THREE.Matrix4().fromArray( [
@@ -181,6 +161,9 @@ export class Building{
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
+        mesh.material=new THREE.MeshBasicMaterial({ 
+            color:id
+        })
         if(this.config.useIndirectMaterial){
             mesh.material=new IndirectMaterial(mesh.material)
         }

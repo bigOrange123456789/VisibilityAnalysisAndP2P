@@ -30,6 +30,36 @@ class Loader: #所有视点,每个视点的可见特征
             database[v.name]=v
             # print("\t\t\t\t\tv.name",v.name)
         return database#database的冗余去除
+    def repeat8(self):
+        print("repeat8 start")
+        def mul(obj,k):
+            obj2=Viewpoint()
+            for direction in obj.data:
+                obj2.data[direction]={}
+                for cid in obj.data[direction]:
+                    if obj.data[direction][cid]>4*3.14/(6*400):
+                        obj2.data[direction][cid]=obj.data[direction][cid]*k 
+            return obj2
+        c=self.c_all["src"]["Building_new"]["createSphere"]
+        step=[c["x"][2],c["y"][2],c["z"][2]]
+        a=1.
+        dx=round(step[0]*a)
+        dy=round(step[1]*a)
+        dz=round(step[2]*a)
+        data2={}
+        for vid in self.data:
+            data2[vid]=mul(self.data[vid],0.92)
+            arr=vid.split(",")
+            x0=int(arr[0])
+            y0=int(arr[1])
+            z0=int(arr[2])
+            for x in[x0-dx,x0+dx]:
+                for y in[y0-dy,y0+dy]:
+                    for z in[z0-dz,z0+dz]:
+                        name=str(x)+","+str(y)+","+str(z)
+                        data2[name]=mul(self.data[vid],0.01)#self.data[vid]
+        self.data=data2
+        print("repeat8 end")
     def pos2pos(self,arr):
         x=int(arr[0])
         y=int(arr[1])
@@ -64,7 +94,6 @@ class Loader: #所有视点,每个视点的可见特征
         # exit(0)
         return str(x2[0])+","+str(y2[0])+","+str(z2[0])
     def removeRedundancy(self):
-        database=self.data
         def rang(i,end,step):
             arr=[]
             while i<=end:
