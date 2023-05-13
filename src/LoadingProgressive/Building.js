@@ -7,6 +7,7 @@ import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
 import {ZipLoader } from '../../lib/zip/ziploader.js';
 import { IndirectMaterial } from '../../lib/IndirectMaterial.js'
+import { WaterController  } from '../../lib/threejs/WaterController'
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
@@ -200,6 +201,7 @@ export class Building{
         // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
         // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
         if(this.instance_info){
+            const meshOld=mesh
             mesh.materialOld=mesh.material
             const color=this.colorList[id]
             const mesh0=mesh
@@ -216,6 +218,15 @@ export class Building{
                 instance_info)
             
             mesh.lod=[mesh,mesh2]
+            if(this.config.waterCidList){
+                for(let i=0;i<this.config.waterCidList.length;i++)
+                    if(id==this.config.waterCidList[i]){
+                        var water = new WaterController(meshOld).water
+                        mesh.visible=mesh2.visible=false
+                        mesh.lod=[water,water]
+                        this.parentGroup2.add(water)
+                    }
+            }
             this.parentGroup2.add(mesh2)
             mesh.used      =mesh0.used
             mesh.LoadDelay =mesh0.LoadDelay

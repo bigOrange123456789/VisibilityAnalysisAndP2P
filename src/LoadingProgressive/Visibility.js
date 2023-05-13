@@ -3,19 +3,23 @@ export class Visibility{
         this.config=window.configALL.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
-        console.log("areaInf",areaInf)
+        // console.log("areaInf",areaInf)
         // console.log(areaInf["min"])
         // areaInf["min"][1]-=0.5
         // areaInf["max"][1]-=0.5
-        areaInf["min"][1]=Math.floor(areaInf["min"][1])
-        areaInf["max"][1]=Math.floor(areaInf["max"][1])
-        this.areaInf=areaInf
+        this.areaInf=this.initAreaInfList()[0]
+        console.log("this.areaInf",this.areaInf)
+        if(false){
+            this.areaInf["min"][1]=Math.floor(this.areaInf["min"][1])
+            this.areaInf["max"][1]=Math.floor(this.areaInf["max"][1])
+        }
         this.camera=camera
         this.meshes=meshes//用于可见性剔除
         this.componentNum=this.config.componentNum//8437//1278
         this.vd=new Array(this.componentNum)//{}//当前每个构件的可见度
         this.visualList={}//用于视点的可见资源列表
-        this.visualList_request={}//记录资源列表的请求是否已经发送
+        
+
         this.prePoint="";//视点变化就进行加载 (或者添加了新的模型) 
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading
@@ -56,6 +60,25 @@ export class Visibility{
         //             camera.position.z+=step[2]
         //         },10)//60*1000
         //     }
+    }
+    initAreaInfList(){
+        this.areaInfList=[]
+        this.visualList_request={}//记录资源列表的请求是否已经发送
+        for(let i=0;i<this.config.areaInfList.length;i++){
+            const c=this.config.areaInfList[i]
+            this.areaInfList.push({
+                "min": [c.x[0],c.y[0],c.z[0]],
+                "max": [c.x[1],c.y[1],c.z[1]],
+                "step": [
+                    (c.x[1]-c.x[0])/c.x[2],
+                    (c.y[1]-c.y[0])/c.y[2],
+                    (c.z[1]-c.z[0])/c.z[2]
+                ],
+                areaId:i
+            })
+            this.visualList_request[i]={}
+        }
+        return this.areaInfList
     }
     getDirection(){
         var d=this.camera.getWorldDirection()
@@ -168,15 +191,22 @@ export class Visibility{
             let list=this.vd.map((value, index) => ({ value, index }))
                 .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
-            let i=0  
-            for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-            console.log("不加载数量:",i)
-            const list2=[]
-            for(let j=0;j<list.length-i;j++)
-                list2.push(
-                    list[j].index
-                )
-            if(list2.length>0)this.loading(list2)
+            if(false){
+                let i=0  
+                // console.log(list,list.length)
+                for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);//console.log(i);
+                console.log("不加载数量:",i)
+                const list2=[]
+                for(let j=0;j<list.length-i;j++)
+                    list2.push(
+                        list[j].index
+                    )
+                list=list2
+            }else{
+                list=list.map((value, index) => value.index )
+            }
+                
+            if(list.length>0)this.loading(list)
             // list.filter((value, index) => index<list.length-i )
             // console.log(list.length)
             // list=list.map((value, index) => value.index )
@@ -269,8 +299,10 @@ export class Visibility{
         }
     }
     request(posIndex){
-        var scope=this
-        if(!this.visualList_request[posIndex]){
+        const scope=this
+        const areaId=this.areaInf.areaId
+        // console.log(this.visualList_request,areaId)
+        if(!this.visualList_request[areaId][posIndex]){
             var oReq = new XMLHttpRequest();
             oReq.open("POST", scope.urlVdServer, true);
             oReq.responseType = "arraybuffer";
@@ -286,8 +318,13 @@ export class Visibility{
                 // console.log("test[1]"  ,Object.keys(test["1"]))
                 scope.getList()
             }
-            oReq.send(JSON.stringify(posIndex));//发送请求
-            this.visualList_request[posIndex]=true//已经完成了请求
+            // console.log({"posIndex":posIndex,"sceneId":scope.config.sceneId,"areaId":scope.areaInf.areaId})
+            // oReq.send(JSON.stringify(posIndex));//发送请求
+            oReq.send(JSON.stringify({
+                "posIndex":posIndex,
+                "sceneId":scope.config.sceneId,
+                "areaId":scope.areaInf.areaId}));//发送请求
+            this.visualList_request[areaId][posIndex]=true//已经完成了请求
         }
     }
     getPosIndex(){

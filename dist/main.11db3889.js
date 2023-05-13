@@ -1491,11 +1491,24 @@ module.exports = {
       "block2Kernel": {},
       "updateColor": false,
       "instanceUse": true,
-      "useIndirectMaterial": false
+      "useIndirectMaterial": false,
+      "waterCidList": [175, 180]
     },
     "Visibility": {
+      "areaInfList": [{
+        "x": [-815, 879, 11],
+        "y": [16, 16, 11],
+        "z": [-962, 1084, 11],
+        "r": 3
+      }, {
+        "x": [-880, 880, 110],
+        "y": [-110, 440, 110],
+        "z": [-990, 1100, 110],
+        "r": 30
+      }],
       "componentNum": 8437,
-      "urlVdServer": "http://39.98.206.0:8092"
+      "sceneId": "gkd",
+      "urlVdServer": "http://localhost:8092"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -41915,19 +41928,22 @@ var Visibility = /*#__PURE__*/function () {
     this.config = window.configALL.src.Visibility;
     this.urlVdServer = this.config.urlVdServer; //"http://150.158.24.191:8091"
     console.log("urlVdServer", this.urlVdServer);
-    console.log("areaInf", areaInf);
+    // console.log("areaInf",areaInf)
     // console.log(areaInf["min"])
     // areaInf["min"][1]-=0.5
     // areaInf["max"][1]-=0.5
-    areaInf["min"][1] = Math.floor(areaInf["min"][1]);
-    areaInf["max"][1] = Math.floor(areaInf["max"][1]);
-    this.areaInf = areaInf;
+    this.areaInf = this.initAreaInfList()[0];
+    console.log("this.areaInf", this.areaInf);
+    if (false) {
+      this.areaInf["min"][1] = Math.floor(this.areaInf["min"][1]);
+      this.areaInf["max"][1] = Math.floor(this.areaInf["max"][1]);
+    }
     this.camera = camera;
     this.meshes = meshes; //用于可见性剔除
     this.componentNum = this.config.componentNum; //8437//1278
     this.vd = new Array(this.componentNum); //{}//当前每个构件的可见度
     this.visualList = {}; //用于视点的可见资源列表
-    this.visualList_request = {}; //记录资源列表的请求是否已经发送
+
     this.prePoint = ""; //视点变化就进行加载 (或者添加了新的模型) 
     this.prePoint2 = ""; //视点变化就进行可见性剔除
     this.loading = loading;
@@ -41970,6 +41986,23 @@ var Visibility = /*#__PURE__*/function () {
     //     }
   }
   _createClass(Visibility, [{
+    key: "initAreaInfList",
+    value: function initAreaInfList() {
+      this.areaInfList = [];
+      this.visualList_request = {}; //记录资源列表的请求是否已经发送
+      for (var _i = 0; _i < this.config.areaInfList.length; _i++) {
+        var c = this.config.areaInfList[_i];
+        this.areaInfList.push({
+          "min": [c.x[0], c.y[0], c.z[0]],
+          "max": [c.x[1], c.y[1], c.z[1]],
+          "step": [(c.x[1] - c.x[0]) / c.x[2], (c.y[1] - c.y[0]) / c.y[2], (c.z[1] - c.z[0]) / c.z[2]],
+          areaId: _i
+        });
+        this.visualList_request[_i] = {};
+      }
+      return this.areaInfList;
+    }
+  }, {
     key: "getDirection",
     value: function getDirection() {
       var d = this.camera.getWorldDirection();
@@ -42070,8 +42103,8 @@ var Visibility = /*#__PURE__*/function () {
       var posIndexAll = this.getPosIndex();
       var arr = posIndexAll[5];
       var loaded = true;
-      for (var _i = 0; _i < arr.length; _i++) {
-        var posIndex0 = arr[_i][3];
+      for (var _i2 = 0; _i2 < arr.length; _i2++) {
+        var posIndex0 = arr[_i2][3];
         if (!this.visualList[posIndex0]) {
           loaded = false;
           this.request(posIndex0);
@@ -42082,31 +42115,31 @@ var Visibility = /*#__PURE__*/function () {
       if (loaded) {
         // const posIndex=posIndexAll[3]
         var d = this.getDirection();
-        var _loop = function _loop(_i2) {
+        var _loop = function _loop(_i3) {
           var getVD = function getVD(j) {
             var posIndex = arr[j][3];
             var weight = arr[j][4];
             var visualList0 = self.visualList[posIndex];
-            var vd1 = _i2 in visualList0["1"] ? visualList0["1"][_i2] : 0;
-            var vd2 = _i2 in visualList0["2"] ? visualList0["2"][_i2] : 0;
-            var vd3 = _i2 in visualList0["3"] ? visualList0["3"][_i2] : 0;
-            var vd4 = _i2 in visualList0["4"] ? visualList0["4"][_i2] : 0;
-            var vd5 = _i2 in visualList0["5"] ? visualList0["5"][_i2] : 0;
-            var vd6 = _i2 in visualList0["6"] ? visualList0["6"][_i2] : 0;
+            var vd1 = _i3 in visualList0["1"] ? visualList0["1"][_i3] : 0;
+            var vd2 = _i3 in visualList0["2"] ? visualList0["2"][_i3] : 0;
+            var vd3 = _i3 in visualList0["3"] ? visualList0["3"][_i3] : 0;
+            var vd4 = _i3 in visualList0["4"] ? visualList0["4"][_i3] : 0;
+            var vd5 = _i3 in visualList0["5"] ? visualList0["5"][_i3] : 0;
+            var vd6 = _i3 in visualList0["6"] ? visualList0["6"][_i3] : 0;
             // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
             return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
           };
 
           // this.vd[i]=getVD(posIndex)//posIndexAll[3]
-          _this2.vd[_i2] = 0;
+          _this2.vd[_i3] = 0;
           for (var _j = 0; _j < arr.length; _j++) {
             // console.log()
-            _this2.vd[_i2] += getVD(_j);
+            _this2.vd[_i3] += getVD(_j);
           }
-          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i2]) vd_had += _this2.vd[_i2];else vd_hading += _this2.vd[_i2];
+          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i3]) vd_had += _this2.vd[_i3];else vd_hading += _this2.vd[_i3];
         };
-        for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
-          _loop(_i2);
+        for (var _i3 = 0; _i3 < this.componentNum; _i3++) {
+          _loop(_i3);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -42119,12 +42152,20 @@ var Visibility = /*#__PURE__*/function () {
         }).sort(function (a, b) {
           return b.value - a.value;
         });
-        var _i3 = 0;
-        for (var sum = 0; _i3 < list.length && sum < 4 * Math.PI / 300; _i3++, sum = sum + list[list.length - 1 - _i3].value);
-        console.log("不加载数量:", _i3);
-        var list2 = [];
-        for (var j = 0; j < list.length - _i3; j++) list2.push(list[j].index);
-        if (list2.length > 0) this.loading(list2);
+        if (false) {
+          var _i4 = 0;
+          // console.log(list,list.length)
+          for (var sum = 0; _i4 < list.length && sum < 4 * Math.PI / 300; _i4++, sum = sum + list[list.length - 1 - _i4].value); //console.log(i);
+          console.log("不加载数量:", _i4);
+          var list2 = [];
+          for (var j = 0; j < list.length - _i4; j++) list2.push(list[j].index);
+          list = list2;
+        } else {
+          list = list.map(function (value, index) {
+            return value.index;
+          });
+        }
+        if (list.length > 0) this.loading(list);
         // list.filter((value, index) => index<list.length-i )
         // console.log(list.length)
         // list=list.map((value, index) => value.index )
@@ -42147,17 +42188,17 @@ var Visibility = /*#__PURE__*/function () {
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
         var d = this.getDirection();
-        for (var _i4 = 0; _i4 < this.componentNum; _i4++) {
-          var vd1 = _i4 in visualList0["1"] ? visualList0["1"][_i4] : 0;
-          var vd2 = _i4 in visualList0["2"] ? visualList0["2"][_i4] : 0;
-          var vd3 = _i4 in visualList0["3"] ? visualList0["3"][_i4] : 0;
-          var vd4 = _i4 in visualList0["4"] ? visualList0["4"][_i4] : 0;
-          var vd5 = _i4 in visualList0["5"] ? visualList0["5"][_i4] : 0;
-          var vd6 = _i4 in visualList0["6"] ? visualList0["6"][_i4] : 0;
-          this.vd[_i4] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i4]) {
-            vd_had += this.vd[_i4];
-          } else vd_hading += this.vd[_i4];
+        for (var _i5 = 0; _i5 < this.componentNum; _i5++) {
+          var vd1 = _i5 in visualList0["1"] ? visualList0["1"][_i5] : 0;
+          var vd2 = _i5 in visualList0["2"] ? visualList0["2"][_i5] : 0;
+          var vd3 = _i5 in visualList0["3"] ? visualList0["3"][_i5] : 0;
+          var vd4 = _i5 in visualList0["4"] ? visualList0["4"][_i5] : 0;
+          var vd5 = _i5 in visualList0["5"] ? visualList0["5"][_i5] : 0;
+          var vd6 = _i5 in visualList0["6"] ? visualList0["6"][_i5] : 0;
+          this.vd[_i5] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (Object.keys(this.meshes).length !== 0 && this.meshes[_i5]) {
+            vd_had += this.vd[_i5];
+          } else vd_hading += this.vd[_i5];
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
 
@@ -42205,27 +42246,27 @@ var Visibility = /*#__PURE__*/function () {
       var visualList0 = this.visualList[posIndex];
       if (visualList0) {
         var d = this.getDirection();
-        for (var _i5 = 0; _i5 < this.componentNum; _i5++) if (this.meshes[_i5]) {
-          var vd1 = _i5 in visualList0["1"] ? visualList0["1"][_i5] : 0;
-          var vd2 = _i5 in visualList0["2"] ? visualList0["2"][_i5] : 0;
-          var vd3 = _i5 in visualList0["3"] ? visualList0["3"][_i5] : 0;
-          var vd4 = _i5 in visualList0["4"] ? visualList0["4"][_i5] : 0;
-          var vd5 = _i5 in visualList0["5"] ? visualList0["5"][_i5] : 0;
-          var vd6 = _i5 in visualList0["6"] ? visualList0["6"][_i5] : 0;
-          this.vd[_i5] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
-          if (this.meshes[_i5].lod) {
-            for (var j = 0; j < this.meshes[_i5].lod.length; j++) this.meshes[_i5].lod[j].visible = false;
-            if (this.vd[_i5] > Math.PI / (6 * 400)) this.meshes[_i5].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
-            else if (this.vd[_i5] > 0) this.meshes[_i5].lod[0].visible = true;
+        for (var _i6 = 0; _i6 < this.componentNum; _i6++) if (this.meshes[_i6]) {
+          var vd1 = _i6 in visualList0["1"] ? visualList0["1"][_i6] : 0;
+          var vd2 = _i6 in visualList0["2"] ? visualList0["2"][_i6] : 0;
+          var vd3 = _i6 in visualList0["3"] ? visualList0["3"][_i6] : 0;
+          var vd4 = _i6 in visualList0["4"] ? visualList0["4"][_i6] : 0;
+          var vd5 = _i6 in visualList0["5"] ? visualList0["5"][_i6] : 0;
+          var vd6 = _i6 in visualList0["6"] ? visualList0["6"][_i6] : 0;
+          this.vd[_i6] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
+          if (this.meshes[_i6].lod) {
+            for (var j = 0; j < this.meshes[_i6].lod.length; j++) this.meshes[_i6].lod[j].visible = false;
+            if (this.vd[_i6] > Math.PI / (6 * 400)) this.meshes[_i6].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
+            else if (this.vd[_i6] > 0) this.meshes[_i6].lod[0].visible = true;
           } else {
-            this.meshes[_i5].visible = this.vd[_i5] > 0;
+            this.meshes[_i6].visible = this.vd[_i6] > 0;
           }
-          this.meshes[_i5].used = true; //这个mesh被使用了
+          this.meshes[_i6].used = true; //这个mesh被使用了
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i6 = 0; _i6 < visualList0["a"].length; _i6++) {
-          window.visibleArea[visualList0["a"][_i6]] = true;
+        if (visualList0["a"]) for (var _i7 = 0; _i7 < visualList0["a"].length; _i7++) {
+          window.visibleArea[visualList0["a"][_i7]] = true;
         }
       }
     }
@@ -42233,7 +42274,9 @@ var Visibility = /*#__PURE__*/function () {
     key: "request",
     value: function request(posIndex) {
       var scope = this;
-      if (!this.visualList_request[posIndex]) {
+      var areaId = this.areaInf.areaId;
+      // console.log(this.visualList_request,areaId)
+      if (!this.visualList_request[areaId][posIndex]) {
         var oReq = new XMLHttpRequest();
         oReq.open("POST", scope.urlVdServer, true);
         oReq.responseType = "arraybuffer";
@@ -42250,8 +42293,14 @@ var Visibility = /*#__PURE__*/function () {
           // console.log("test[1]"  ,Object.keys(test["1"]))
           scope.getList();
         };
-        oReq.send(JSON.stringify(posIndex)); //发送请求
-        this.visualList_request[posIndex] = true; //已经完成了请求
+        // console.log({"posIndex":posIndex,"sceneId":scope.config.sceneId,"areaId":scope.areaInf.areaId})
+        // oReq.send(JSON.stringify(posIndex));//发送请求
+        oReq.send(JSON.stringify({
+          "posIndex": posIndex,
+          "sceneId": scope.config.sceneId,
+          "areaId": scope.areaInf.areaId
+        })); //发送请求
+        this.visualList_request[areaId][posIndex] = true; //已经完成了请求
       }
     }
   }, {
@@ -42297,12 +42346,12 @@ var Visibility = /*#__PURE__*/function () {
       var y = c.position.y;
       var z = c.position.z;
       var arr = [];
-      for (var _i7 = -1; _i7 < 2; _i7 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i7 * dl[0], y + j * dl[1], z + k * dl[2]));
+      for (var _i8 = -1; _i8 < 2; _i8 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i8 * dl[0], y + j * dl[1], z + k * dl[2]));
       var a0 = getPosIndex0(x, y, z);
       arr.push(a0);
       var sum = 0;
-      for (var _i8 = 0; _i8 < arr.length; _i8++) sum += arr[_i8][4];
-      if (sum !== 0) for (var _i9 = 0; _i9 < arr.length; _i9++) arr[_i9][4] / sum;
+      for (var _i9 = 0; _i9 < arr.length; _i9++) sum += arr[_i9][4];
+      if (sum !== 0) for (var _i10 = 0; _i10 < arr.length; _i10++) arr[_i10][4] / sum;
       a0.push(arr);
       return a0;
     }
@@ -52700,7 +52749,268 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
   return IndirectMaterial;
 }(THREE.ShaderMaterial); // IndirectMaterial0.prototype.isMeshStandardMaterial = true;
 exports.IndirectMaterial = IndirectMaterial;
-},{"three":"node_modules/three/build/three.module.js","pako":"node_modules/pako/index.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"src/LoadingProgressive/Building.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","pako":"node_modules/pako/index.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"node_modules/three/examples/jsm/objects/Water.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Water = void 0;
+var _three = require("three");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+/**
+ * Work based on :
+ * https://github.com/Slayvin: Flat mirror for three.js
+ * https://home.adelphi.edu/~stemkoski/ : An implementation of water shader based on the flat mirror
+ * http://29a.ch/ && http://29a.ch/slides/2012/webglwater/ : Water shader explanations in WebGL
+ */
+var Water = /*#__PURE__*/function (_Mesh) {
+  _inherits(Water, _Mesh);
+  var _super = _createSuper(Water);
+  function Water(geometry, options = {}) {
+    var _this;
+    _classCallCheck(this, Water);
+    _this = _super.call(this, geometry);
+    _this.isWater = true;
+    var scope = _assertThisInitialized(_this);
+    var textureWidth = options.textureWidth !== undefined ? options.textureWidth : 512;
+    var textureHeight = options.textureHeight !== undefined ? options.textureHeight : 512;
+    var clipBias = options.clipBias !== undefined ? options.clipBias : 0.0;
+    var alpha = options.alpha !== undefined ? options.alpha : 1.0;
+    var time = options.time !== undefined ? options.time : 0.0;
+    var normalSampler = options.waterNormals !== undefined ? options.waterNormals : null;
+    var sunDirection = options.sunDirection !== undefined ? options.sunDirection : new _three.Vector3(0.70707, 0.70707, 0.0);
+    var sunColor = new _three.Color(options.sunColor !== undefined ? options.sunColor : 0xffffff);
+    var waterColor = new _three.Color(options.waterColor !== undefined ? options.waterColor : 0x7F7F7F);
+    var eye = options.eye !== undefined ? options.eye : new _three.Vector3(0, 0, 0);
+    var distortionScale = options.distortionScale !== undefined ? options.distortionScale : 20.0;
+    var side = options.side !== undefined ? options.side : _three.FrontSide;
+    var fog = options.fog !== undefined ? options.fog : false;
+
+    //
+
+    var mirrorPlane = new _three.Plane();
+    var normal = new _three.Vector3();
+    var mirrorWorldPosition = new _three.Vector3();
+    var cameraWorldPosition = new _three.Vector3();
+    var rotationMatrix = new _three.Matrix4();
+    var lookAtPosition = new _three.Vector3(0, 0, -1);
+    var clipPlane = new _three.Vector4();
+    var view = new _three.Vector3();
+    var target = new _three.Vector3();
+    var q = new _three.Vector4();
+    var textureMatrix = new _three.Matrix4();
+    var mirrorCamera = new _three.PerspectiveCamera();
+    var renderTarget = new _three.WebGLRenderTarget(textureWidth, textureHeight);
+    var mirrorShader = {
+      uniforms: _three.UniformsUtils.merge([_three.UniformsLib['fog'], _three.UniformsLib['lights'], {
+        'normalSampler': {
+          value: null
+        },
+        'mirrorSampler': {
+          value: null
+        },
+        'alpha': {
+          value: 1.0
+        },
+        'time': {
+          value: 0.0
+        },
+        'size': {
+          value: 1.0
+        },
+        'distortionScale': {
+          value: 20.0
+        },
+        'textureMatrix': {
+          value: new _three.Matrix4()
+        },
+        'sunColor': {
+          value: new _three.Color(0x7F7F7F)
+        },
+        'sunDirection': {
+          value: new _three.Vector3(0.70707, 0.70707, 0)
+        },
+        'eye': {
+          value: new _three.Vector3()
+        },
+        'waterColor': {
+          value: new _three.Color(0x555555)
+        }
+      }]),
+      vertexShader: /* glsl */"\n\t\t\t\tuniform mat4 textureMatrix;\n\t\t\t\tuniform float time;\n\n\t\t\t\tvarying vec4 mirrorCoord;\n\t\t\t\tvarying vec4 worldPosition;\n\n\t\t\t\t#include <common>\n\t\t\t\t#include <fog_pars_vertex>\n\t\t\t\t#include <shadowmap_pars_vertex>\n\t\t\t\t#include <logdepthbuf_pars_vertex>\n\n\t\t\t\tvoid main() {\n\t\t\t\t\tmirrorCoord = modelMatrix * vec4( position, 1.0 );\n\t\t\t\t\tworldPosition = mirrorCoord.xyzw;\n\t\t\t\t\tmirrorCoord = textureMatrix * mirrorCoord;\n\t\t\t\t\tvec4 mvPosition =  modelViewMatrix * vec4( position, 1.0 );\n\t\t\t\t\tgl_Position = projectionMatrix * mvPosition;\n\n\t\t\t\t#include <beginnormal_vertex>\n\t\t\t\t#include <defaultnormal_vertex>\n\t\t\t\t#include <logdepthbuf_vertex>\n\t\t\t\t#include <fog_vertex>\n\t\t\t\t#include <shadowmap_vertex>\n\t\t\t}",
+      fragmentShader: /* glsl */"\n\t\t\t\tuniform sampler2D mirrorSampler;\n\t\t\t\tuniform float alpha;\n\t\t\t\tuniform float time;\n\t\t\t\tuniform float size;\n\t\t\t\tuniform float distortionScale;\n\t\t\t\tuniform sampler2D normalSampler;\n\t\t\t\tuniform vec3 sunColor;\n\t\t\t\tuniform vec3 sunDirection;\n\t\t\t\tuniform vec3 eye;\n\t\t\t\tuniform vec3 waterColor;\n\n\t\t\t\tvarying vec4 mirrorCoord;\n\t\t\t\tvarying vec4 worldPosition;\n\n\t\t\t\tvec4 getNoise( vec2 uv ) {\n\t\t\t\t\tvec2 uv0 = ( uv / 103.0 ) + vec2(time / 17.0, time / 29.0);\n\t\t\t\t\tvec2 uv1 = uv / 107.0-vec2( time / -19.0, time / 31.0 );\n\t\t\t\t\tvec2 uv2 = uv / vec2( 8907.0, 9803.0 ) + vec2( time / 101.0, time / 97.0 );\n\t\t\t\t\tvec2 uv3 = uv / vec2( 1091.0, 1027.0 ) - vec2( time / 109.0, time / -113.0 );\n\t\t\t\t\tvec4 noise = texture2D( normalSampler, uv0 ) +\n\t\t\t\t\t\ttexture2D( normalSampler, uv1 ) +\n\t\t\t\t\t\ttexture2D( normalSampler, uv2 ) +\n\t\t\t\t\t\ttexture2D( normalSampler, uv3 );\n\t\t\t\t\treturn noise * 0.5 - 1.0;\n\t\t\t\t}\n\n\t\t\t\tvoid sunLight( const vec3 surfaceNormal, const vec3 eyeDirection, float shiny, float spec, float diffuse, inout vec3 diffuseColor, inout vec3 specularColor ) {\n\t\t\t\t\tvec3 reflection = normalize( reflect( -sunDirection, surfaceNormal ) );\n\t\t\t\t\tfloat direction = max( 0.0, dot( eyeDirection, reflection ) );\n\t\t\t\t\tspecularColor += pow( direction, shiny ) * sunColor * spec;\n\t\t\t\t\tdiffuseColor += max( dot( sunDirection, surfaceNormal ), 0.0 ) * sunColor * diffuse;\n\t\t\t\t}\n\n\t\t\t\t#include <common>\n\t\t\t\t#include <packing>\n\t\t\t\t#include <bsdfs>\n\t\t\t\t#include <fog_pars_fragment>\n\t\t\t\t#include <logdepthbuf_pars_fragment>\n\t\t\t\t#include <lights_pars_begin>\n\t\t\t\t#include <shadowmap_pars_fragment>\n\t\t\t\t#include <shadowmask_pars_fragment>\n\n\t\t\t\tvoid main() {\n\n\t\t\t\t\t#include <logdepthbuf_fragment>\n\t\t\t\t\tvec4 noise = getNoise( worldPosition.xz * size );\n\t\t\t\t\tvec3 surfaceNormal = normalize( noise.xzy * vec3( 1.5, 1.0, 1.5 ) );\n\n\t\t\t\t\tvec3 diffuseLight = vec3(0.0);\n\t\t\t\t\tvec3 specularLight = vec3(0.0);\n\n\t\t\t\t\tvec3 worldToEye = eye-worldPosition.xyz;\n\t\t\t\t\tvec3 eyeDirection = normalize( worldToEye );\n\t\t\t\t\tsunLight( surfaceNormal, eyeDirection, 100.0, 2.0, 0.5, diffuseLight, specularLight );\n\n\t\t\t\t\tfloat distance = length(worldToEye);\n\n\t\t\t\t\tvec2 distortion = surfaceNormal.xz * ( 0.001 + 1.0 / distance ) * distortionScale;\n\t\t\t\t\tvec3 reflectionSample = vec3( texture2D( mirrorSampler, mirrorCoord.xy / mirrorCoord.w + distortion ) );\n\n\t\t\t\t\tfloat theta = max( dot( eyeDirection, surfaceNormal ), 0.0 );\n\t\t\t\t\tfloat rf0 = 0.3;\n\t\t\t\t\tfloat reflectance = rf0 + ( 1.0 - rf0 ) * pow( ( 1.0 - theta ), 5.0 );\n\t\t\t\t\tvec3 scatter = max( 0.0, dot( surfaceNormal, eyeDirection ) ) * waterColor;\n\t\t\t\t\tvec3 albedo = mix( ( sunColor * diffuseLight * 0.3 + scatter ) * getShadowMask(), ( vec3( 0.1 ) + reflectionSample * 0.9 + reflectionSample * specularLight ), reflectance);\n\t\t\t\t\tvec3 outgoingLight = albedo;\n\t\t\t\t\tgl_FragColor = vec4( outgoingLight, alpha );\n\n\t\t\t\t\t#include <tonemapping_fragment>\n\t\t\t\t\t#include <fog_fragment>\n\t\t\t\t}"
+    };
+    var material = new _three.ShaderMaterial({
+      fragmentShader: mirrorShader.fragmentShader,
+      vertexShader: mirrorShader.vertexShader,
+      uniforms: _three.UniformsUtils.clone(mirrorShader.uniforms),
+      lights: true,
+      side: side,
+      fog: fog
+    });
+    material.uniforms['mirrorSampler'].value = renderTarget.texture;
+    material.uniforms['textureMatrix'].value = textureMatrix;
+    material.uniforms['alpha'].value = alpha;
+    material.uniforms['time'].value = time;
+    material.uniforms['normalSampler'].value = normalSampler;
+    material.uniforms['sunColor'].value = sunColor;
+    material.uniforms['waterColor'].value = waterColor;
+    material.uniforms['sunDirection'].value = sunDirection;
+    material.uniforms['distortionScale'].value = distortionScale;
+    material.uniforms['eye'].value = eye;
+    scope.material = material;
+    scope.onBeforeRender = function (renderer, scene, camera) {
+      mirrorWorldPosition.setFromMatrixPosition(scope.matrixWorld);
+      cameraWorldPosition.setFromMatrixPosition(camera.matrixWorld);
+      rotationMatrix.extractRotation(scope.matrixWorld);
+      normal.set(0, 0, 1);
+      normal.applyMatrix4(rotationMatrix);
+      view.subVectors(mirrorWorldPosition, cameraWorldPosition);
+
+      // Avoid rendering when mirror is facing away
+
+      if (view.dot(normal) > 0) return;
+      view.reflect(normal).negate();
+      view.add(mirrorWorldPosition);
+      rotationMatrix.extractRotation(camera.matrixWorld);
+      lookAtPosition.set(0, 0, -1);
+      lookAtPosition.applyMatrix4(rotationMatrix);
+      lookAtPosition.add(cameraWorldPosition);
+      target.subVectors(mirrorWorldPosition, lookAtPosition);
+      target.reflect(normal).negate();
+      target.add(mirrorWorldPosition);
+      mirrorCamera.position.copy(view);
+      mirrorCamera.up.set(0, 1, 0);
+      mirrorCamera.up.applyMatrix4(rotationMatrix);
+      mirrorCamera.up.reflect(normal);
+      mirrorCamera.lookAt(target);
+      mirrorCamera.far = camera.far; // Used in WebGLBackground
+
+      mirrorCamera.updateMatrixWorld();
+      mirrorCamera.projectionMatrix.copy(camera.projectionMatrix);
+
+      // Update the texture matrix
+      textureMatrix.set(0.5, 0.0, 0.0, 0.5, 0.0, 0.5, 0.0, 0.5, 0.0, 0.0, 0.5, 0.5, 0.0, 0.0, 0.0, 1.0);
+      textureMatrix.multiply(mirrorCamera.projectionMatrix);
+      textureMatrix.multiply(mirrorCamera.matrixWorldInverse);
+
+      // Now update projection matrix with new clip plane, implementing code from: http://www.terathon.com/code/oblique.html
+      // Paper explaining this technique: http://www.terathon.com/lengyel/Lengyel-Oblique.pdf
+      mirrorPlane.setFromNormalAndCoplanarPoint(normal, mirrorWorldPosition);
+      mirrorPlane.applyMatrix4(mirrorCamera.matrixWorldInverse);
+      clipPlane.set(mirrorPlane.normal.x, mirrorPlane.normal.y, mirrorPlane.normal.z, mirrorPlane.constant);
+      var projectionMatrix = mirrorCamera.projectionMatrix;
+      q.x = (Math.sign(clipPlane.x) + projectionMatrix.elements[8]) / projectionMatrix.elements[0];
+      q.y = (Math.sign(clipPlane.y) + projectionMatrix.elements[9]) / projectionMatrix.elements[5];
+      q.z = -1.0;
+      q.w = (1.0 + projectionMatrix.elements[10]) / projectionMatrix.elements[14];
+
+      // Calculate the scaled plane vector
+      clipPlane.multiplyScalar(2.0 / clipPlane.dot(q));
+
+      // Replacing the third row of the projection matrix
+      projectionMatrix.elements[2] = clipPlane.x;
+      projectionMatrix.elements[6] = clipPlane.y;
+      projectionMatrix.elements[10] = clipPlane.z + 1.0 - clipBias;
+      projectionMatrix.elements[14] = clipPlane.w;
+      eye.setFromMatrixPosition(camera.matrixWorld);
+
+      // Render
+
+      var currentRenderTarget = renderer.getRenderTarget();
+      var currentXrEnabled = renderer.xr.enabled;
+      var currentShadowAutoUpdate = renderer.shadowMap.autoUpdate;
+      scope.visible = false;
+      renderer.xr.enabled = false; // Avoid camera modification and recursion
+      renderer.shadowMap.autoUpdate = false; // Avoid re-computing shadows
+
+      renderer.setRenderTarget(renderTarget);
+      renderer.state.buffers.depth.setMask(true); // make sure the depth buffer is writable so it can be properly cleared, see #18897
+
+      if (renderer.autoClear === false) renderer.clear();
+      renderer.render(scene, mirrorCamera);
+      scope.visible = true;
+      renderer.xr.enabled = currentXrEnabled;
+      renderer.shadowMap.autoUpdate = currentShadowAutoUpdate;
+      renderer.setRenderTarget(currentRenderTarget);
+
+      // Restore viewport
+
+      var viewport = camera.viewport;
+      if (viewport !== undefined) {
+        renderer.state.viewport(viewport);
+      }
+    };
+    return _this;
+  }
+  return _createClass(Water);
+}(_three.Mesh);
+exports.Water = Water;
+},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/WaterController.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.WaterController = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+var _Water = require("three/examples/jsm/objects/Water");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var WaterController = /*#__PURE__*/function () {
+  function WaterController(mesh) {
+    _classCallCheck(this, WaterController);
+    this.water = this.initWater(mesh);
+    var self = this;
+    var animate = function animate() {
+      // const sun=window.sun?window.sun:new THREE.Vector3(-200,800,-600)
+      var sun = new THREE.Vector3(-200, 800, -600);
+      requestAnimationFrame(animate);
+      self.water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+      self.water.material.uniforms['time'].value += 1.0 / 120.0;
+    };
+    animate();
+  }
+  _createClass(WaterController, [{
+    key: "initWater",
+    value: function initWater(mesh) {
+      return new _Water.Water(mesh.geometry, {
+        textureWidth: 512,
+        textureHeight: 512,
+        waterNormals: new THREE.TextureLoader().load('assets/waternormals.jpg', function (texture) {
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        }),
+        sunDirection: new THREE.Vector3(),
+        sunColor: 0xffffff,
+        waterColor: 0x001e0f,
+        distortionScale: 3.7,
+        fog: false
+      });
+    }
+  }]);
+  return WaterController;
+}();
+exports.WaterController = WaterController;
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/objects/Water":"node_modules/three/examples/jsm/objects/Water.js"}],"src/LoadingProgressive/Building.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52716,6 +53026,7 @@ var _P2P = require("./P2P.js");
 var _Detection = require("./Detection.js");
 var _ziploader = require("../../lib/zip/ziploader.js");
 var _IndirectMaterial = require("../../lib/IndirectMaterial.js");
+var _WaterController = require("../../lib/threejs/WaterController");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -52899,6 +53210,7 @@ var Building = /*#__PURE__*/function () {
       // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
       // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
       if (this.instance_info) {
+        var meshOld = mesh;
         mesh.materialOld = mesh.material;
         var color = this.colorList[id];
         var mesh0 = mesh;
@@ -52911,6 +53223,14 @@ var Building = /*#__PURE__*/function () {
           metalness: 0.5
         }), instance_info);
         mesh.lod = [mesh, mesh2];
+        if (this.config.waterCidList) {
+          for (var i = 0; i < this.config.waterCidList.length; i++) if (id == this.config.waterCidList[i]) {
+            var water = new _WaterController.WaterController(meshOld).water;
+            mesh.visible = mesh2.visible = false;
+            mesh.lod = [water, water];
+            this.parentGroup2.add(water);
+          }
+        }
         this.parentGroup2.add(mesh2);
         mesh.used = mesh0.used;
         mesh.LoadDelay = mesh0.LoadDelay;
@@ -53128,7 +53448,7 @@ var Building = /*#__PURE__*/function () {
   return Building;
 }();
 exports.Building = Building;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js","../../lib/IndirectMaterial.js":"lib/IndirectMaterial.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js","../../lib/IndirectMaterial.js":"lib/IndirectMaterial.js","../../lib/threejs/WaterController":"lib/threejs/WaterController.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61277,7 +61597,7 @@ var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
   _scope2.rectify = true; //
   _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
 });
-},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/Sky.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/objects/Sky.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61357,7 +61677,81 @@ Sky.SkyShader = {
   vertexShader: /* glsl */"\n\t\tuniform vec3 sunPosition;\n\t\tuniform float rayleigh;\n\t\tuniform float turbidity;\n\t\tuniform float mieCoefficient;\n\t\tuniform vec3 up;\n\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\t// constants for atmospheric scattering\n\t\tconst float e = 2.71828182845904523536028747135266249775724709369995957;\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\t// wavelength of used primaries, according to preetham\n\t\tconst vec3 lambda = vec3( 680E-9, 550E-9, 450E-9 );\n\t\t// this pre-calcuation replaces older TotalRayleigh(vec3 lambda) function:\n\t\t// (8.0 * pow(pi, 3.0) * pow(pow(n, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * N * pow(lambda, vec3(4.0)) * (6.0 - 7.0 * pn))\n\t\tconst vec3 totalRayleigh = vec3( 5.804542996261093E-6, 1.3562911419845635E-5, 3.0265902468824876E-5 );\n\n\t\t// mie stuff\n\t\t// K coefficient for the primaries\n\t\tconst float v = 4.0;\n\t\tconst vec3 K = vec3( 0.686, 0.678, 0.666 );\n\t\t// MieConst = pi * pow( ( 2.0 * pi ) / lambda, vec3( v - 2.0 ) ) * K\n\t\tconst vec3 MieConst = vec3( 1.8399918514433978E14, 2.7798023919660528E14, 4.0790479543861094E14 );\n\n\t\t// earth shadow hack\n\t\t// cutoffAngle = pi / 1.95;\n\t\tconst float cutoffAngle = 1.6110731556870734;\n\t\tconst float steepness = 1.5;\n\t\tconst float EE = 1000.0;\n\n\t\tfloat sunIntensity( float zenithAngleCos ) {\n\t\t\tzenithAngleCos = clamp( zenithAngleCos, -1.0, 1.0 );\n\t\t\treturn EE * max( 0.0, 1.0 - pow( e, -( ( cutoffAngle - acos( zenithAngleCos ) ) / steepness ) ) );\n\t\t}\n\n\t\tvec3 totalMie( float T ) {\n\t\t\tfloat c = ( 0.2 * T ) * 10E-18;\n\t\t\treturn 0.434 * c * MieConst;\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n\t\t\tvWorldPosition = worldPosition.xyz;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\t\t\tgl_Position.z = gl_Position.w; // set z to camera.far\n\n\t\t\tvSunDirection = normalize( sunPosition );\n\n\t\t\tvSunE = sunIntensity( dot( vSunDirection, up ) );\n\n\t\t\tvSunfade = 1.0 - clamp( 1.0 - exp( ( sunPosition.y / 450000.0 ) ), 0.0, 1.0 );\n\n\t\t\tfloat rayleighCoefficient = rayleigh - ( 1.0 * ( 1.0 - vSunfade ) );\n\n\t\t\t// extinction (absorbtion + out scattering)\n\t\t\t// rayleigh coefficients\n\t\t\tvBetaR = totalRayleigh * rayleighCoefficient;\n\n\t\t\t// mie coefficients\n\t\t\tvBetaM = totalMie( turbidity ) * mieCoefficient;\n\n\t\t}",
   fragmentShader: /* glsl */"\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\tuniform float mieDirectionalG;\n\t\tuniform vec3 up;\n\n\t\tconst vec3 cameraPos = vec3( 0.0, 0.0, 0.0 );\n\n\t\t// constants for atmospheric scattering\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\tconst float n = 1.0003; // refractive index of air\n\t\tconst float N = 2.545E25; // number of molecules per unit volume for air at 288.15K and 1013mb (sea level -45 celsius)\n\n\t\t// optical length at zenith for molecules\n\t\tconst float rayleighZenithLength = 8.4E3;\n\t\tconst float mieZenithLength = 1.25E3;\n\t\t// 66 arc seconds -> degrees, and the cosine of that\n\t\tconst float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324;\n\n\t\t// 3.0 / ( 16.0 * pi )\n\t\tconst float THREE_OVER_SIXTEENPI = 0.05968310365946075;\n\t\t// 1.0 / ( 4.0 * pi )\n\t\tconst float ONE_OVER_FOURPI = 0.07957747154594767;\n\n\t\tfloat rayleighPhase( float cosTheta ) {\n\t\t\treturn THREE_OVER_SIXTEENPI * ( 1.0 + pow( cosTheta, 2.0 ) );\n\t\t}\n\n\t\tfloat hgPhase( float cosTheta, float g ) {\n\t\t\tfloat g2 = pow( g, 2.0 );\n\t\t\tfloat inverse = 1.0 / pow( 1.0 - 2.0 * g * cosTheta + g2, 1.5 );\n\t\t\treturn ONE_OVER_FOURPI * ( ( 1.0 - g2 ) * inverse );\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec3 direction = normalize( vWorldPosition - cameraPos );\n\n\t\t\t// optical length\n\t\t\t// cutoff angle at 90 to avoid singularity in next formula.\n\t\t\tfloat zenithAngle = acos( max( 0.0, dot( up, direction ) ) );\n\t\t\tfloat inverse = 1.0 / ( cos( zenithAngle ) + 0.15 * pow( 93.885 - ( ( zenithAngle * 180.0 ) / pi ), -1.253 ) );\n\t\t\tfloat sR = rayleighZenithLength * inverse;\n\t\t\tfloat sM = mieZenithLength * inverse;\n\n\t\t\t// combined extinction factor\n\t\t\tvec3 Fex = exp( -( vBetaR * sR + vBetaM * sM ) );\n\n\t\t\t// in scattering\n\t\t\tfloat cosTheta = dot( direction, vSunDirection );\n\n\t\t\tfloat rPhase = rayleighPhase( cosTheta * 0.5 + 0.5 );\n\t\t\tvec3 betaRTheta = vBetaR * rPhase;\n\n\t\t\tfloat mPhase = hgPhase( cosTheta, mieDirectionalG );\n\t\t\tvec3 betaMTheta = vBetaM * mPhase;\n\n\t\t\tvec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );\n\t\t\tLin *= mix( vec3( 1.0 ), pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * Fex, vec3( 1.0 / 2.0 ) ), clamp( pow( 1.0 - dot( up, vSunDirection ), 5.0 ), 0.0, 1.0 ) );\n\n\t\t\t// nightsky\n\t\t\tfloat theta = acos( direction.y ); // elevation --> y-axis, [-pi/2, pi/2]\n\t\t\tfloat phi = atan( direction.z, direction.x ); // azimuth --> x-axis [-pi/2, pi/2]\n\t\t\tvec2 uv = vec2( phi, theta ) / vec2( 2.0 * pi, pi ) + vec2( 0.5, 0.0 );\n\t\t\tvec3 L0 = vec3( 0.1 ) * Fex;\n\n\t\t\t// composition + solar disc\n\t\t\tfloat sundisk = smoothstep( sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta );\n\t\t\tL0 += ( vSunE * 19000.0 * Fex ) * sundisk;\n\n\t\t\tvec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );\n\n\t\t\tvec3 retColor = pow( texColor, vec3( 1.0 / ( 1.2 + ( 1.2 * vSunfade ) ) ) );\n\n\t\t\tgl_FragColor = vec4( retColor, 1.0 );\n\n\t\t\t#include <tonemapping_fragment>\n\t\t\t#include <encodings_fragment>\n\n\t\t}"
 };
-},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/SkyController.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SkyController = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+var _Sky = require("three/examples/jsm/objects/Sky");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var SkyController = /*#__PURE__*/function () {
+  function SkyController(scene, camera, renderer) {
+    _classCallCheck(this, SkyController);
+    this.scene = scene;
+    this.camera = camera;
+    this.renderer = renderer;
+    this.sun = new THREE.Vector3();
+    window.sun = this.sum;
+    this.sky = this.initSky();
+    this.render();
+  }
+  _createClass(SkyController, [{
+    key: "initSky",
+    value: function initSky() {
+      var sky = new _Sky.Sky();
+      sky.scale.setScalar(450000);
+      this.scene.add(sky);
+      this.sky = sky;
+      this.effectController = {
+        turbidity: 0.01,
+        //1,//10,//光晕强度
+        rayleigh: 0.5,
+        //1,//3,//红色强度
+        mieCoefficient: 0.0001,
+        //0.005,//光晕强度
+        mieDirectionalG: 0.01,
+        //0.7,//光晕强度
+        elevation: 20,
+        //5,//2,  //俯仰角
+        azimuth: 180,
+        //偏航角
+        exposure: this.renderer.toneMappingExposure / 100 //this.renderer.toneMappingExposure
+      };
+
+      return sky;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var effectController = this.effectController;
+      // console.log()
+      var uniforms = this.sky.material.uniforms;
+      uniforms['turbidity'].value = effectController.turbidity;
+      uniforms['rayleigh'].value = effectController.rayleigh;
+      uniforms['mieCoefficient'].value = effectController.mieCoefficient;
+      uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
+      var phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
+      var theta = THREE.MathUtils.degToRad(effectController.azimuth);
+      this.sun.setFromSphericalCoords(1, phi, theta);
+      uniforms['sunPosition'].value.copy(this.sun);
+      this.renderer.toneMappingExposure = effectController.exposure;
+      this.renderer.render(this.scene, this.camera);
+    }
+  }]);
+  return SkyController;
+}();
+exports.SkyController = SkyController;
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/objects/Sky":"node_modules/three/examples/jsm/objects/Sky.js"}],"src/LoadingProgressive/main.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61375,7 +61769,7 @@ var _LightProducer = require("./LightProducer.js");
 var _Panel = require("./Panel.js");
 var _AvatarManager = require("./AvatarManager.js");
 var _MoveManager = require("../../lib/playerControl/MoveManager.js");
-var _Sky = require("../../lib/threejs/Sky.js");
+var _SkyController = require("../../lib/threejs/SkyController");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -61485,41 +61879,7 @@ var Loader = /*#__PURE__*/function () {
     key: "initSky",
     value: function initSky() {
       if (this.config.render == "false") return;
-      var self = this;
-      var sky = new _Sky.Sky();
-      sky.scale.setScalar(450000);
-      this.scene.add(sky);
-      var sun = new THREE.Vector3();
-      var effectController = {
-        turbidity: 0.01,
-        //1,//10,//光晕强度
-        rayleigh: 0.5,
-        //1,//3,//红色强度
-        mieCoefficient: 0.0001,
-        //0.005,//光晕强度
-        mieDirectionalG: 0.01,
-        //0.7,//光晕强度
-        elevation: 20,
-        //5,//2,  //俯仰角
-        azimuth: 180,
-        //偏航角
-        exposure: this.renderer.toneMappingExposure / 100 //this.renderer.toneMappingExposure
-      };
-
-      function guiChanged(effectController, sun) {
-        var uniforms = sky.material.uniforms;
-        uniforms['turbidity'].value = effectController.turbidity;
-        uniforms['rayleigh'].value = effectController.rayleigh;
-        uniforms['mieCoefficient'].value = effectController.mieCoefficient;
-        uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
-        var phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
-        var theta = THREE.MathUtils.degToRad(effectController.azimuth);
-        sun.setFromSphericalCoords(1, phi, theta);
-        uniforms['sunPosition'].value.copy(sun);
-        self.renderer.toneMappingExposure = effectController.exposure;
-        self.renderer.render(self.scene, self.camera);
-      }
-      guiChanged(effectController, sun);
+      new _SkyController.SkyController(this.scene, this.camera, this.renderer);
     }
   }, {
     key: "setSpeed",
@@ -61583,7 +61943,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.configALL = config;
   new Loader(document.body);
 });
-},{"../../config/configOP7.json":"config/configOP7.json","../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/Sky.js":"lib/threejs/Sky.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../config/configOP7.json":"config/configOP7.json","../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

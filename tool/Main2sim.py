@@ -9,7 +9,8 @@ import json
 class Main: #所有视点,每个视点的可见特征
     def __init__(self,config):
         id=config["id"]
-        loader=Loader("F:/result_gkd1_anNing",id)
+        # loader=Loader("F:/result_gkd1_anNing",id)
+        loader=Loader("F:/gitHubRepositories/vk-precompute-main/output8",id)
         for vid in loader.data:
             loader.data[vid].data["all"]={}
         # loader.repeat8()

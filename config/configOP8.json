@@ -32,11 +32,45 @@
             "block2Kernel": {},
             "updateColor":false,
             "instanceUse":true,
-            "useIndirectMaterial":false
+            "useIndirectMaterial":false,
+            "waterCidList":[175,180]
         },
         "Visibility":{
+            "areaInfList":[
+                {
+                    "x": [
+                        -815,879,
+                        11
+                    ],
+                    "y": [
+                        16,16,
+                        11
+                    ],
+                    "z": [
+                        -962,1084,
+                        11
+                    ],
+                    "r": 3
+                },
+                {
+                    "x": [
+                        -880,880,
+                        110
+                    ],
+                    "y": [
+                        -110,440,
+                        110
+                    ],
+                    "z": [
+                        -990,1100,
+                        110
+                    ],
+                    "r": 30
+                }
+            ],
             "componentNum":8437,
-            "urlVdServer":"http://39.98.206.0:8092"
+            "sceneId":"gkd",
+            "urlVdServer":"http://localhost:8092"
         },
         "P2P":{
             "urlP2pControllerServer":"http://139.196.217.153:8010"
