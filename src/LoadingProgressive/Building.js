@@ -41,6 +41,27 @@ export class Building{
     }
     loadConfigInstance(cb){
         const self=this
+        const matrix2str=(instanceMatrix)=>{
+            let str=""
+            console.log(instanceMatrix.length,"instanceMatrix.length")
+            for(let i=0;i<Object.keys(instanceMatrix).length;i++){
+                const group=instanceMatrix[""+i]
+                str+="["
+                for(let j=0;j<group.length;j++){
+                    const mesh=group[j]
+                    str+=("[")
+                    for(let k=0;k<12;k++){
+                        str+=(mesh[k])
+                        if(k<12-1)str+=(", ")
+                    }
+                    str+=("]")
+                    if(j<group.length-1)str+=(", ")
+                }
+                str+="], "
+            }
+            console.log(str)
+            self.saveStr(str,"matrices_all.json")
+        }
         if(this.config.instanceUse){
             this.parentGroup2=new THREE.Group()//用于Lod
             this.parentGroup.add(this.parentGroup2)
@@ -50,6 +71,7 @@ export class Building{
                     console.log(data)
                     self.instance_info=data.instanceMatrix
                     self.colorList=data.colorList
+                    if(false)matrix2str(data.instanceMatrix)
                     cb()
                 }
             )
@@ -161,9 +183,7 @@ export class Building{
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
-        mesh.material=new THREE.MeshBasicMaterial({ 
-            color:id
-        })
+        if(false)mesh.material=new THREE.MeshBasicMaterial({color:id})
         if(this.config.useIndirectMaterial){
             mesh.material=new IndirectMaterial(mesh.material)
         }
@@ -356,22 +376,12 @@ export class Building{
             }
         },100)
     }
-    saveMesh(mesh,name){
-        const scene=new THREE.Scene()
-        // mesh.geometry.attributes.normal=null
-        // mesh.geometry.attributes={
-        //     position:mesh.geometry.attributes.position
-        // }
-        scene.add(mesh)
-        scene.traverse(o=>{
-            if(o instanceof THREE.Mesh)
-                o.geometry.attributes={position:o.geometry.attributes.position}
-        })
-        const objData = new OBJExporter().parse(scene, { includeNormals: false });
-
-        // 将数据保存为OBJ文件
-        const blob = new Blob([objData], { type: 'textain' });
-        saveAs(blob, name);
+    saveStr(str,name){
+        var myBlob=new Blob([str], { type: 'text/plain' })
+        let link = document.createElement('a')
+        link.href = URL.createObjectURL(myBlob)
+        link.download = name
+        link.click()
     }
     InY(mesh,ymin,ymax){
         var box = new THREE.Box3().setFromObject(mesh)

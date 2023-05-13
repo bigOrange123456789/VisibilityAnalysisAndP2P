@@ -41915,6 +41915,7 @@ var Visibility = /*#__PURE__*/function () {
     this.config = window.configALL.src.Visibility;
     this.urlVdServer = this.config.urlVdServer; //"http://150.158.24.191:8091"
     console.log("urlVdServer", this.urlVdServer);
+    console.log("areaInf", areaInf);
     // console.log(areaInf["min"])
     // areaInf["min"][1]-=0.5
     // areaInf["max"][1]-=0.5
@@ -41969,9 +41970,6 @@ var Visibility = /*#__PURE__*/function () {
     //     }
   }
   _createClass(Visibility, [{
-    key: "getPlumpness",
-    value: function getPlumpness() {}
-  }, {
     key: "getDirection",
     value: function getDirection() {
       var d = this.camera.getWorldDirection();
@@ -42105,9 +42103,7 @@ var Visibility = /*#__PURE__*/function () {
             // console.log()
             _this2.vd[_i2] += getVD(_j);
           }
-          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i2]) {
-            vd_had += _this2.vd[_i2];
-          } else vd_hading += _this2.vd[_i2];
+          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i2]) vd_had += _this2.vd[_i2];else vd_hading += _this2.vd[_i2];
         };
         for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
           _loop(_i2);
@@ -42125,7 +42121,7 @@ var Visibility = /*#__PURE__*/function () {
         });
         var _i3 = 0;
         for (var sum = 0; _i3 < list.length && sum < 4 * Math.PI / 300; _i3++, sum = sum + list[list.length - 1 - _i3].value);
-        // console.log("不加载数量:",i)
+        console.log("不加载数量:", _i3);
         var list2 = [];
         for (var j = 0; j < list.length - _i3; j++) list2.push(list[j].index);
         if (list2.length > 0) this.loading(list2);
@@ -52758,6 +52754,27 @@ var Building = /*#__PURE__*/function () {
     key: "loadConfigInstance",
     value: function loadConfigInstance(cb) {
       var self = this;
+      var matrix2str = function matrix2str(instanceMatrix) {
+        var str = "";
+        console.log(instanceMatrix.length, "instanceMatrix.length");
+        for (var i = 0; i < Object.keys(instanceMatrix).length; i++) {
+          var group = instanceMatrix["" + i];
+          str += "[";
+          for (var j = 0; j < group.length; j++) {
+            var mesh = group[j];
+            str += "[";
+            for (var k = 0; k < 12; k++) {
+              str += mesh[k];
+              if (k < 12 - 1) str += ", ";
+            }
+            str += "]";
+            if (j < group.length - 1) str += ", ";
+          }
+          str += "], ";
+        }
+        console.log(str);
+        self.saveStr(str, "matrices_all.json");
+      };
       if (this.config.instanceUse) {
         this.parentGroup2 = new THREE.Group(); //用于Lod
         this.parentGroup.add(this.parentGroup2);
@@ -52765,6 +52782,7 @@ var Building = /*#__PURE__*/function () {
           console.log(data);
           self.instance_info = data.instanceMatrix;
           self.colorList = data.colorList;
+          if (false) matrix2str(data.instanceMatrix);
           cb();
         });
       } else cb();
@@ -52862,7 +52880,7 @@ var Building = /*#__PURE__*/function () {
         mesh.material.side = 0; //THREE.DoubleSide
       }
 
-      mesh.material = new THREE.MeshBasicMaterial({
+      if (false) mesh.material = new THREE.MeshBasicMaterial({
         color: id
       });
       if (this.config.useIndirectMaterial) {
@@ -53075,28 +53093,15 @@ var Building = /*#__PURE__*/function () {
       }, 100);
     }
   }, {
-    key: "saveMesh",
-    value: function saveMesh(mesh, name) {
-      var scene = new THREE.Scene();
-      // mesh.geometry.attributes.normal=null
-      // mesh.geometry.attributes={
-      //     position:mesh.geometry.attributes.position
-      // }
-      scene.add(mesh);
-      scene.traverse(function (o) {
-        if (o instanceof THREE.Mesh) o.geometry.attributes = {
-          position: o.geometry.attributes.position
-        };
+    key: "saveStr",
+    value: function saveStr(str, name) {
+      var myBlob = new Blob([str], {
+        type: 'text/plain'
       });
-      var objData = new _OBJExporter.OBJExporter().parse(scene, {
-        includeNormals: false
-      });
-
-      // 将数据保存为OBJ文件
-      var blob = new Blob([objData], {
-        type: 'textain'
-      });
-      (0, _fileSaver.saveAs)(blob, name);
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(myBlob);
+      link.download = name;
+      link.click();
     }
   }, {
     key: "InY",
@@ -61603,7 +61608,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58857" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52122" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

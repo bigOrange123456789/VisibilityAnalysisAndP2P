@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        new SamplePointList(
-            this.config.createSphere,
-            this.parentGroup,
-            this.meshes,
-            this.config.entropy
-            )
+        // new SamplePointList(
+        //     this.config.createSphere,
+        //     this.parentGroup,
+        //     this.meshes,
+        //     this.config.entropy
+        //     )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -305,7 +305,7 @@ export class Building{
                     const mesh=o
                     // console.log()
                     mesh.myId=self.meshes.length
-                    colorList.push(self.getColor2(mesh))
+                    if(false)colorList.push(self.getColor2(mesh))
                     
                     if(self.config.updateColor){
                         let t=mesh.myId*256*256*256/2665
@@ -314,7 +314,6 @@ export class Building{
                         mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
                         mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
                     }
-
                     
                     // mesh.material.opacity=1
                     // mesh.material.transparent=true
@@ -387,7 +386,8 @@ export class Building{
                 }
             })
             console.log("colorList",colorList)
-            self.saveJson(colorList,"colorList.json")
+            // self.saveJson(colorList,"colorList.json")
+
             // self.config.isdoor={}
             // for(let i=0;i<self.meshes.length;i++){
             //     self.config.isdoor[""+i]=

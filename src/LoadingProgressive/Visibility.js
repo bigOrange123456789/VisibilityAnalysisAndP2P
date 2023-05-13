@@ -3,6 +3,7 @@ export class Visibility{
         this.config=window.configALL.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
         console.log("urlVdServer",this.urlVdServer)
+        console.log("areaInf",areaInf)
         // console.log(areaInf["min"])
         // areaInf["min"][1]-=0.5
         // areaInf["max"][1]-=0.5
@@ -55,9 +56,6 @@ export class Visibility{
         //             camera.position.z+=step[2]
         //         },10)//60*1000
         //     }
-    }
-    getPlumpness(){
-
     }
     getDirection(){
         var d=this.camera.getWorldDirection()
@@ -160,18 +158,19 @@ export class Visibility{
                     // console.log()
                     this.vd[i]+=getVD(j)
                 }
-                if(Object.keys(this.meshes).length!==0&&this.meshes[i]){
+                if(Object.keys(this.meshes).length!==0&&this.meshes[i])
                     vd_had+=this.vd[i]
-                }else vd_hading+=this.vd[i]
+                else vd_hading+=this.vd[i]
             } 
             document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
+            
             
             let list=this.vd.map((value, index) => ({ value, index }))
                 .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
             let i=0  
             for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);
-            // console.log("不加载数量:",i)
+            console.log("不加载数量:",i)
             const list2=[]
             for(let j=0;j<list.length-i;j++)
                 list2.push(
