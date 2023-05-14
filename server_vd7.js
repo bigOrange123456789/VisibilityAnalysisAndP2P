@@ -76,7 +76,7 @@ class VD{
     return vdList
   } 
   static getEvd(info,vdList){
-    if(typeof info.sceneId=="undefined"||typeof info.areaId=="undefined"){
+    if(typeof info=="undefined"||typeof info.sceneId=="undefined"||typeof info.areaId=="undefined"){
       console.log("系统版本未更新")
       return null
     }

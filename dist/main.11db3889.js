@@ -42104,6 +42104,90 @@ var Visibility = /*#__PURE__*/function () {
     key: "getList",
     value: function getList() {
       var _this2 = this;
+      console.log("*");
+      var self = this;
+      var vd_had = 0;
+      var vd_hading = 0;
+      var posIndexAll = this.getPosIndex();
+      var arr = posIndexAll[5];
+      var loaded = true;
+      for (var i = 0; i < arr.length; i++) {
+        var posIndex0 = arr[i][3];
+        if (!this.visualList[posIndex0]) {
+          loaded = false;
+          this.request(posIndex0);
+        }
+      }
+      // window.arr=arr
+      // console.log(arr)
+      if (loaded) {
+        // const posIndex=posIndexAll[3]
+        var t0 = performance.now();
+        window.t = {};
+        var d = this.getDirection();
+        window.t.t1 = performance.now() - t0;
+        t0 = performance.now();
+        var _loop = function _loop(_i) {
+          var getVD = function getVD(j) {
+            var posIndex = arr[j][3];
+            var weight = arr[j][4];
+            var visualList0 = self.visualList[posIndex];
+            var vd1 = _i in visualList0["1"] ? visualList0["1"][_i] : 0;
+            var vd2 = _i in visualList0["2"] ? visualList0["2"][_i] : 0;
+            var vd3 = _i in visualList0["3"] ? visualList0["3"][_i] : 0;
+            var vd4 = _i in visualList0["4"] ? visualList0["4"][_i] : 0;
+            var vd5 = _i in visualList0["5"] ? visualList0["5"][_i] : 0;
+            var vd6 = _i in visualList0["6"] ? visualList0["6"][_i] : 0;
+            // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
+            return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
+          };
+
+          // this.vd[i]=getVD(posIndex)//posIndexAll[3]
+          _this2.vd[_i] = 0;
+          for (var j = 0; j < arr.length; j++) {
+            // console.log()
+            _this2.vd[_i] += getVD(j);
+          }
+          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i]) vd_had += _this2.vd[_i];else vd_hading += _this2.vd[_i];
+        };
+        for (var _i = 0; _i < this.componentNum; _i++) {
+          _loop(_i);
+        }
+        window.t.t2 = performance.now() - t0;
+        t0 = performance.now();
+        document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
+        var list = this.vd.map(function (value, index) {
+          return {
+            value: value,
+            index: index
+          };
+        }).filter(function (item) {
+          return item.value > 0;
+        }).sort(function (a, b) {
+          return b.value - a.value;
+        });
+        list = list.map(function (value, index) {
+          return value.index;
+        });
+        window.t.t3 = performance.now() - t0;
+        t0 = performance.now();
+        if (list.length > 0) this.loading(list);
+        // list.filter((value, index) => index<list.length-i )
+        // console.log(list.length)
+        // list=list.map((value, index) => value.index )
+        // if(list.length>0)this.loading(list)
+
+        // const list=this.vd.map((value, index) => ({ value, index }))
+        //     .filter(item => item.value > 4*Math.PI/600)
+        //     .sort((a, b) => b.value - a.value)
+        //     .map((value, index) => value.index )
+        // if(list.length>0)this.loading(list)
+      }
+    }
+  }, {
+    key: "getListOld",
+    value: function getListOld() {
+      var _this3 = this;
       var self = this;
       var vd_had = 0;
       var vd_hading = 0;
@@ -42122,31 +42206,31 @@ var Visibility = /*#__PURE__*/function () {
       if (loaded) {
         // const posIndex=posIndexAll[3]
         var d = this.getDirection();
-        var _loop = function _loop(_i) {
+        var _loop2 = function _loop2(_i2) {
           var getVD = function getVD(j) {
             var posIndex = arr[j][3];
             var weight = arr[j][4];
             var visualList0 = self.visualList[posIndex];
-            var vd1 = _i in visualList0["1"] ? visualList0["1"][_i] : 0;
-            var vd2 = _i in visualList0["2"] ? visualList0["2"][_i] : 0;
-            var vd3 = _i in visualList0["3"] ? visualList0["3"][_i] : 0;
-            var vd4 = _i in visualList0["4"] ? visualList0["4"][_i] : 0;
-            var vd5 = _i in visualList0["5"] ? visualList0["5"][_i] : 0;
-            var vd6 = _i in visualList0["6"] ? visualList0["6"][_i] : 0;
+            var vd1 = _i2 in visualList0["1"] ? visualList0["1"][_i2] : 0;
+            var vd2 = _i2 in visualList0["2"] ? visualList0["2"][_i2] : 0;
+            var vd3 = _i2 in visualList0["3"] ? visualList0["3"][_i2] : 0;
+            var vd4 = _i2 in visualList0["4"] ? visualList0["4"][_i2] : 0;
+            var vd5 = _i2 in visualList0["5"] ? visualList0["5"][_i2] : 0;
+            var vd6 = _i2 in visualList0["6"] ? visualList0["6"][_i2] : 0;
             // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
             return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
           };
 
           // this.vd[i]=getVD(posIndex)//posIndexAll[3]
-          _this2.vd[_i] = 0;
+          _this3.vd[_i2] = 0;
           for (var _j = 0; _j < arr.length; _j++) {
             // console.log()
-            _this2.vd[_i] += getVD(_j);
+            _this3.vd[_i2] += getVD(_j);
           }
-          if (Object.keys(_this2.meshes).length !== 0 && _this2.meshes[_i]) vd_had += _this2.vd[_i];else vd_hading += _this2.vd[_i];
+          if (Object.keys(_this3.meshes).length !== 0 && _this3.meshes[_i2]) vd_had += _this3.vd[_i2];else vd_hading += _this3.vd[_i2];
         };
-        for (var _i = 0; _i < this.componentNum; _i++) {
-          _loop(_i);
+        for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
+          _loop2(_i2);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -42160,12 +42244,12 @@ var Visibility = /*#__PURE__*/function () {
           return b.value - a.value;
         });
         if (false) {
-          var _i2 = 0;
+          var _i3 = 0;
           // console.log(list,list.length)
-          for (var sum = 0; _i2 < list.length && sum < 4 * Math.PI / 300; _i2++, sum = sum + list[list.length - 1 - _i2].value); //console.log(i);
-          console.log("不加载数量:", _i2);
+          for (var sum = 0; _i3 < list.length && sum < 4 * Math.PI / 300; _i3++, sum = sum + list[list.length - 1 - _i3].value); //console.log(i);
+          console.log("不加载数量:", _i3);
           var list2 = [];
-          for (var j = 0; j < list.length - _i2; j++) list2.push(list[j].index);
+          for (var j = 0; j < list.length - _i3; j++) list2.push(list[j].index);
           list = list2;
         } else {
           list = list.map(function (value, index) {
@@ -42211,8 +42295,8 @@ var Visibility = /*#__PURE__*/function () {
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i3 = 0; _i3 < visualList0["a"].length; _i3++) {
-          window.visibleArea[visualList0["a"][_i3]] = true;
+        if (visualList0["a"]) for (var _i4 = 0; _i4 < visualList0["a"].length; _i4++) {
+          window.visibleArea[visualList0["a"][_i4]] = true;
         }
       }
     }
@@ -42269,7 +42353,7 @@ var Visibility = /*#__PURE__*/function () {
   }, {
     key: "getPosIndex",
     value: function getPosIndex() {
-      var _this3 = this;
+      var _this4 = this;
       //加载和剔除都调用这个函数
       this.setArea();
       var self = this;
@@ -42282,14 +42366,14 @@ var Visibility = /*#__PURE__*/function () {
       var distanceMax = Math.pow(Math.pow(dl[0], 2) + Math.pow(dl[1], 2) + Math.pow(dl[2], 2), 0.5);
       var getPosIndex0 = function getPosIndex0(x, y, z) {
         if (x > max[0] || y > max[1] || z > max[2] || x < min[0] || y < min[1] || z < min[2]) {
-          _this3.border = true; //视点在采样区域之外
+          _this4.border = true; //视点在采样区域之外
           if (x > max[0]) x = max[0];
           if (y > max[1]) y = max[1];
           if (z > max[2]) z = max[2];
           if (x < min[0]) x = min[0];
           if (y < min[1]) y = min[1];
           if (z < min[2]) z = min[2];
-        } else _this3.border = false;
+        } else _this4.border = false;
         var x2 = self.camera.position.x;
         var y2 = self.camera.position.y;
         var z2 = self.camera.position.z;
@@ -42311,12 +42395,12 @@ var Visibility = /*#__PURE__*/function () {
       var y = c.position.y;
       var z = c.position.z;
       var arr = [];
-      for (var _i4 = -1; _i4 < 2; _i4 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i4 * dl[0], y + j * dl[1], z + k * dl[2]));
+      for (var _i5 = -1; _i5 < 2; _i5 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i5 * dl[0], y + j * dl[1], z + k * dl[2]));
       var a0 = getPosIndex0(x, y, z);
       arr.push(a0);
       var sum = 0;
-      for (var _i5 = 0; _i5 < arr.length; _i5++) sum += arr[_i5][4];
-      if (sum !== 0) for (var _i6 = 0; _i6 < arr.length; _i6++) arr[_i6][4] / sum;
+      for (var _i6 = 0; _i6 < arr.length; _i6++) sum += arr[_i6][4];
+      if (sum !== 0) for (var _i7 = 0; _i7 < arr.length; _i7++) arr[_i7][4] / sum;
       a0.push(arr);
       return a0;
     }
@@ -52269,7 +52353,7 @@ var RGBELoader = /*#__PURE__*/function (_DataTextureLoader) {
   return RGBELoader;
 }(_three.DataTextureLoader);
 exports.RGBELoader = RGBELoader;
-},{"three":"node_modules/three/build/three.module.js"}],"lib/IndirectMaterial.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/IndirectMaterial.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -52946,14 +53030,13 @@ var WaterController = /*#__PURE__*/function () {
     _classCallCheck(this, WaterController);
     this.water = this.initWater(mesh);
     var self = this;
-    var animate = function animate() {
-      // const sun=window.sun?window.sun:new THREE.Vector3(-200,800,-600)
-      var sun = new THREE.Vector3(-200, 800, -600);
-      requestAnimationFrame(animate);
-      self.water.material.uniforms['sunDirection'].value.copy(sun).normalize();
-      self.water.material.uniforms['time'].value += 1.0 / 120.0;
-    };
-    animate();
+    // const animate=()=>{
+    //     // const sun=window.sun?window.sun:new THREE.Vector3(-200,800,-600)
+    //     const sun=new THREE.Vector3(-200,800,-600)
+    //     requestAnimationFrame(animate)
+    //     self.water.material.uniforms['sunDirection'].value.copy(sun).normalize()
+    //     self.water.material.uniforms['time'].value += 1.0/120.0
+    // };animate()
   }
   _createClass(WaterController, [{
     key: "initWater",
@@ -52961,9 +53044,9 @@ var WaterController = /*#__PURE__*/function () {
       return new _Water.Water(mesh.geometry, {
         textureWidth: 512,
         textureHeight: 512,
-        waterNormals: new THREE.TextureLoader().load('assets/waternormals.jpg', function (texture) {
-          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        }),
+        // waterNormals: new THREE.TextureLoader().load('assets/waternormals.jpg',function(texture){
+        //     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        // }),
         sunDirection: new THREE.Vector3(),
         sunColor: 0xffffff,
         waterColor: 0x001e0f,
@@ -52990,7 +53073,7 @@ var _Visibility = require("./Visibility.js");
 var _P2P = require("./P2P.js");
 var _Detection = require("./Detection.js");
 var _ziploader = require("../../lib/zip/ziploader.js");
-var _IndirectMaterial = require("../../lib/IndirectMaterial.js");
+var _IndirectMaterial = require("../../lib/threejs/IndirectMaterial");
 var _WaterController = require("../../lib/threejs/WaterController");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -53183,12 +53266,14 @@ var Building = /*#__PURE__*/function () {
           metalness: 0.5
         }), instance_info);
         mesh.lod = [mesh, mesh2];
-        if (this.config.waterCidList) {
+        // mesh.lod=[mesh,mesh]
+        // mesh.visible=false
+        if (false) if (this.config.waterCidList) {
           for (var i = 0; i < this.config.waterCidList.length; i++) if (id == this.config.waterCidList[i]) {
             var water = new _WaterController.WaterController(meshOld).water;
             mesh.visible = mesh2.visible = false;
             mesh.lod = [water, water];
-            this.parentGroup2.add(water);
+            if (true) this.parentGroup2.add(water);
           }
         }
         this.parentGroup2.add(mesh2);
@@ -53408,7 +53493,7 @@ var Building = /*#__PURE__*/function () {
   return Building;
 }();
 exports.Building = Building;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js","../../lib/IndirectMaterial.js":"lib/IndirectMaterial.js","../../lib/threejs/WaterController":"lib/threejs/WaterController.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","three/examples/jsm/exporters/OBJExporter":"node_modules/three/examples/jsm/exporters/OBJExporter.js","file-saver":"node_modules/file-saver/dist/FileSaver.min.js","./Visibility.js":"src/LoadingProgressive/Visibility.js","./P2P.js":"src/LoadingProgressive/P2P.js","./Detection.js":"src/LoadingProgressive/Detection.js","../../lib/zip/ziploader.js":"lib/zip/ziploader.js","../../lib/threejs/IndirectMaterial":"lib/threejs/IndirectMaterial.js","../../lib/threejs/WaterController":"lib/threejs/WaterController.js"}],"src/LoadingProgressive/LightProducer.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61928,7 +62013,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52122" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53230" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];
