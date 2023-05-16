@@ -1467,7 +1467,7 @@ module.exports = {
         "near": 10,
         "far": 5000000
       },
-      "speed": 1,
+      "speed": 10,
       "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 500], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 2000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 500], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 500], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000], [-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 500]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 500], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 2000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 500], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 2000]]]
     }
   }
@@ -53512,61 +53512,127 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var LightProducer = /*#__PURE__*/function () {
   function LightProducer() {
     _classCallCheck(this, LightProducer);
-    var scene = new THREE.Object3D();
-    this.scene = scene;
-
-    // Lights 
-    var x = 0.;
-    var ambient = new THREE.AmbientLight(0xffffff, 0.8); //new THREE.AmbientLight( 0xffffff ,.8);
-    scene.add(ambient);
-    ambient.name = "ambient";
-
-    // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
-    // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
-    // scene.add( Light1 );
-    // Light1.name="Light1"
-    var light = new THREE.Object3D();
-    scene.add(light);
-    window.light = light;
-    // return
-
-    var Light3 = new THREE.DirectionalLight(0xcffffff, x + 0.5);
-    Light3.rotation.set(Math.PI * 3 / 4, 0, 0);
-    // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
-    light.add(Light3);
-    var Light4 = new THREE.PointLight(0xcffffff, x + 0.5);
-    Light4.rotation.set(0, 0, Math.PI / 2);
-    // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
-    light.add(Light4);
-
-    // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
-    // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
-    // // Light2.rotation.set(0,0,Math.PI/2)
-    // // Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
-    // light.add( Light2 )
-    // Light2.name="dirLight2"
-
-    //创建区域光 
-    // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
-    // //设置区域光位置
-    // rectLight.position.set(0,50,0);
-    // //设置区域光旋转角度
-    // rectLight.rotation.x = 0.5*Math.PI;
-    // //将区域光添加进场景
-    // scene.add(rectLight);
-    //创建区域光辅助器
-    // let rectLightHelper = new THREE.RectAreaLightHelper(rectLight,0xff0000);
-    //将区域光辅助器添加进场景
-    // scene.add(rectLightHelper);
-
-    // const light1=new THREE.Object3D()
-    // setTimeout(()=>{
-    //     scene.add(this.getSpotGroup())
-    // },3000)
-
-    // light1.
+    this.init(); //this.test()
   }
   _createClass(LightProducer, [{
+    key: "test",
+    value: function test() {
+      var scene = new THREE.Object3D();
+      this.scene = scene;
+
+      // Lights 
+      var x = 0.;
+      var ambient = new THREE.AmbientLight(0xffffff, 0.); //new THREE.AmbientLight( 0xffffff ,.8);
+      scene.add(ambient);
+      ambient.name = "ambient";
+
+      // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
+      // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
+      // scene.add( Light1 );
+      // Light1.name="Light1"
+      var light = new THREE.Object3D();
+      scene.add(light);
+      window.light = light;
+      // return
+
+      var Light3 = new THREE.DirectionalLight(0xcffffff, 2);
+      // Light3.rotation.set(0.5*Math.PI,0,0)
+      Light3.position.x = -112955.1488905516;
+      window.light = Light3;
+      // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+      light.add(Light3);
+      var Light4 = new THREE.PointLight(0xcffffff, x + 0.5);
+      Light4.rotation.set(0, 0, 0);
+      Light4.position.x = -112955.14889055162;
+      // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
+      light.add(Light4);
+      window.light = Light4;
+
+      // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
+      // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
+      // // Light2.rotation.set(0,0,Math.PI/2)
+      // // Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+      // light.add( Light2 )
+      // Light2.name="dirLight2"
+
+      //创建区域光 
+      // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
+      // //设置区域光位置
+      // rectLight.position.set(0,50,0);
+      // //设置区域光旋转角度
+      // rectLight.rotation.x = 0.5*Math.PI;
+      // //将区域光添加进场景
+      // scene.add(rectLight);
+      //创建区域光辅助器
+      // let rectLightHelper = new THREE.RectAreaLightHelper(rectLight,0xff0000);
+      //将区域光辅助器添加进场景
+      // scene.add(rectLightHelper);
+
+      // const light1=new THREE.Object3D()
+      // setTimeout(()=>{
+      //     scene.add(this.getSpotGroup())
+      // },3000)
+
+      // light1.
+    }
+  }, {
+    key: "init",
+    value: function init() {
+      var scene = new THREE.Object3D();
+      this.scene = scene;
+
+      // Lights 
+      var x = 0.;
+      var ambient = new THREE.AmbientLight(0xffffff, 0.8); //new THREE.AmbientLight( 0xffffff ,.8);
+      scene.add(ambient);
+      ambient.name = "ambient";
+
+      // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
+      // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
+      // scene.add( Light1 );
+      // Light1.name="Light1"
+      var light = new THREE.Object3D();
+      scene.add(light);
+      window.light = light;
+      // return
+
+      var Light3 = new THREE.DirectionalLight(0xcffffff, x + 0.5);
+      Light3.rotation.set(Math.PI * 3 / 4, 0, 0);
+      // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+      light.add(Light3);
+      var Light4 = new THREE.PointLight(0xcffffff, x + 0.5);
+      Light4.rotation.set(0, 0, Math.PI / 2);
+      // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
+      light.add(Light4);
+
+      // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
+      // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
+      // // Light2.rotation.set(0,0,Math.PI/2)
+      // // Light2.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+      // light.add( Light2 )
+      // Light2.name="dirLight2"
+
+      //创建区域光 
+      // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
+      // //设置区域光位置
+      // rectLight.position.set(0,50,0);
+      // //设置区域光旋转角度
+      // rectLight.rotation.x = 0.5*Math.PI;
+      // //将区域光添加进场景
+      // scene.add(rectLight);
+      //创建区域光辅助器
+      // let rectLightHelper = new THREE.RectAreaLightHelper(rectLight,0xff0000);
+      //将区域光辅助器添加进场景
+      // scene.add(rectLightHelper);
+
+      // const light1=new THREE.Object3D()
+      // setTimeout(()=>{
+      //     scene.add(this.getSpotGroup())
+      // },3000)
+
+      // light1.
+    }
+  }, {
     key: "getSpotGroup",
     value: function getSpotGroup() {
       var light = new THREE.Object3D();
@@ -57883,415 +57949,27 @@ var Panel = /*#__PURE__*/function () {
   return Panel;
 }();
 exports.Panel = Panel;
-},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"node_modules/three/examples/jsm/loaders/TGALoader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.TGALoader = void 0;
-var _three = require("three");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var TGALoader = /*#__PURE__*/function (_DataTextureLoader) {
-  _inherits(TGALoader, _DataTextureLoader);
-  var _super = _createSuper(TGALoader);
-  function TGALoader(manager) {
-    _classCallCheck(this, TGALoader);
-    return _super.call(this, manager);
-  }
-  _createClass(TGALoader, [{
-    key: "parse",
-    value: function parse(buffer) {
-      // reference from vthibault, https://github.com/vthibault/roBrowser/blob/master/src/Loaders/Targa.js
-
-      function tgaCheckHeader(header) {
-        switch (header.image_type) {
-          // check indexed type
-
-          case TGA_TYPE_INDEXED:
-          case TGA_TYPE_RLE_INDEXED:
-            if (header.colormap_length > 256 || header.colormap_size !== 24 || header.colormap_type !== 1) {
-              console.error('THREE.TGALoader: Invalid type colormap data for indexed type.');
-            }
-            break;
-
-          // check colormap type
-
-          case TGA_TYPE_RGB:
-          case TGA_TYPE_GREY:
-          case TGA_TYPE_RLE_RGB:
-          case TGA_TYPE_RLE_GREY:
-            if (header.colormap_type) {
-              console.error('THREE.TGALoader: Invalid type colormap data for colormap type.');
-            }
-            break;
-
-          // What the need of a file without data ?
-
-          case TGA_TYPE_NO_DATA:
-            console.error('THREE.TGALoader: No data.');
-
-          // Invalid type ?
-
-          default:
-            console.error('THREE.TGALoader: Invalid type "%s".', header.image_type);
-        }
-
-        // check image width and height
-
-        if (header.width <= 0 || header.height <= 0) {
-          console.error('THREE.TGALoader: Invalid image size.');
-        }
-
-        // check image pixel size
-
-        if (header.pixel_size !== 8 && header.pixel_size !== 16 && header.pixel_size !== 24 && header.pixel_size !== 32) {
-          console.error('THREE.TGALoader: Invalid pixel size "%s".', header.pixel_size);
-        }
-      }
-
-      // parse tga image buffer
-
-      function tgaParse(use_rle, use_pal, header, offset, data) {
-        var pixel_data, palettes;
-        var pixel_size = header.pixel_size >> 3;
-        var pixel_total = header.width * header.height * pixel_size;
-
-        // read palettes
-
-        if (use_pal) {
-          palettes = data.subarray(offset, offset += header.colormap_length * (header.colormap_size >> 3));
-        }
-
-        // read RLE
-
-        if (use_rle) {
-          pixel_data = new Uint8Array(pixel_total);
-          var c, count, i;
-          var shift = 0;
-          var pixels = new Uint8Array(pixel_size);
-          while (shift < pixel_total) {
-            c = data[offset++];
-            count = (c & 0x7f) + 1;
-
-            // RLE pixels
-
-            if (c & 0x80) {
-              // bind pixel tmp array
-
-              for (i = 0; i < pixel_size; ++i) {
-                pixels[i] = data[offset++];
-              }
-
-              // copy pixel array
-
-              for (i = 0; i < count; ++i) {
-                pixel_data.set(pixels, shift + i * pixel_size);
-              }
-              shift += pixel_size * count;
-            } else {
-              // raw pixels
-
-              count *= pixel_size;
-              for (i = 0; i < count; ++i) {
-                pixel_data[shift + i] = data[offset++];
-              }
-              shift += count;
-            }
-          }
-        } else {
-          // raw pixels
-
-          pixel_data = data.subarray(offset, offset += use_pal ? header.width * header.height : pixel_total);
-        }
-        return {
-          pixel_data: pixel_data,
-          palettes: palettes
-        };
-      }
-      function tgaGetImageData8bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image, palettes) {
-        var colormap = palettes;
-        var color,
-          i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i++) {
-            color = image[i];
-            imageData[(x + width * y) * 4 + 3] = 255;
-            imageData[(x + width * y) * 4 + 2] = colormap[color * 3 + 0];
-            imageData[(x + width * y) * 4 + 1] = colormap[color * 3 + 1];
-            imageData[(x + width * y) * 4 + 0] = colormap[color * 3 + 2];
-          }
-        }
-        return imageData;
-      }
-      function tgaGetImageData16bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image) {
-        var color,
-          i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i += 2) {
-            color = image[i + 0] + (image[i + 1] << 8);
-            imageData[(x + width * y) * 4 + 0] = (color & 0x7C00) >> 7;
-            imageData[(x + width * y) * 4 + 1] = (color & 0x03E0) >> 2;
-            imageData[(x + width * y) * 4 + 2] = (color & 0x001F) << 3;
-            imageData[(x + width * y) * 4 + 3] = color & 0x8000 ? 0 : 255;
-          }
-        }
-        return imageData;
-      }
-      function tgaGetImageData24bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image) {
-        var i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i += 3) {
-            imageData[(x + width * y) * 4 + 3] = 255;
-            imageData[(x + width * y) * 4 + 2] = image[i + 0];
-            imageData[(x + width * y) * 4 + 1] = image[i + 1];
-            imageData[(x + width * y) * 4 + 0] = image[i + 2];
-          }
-        }
-        return imageData;
-      }
-      function tgaGetImageData32bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image) {
-        var i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i += 4) {
-            imageData[(x + width * y) * 4 + 2] = image[i + 0];
-            imageData[(x + width * y) * 4 + 1] = image[i + 1];
-            imageData[(x + width * y) * 4 + 0] = image[i + 2];
-            imageData[(x + width * y) * 4 + 3] = image[i + 3];
-          }
-        }
-        return imageData;
-      }
-      function tgaGetImageDataGrey8bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image) {
-        var color,
-          i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i++) {
-            color = image[i];
-            imageData[(x + width * y) * 4 + 0] = color;
-            imageData[(x + width * y) * 4 + 1] = color;
-            imageData[(x + width * y) * 4 + 2] = color;
-            imageData[(x + width * y) * 4 + 3] = 255;
-          }
-        }
-        return imageData;
-      }
-      function tgaGetImageDataGrey16bits(imageData, y_start, y_step, y_end, x_start, x_step, x_end, image) {
-        var i = 0,
-          x,
-          y;
-        var width = header.width;
-        for (y = y_start; y !== y_end; y += y_step) {
-          for (x = x_start; x !== x_end; x += x_step, i += 2) {
-            imageData[(x + width * y) * 4 + 0] = image[i + 0];
-            imageData[(x + width * y) * 4 + 1] = image[i + 0];
-            imageData[(x + width * y) * 4 + 2] = image[i + 0];
-            imageData[(x + width * y) * 4 + 3] = image[i + 1];
-          }
-        }
-        return imageData;
-      }
-      function getTgaRGBA(data, width, height, image, palette) {
-        var x_start, y_start, x_step, y_step, x_end, y_end;
-        switch ((header.flags & TGA_ORIGIN_MASK) >> TGA_ORIGIN_SHIFT) {
-          default:
-          case TGA_ORIGIN_UL:
-            x_start = 0;
-            x_step = 1;
-            x_end = width;
-            y_start = 0;
-            y_step = 1;
-            y_end = height;
-            break;
-          case TGA_ORIGIN_BL:
-            x_start = 0;
-            x_step = 1;
-            x_end = width;
-            y_start = height - 1;
-            y_step = -1;
-            y_end = -1;
-            break;
-          case TGA_ORIGIN_UR:
-            x_start = width - 1;
-            x_step = -1;
-            x_end = -1;
-            y_start = 0;
-            y_step = 1;
-            y_end = height;
-            break;
-          case TGA_ORIGIN_BR:
-            x_start = width - 1;
-            x_step = -1;
-            x_end = -1;
-            y_start = height - 1;
-            y_step = -1;
-            y_end = -1;
-            break;
-        }
-        if (use_grey) {
-          switch (header.pixel_size) {
-            case 8:
-              tgaGetImageDataGrey8bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image);
-              break;
-            case 16:
-              tgaGetImageDataGrey16bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image);
-              break;
-            default:
-              console.error('THREE.TGALoader: Format not supported.');
-              break;
-          }
-        } else {
-          switch (header.pixel_size) {
-            case 8:
-              tgaGetImageData8bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image, palette);
-              break;
-            case 16:
-              tgaGetImageData16bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image);
-              break;
-            case 24:
-              tgaGetImageData24bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image);
-              break;
-            case 32:
-              tgaGetImageData32bits(data, y_start, y_step, y_end, x_start, x_step, x_end, image);
-              break;
-            default:
-              console.error('THREE.TGALoader: Format not supported.');
-              break;
-          }
-        }
-
-        // Load image data according to specific method
-        // let func = 'tgaGetImageData' + (use_grey ? 'Grey' : '') + (header.pixel_size) + 'bits';
-        // func(data, y_start, y_step, y_end, x_start, x_step, x_end, width, image, palette );
-        return data;
-      }
-
-      // TGA constants
-
-      var TGA_TYPE_NO_DATA = 0,
-        TGA_TYPE_INDEXED = 1,
-        TGA_TYPE_RGB = 2,
-        TGA_TYPE_GREY = 3,
-        TGA_TYPE_RLE_INDEXED = 9,
-        TGA_TYPE_RLE_RGB = 10,
-        TGA_TYPE_RLE_GREY = 11,
-        TGA_ORIGIN_MASK = 0x30,
-        TGA_ORIGIN_SHIFT = 0x04,
-        TGA_ORIGIN_BL = 0x00,
-        TGA_ORIGIN_BR = 0x01,
-        TGA_ORIGIN_UL = 0x02,
-        TGA_ORIGIN_UR = 0x03;
-      if (buffer.length < 19) console.error('THREE.TGALoader: Not enough data to contain header.');
-      var offset = 0;
-      var content = new Uint8Array(buffer),
-        header = {
-          id_length: content[offset++],
-          colormap_type: content[offset++],
-          image_type: content[offset++],
-          colormap_index: content[offset++] | content[offset++] << 8,
-          colormap_length: content[offset++] | content[offset++] << 8,
-          colormap_size: content[offset++],
-          origin: [content[offset++] | content[offset++] << 8, content[offset++] | content[offset++] << 8],
-          width: content[offset++] | content[offset++] << 8,
-          height: content[offset++] | content[offset++] << 8,
-          pixel_size: content[offset++],
-          flags: content[offset++]
-        };
-
-      // check tga if it is valid format
-
-      tgaCheckHeader(header);
-      if (header.id_length + offset > buffer.length) {
-        console.error('THREE.TGALoader: No data.');
-      }
-
-      // skip the needn't data
-
-      offset += header.id_length;
-
-      // get targa information about RLE compression and palette
-
-      var use_rle = false,
-        use_pal = false,
-        use_grey = false;
-      switch (header.image_type) {
-        case TGA_TYPE_RLE_INDEXED:
-          use_rle = true;
-          use_pal = true;
-          break;
-        case TGA_TYPE_INDEXED:
-          use_pal = true;
-          break;
-        case TGA_TYPE_RLE_RGB:
-          use_rle = true;
-          break;
-        case TGA_TYPE_RGB:
-          break;
-        case TGA_TYPE_RLE_GREY:
-          use_rle = true;
-          use_grey = true;
-          break;
-        case TGA_TYPE_GREY:
-          use_grey = true;
-          break;
-      }
-
-      //
-
-      var imageData = new Uint8Array(header.width * header.height * 4);
-      var result = tgaParse(use_rle, use_pal, header, offset, content);
-      getTgaRGBA(imageData, header.width, header.height, result.pixel_data, result.palettes);
-      return {
-        data: imageData,
-        width: header.width,
-        height: header.height,
-        flipY: true,
-        generateMipmaps: true,
-        minFilter: _three.LinearMipmapLinearFilter
-      };
-    }
-  }]);
-  return TGALoader;
-}(_three.DataTextureLoader);
-exports.TGALoader = TGALoader;
-},{"three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdShader.js":[function(require,module,exports) {
-var define;
+},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"lib/crowd/my_shader.json":[function(require,module,exports) {
+module.exports = {
+  "./assets/avatar/shader/frag_lights_physical_pars_fragment_Scattering.glsl": "float thicknessDistortion = 0.1;\r\n//vec3 thicknessColor = vec3(0.5,0.3,0.0);\r\nfloat thicknessPower = 2.0;\r\nfloat thicknessScale = 2.0;\r\n\r\nuniform float sssIntensity;\r\n\r\nvoid RE_Direct_Physical_Scattering( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        vec3 scatteringHalf = normalize( directLight.direction + (geometry.normal * thicknessDistortion));\r\n        float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;\r\n        reflectedLight.directDiffuse += scatteringDot * directLight.color * material.diffuseColor.rgb;\r\n\r\n        float wrappedDotNL = (dot(directLight.direction, geometry.normal) * 0.5 + 0.5);\r\n        //vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, CurveFactor  ));\r\n        // vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, 1.0 / curve  ));//散射颜色取决于入射夹角和曲率\r\n        vec3 scatteringColor = vec3(1.,0.,0.);\r\n        reflectedLight.directDiffuse=reflectedLight.directDiffuse + (1.0 - wrappedDotNL) * directLight.color * material.diffuseColor * scatteringColor.rgb * sssIntensity;//计算次表面散射并加入到漫反射中\r\n}\r\n#define  RE_Direct_Physical  RE_Direct_Physical_Scattering\r\n",
+  "./assets/avatar/shader/frag_lights_physical_pars_fragment_Specular.glsl": "uniform float brightness_specular;\r\nfloat PHBeckmann( float NdotH , float roughness ){//余弦 , 粗糙度 //针对皮肤的高光项 //Beckmann分布函数预处理以便生成速查纹理\r\n\troughness = max(roughness,0.01);//roughness要大于0.01\r\n        float alpha = acos( NdotH );\r\n        float ta = tan(alpha);\r\n        float m = roughness * roughness ;\r\n        float val = 1.0 / ( m * pow(NdotH,4.0) ) * exp( -(ta*ta)/ m );\r\n        return val;//与roughness正相关 与alpha负相关 \r\n}\r\nfloat fresnelReflectance( vec3 H, vec3 V, float F0 )//半程方向 视线方向 常数\r\n{\r\n        float base = 1.0 - dot( V, H );  \r\n        float exponential = pow( base, 5.0 );\r\n        return exponential + F0 * ( 1.0 - exponential );//菲涅尔方程（Fresnel equations）\r\n}\r\nvoid RE_Direct_Physical_Specular( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        float dotNL = dot( geometry.normal, directLight.direction ); //法向量与入射方向夹角的余弦值 //漫反射强度\r\n        if(dotNL > 0.0){ //如果存在漫反射\r\n            vec3 h =  directLight.direction + geometry.viewDir ; // Unnormalized half-way vector  //半程方向\r\n            vec3 H = normalize( h ); //单位化\r\n            float dotNH = dot( geometry.normal , H ); //法线与半程方向夹角的余弦 //镜面反射强度\r\n            float PH = PHBeckmann( dotNH , roughness );//针对皮肤的高光项\r\n            float F = fresnelReflectance( H,geometry.viewDir,0.028 );//针对皮肤的高光项?\r\n            float frSpec = max( PH * F / dot(h,h) , 0.0 );\r\n            reflectedLight.directSpecular +=  dotNL * brightness_specular * frSpec * directLight.color ;//添加高光\r\n        }\r\n}\r\n#define RE_Direct_Physical_Scattering RE_Direct_Physical_Specular\r\n",
+  "./assets/avatar/shader/frag_MeshStandardMaterial.glsl": "#define STANDARD\r\n\r\n#ifdef PHYSICAL\r\n\t#define IOR\r\n\t#define SPECULAR\r\n#endif\r\n\r\nuniform vec3 diffuse;\r\nuniform vec3 emissive;\r\nuniform float roughness;\r\nuniform float metalness;\r\nuniform float opacity;\r\n\r\n#ifdef IOR\r\n\tuniform float ior;\r\n#endif\r\n\r\n#ifdef SPECULAR\r\n\tuniform float specularIntensity;\r\n\tuniform vec3 specularColor;\r\n\r\n\t#ifdef USE_SPECULARINTENSITYMAP\r\n\t\tuniform sampler2D specularIntensityMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SPECULARCOLORMAP\r\n\t\tuniform sampler2D specularColorMap;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef USE_CLEARCOAT\r\n\tuniform float clearcoat;\r\n\tuniform float clearcoatRoughness;\r\n#endif\r\n\r\n#ifdef USE_SHEEN\r\n\tuniform vec3 sheenColor;\r\n\tuniform float sheenRoughness;\r\n\r\n\t#ifdef USE_SHEENCOLORMAP\r\n\t\tuniform sampler2D sheenColorMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SHEENROUGHNESSMAP\r\n\t\tuniform sampler2D sheenRoughnessMap;\r\n\t#endif\r\n#endif\r\n\r\nvarying vec3 vViewPosition;\r\n\r\n#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n#include <color_pars_fragment>\r\n#include <uv_pars_fragment>\r\n#include <uv2_pars_fragment>\r\n#include <map_pars_fragment>\r\n#include <alphamap_pars_fragment>\r\n#include <alphatest_pars_fragment>\r\n#include <aomap_pars_fragment>\r\n#include <lightmap_pars_fragment>\r\n#include <emissivemap_pars_fragment>\r\n#include <bsdfs>\r\n#include <cube_uv_reflection_fragment>\r\n#include <envmap_common_pars_fragment>\r\n#include <envmap_physical_pars_fragment>\r\n#include <fog_pars_fragment>\r\n#include <lights_pars_begin>\r\n#include <normal_pars_fragment>\r\n\r\n#include <lights_physical_pars_fragment>\r\n\r\n#include <transmission_pars_fragment>\r\n#include <shadowmap_pars_fragment>\r\n#include <bumpmap_pars_fragment>\r\n#include <normalmap_pars_fragment>\r\n#include <clearcoat_pars_fragment>\r\n#include <roughnessmap_pars_fragment>\r\n#include <metalnessmap_pars_fragment>\r\n#include <logdepthbuf_pars_fragment>\r\n#include <clipping_planes_pars_fragment>\r\n//////////////////////////////////////////////////////\r\nin vec3 instanceColorOut;\r\n//////////////////////////////////////////////////////\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\tvec4 diffuseColor = vec4( diffuse, opacity );\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tdiffuseColor.xyz +=instanceColorOut;\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\r\n\tvec3 totalEmissiveRadiance = emissive;\r\n\r\n\t#include <logdepthbuf_fragment>\r\n\t#include <map_fragment>\r\n\t#include <color_fragment>\r\n\t#include <alphamap_fragment>\r\n\t#include <alphatest_fragment>\r\n\t#include <roughnessmap_fragment>\r\n\t#include <metalnessmap_fragment>\r\n\t#include <normal_fragment_begin>\r\n\t#include <normal_fragment_maps>\r\n\t#include <clearcoat_normal_fragment_begin>\r\n\t#include <clearcoat_normal_fragment_maps>\r\n\t#include <emissivemap_fragment>\r\n\r\n\t// accumulation\r\n\t#include <lights_physical_fragment>\r\n\t#include <lights_fragment_begin>\r\n\t#include <lights_fragment_maps>\r\n\t#include <lights_fragment_end>\r\n\r\n\t// modulation\r\n\t#include <aomap_fragment>\r\n\r\n\tvec3 totalDiffuse = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;\r\n\tvec3 totalSpecular = reflectedLight.directSpecular + reflectedLight.indirectSpecular;\r\n\r\n\t#include <transmission_fragment>\r\n\r\n\tvec3 outgoingLight = totalDiffuse + totalSpecular + totalEmissiveRadiance;\r\n\r\n\t#ifdef USE_CLEARCOAT\r\n\r\n\t\tfloat dotNVcc = saturate( dot( geometry.clearcoatNormal, geometry.viewDir ) );\r\n\r\n\t\tvec3 Fcc = F_Schlick( material.clearcoatF0, material.clearcoatF90, dotNVcc );\r\n\r\n\t\toutgoingLight = outgoingLight * ( 1.0 - clearcoat * Fcc ) + clearcoatSpecular * clearcoat;\r\n\r\n\t#endif\r\n\r\n\t#include <output_fragment>\r\n\t#include <tonemapping_fragment>\r\n\t#include <encodings_fragment>\r\n\t#include <fog_fragment>\r\n\t#include <premultiplied_alpha_fragment>\r\n\t#include <dithering_fragment>\r\n\r\n}",
+  "./assets/avatar/shader/vert_anim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\nin float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * animationFrameCount + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    mat4 test=mat4(\r\n        vec4(obesity ,0.,0., 0.),\r\n        vec4(0.,1.,0., 0.),\r\n        vec4(0.,0.,obesity, 0.),\r\n        vec4(0.,0.,0., 1.)\r\n    );\r\n    mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    vertex.position=(m2*test*m1*position).xyz;\r\n\r\n    vec3 normal=vertex.normal;\r\n    mat3 m3=mat4_mat3(m1);\r\n    mat3 test2=mat4_mat3(test);\r\n    mat3 m4=mat4_mat3(m2);\r\n    vertex.normal= m4*test2*m3*normal;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-1.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-1.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount));\r\n    if(frameIndex2>=animationFrameCount-1.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n    vertex.normal = (1. - weight) * vertex1.normal + weight * vertex2.normal;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    // float f=1.;\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
+  "./assets/avatar/shader/vert_anim_sim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\n// in float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * (animationFrameCount-1.) + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    // mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    // mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    // vertex.position=(m2*m1*position).xyz;\r\n    mat4 m=computeAnimationMatrix( boneIndex,  frameIndex);\r\n    vertex.position=(m*position).xyz;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载 //点集渲染的时候可以用到\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    // vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        // vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-2.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-2.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount-1.));\r\n    if(frameIndex2>=animationFrameCount-2.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
+  "./assets/avatar/shader/vert_MeshStandardMaterial.glsl": "#define STANDARD\r\nvarying vec3 vViewPosition;\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvarying vec3 vWorldPosition;\r\n\r\n#endif\r\n\r\n#include <common>\r\n#include <uv_pars_vertex>\r\n#include <uv2_pars_vertex>\r\n#include <displacementmap_pars_vertex>\r\n#include <color_pars_vertex>\r\n#include <fog_pars_vertex>\r\n#include <normal_pars_vertex>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <shadowmap_pars_vertex>\r\n#include <logdepthbuf_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\nvoid main() {\r\n\t// gl_Position=vec4(0.,0.,-1000.,1.);\r\n\t// return;\r\n\t#include <uv_vertex>\r\n\t#include <uv2_vertex>\r\n\t#include <color_vertex>\r\n\r\n\t#include <beginnormal_vertex>\r\n\t#include <morphnormal_vertex>\r\n\t#include <skinbase_vertex>\r\n\t#include <skinnormal_vertex>\r\n\t#include <defaultnormal_vertex>\r\n\t#include <normal_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <displacementmap_vertex>\r\n\t///////////////////////////////////////////\r\n\tVertex vertex;\r\n\tvertex.position=transformed;\r\n\tvertex.normal=vNormal;\r\n\t// transformed_temp=transformed;\r\n\t// vNormal_temp=vNormal;\r\n\tvertex=frameInterpolation(vertex);\r\n\t// transformed=transformed_temp;\r\n\t// vNormal=vNormal_temp;\r\n\ttransformed=vertex.position;\r\n\tvNormal=vertex.normal;\r\n\r\n    // vec4 temp=frameInterpolation(transformed);\r\n\t// transformed=temp.xyz;\r\n\t// float direction=temp.a;\r\n    instanceColorOut= instanceColorIn;//vNormal\r\n\t///////////////////////////////////////////\r\n\t#include <project_vertex>\r\n\t\r\n\t#include <logdepthbuf_vertex>\r\n\t#include <clipping_planes_vertex>\r\n\r\n\tvViewPosition = - mvPosition.xyz;\r\n\r\n\t#include <worldpos_vertex>\r\n\t#include <shadowmap_vertex>\r\n\t#include <fog_vertex>\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvWorldPosition = worldPosition.xyz;\r\n\r\n#endif\r\n}"
+};
+},{}],"lib/crowd/CrowdShader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CrowdShader = void 0;
+var _my_shader = _interopRequireDefault(require("./my_shader.json"));
 var THREE = _interopRequireWildcard(require("three"));
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -58301,19 +57979,11 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var assets = {
-  "./assets/shader/frag_lights_physical_pars_fragment_Scattering.glsl": "float curve = 1.0;\r\n\r\nfloat thicknessDistortion = 0.1;\r\n//vec3 thicknessColor = vec3(0.5,0.3,0.0);\r\nfloat thicknessPower = 2.0;\r\nfloat thicknessScale = 2.0;\r\n\r\nuniform sampler2D sssLUT;//Subsurface Scattering //https://developer.nvidia.com/gpugems/gpugems3/part-iii-rendering/chapter-14-advanced-techniques-realistic-real-time-skin\r\nuniform float sssIntensity;\r\nuniform float sssIntensity2;\r\nuniform float CurveFactor;\r\n\r\nvoid RE_Direct_Physical_Scattering( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        vec3 scatteringHalf = normalize( directLight.direction + (geometry.normal * thicknessDistortion));\r\n        float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;\r\n        reflectedLight.directDiffuse += scatteringDot * directLight.color * material.diffuseColor.rgb;\r\n\r\n        float wrappedDotNL = (dot(directLight.direction, geometry.normal) * 0.5 + 0.5);\r\n        vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, CurveFactor  ));\r\n        // vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, 1.0 / curve  ));//散射颜色取决于入射夹角和曲率\r\n        reflectedLight.directDiffuse += (1.0 - wrappedDotNL) * directLight.color * material.diffuseColor * scatteringColor.rgb * sssIntensity;//计算次表面散射并加入到漫反射中\r\n}\r\n#define  RE_Direct_Physical  RE_Direct_Physical_Scattering\r\n",
-  "./assets/shader/frag_lights_physical_pars_fragment_Specular.glsl": "uniform float brightness_specular;\r\nfloat PHBeckmann( float NdotH , float roughness ){//余弦 , 粗糙度 //针对皮肤的高光项 //Beckmann分布函数预处理以便生成速查纹理\r\n\troughness = max(roughness,0.01);//roughness要大于0.01\r\n        float alpha = acos( NdotH );\r\n        float ta = tan(alpha);\r\n        float m = roughness * roughness ;\r\n        float val = 1.0 / ( m * pow(NdotH,4.0) ) * exp( -(ta*ta)/ m );\r\n        return val;//与roughness正相关 与alpha负相关 \r\n}\r\nfloat fresnelReflectance( vec3 H, vec3 V, float F0 )//半程方向 视线方向 常数\r\n{\r\n        float base = 1.0 - dot( V, H );  \r\n        float exponential = pow( base, 5.0 );\r\n        return exponential + F0 * ( 1.0 - exponential );//菲涅尔方程（Fresnel equations）\r\n}\r\nvoid RE_Direct_Physical_Specular( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        float dotNL = dot( geometry.normal, directLight.direction ); //法向量与入射方向夹角的余弦值 //漫反射强度\r\n        if(dotNL > 0.0){ //如果存在漫反射\r\n            vec3 h =  directLight.direction + geometry.viewDir ; // Unnormalized half-way vector  //半程方向\r\n            vec3 H = normalize( h ); //单位化\r\n            float dotNH = dot( geometry.normal , H ); //法线与半程方向夹角的余弦 //镜面反射强度\r\n            float PH = PHBeckmann( dotNH , roughness );//针对皮肤的高光项\r\n            float F = fresnelReflectance( H,geometry.viewDir,0.028 );//针对皮肤的高光项?\r\n            float frSpec = max( PH * F / dot(h,h) , 0.0 );\r\n            reflectedLight.directSpecular +=  dotNL * brightness_specular * frSpec * directLight.color ;//添加高光\r\n        }\r\n}\r\n#define RE_Direct_Physical_Scattering RE_Direct_Physical_Specular\r\n",
-  "./assets/shader/frag_MeshStandardMaterial.glsl": "#define STANDARD\r\n\r\n#ifdef PHYSICAL\r\n\t#define IOR\r\n\t#define SPECULAR\r\n#endif\r\n\r\nuniform vec3 diffuse;\r\nuniform vec3 emissive;\r\nuniform float roughness;\r\nuniform float metalness;\r\nuniform float opacity;\r\n\r\n#ifdef IOR\r\n\tuniform float ior;\r\n#endif\r\n\r\n#ifdef SPECULAR\r\n\tuniform float specularIntensity;\r\n\tuniform vec3 specularColor;\r\n\r\n\t#ifdef USE_SPECULARINTENSITYMAP\r\n\t\tuniform sampler2D specularIntensityMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SPECULARCOLORMAP\r\n\t\tuniform sampler2D specularColorMap;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef USE_CLEARCOAT\r\n\tuniform float clearcoat;\r\n\tuniform float clearcoatRoughness;\r\n#endif\r\n\r\n#ifdef USE_SHEEN\r\n\tuniform vec3 sheenColor;\r\n\tuniform float sheenRoughness;\r\n\r\n\t#ifdef USE_SHEENCOLORMAP\r\n\t\tuniform sampler2D sheenColorMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SHEENROUGHNESSMAP\r\n\t\tuniform sampler2D sheenRoughnessMap;\r\n\t#endif\r\n#endif\r\n\r\nvarying vec3 vViewPosition;\r\n\r\n#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n#include <color_pars_fragment>\r\n#include <uv_pars_fragment>\r\n#include <uv2_pars_fragment>\r\n#include <map_pars_fragment>\r\n#include <alphamap_pars_fragment>\r\n#include <alphatest_pars_fragment>\r\n#include <aomap_pars_fragment>\r\n#include <lightmap_pars_fragment>\r\n#include <emissivemap_pars_fragment>\r\n#include <bsdfs>\r\n#include <cube_uv_reflection_fragment>\r\n#include <envmap_common_pars_fragment>\r\n#include <envmap_physical_pars_fragment>\r\n#include <fog_pars_fragment>\r\n#include <lights_pars_begin>\r\n#include <normal_pars_fragment>\r\n\r\n#include <lights_physical_pars_fragment>\r\n\r\n#include <transmission_pars_fragment>\r\n#include <shadowmap_pars_fragment>\r\n#include <bumpmap_pars_fragment>\r\n#include <normalmap_pars_fragment>\r\n#include <clearcoat_pars_fragment>\r\n#include <roughnessmap_pars_fragment>\r\n#include <metalnessmap_pars_fragment>\r\n#include <logdepthbuf_pars_fragment>\r\n#include <clipping_planes_pars_fragment>\r\n//////////////////////////////////////////////////////\r\nin vec3 instanceColorOut;\r\n//////////////////////////////////////////////////////\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\tvec4 diffuseColor = vec4( diffuse, opacity );\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tdiffuseColor.xyz +=instanceColorOut;\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\r\n\tvec3 totalEmissiveRadiance = emissive;\r\n\r\n\t#include <logdepthbuf_fragment>\r\n\t#include <map_fragment>\r\n\t#include <color_fragment>\r\n\t#include <alphamap_fragment>\r\n\t#include <alphatest_fragment>\r\n\t#include <roughnessmap_fragment>\r\n\t#include <metalnessmap_fragment>\r\n\t#include <normal_fragment_begin>\r\n\t#include <normal_fragment_maps>\r\n\t#include <clearcoat_normal_fragment_begin>\r\n\t#include <clearcoat_normal_fragment_maps>\r\n\t#include <emissivemap_fragment>\r\n\r\n\t// accumulation\r\n\t#include <lights_physical_fragment>\r\n\t#include <lights_fragment_begin>\r\n\t#include <lights_fragment_maps>\r\n\t#include <lights_fragment_end>\r\n\r\n\t// modulation\r\n\t#include <aomap_fragment>\r\n\r\n\tvec3 totalDiffuse = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;\r\n\tvec3 totalSpecular = reflectedLight.directSpecular + reflectedLight.indirectSpecular;\r\n\r\n\t#include <transmission_fragment>\r\n\r\n\tvec3 outgoingLight = totalDiffuse + totalSpecular + totalEmissiveRadiance;\r\n\r\n\t#ifdef USE_CLEARCOAT\r\n\r\n\t\tfloat dotNVcc = saturate( dot( geometry.clearcoatNormal, geometry.viewDir ) );\r\n\r\n\t\tvec3 Fcc = F_Schlick( material.clearcoatF0, material.clearcoatF90, dotNVcc );\r\n\r\n\t\toutgoingLight = outgoingLight * ( 1.0 - clearcoat * Fcc ) + clearcoatSpecular * clearcoat;\r\n\r\n\t#endif\r\n\r\n\t#include <output_fragment>\r\n\t#include <tonemapping_fragment>\r\n\t#include <encodings_fragment>\r\n\t#include <fog_fragment>\r\n\t#include <premultiplied_alpha_fragment>\r\n\t#include <dithering_fragment>\r\n\r\n}",
-  "./assets/shader/vert_anim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\nin float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * animationFrameCount + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    mat4 test=mat4(\r\n        vec4(obesity ,0.,0., 0.),\r\n        vec4(0.,1.,0., 0.),\r\n        vec4(0.,0.,obesity, 0.),\r\n        vec4(0.,0.,0., 1.)\r\n    );\r\n    mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    vertex.position=(m2*test*m1*position).xyz;\r\n\r\n    vec3 normal=vertex.normal;\r\n    mat3 m3=mat4_mat3(m1);\r\n    mat3 test2=mat4_mat3(test);\r\n    mat3 m4=mat4_mat3(m2);\r\n    vertex.normal= m4*test2*m3*normal;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-1.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-1.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount));\r\n    if(frameIndex2>=animationFrameCount-1.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n    vertex.normal = (1. - weight) * vertex1.normal + weight * vertex2.normal;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    // float f=1.;\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
-  "./assets/shader/vert_anim_sim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\n// in float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * (animationFrameCount-1.) + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    // mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    // mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    // vertex.position=(m2*m1*position).xyz;\r\n    mat4 m=computeAnimationMatrix( boneIndex,  frameIndex);\r\n    vertex.position=(m*position).xyz;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    // vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        // vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-2.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-2.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount-1.));\r\n    if(frameIndex2>=animationFrameCount-2.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
-  "./assets/shader/vert_MeshStandardMaterial.glsl": "#define STANDARD\r\nvarying vec3 vViewPosition;\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvarying vec3 vWorldPosition;\r\n\r\n#endif\r\n\r\n#include <common>\r\n#include <uv_pars_vertex>\r\n#include <uv2_pars_vertex>\r\n#include <displacementmap_pars_vertex>\r\n#include <color_pars_vertex>\r\n#include <fog_pars_vertex>\r\n#include <normal_pars_vertex>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <shadowmap_pars_vertex>\r\n#include <logdepthbuf_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\nvoid main() {\r\n\t// gl_Position=vec4(0.,0.,-1000.,1.);\r\n\t// return;\r\n\t#include <uv_vertex>\r\n\t#include <uv2_vertex>\r\n\t#include <color_vertex>\r\n\r\n\t#include <beginnormal_vertex>\r\n\t#include <morphnormal_vertex>\r\n\t#include <skinbase_vertex>\r\n\t#include <skinnormal_vertex>\r\n\t#include <defaultnormal_vertex>\r\n\t#include <normal_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <displacementmap_vertex>\r\n\t///////////////////////////////////////////\r\n\tVertex vertex;\r\n\tvertex.position=transformed;\r\n\tvertex.normal=vNormal;\r\n\t// transformed_temp=transformed;\r\n\t// vNormal_temp=vNormal;\r\n\tvertex=frameInterpolation(vertex);\r\n\t// transformed=transformed_temp;\r\n\t// vNormal=vNormal_temp;\r\n\ttransformed=vertex.position;\r\n\tvNormal=vertex.normal;\r\n\r\n    // vec4 temp=frameInterpolation(transformed);\r\n\t// transformed=temp.xyz;\r\n\t// float direction=temp.a;\r\n    instanceColorOut= instanceColorIn;//vNormal\r\n\t///////////////////////////////////////////\r\n\t#include <project_vertex>\r\n\t\r\n\t#include <logdepthbuf_vertex>\r\n\t#include <clipping_planes_vertex>\r\n\r\n\tvViewPosition = - mvPosition.xyz;\r\n\r\n\t#include <worldpos_vertex>\r\n\t#include <shadowmap_vertex>\r\n\t#include <fog_vertex>\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvWorldPosition = worldPosition.xyz;\r\n\r\n#endif\r\n}"
-};
 var CrowdShader = /*#__PURE__*/function () {
   function CrowdShader(opt) {
     _classCallCheck(this, CrowdShader);
     this.opt = opt;
-    this.path0 = "./assets/shader/";
+    this.path0 = "./assets/avatar/shader/";
   }
   _createClass(CrowdShader, [{
     key: "init",
@@ -58376,9 +58046,9 @@ var CrowdShader = /*#__PURE__*/function () {
     key: "load",
     value: function load(name) {
       var url = this.path0 + name + ".glsl";
-      if (!assets[url]) {
+      if (!_my_shader.default[url]) {
         console.log("加载shader", url);
-        assets[url] = new Promise(function (resolve, reject) {
+        _my_shader.default[url] = new Promise(function (resolve, reject) {
           var xhr = new XMLHttpRequest();
           xhr.onload = function () {
             resolve(xhr.responseText);
@@ -58391,20 +58061,19 @@ var CrowdShader = /*#__PURE__*/function () {
           xhr.send();
         });
       }
-      return assets[url];
+      return _my_shader.default[url];
     }
   }]);
   return CrowdShader;
 }();
 exports.CrowdShader = CrowdShader;
-},{"three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdMaterial.js":[function(require,module,exports) {
+},{"./my_shader.json":"lib/crowd/my_shader.json","three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdMaterial.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.CrowdMaterial = void 0;
-var _TGALoader = require("three/examples/jsm/loaders/TGALoader.js");
 var THREE = _interopRequireWildcard(require("three"));
 var _CrowdShader = require("./CrowdShader.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -58425,12 +58094,8 @@ function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) ===
 function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var assets = {
-  sssLUT: {
-    value: new _TGALoader.TGALoader().load('./assets/textures/PreIntergated.TGA')
-  }
-};
 var assets_base64 = {};
+var assets = {};
 var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
   _inherits(CrowdMaterial, _THREE$ShaderMaterial);
   var _super = _createSuper(CrowdMaterial);
@@ -58442,6 +58107,7 @@ var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
     _this.normalMap = null;
     _this.setValues(parameters);
     _this.uniforms = Object.assign({}, THREE.ShaderLib.standard.uniforms, _this.uniforms);
+    if (_this.uniforms.sssIntensity) window.sssIntensity = _this.uniforms.sssIntensity;
     return _this;
   }
   _createClass(CrowdMaterial, [{
@@ -58495,8 +58161,9 @@ var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
                   },
                   //未被使用
                   sssIntensity: {
-                    value: 0.85
+                    value: 1.25 * 0.1 //0.85 
                   },
+
                   sssIntensity2: {
                     //未被使用
                     value: 1.0 //0.35 
@@ -58504,8 +58171,8 @@ var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
 
                   CurveFactor: {
                     value: 1.0
-                  },
-                  sssLUT: assets.sssLUT //{ value: new TGALoader().load( './assets/textures/PreIntergated.TGA' ) },
+                  }
+                  // sssLUT: assets.sssLUT//{ value: new TGALoader().load( './assets/textures/PreIntergated.TGA' ) },
                 }
                 // map:  material.map,//textureLoader.load( 'Head.png' ),
                 // normalMap: material.normalMap,//new THREE.TextureLoader().load( './assets/textures/Normal.png' ) ,
@@ -58624,7 +58291,7 @@ var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
 }(THREE.ShaderMaterial);
 exports.CrowdMaterial = CrowdMaterial;
 CrowdMaterial.prototype.isMeshStandardMaterial = true;
-},{"three/examples/jsm/loaders/TGALoader.js":"node_modules/three/examples/jsm/loaders/TGALoader.js","three":"node_modules/three/build/three.module.js","./CrowdShader.js":"lib/crowd/CrowdShader.js"}],"lib/crowd/CrowdGeometry.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./CrowdShader.js":"lib/crowd/CrowdShader.js"}],"lib/crowd/CrowdGeometry.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61208,7 +60875,45 @@ var Crowd = /*#__PURE__*/function (_THREE$Object3D) {
   return Crowd;
 }(THREE.Object3D);
 exports.Crowd = Crowd;
-},{"three":"node_modules/three/build/three.module.js","./CrowdModel.js":"lib/crowd/CrowdModel.js","./CrowdLod.js":"lib/crowd/CrowdLod.js"}],"src/LoadingProgressive/AvatarManager.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./CrowdModel.js":"lib/crowd/CrowdModel.js","./CrowdLod.js":"lib/crowd/CrowdLod.js"}],"config/avatar/sceneConifg_woman01.json":[function(require,module,exports) {
+module.exports = [{
+  "path": ["assets/avatar/sim/woman01/"],
+  "pathTexture": ["./assets/avatar/textures_sim1/woman01/"],
+  "meshType": [{
+    "CloW_A_body_geo": "coat",
+    "CloW_A_kuzi_geo": "trousers",
+    "CloW_A_shangyi_geo": "coat",
+    "CloW_A_waitao_geo1": "coat",
+    "CloW_A_xiezi_geo": "xiezi",
+    "CloW_E_eyeLeft_geo02": "eye",
+    "CloW_E_eyeRight_geo01": "eye",
+    "eyelash": "eyelash",
+    "hair": "hair",
+    "head": "head",
+    "teeth": null
+  }],
+  "lod_visible": [{
+    "CloW_A_kuzi_geo": 5,
+    "CloW_A_shangyi_geo": 4,
+    "head": 4,
+    "CloW_A_body_geo": 3,
+    "CloW_A_waitao_geo1": 3,
+    "CloW_A_xiezi_geo": 3,
+    "CloW_E_eyeLeft_geo02": 2,
+    "CloW_E_eyeRight_geo01": 2,
+    "eyelash": 2,
+    "hair": 3
+  }],
+  "useColorTag": ["CloW_A_kuzi_geo", "CloW_A_shangyi_geo", "CloW_A_waitao_geo1", "CloW_A_xiezi_geo"],
+  "walkAnimationList": [5, 8],
+  "sitAnimationList": [],
+  "standAnimationList": [0, 1, 2, 3, 4, 6, 7, 9, 10, 11, 12],
+  "pathAnima": "assets/avatar/animation_woman0.bin",
+  "lod_distance": [5, 15, 30, 60, 100],
+  "lod_geometry": [20, 15, 1, 0, 0],
+  "lod_avatarCount": [200, 900, 3240, 8800, 12600]
+}];
+},{}],"src/LoadingProgressive/AvatarManager.js":[function(require,module,exports) {
 var define;
 var process = require("process");
 "use strict";
@@ -61219,6 +60924,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.AvatarManager = void 0;
 var _GLTFLoader = require("three/examples/jsm/loaders/GLTFLoader");
 var _Crowd = require("../../lib/crowd/Crowd.js");
+var _sceneConifg_woman = _interopRequireDefault(require("../../config/avatar/sceneConifg_woman01.json"));
+var THREE = _interopRequireWildcard(require("three"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -61227,8 +60937,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-//let Crowd=Pack// 
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //let Crowd=Pack// 
 var AvatarManager = /*#__PURE__*/function () {
   function AvatarManager(scene, camera) {
     _classCallCheck(this, AvatarManager);
@@ -61240,8 +60949,8 @@ var AvatarManager = /*#__PURE__*/function () {
     // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
     // this.sum_count = 0; //当前row_index前面行的人数总和
     // this.row_count = 0; //当前行的可放置人数
-    this.initPos_old();
-    this.init();
+    this.initPos(); //this.initPos_test()//this.initPos_old()
+    this.init(); //this.init_test()//
   }
   _createClass(AvatarManager, [{
     key: "initPos_old",
@@ -61286,91 +60995,37 @@ var AvatarManager = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "initPos_test",
+    value: function initPos_test() {
+      this.poslist = [];
+      var c = {
+        "x": [-121000, 117000, 2000],
+        "y": [2286, 2286, 2000],
+        "z": [-4000, 16000, 2000]
+      };
+      for (var x = c.x[0]; x <= c.x[1]; x = x + c.x[2]) for (var y = c.y[0]; y <= c.y[1]; y = y + c.y[2]) for (var z = c.z[0]; z <= c.z[1]; z = z + c.z[2]) {
+        this.poslist.push([x, y, z]);
+      }
+    }
+  }, {
     key: "getConfig",
     value: function getConfig() {
-      var c1 = {
-        "path": ["assets/sim/woman01/"],
-        "pathTexture": ["./assets/textures_sim1/woman01/"],
-        "meshType": [{
-          "CloW_A_body_geo": "coat",
-          "CloW_A_kuzi_geo": "trousers",
-          "CloW_A_shangyi_geo": "coat",
-          "CloW_A_waitao_geo1": "coat",
-          "CloW_A_xiezi_geo": "xiezi",
-          "CloW_E_eyeLeft_geo02": "eye",
-          "CloW_E_eyeRight_geo01": "eye",
-          "eyelash": "eyelash",
-          "hair": "hair",
-          "head": "head",
-          "teeth": null
-        }],
-        "lod_visible": [{
-          "CloW_A_kuzi_geo": 5,
-          "CloW_A_shangyi_geo": 4,
-          "head": 4,
-          "CloW_A_body_geo": 3,
-          "CloW_A_waitao_geo1": 3,
-          "CloW_A_xiezi_geo": 3,
-          "CloW_E_eyeLeft_geo02": 2,
-          "CloW_E_eyeRight_geo01": 2,
-          "eyelash": 2,
-          "hair": 3
-        }],
-        "useColorTag": ["CloW_A_kuzi_geo",
-        // "CloW_A_shangyi_geo",
-        "CloW_A_waitao_geo1"
-        // "CloW_A_xiezi_geo"
-        ],
+      var config = _sceneConifg_woman.default;
+      for (var i = 0; i < config.length; i++) {
+        var c1 = config[i];
 
-        "walkAnimationList": [5, 8],
-        "sitAnimationList": [],
-        "standAnimationList": [0, 1, 2, 3, 4, 6, 7, 9, 10, 11, 12],
-        "pathAnima": "assets/animation_woman0.bin",
-        "lod_distance": [5000, 15000, 30000, 60000, 100000],
-        "lod_geometry": [20, 15, 1, 0, 0],
-        "lod_avatarCount": [200, 900, 3240, 8800, 12600]
-      };
-      var c0 = {
-        "path": ["assets/sim/man02/"],
-        "pathTexture": ["./assets/textures_sim1/man02/"],
-        "meshType": [{
-          CloM_B_body_geo: "body",
-          CloM_B_chenshan_geo: "coat",
-          CloM_B_eyeLeft_geo1: "eye",
-          CloM_B_eyeRight_geo1: "eye",
-          CloM_B_kuzi_geo: "coat",
-          CloM_B_waitao_geo: "coat",
-          CloM_B_xie_geo: "shoes",
-          eyelash: "eyelash",
-          hair: "hair",
-          head: "head",
-          teeth: null
-        }],
-        "lod_visible": [{
-          CloM_B_body_geo: 3,
-          CloM_B_chenshan_geo: 3,
-          CloM_B_eyeLeft_geo1: 2,
-          CloM_B_eyeRight_geo1: 2,
-          CloM_B_kuzi_geo: 4,
-          CloM_B_waitao_geo: 5,
-          CloM_B_xie_geo: 3,
-          eyelash: 2,
-          hair: 3,
-          head: 4
-        }],
-        "useColorTag": ["CloM_B_kuzi_geo", "CloM_B_waitao_geo"],
-        "walkAnimationList": [5, 8],
-        "sitAnimationList": [],
-        "standAnimationList": [0, 1, 2, 3, 4, 6, 7, 9, 10, 11, 12],
-        "pathAnima": "assets/animation_man02.bin",
-        // "lod_distance":[ 5000, 15000, 30000, 60000, 100000 ],
-        // "lod_geometry":    [ 20,  15,   1,    0,   0  ],
-        // "lod_avatarCount": [ 200, 900, 3240, 8800, 12600]
-        "lod_distance": [100000],
-        "lod_geometry": [20],
-        "lod_avatarCount": [200]
-      };
-      return c1;
+        // for(let j=0;j<c1.path.length;j++)
+        //     c1.path[j]       =c1.path[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
+        // for(let j=0;j<c1.pathTexture.length;j++)
+        //     c1.pathTexture[j]=c1.pathTexture[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
+        // c1.pathAnima=c1.pathAnima.replace(new RegExp("assets/","gm"),"assets/avatar/")
+
+        c1.lod_distance = [5000, 15000, 30000, 60000, 100000];
+        c1.lod_geometry = [20, 15, 1, 0, 0];
+        c1.lod_avatarCount = [200, 900, 3240, 8800, 12600];
+      }
+      console.log(config);
+      return config[0];
     }
   }, {
     key: "init",
@@ -61431,11 +61086,105 @@ var AvatarManager = /*#__PURE__*/function () {
         // self.scene.add(crowd.CrowdPoints)
       }
     }
+  }, {
+    key: "init_test",
+    value: function init_test() {
+      window.camera.position.set(-112955.14889055162, -1060.26, 15389.89423682258);
+      window.camera.position.set(-112769.81911025316, -460.26, 15631.057800327242);
+      window.camera.rotation.set(2.9971475897725877, 0.019309738726166568, -3.1387840775235243);
+      window.camera.position.set(-113613.07101287028, -1310.26, 13639.167352406446);
+      window.camera.rotation.set(2.798170084677891, -0.25254251780158277, 3.052478889142581);
+      window.camera.position.set(-113316.52150201441, -1220.26, 14942.784975382892);
+      window.camera.rotation.set(2.9596643731833536, -0.24159278294367525, 3.0976081453913644);
+      function r(arr) {
+        var randomIndex = 1; //Math.floor(Math.random() * arr.length)
+        return arr[randomIndex];
+      }
+      var c = this.getConfig1();
+      var self = this;
+      new _GLTFLoader.GLTFLoader().load(c.path + "sim.glb", /*#__PURE__*/function () {
+        var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(glb0) {
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                glb0.scene.traverse(function (o) {
+                  if (o instanceof THREE.Mesh) {
+                    // console.log(o.material)
+                    o.material.metalness = 0;
+                    o.material.roughness = 1;
+                    console.log(o.name);
+                    if (o.name == "CloW_A_xiezi_geo") o.visible = false;
+                    if (
+                    //o.name=="head"||
+                    // o.name=="CloW_A_body_geo"
+                    o.name == "hair") {
+                      o.material.side = 2;
+                      // console.log(o)
+                      //o.material.scattering=true
+                    }
+
+                    if (o.name == "CloM_B_body_geo2" || o.name == "CloM_C_head_geo") {
+                      o.material.scattering = true;
+                    }
+                    // if(o.name=="CloW_C_body_geo1"){
+                    //     o.material.color.r=0.7
+                    //     o.material.color.g=1.
+                    //     o.material.color.b=1.
+
+                    // }
+                  }
+                });
+
+                process([glb0.scene], 0);
+              case 2:
+              case "end":
+                return _context2.stop();
+            }
+          }, _callee2);
+        }));
+        return function (_x4) {
+          return _ref2.apply(this, arguments);
+        };
+      }());
+      function process(scenes) {
+        var crowd = new _Crowd.Crowd({
+          camera: self.camera,
+          assets: {},
+          animPathPre: c.pathAnima,
+          count: self.poslist.length,
+          lod_avatarCount: c.lod_avatarCount,
+          lod_distance: c.lod_distance,
+          lod_geometry: c.lod_geometry,
+          lod_visible: c.lod_visible,
+          meshType: c.meshType,
+          pathLodGeo: [c.path + "LOD/"],
+          pathTexture: c.pathTexture,
+          pathTextureConfig: [c.path + "texture_names.json"],
+          useColorTag: c.useColorTag
+        });
+        for (var i00 = 0; i00 < crowd.count; i00++) {
+          var p = self.poslist[i00]; //[i00*1500-50,100,0]
+          crowd.setPosition(i00, [p[0], p[1] - 2000, p[2]]);
+          crowd.setRotation(i00, [0, 0.1 * Math.PI, 0]);
+          crowd.setAnimation(i00, r(c.standAnimationList), 0.1 * i00);
+          crowd.setSpeed(i00, 0);
+          crowd.setScale(i00, [-900, -900 * (1 - 0.2 + 0.1), 900]);
+          crowd.setObesity(i00, 0.8 + 0.2);
+          var j = 10;
+          crowd.setColor(i00, [j, j, j], "CloW_A_kuzi_geo");
+          crowd.setColor(i00, [j, j, j], "CloW_A_waitao_geo1");
+        }
+        crowd.init(scenes);
+        self.scene.add(crowd);
+        // crowd.visible=false
+        // self.scene.add(crowd.CrowdPoints)
+      }
+    }
   }]);
   return AvatarManager;
 }();
 exports.AvatarManager = AvatarManager;
-},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","process":"node_modules/process/browser.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","../../config/avatar/sceneConifg_woman01.json":"config/avatar/sceneConifg_woman01.json","three":"node_modules/three/build/three.module.js","process":"node_modules/process/browser.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61905,7 +61654,7 @@ var Loader = /*#__PURE__*/function () {
   }, {
     key: "animate",
     value: function animate() {
-      this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
+      // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
       this.stats.update();
       // console.log(this.config)
       if (this.config.render !== "false") this.renderer.render(this.scene, this.camera);
@@ -62013,7 +61762,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53230" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60724" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

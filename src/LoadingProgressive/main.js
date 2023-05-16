@@ -94,7 +94,7 @@ export class Loader{
         requestAnimationFrame(this.animate)
     }
     animate(){
-        this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
+        // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
         this.stats.update()
         // console.log(this.config)
         if(this.config.render!=="false")

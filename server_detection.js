@@ -27,21 +27,17 @@ function getName(){
 var data0=""
 require('http').createServer(function (request, response) {
     response.setHeader("Access-Control-Allow-Origin", "*");
+     let chunk = ""
     request.on('data', function (data) {//接受请求
-        data=data.toString()
-        try{
-            saveJson(JSON.parse(data0))//saveStr(data0)//
-        }catch (e) {
-            data0=data0+data
-            try{
-                saveJson(JSON.parse(data0))//saveStr(data0)//
-                data0=""
-            }catch(e){
-                // console.log(1,e)
-            }
-        }
+        chunk += data.toString()
+        
     });
     request.on('end', function () {//返回数据
+        try{
+            saveJson(JSON.parse(chunk))//saveStr(data0)//
+        }catch (e) {
+            console.log("error", e)
+        }
         response.write("finish");//发送字符串
         response.end();
     });
