@@ -1,3 +1,4 @@
+console.log("version:01")
 require('fs').mkdir("detection", ()=>{})
 const port=9999
 let id=0
@@ -23,8 +24,6 @@ function getName(){
     return name
 }
 
-//localhost:8080
-var data0=""
 require('http').createServer(function (request, response) {
     response.setHeader("Access-Control-Allow-Origin", "*");
      let chunk = ""
@@ -34,7 +33,7 @@ require('http').createServer(function (request, response) {
     });
     request.on('end', function () {//返回数据
         try{
-            saveJson(JSON.parse(chunk))//saveStr(data0)//
+            saveStr(chunk)//saveJson(JSON.parse(chunk))//
         }catch (e) {
             console.log("error", e)
         }
@@ -50,7 +49,6 @@ function saveJson(json0) {
     var fs=require('fs')
     try{
         fs.writeFile(name,JSON.stringify(json0 , null, "\t"), function(){});
-        // fs.writeFile(name, JSON.stringify(json0 , null, "\t") , function(){});
     }catch (e) {
         console.log(2,e)
     }

@@ -1314,7 +1314,10 @@
             "block2Kernel": {},
             "updateColor":true,
             "instanceUse":false,
-            "useIndirectMaterial":false
+            "useIndirectMaterial":false,
+            "crossOriginSocket":[
+                "49.234.135.98:8081"
+            ]
         },
         "Visibility":{
             "areaInfList":[

@@ -5,7 +5,7 @@ import { saveAs } from 'file-saver'
 import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
-import {ZipLoader } from '../../lib/zip/ziploader.js'
+import {ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 import { WaterController  } from '../../lib/threejs/WaterController'
 export class Building{
@@ -261,6 +261,10 @@ export class Building{
         var url=self.config.path+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
             const zipLoader=new ZipLoader()
+            if(self.config.crossOriginSocket.length>0){
+                const i=Math.floor(Math.random()*self.config.crossOriginSocket.length)
+                zipLoader.crossOriginSocket=self.config.crossOriginSocket[i]
+            }
 		    zipLoader.load( url,()=>{
 		    },()=>{
 			    console.log("加载失败："+id)
