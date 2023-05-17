@@ -117,7 +117,1356 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"config/configOP7.json":[function(require,module,exports) {
+})({"config/configOP6.json":[function(require,module,exports) {
+module.exports = {
+  "FlipY": false,
+  "src": {
+    "Building_new": {
+      "path": "assets/space6Zip/",
+      "NumberOfComponents": 1278,
+      "parentGroup": {
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "createSphere": {
+        "x": [-121000, 117000, 2000],
+        "y": [2286.5, 2286.5, 2000],
+        "z": [-4000, 16000, 2000],
+        "r": 250
+      },
+      "kernelPosition": "-110,40,-10",
+      "entropy": {},
+      "isdoor": {
+        "0": 0,
+        "1": 0,
+        "2": 0,
+        "3": 0,
+        "4": 0,
+        "5": 0,
+        "6": 0,
+        "7": 0,
+        "8": 0,
+        "9": 0,
+        "10": 0,
+        "11": 0,
+        "12": 0,
+        "13": 0,
+        "14": 0,
+        "15": 0,
+        "16": 0,
+        "17": 0,
+        "18": 0,
+        "19": 0,
+        "20": 0,
+        "21": 0,
+        "22": 0,
+        "23": 0,
+        "24": 0,
+        "25": 0,
+        "26": 0,
+        "27": 0,
+        "28": 0,
+        "29": 0,
+        "30": 0,
+        "31": 0,
+        "32": 0,
+        "33": 0,
+        "34": 0,
+        "35": 0,
+        "36": 0,
+        "37": 0,
+        "38": 0,
+        "39": 0,
+        "40": 0,
+        "41": 0,
+        "42": 0,
+        "43": 0,
+        "44": 0,
+        "45": 0,
+        "46": 0,
+        "47": 0,
+        "48": 0,
+        "49": 0,
+        "50": 0,
+        "51": 0,
+        "52": 0,
+        "53": 0,
+        "54": 0,
+        "55": 0,
+        "56": 0,
+        "57": 0,
+        "58": 0,
+        "59": 0,
+        "60": 0,
+        "61": 0,
+        "62": 0,
+        "63": 0,
+        "64": 0,
+        "65": 0,
+        "66": 0,
+        "67": 0,
+        "68": 0,
+        "69": 0,
+        "70": 0,
+        "71": 0,
+        "72": 0,
+        "73": 0,
+        "74": 0,
+        "75": 0,
+        "76": 0,
+        "77": 0,
+        "78": 0,
+        "79": 0,
+        "80": 0,
+        "81": 0,
+        "82": 0,
+        "83": 0,
+        "84": 0,
+        "85": 0,
+        "86": 0,
+        "87": 0,
+        "88": 0,
+        "89": 0,
+        "90": 0,
+        "91": 0,
+        "92": 0,
+        "93": 0,
+        "94": 0,
+        "95": 0,
+        "96": 0,
+        "97": 0,
+        "98": 0,
+        "99": 0,
+        "100": 0,
+        "101": 0,
+        "102": 0,
+        "103": 0,
+        "104": 0,
+        "105": 0,
+        "106": 0,
+        "107": 0,
+        "108": 0,
+        "109": 0,
+        "110": 0,
+        "111": 0,
+        "112": 0,
+        "113": 0,
+        "114": 0,
+        "115": 0,
+        "116": 0,
+        "117": 0,
+        "118": 0,
+        "119": 0,
+        "120": 0,
+        "121": 0,
+        "122": 0,
+        "123": 0,
+        "124": 0,
+        "125": 0,
+        "126": 0,
+        "127": 0,
+        "128": 0,
+        "129": 0,
+        "130": 0,
+        "131": 0,
+        "132": 0,
+        "133": 0,
+        "134": 0,
+        "135": 0,
+        "136": 0,
+        "137": 0,
+        "138": 0,
+        "139": 0,
+        "140": 0,
+        "141": 0,
+        "142": 0,
+        "143": 0,
+        "144": 0,
+        "145": 0,
+        "146": 0,
+        "147": 0,
+        "148": 0,
+        "149": 0,
+        "150": 0,
+        "151": 0,
+        "152": 0,
+        "153": 0,
+        "154": 0,
+        "155": 0,
+        "156": 0,
+        "157": 0,
+        "158": 0,
+        "159": 0,
+        "160": 0,
+        "161": 0,
+        "162": 0,
+        "163": 0,
+        "164": 0,
+        "165": 0,
+        "166": 0,
+        "167": 0,
+        "168": 0,
+        "169": 0,
+        "170": 0,
+        "171": 0,
+        "172": 0,
+        "173": 0,
+        "174": 0,
+        "175": 0,
+        "176": 0,
+        "177": 0,
+        "178": 0,
+        "179": 0,
+        "180": 0,
+        "181": 0,
+        "182": 0,
+        "183": 0,
+        "184": 0,
+        "185": 0,
+        "186": 0,
+        "187": 0,
+        "188": 0,
+        "189": 0,
+        "190": 0,
+        "191": 0,
+        "192": 0,
+        "193": 0,
+        "194": 0,
+        "195": 0,
+        "196": 0,
+        "197": 0,
+        "198": 0,
+        "199": 0,
+        "200": 0,
+        "201": 0,
+        "202": 0,
+        "203": 0,
+        "204": 0,
+        "205": 0,
+        "206": 0,
+        "207": 0,
+        "208": 0,
+        "209": 0,
+        "210": 0,
+        "211": 0,
+        "212": 0,
+        "213": 0,
+        "214": 0,
+        "215": 0,
+        "216": 0,
+        "217": 0,
+        "218": 0,
+        "219": 0,
+        "220": 0,
+        "221": 0,
+        "222": 0,
+        "223": 0,
+        "224": 0,
+        "225": 0,
+        "226": 0,
+        "227": 0,
+        "228": 0,
+        "229": 0,
+        "230": 0,
+        "231": 0,
+        "232": 0,
+        "233": 0,
+        "234": 0,
+        "235": 0,
+        "236": 0,
+        "237": 0,
+        "238": 0,
+        "239": 0,
+        "240": 0,
+        "241": 0,
+        "242": 0,
+        "243": 0,
+        "244": 0,
+        "245": 0,
+        "246": 0,
+        "247": 0,
+        "248": 0,
+        "249": 0,
+        "250": 0,
+        "251": 0,
+        "252": 0,
+        "253": 0,
+        "254": 0,
+        "255": 0,
+        "256": 0,
+        "257": 0,
+        "258": 0,
+        "259": 0,
+        "260": 0,
+        "261": 0,
+        "262": 0,
+        "263": 0,
+        "264": 0,
+        "265": 0,
+        "266": 0,
+        "267": 0,
+        "268": 0,
+        "269": 0,
+        "270": 0,
+        "271": 0,
+        "272": 0,
+        "273": 0,
+        "274": 0,
+        "275": 0,
+        "276": 0,
+        "277": 0,
+        "278": 0,
+        "279": 0,
+        "280": 0,
+        "281": 0,
+        "282": 0,
+        "283": 0,
+        "284": 0,
+        "285": 0,
+        "286": 0,
+        "287": 0,
+        "288": 0,
+        "289": 0,
+        "290": 0,
+        "291": 0,
+        "292": 0,
+        "293": 0,
+        "294": 0,
+        "295": 0,
+        "296": 0,
+        "297": 0,
+        "298": 0,
+        "299": 0,
+        "300": 0,
+        "301": 0,
+        "302": 0,
+        "303": 0,
+        "304": 0,
+        "305": 0,
+        "306": 0,
+        "307": 0,
+        "308": 0,
+        "309": 0,
+        "310": 0,
+        "311": 0,
+        "312": 0,
+        "313": 0,
+        "314": 0,
+        "315": 0,
+        "316": 0,
+        "317": 0,
+        "318": 0,
+        "319": 0,
+        "320": 0,
+        "321": 0,
+        "322": 0,
+        "323": 0,
+        "324": 0,
+        "325": 0,
+        "326": 0,
+        "327": 0,
+        "328": 0,
+        "329": 0,
+        "330": 0,
+        "331": 0,
+        "332": 0,
+        "333": 0,
+        "334": 0,
+        "335": 0,
+        "336": 0,
+        "337": 0,
+        "338": 0,
+        "339": 0,
+        "340": 0,
+        "341": 0,
+        "342": 0,
+        "343": 0,
+        "344": 0,
+        "345": 0,
+        "346": 0,
+        "347": 0,
+        "348": 0,
+        "349": 0,
+        "350": 0,
+        "351": 0,
+        "352": 0,
+        "353": 0,
+        "354": 0,
+        "355": 0,
+        "356": 0,
+        "357": 0,
+        "358": 0,
+        "359": 0,
+        "360": 0,
+        "361": 0,
+        "362": 0,
+        "363": 0,
+        "364": 0,
+        "365": 0,
+        "366": 0,
+        "367": 0,
+        "368": 0,
+        "369": 0,
+        "370": 0,
+        "371": 0,
+        "372": 0,
+        "373": 0,
+        "374": 0,
+        "375": 0,
+        "376": 0,
+        "377": 0,
+        "378": 0,
+        "379": 0,
+        "380": 0,
+        "381": 0,
+        "382": 0,
+        "383": 0,
+        "384": 0,
+        "385": 0,
+        "386": 0,
+        "387": 0,
+        "388": 0,
+        "389": 0,
+        "390": 0,
+        "391": 0,
+        "392": 0,
+        "393": 0,
+        "394": 0,
+        "395": 0,
+        "396": 0,
+        "397": 0,
+        "398": 0,
+        "399": 0,
+        "400": 0,
+        "401": 0,
+        "402": 0,
+        "403": 0,
+        "404": 0,
+        "405": 0,
+        "406": 0,
+        "407": 0,
+        "408": 0,
+        "409": 0,
+        "410": 0,
+        "411": 0,
+        "412": 0,
+        "413": 0,
+        "414": 0,
+        "415": 0,
+        "416": 0,
+        "417": 0,
+        "418": 0,
+        "419": 0,
+        "420": 0,
+        "421": 0,
+        "422": 0,
+        "423": 0,
+        "424": 0,
+        "425": 0,
+        "426": 0,
+        "427": 0,
+        "428": 0,
+        "429": 0,
+        "430": 0,
+        "431": 0,
+        "432": 0,
+        "433": 0,
+        "434": 0,
+        "435": 0,
+        "436": 0,
+        "437": 0,
+        "438": 0,
+        "439": 0,
+        "440": 0,
+        "441": 0,
+        "442": 0,
+        "443": 0,
+        "444": 0,
+        "445": 0,
+        "446": 0,
+        "447": 0,
+        "448": 0,
+        "449": 0,
+        "450": 0,
+        "451": 0,
+        "452": 0,
+        "453": 0,
+        "454": 0,
+        "455": 0,
+        "456": 0,
+        "457": 0,
+        "458": 0,
+        "459": 0,
+        "460": 0,
+        "461": 0,
+        "462": 0,
+        "463": 0,
+        "464": 0,
+        "465": 0,
+        "466": 0,
+        "467": 0,
+        "468": 0,
+        "469": 0,
+        "470": 0,
+        "471": 0,
+        "472": 0,
+        "473": 0,
+        "474": 0,
+        "475": 0,
+        "476": 0,
+        "477": 0,
+        "478": 0,
+        "479": 0,
+        "480": 0,
+        "481": 0,
+        "482": 0,
+        "483": 0,
+        "484": 0,
+        "485": 0,
+        "486": 0,
+        "487": 0,
+        "488": 0,
+        "489": 0,
+        "490": 0,
+        "491": 0,
+        "492": 0,
+        "493": 0,
+        "494": 0,
+        "495": 0,
+        "496": 0,
+        "497": 0,
+        "498": 0,
+        "499": 0,
+        "500": 0,
+        "501": 0,
+        "502": 0,
+        "503": 0,
+        "504": 0,
+        "505": 0,
+        "506": 0,
+        "507": 0,
+        "508": 0,
+        "509": 0,
+        "510": 0,
+        "511": 0,
+        "512": 0,
+        "513": 0,
+        "514": 0,
+        "515": 0,
+        "516": 0,
+        "517": 0,
+        "518": 0,
+        "519": 0,
+        "520": 0,
+        "521": 0,
+        "522": 0,
+        "523": 0,
+        "524": 0,
+        "525": 0,
+        "526": 0,
+        "527": 0,
+        "528": 0,
+        "529": 0,
+        "530": 0,
+        "531": 0,
+        "532": 0,
+        "533": 0,
+        "534": 0,
+        "535": 0,
+        "536": 0,
+        "537": 0,
+        "538": 0,
+        "539": 0,
+        "540": 0,
+        "541": 0,
+        "542": 0,
+        "543": 0,
+        "544": 0,
+        "545": 0,
+        "546": 0,
+        "547": 0,
+        "548": 0,
+        "549": 0,
+        "550": 0,
+        "551": 0,
+        "552": 0,
+        "553": 0,
+        "554": 0,
+        "555": 0,
+        "556": 0,
+        "557": 0,
+        "558": 0,
+        "559": 0,
+        "560": 0,
+        "561": 0,
+        "562": 0,
+        "563": 0,
+        "564": 0,
+        "565": 0,
+        "566": 0,
+        "567": 0,
+        "568": 0,
+        "569": 0,
+        "570": 0,
+        "571": 0,
+        "572": 0,
+        "573": 0,
+        "574": 0,
+        "575": 0,
+        "576": 0,
+        "577": 0,
+        "578": 0,
+        "579": 0,
+        "580": 0,
+        "581": 0,
+        "582": 0,
+        "583": 0,
+        "584": 0,
+        "585": 0,
+        "586": 0,
+        "587": 0,
+        "588": 0,
+        "589": 0,
+        "590": 0,
+        "591": 0,
+        "592": 0,
+        "593": 0,
+        "594": 0,
+        "595": 0,
+        "596": 0,
+        "597": 0,
+        "598": 0,
+        "599": 0,
+        "600": 0,
+        "601": 0,
+        "602": 0,
+        "603": 0,
+        "604": 0,
+        "605": 0,
+        "606": 0,
+        "607": 0,
+        "608": 0,
+        "609": 0,
+        "610": 0,
+        "611": 0,
+        "612": 0,
+        "613": 0,
+        "614": 0,
+        "615": 0,
+        "616": 0,
+        "617": 0,
+        "618": 0,
+        "619": 0,
+        "620": 0,
+        "621": 0,
+        "622": 0,
+        "623": 0,
+        "624": 0,
+        "625": 0,
+        "626": 0,
+        "627": 0,
+        "628": 0,
+        "629": 0,
+        "630": 0,
+        "631": 0,
+        "632": 0,
+        "633": 0,
+        "634": 0,
+        "635": 0,
+        "636": 0,
+        "637": 0,
+        "638": 0,
+        "639": 0,
+        "640": 0,
+        "641": 0,
+        "642": 0,
+        "643": 0,
+        "644": 0,
+        "645": 0,
+        "646": 0,
+        "647": 0,
+        "648": 0,
+        "649": 0,
+        "650": 0,
+        "651": 0,
+        "652": 0,
+        "653": 0,
+        "654": 0,
+        "655": 0,
+        "656": 0,
+        "657": 0,
+        "658": 0,
+        "659": 0,
+        "660": 0,
+        "661": 0,
+        "662": 0,
+        "663": 0,
+        "664": 0,
+        "665": 0,
+        "666": 0,
+        "667": 0,
+        "668": 0,
+        "669": 0,
+        "670": 0,
+        "671": 0,
+        "672": 0,
+        "673": 0,
+        "674": 0,
+        "675": 0,
+        "676": 0,
+        "677": 0,
+        "678": 0,
+        "679": 0,
+        "680": 0,
+        "681": 0,
+        "682": 0,
+        "683": 0,
+        "684": 0,
+        "685": 0,
+        "686": 0,
+        "687": 0,
+        "688": 0,
+        "689": 0,
+        "690": 0,
+        "691": 0,
+        "692": 0,
+        "693": 0,
+        "694": 0,
+        "695": 0,
+        "696": 0,
+        "697": 0,
+        "698": 0,
+        "699": 0,
+        "700": 0,
+        "701": 0,
+        "702": 0,
+        "703": 0,
+        "704": 0,
+        "705": 0,
+        "706": 0,
+        "707": 0,
+        "708": 0,
+        "709": 0,
+        "710": 0,
+        "711": 0,
+        "712": 0,
+        "713": 0,
+        "714": 0,
+        "715": 0,
+        "716": 0,
+        "717": 0,
+        "718": 0,
+        "719": 0,
+        "720": 0,
+        "721": 0,
+        "722": 0,
+        "723": 0,
+        "724": 0,
+        "725": 0,
+        "726": 0,
+        "727": 0,
+        "728": 0,
+        "729": 0,
+        "730": 0,
+        "731": 0,
+        "732": 0,
+        "733": 0,
+        "734": 0,
+        "735": 0,
+        "736": 0,
+        "737": 0,
+        "738": 0,
+        "739": 0,
+        "740": 0,
+        "741": 0,
+        "742": 0,
+        "743": 0,
+        "744": 0,
+        "745": 0,
+        "746": 0,
+        "747": 0,
+        "748": 0,
+        "749": 0,
+        "750": 0,
+        "751": 0,
+        "752": 0,
+        "753": 0,
+        "754": 0,
+        "755": 0,
+        "756": 0,
+        "757": 0,
+        "758": 0,
+        "759": 0,
+        "760": 0,
+        "761": 0,
+        "762": 0,
+        "763": 0,
+        "764": 0,
+        "765": 0,
+        "766": 0,
+        "767": 0,
+        "768": 0,
+        "769": 0,
+        "770": 0,
+        "771": 0,
+        "772": 0,
+        "773": 0,
+        "774": 0,
+        "775": 0,
+        "776": 0,
+        "777": 0,
+        "778": 0,
+        "779": 0,
+        "780": 0,
+        "781": 0,
+        "782": 0,
+        "783": 0,
+        "784": 0,
+        "785": 0,
+        "786": 0,
+        "787": 0,
+        "788": 0,
+        "789": 0,
+        "790": 0,
+        "791": 0,
+        "792": 0,
+        "793": 0,
+        "794": 0,
+        "795": 0,
+        "796": 0,
+        "797": 0,
+        "798": 0,
+        "799": 0,
+        "800": 0,
+        "801": 0,
+        "802": 0,
+        "803": 0,
+        "804": 0,
+        "805": 0,
+        "806": 0,
+        "807": 0,
+        "808": 0,
+        "809": 0,
+        "810": 0,
+        "811": 0,
+        "812": 0,
+        "813": 0,
+        "814": 0,
+        "815": 0,
+        "816": 0,
+        "817": 0,
+        "818": 0,
+        "819": 0,
+        "820": 0,
+        "821": 0,
+        "822": 0,
+        "823": 0,
+        "824": 0,
+        "825": 0,
+        "826": 0,
+        "827": 0,
+        "828": 0,
+        "829": 0,
+        "830": 0,
+        "831": 0,
+        "832": 0,
+        "833": 0,
+        "834": 0,
+        "835": 0,
+        "836": 0,
+        "837": 0,
+        "838": 0,
+        "839": 0,
+        "840": 0,
+        "841": 0,
+        "842": 0,
+        "843": 0,
+        "844": 0,
+        "845": 0,
+        "846": 0,
+        "847": 0,
+        "848": 0,
+        "849": 0,
+        "850": 0,
+        "851": 0,
+        "852": 0,
+        "853": 0,
+        "854": 0,
+        "855": 0,
+        "856": 0,
+        "857": 0,
+        "858": 0,
+        "859": 0,
+        "860": 0,
+        "861": 0,
+        "862": 0,
+        "863": 0,
+        "864": 0,
+        "865": 0,
+        "866": 0,
+        "867": 0,
+        "868": 0,
+        "869": 0,
+        "870": 0,
+        "871": 0,
+        "872": 0,
+        "873": 0,
+        "874": 0,
+        "875": 0,
+        "876": 0,
+        "877": 0,
+        "878": 0,
+        "879": 0,
+        "880": 0,
+        "881": 0,
+        "882": 0,
+        "883": 0,
+        "884": 0,
+        "885": 0,
+        "886": 0,
+        "887": 0,
+        "888": 0,
+        "889": 0,
+        "890": 0,
+        "891": 0,
+        "892": 0,
+        "893": 0,
+        "894": 0,
+        "895": 0,
+        "896": 0,
+        "897": 0,
+        "898": 0,
+        "899": 0,
+        "900": 0,
+        "901": 0,
+        "902": 0,
+        "903": 0,
+        "904": 0,
+        "905": 0,
+        "906": 0,
+        "907": 0,
+        "908": 0,
+        "909": 0,
+        "910": 0,
+        "911": 0,
+        "912": 0,
+        "913": 0,
+        "914": 0,
+        "915": 0,
+        "916": 0,
+        "917": 0,
+        "918": 0,
+        "919": 0,
+        "920": 0,
+        "921": 0,
+        "922": 0,
+        "923": 0,
+        "924": 0,
+        "925": 1,
+        "926": 1,
+        "927": 1,
+        "928": 1,
+        "929": 1,
+        "930": 1,
+        "931": 1,
+        "932": 1,
+        "933": 1,
+        "934": 1,
+        "935": 1,
+        "936": 1,
+        "937": 1,
+        "938": 1,
+        "939": 1,
+        "940": 1,
+        "941": 1,
+        "942": 1,
+        "943": 1,
+        "944": 1,
+        "945": 1,
+        "946": 1,
+        "947": 1,
+        "948": 1,
+        "949": 1,
+        "950": 1,
+        "951": 1,
+        "952": 1,
+        "953": 1,
+        "954": 1,
+        "955": 1,
+        "956": 1,
+        "957": 1,
+        "958": 1,
+        "959": 1,
+        "960": 1,
+        "961": 1,
+        "962": 1,
+        "963": 1,
+        "964": 1,
+        "965": 1,
+        "966": 1,
+        "967": 1,
+        "968": 1,
+        "969": 1,
+        "970": 1,
+        "971": 1,
+        "972": 1,
+        "973": 1,
+        "974": 1,
+        "975": 1,
+        "976": 1,
+        "977": 1,
+        "978": 1,
+        "979": 1,
+        "980": 1,
+        "981": 1,
+        "982": 1,
+        "983": 1,
+        "984": 1,
+        "985": 1,
+        "986": 1,
+        "987": 1,
+        "988": 1,
+        "989": 1,
+        "990": 1,
+        "991": 1,
+        "992": 1,
+        "993": 1,
+        "994": 1,
+        "995": 1,
+        "996": 1,
+        "997": 1,
+        "998": 1,
+        "999": 1,
+        "1000": 1,
+        "1001": 1,
+        "1002": 1,
+        "1003": 1,
+        "1004": 1,
+        "1005": 1,
+        "1006": 1,
+        "1007": 1,
+        "1008": 1,
+        "1009": 1,
+        "1010": 1,
+        "1011": 1,
+        "1012": 1,
+        "1013": 1,
+        "1014": 1,
+        "1015": 1,
+        "1016": 1,
+        "1017": 1,
+        "1018": 1,
+        "1019": 1,
+        "1020": 1,
+        "1021": 1,
+        "1022": 1,
+        "1023": 1,
+        "1024": 1,
+        "1025": 1,
+        "1026": 1,
+        "1027": 1,
+        "1028": 1,
+        "1029": 1,
+        "1030": 1,
+        "1031": 1,
+        "1032": 1,
+        "1033": 1,
+        "1034": 1,
+        "1035": 1,
+        "1036": 1,
+        "1037": 1,
+        "1038": 1,
+        "1039": 1,
+        "1040": 1,
+        "1041": 1,
+        "1042": 1,
+        "1043": 1,
+        "1044": 1,
+        "1045": 1,
+        "1046": 1,
+        "1047": 1,
+        "1048": 1,
+        "1049": 1,
+        "1050": 1,
+        "1051": 0,
+        "1052": 0,
+        "1053": 0,
+        "1054": 0,
+        "1055": 0,
+        "1056": 0,
+        "1057": 0,
+        "1058": 0,
+        "1059": 0,
+        "1060": 0,
+        "1061": 0,
+        "1062": 0,
+        "1063": 0,
+        "1064": 0,
+        "1065": 0,
+        "1066": 0,
+        "1067": 0,
+        "1068": 0,
+        "1069": 0,
+        "1070": 0,
+        "1071": 0,
+        "1072": 0,
+        "1073": 0,
+        "1074": 0,
+        "1075": 0,
+        "1076": 0,
+        "1077": 0,
+        "1078": 0,
+        "1079": 0,
+        "1080": 0,
+        "1081": 0,
+        "1082": 0,
+        "1083": 0,
+        "1084": 0,
+        "1085": 0,
+        "1086": 0,
+        "1087": 0,
+        "1088": 0,
+        "1089": 0,
+        "1090": 0,
+        "1091": 0,
+        "1092": 0,
+        "1093": 0,
+        "1094": 0,
+        "1095": 0,
+        "1096": 0,
+        "1097": 0,
+        "1098": 0,
+        "1099": 0,
+        "1100": 0,
+        "1101": 0,
+        "1102": 0,
+        "1103": 0,
+        "1104": 0,
+        "1105": 0,
+        "1106": 0,
+        "1107": 0,
+        "1108": 0,
+        "1109": 0,
+        "1110": 0,
+        "1111": 0,
+        "1112": 0,
+        "1113": 0,
+        "1114": 0,
+        "1115": 0,
+        "1116": 0,
+        "1117": 0,
+        "1118": 0,
+        "1119": 0,
+        "1120": 0,
+        "1121": 0,
+        "1122": 0,
+        "1123": 0,
+        "1124": 0,
+        "1125": 0,
+        "1126": 0,
+        "1127": 0,
+        "1128": 0,
+        "1129": 0,
+        "1130": 0,
+        "1131": 0,
+        "1132": 0,
+        "1133": 0,
+        "1134": 0,
+        "1135": 0,
+        "1136": 0,
+        "1137": 0,
+        "1138": 0,
+        "1139": 0,
+        "1140": 0,
+        "1141": 0,
+        "1142": 0,
+        "1143": 0,
+        "1144": 0,
+        "1145": 0,
+        "1146": 0,
+        "1147": 0,
+        "1148": 0,
+        "1149": 0,
+        "1150": 0,
+        "1151": 0,
+        "1152": 0,
+        "1153": 0,
+        "1154": 0,
+        "1155": 0,
+        "1156": 0,
+        "1157": 0,
+        "1158": 0,
+        "1159": 0,
+        "1160": 0,
+        "1161": 0,
+        "1162": 0,
+        "1163": 0,
+        "1164": 0,
+        "1165": 0,
+        "1166": 0,
+        "1167": 0,
+        "1168": 0,
+        "1169": 0,
+        "1170": 0,
+        "1171": 0,
+        "1172": 0,
+        "1173": 0,
+        "1174": 0,
+        "1175": 0,
+        "1176": 0,
+        "1177": 0,
+        "1178": 0,
+        "1179": 0,
+        "1180": 0,
+        "1181": 0,
+        "1182": 0,
+        "1183": 0,
+        "1184": 0,
+        "1185": 0,
+        "1186": 0,
+        "1187": 0,
+        "1188": 0,
+        "1189": 0,
+        "1190": 0,
+        "1191": 0,
+        "1192": 0,
+        "1193": 0,
+        "1194": 0,
+        "1195": 0,
+        "1196": 0,
+        "1197": 0,
+        "1198": 0,
+        "1199": 0,
+        "1200": 0,
+        "1201": 0,
+        "1202": 0,
+        "1203": 0,
+        "1204": 0,
+        "1205": 0,
+        "1206": 0,
+        "1207": 0,
+        "1208": 0,
+        "1209": 0,
+        "1210": 0,
+        "1211": 0,
+        "1212": 0,
+        "1213": 0,
+        "1214": 0,
+        "1215": 0,
+        "1216": 0,
+        "1217": 0,
+        "1218": 0,
+        "1219": 0,
+        "1220": 0,
+        "1221": 0,
+        "1222": 0,
+        "1223": 0,
+        "1224": 0,
+        "1225": 0,
+        "1226": 0,
+        "1227": 0,
+        "1228": 0,
+        "1229": 0,
+        "1230": 0,
+        "1231": 0,
+        "1232": 0,
+        "1233": 0,
+        "1234": 0,
+        "1235": 0,
+        "1236": 0,
+        "1237": 0,
+        "1238": 0,
+        "1239": 0,
+        "1240": 0,
+        "1241": 0,
+        "1242": 0,
+        "1243": 0,
+        "1244": 0,
+        "1245": 0,
+        "1246": 0,
+        "1247": 0,
+        "1248": 0,
+        "1249": 0,
+        "1250": 0,
+        "1251": 0,
+        "1252": 0,
+        "1253": 0,
+        "1254": 0,
+        "1255": 0,
+        "1256": 0,
+        "1257": 0,
+        "1258": 0,
+        "1259": 0,
+        "1260": 0,
+        "1261": 0,
+        "1262": 0,
+        "1263": 0,
+        "1264": 0,
+        "1265": 0,
+        "1266": 0,
+        "1267": 0,
+        "1268": 0,
+        "1269": 0,
+        "1270": 0,
+        "1271": 0,
+        "1272": 0,
+        "1273": 0,
+        "1274": 0,
+        "1275": 0,
+        "1276": 0,
+        "1277": 0
+      },
+      "blocking": {},
+      "block2Kernel": {}
+    },
+    "Visibility": {
+      "areaInfList": [{
+        "x": [-121000, 117000, 2000],
+        "y": [2286.5, 2286.5, 2000],
+        "z": [-4000, 16000, 2000],
+        "r": 250
+      }],
+      "componentNum": 1278,
+      "sceneId": "haiNing0",
+      "urlVdServer": "http://39.98.206.0:8091"
+    },
+    "P2P": {
+      "urlP2pControllerServer": "http://139.196.217.153:8010"
+    },
+    "Detection": {
+      "urlDetectionServer": "http://123.57.58.224:9999",
+      "maxBackDelay": 10
+    },
+    "SamplePointList": {
+      "vvd": {}
+    },
+    "main": {
+      "camera": {
+        "position": {
+          "x": -116237.59887439065,
+          "y": 1669.743315338819,
+          "z": 11978.665556584478
+        },
+        "rotation": {
+          "x": -0.1385006576646772,
+          "y": -1.4671197521902537,
+          "z": -0.13776636314558174
+        },
+        "target": {
+          "x": -22958.633680551236,
+          "y": -1213.5804965263233,
+          "z": 4122.605105589213
+        },
+        "near": 10,
+        "far": 5000000
+      }
+    }
+  }
+};
+},{}],"config/configOP7.json":[function(require,module,exports) {
 module.exports = {
   "src": {
     "Building_new": {
@@ -1517,7 +2866,7 @@ module.exports = {
       }],
       "componentNum": 8437,
       "sceneId": "gkd",
-      "urlVdServer": "http://39.98.206.0:8092"
+      "urlVdServer": "http://39.98.206.0:8091"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -41942,10 +43291,6 @@ var Visibility = /*#__PURE__*/function () {
     // areaInf["max"][1]-=0.5
     this.areaInf = this.initAreaInfList()[0];
     console.log("this.areaInf", this.areaInf);
-    if (false) {
-      this.areaInf["min"][1] = Math.floor(this.areaInf["min"][1]);
-      this.areaInf["max"][1] = Math.floor(this.areaInf["max"][1]);
-    }
     this.camera = camera;
     this.meshes = meshes; //用于可见性剔除
     this.componentNum = this.config.componentNum; //8437//1278
@@ -42000,6 +43345,13 @@ var Visibility = /*#__PURE__*/function () {
       this.visualList_request = {}; //记录资源列表的请求是否已经发送
       for (var i = 0; i < this.config.areaInfList.length; i++) {
         var c = this.config.areaInfList[i];
+        if (true) {
+          c.y[0] = Math.floor(c.y[0]);
+          c.y[1] = Math.floor(c.y[1]);
+          // this.areaInf["min"][1]=Math.floor(this.areaInf["min"][1])
+          // this.areaInf["max"][1]=Math.floor(this.areaInf["max"][1])
+        }
+
         this.areaInfList.push({
           "min": [c.x[0], c.y[0], c.z[0]],
           "max": [c.x[1], c.y[1], c.z[1]],
@@ -53314,7 +54666,7 @@ var Building = /*#__PURE__*/function () {
       new Promise(function (resolve, reject) {
         //加载资源压缩包
         var zipLoader = new _Ziploader.ZipLoader();
-        if (self.config.crossOriginSocket.length > 0) {
+        if (self.config.crossOriginSocket && self.config.crossOriginSocket.length > 0) {
           var i = Math.floor(Math.random() * self.config.crossOriginSocket.length);
           zipLoader.crossOriginSocket = self.config.crossOriginSocket[i];
         }
@@ -57940,3242 +59292,7 @@ var Panel = /*#__PURE__*/function () {
   return Panel;
 }();
 exports.Panel = Panel;
-},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"lib/crowd/my_shader.json":[function(require,module,exports) {
-module.exports = {
-  "./assets/avatar/shader/frag_lights_physical_pars_fragment_Scattering.glsl": "float thicknessDistortion = 0.1;\r\n//vec3 thicknessColor = vec3(0.5,0.3,0.0);\r\nfloat thicknessPower = 2.0;\r\nfloat thicknessScale = 2.0;\r\n\r\nuniform float sssIntensity;\r\n\r\nvoid RE_Direct_Physical_Scattering( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        vec3 scatteringHalf = normalize( directLight.direction + (geometry.normal * thicknessDistortion));\r\n        float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;\r\n        reflectedLight.directDiffuse += scatteringDot * directLight.color * material.diffuseColor.rgb;\r\n\r\n        float wrappedDotNL = (dot(directLight.direction, geometry.normal) * 0.5 + 0.5);\r\n        //vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, CurveFactor  ));\r\n        // vec4 scatteringColor = texture2D(sssLUT, vec2(wrappedDotNL, 1.0 / curve  ));//散射颜色取决于入射夹角和曲率\r\n        vec3 scatteringColor = vec3(1.,0.,0.);\r\n        reflectedLight.directDiffuse=reflectedLight.directDiffuse + (1.0 - wrappedDotNL) * directLight.color * material.diffuseColor * scatteringColor.rgb * sssIntensity;//计算次表面散射并加入到漫反射中\r\n}\r\n#define  RE_Direct_Physical  RE_Direct_Physical_Scattering\r\n",
-  "./assets/avatar/shader/frag_lights_physical_pars_fragment_Specular.glsl": "uniform float brightness_specular;\r\nfloat PHBeckmann( float NdotH , float roughness ){//余弦 , 粗糙度 //针对皮肤的高光项 //Beckmann分布函数预处理以便生成速查纹理\r\n\troughness = max(roughness,0.01);//roughness要大于0.01\r\n        float alpha = acos( NdotH );\r\n        float ta = tan(alpha);\r\n        float m = roughness * roughness ;\r\n        float val = 1.0 / ( m * pow(NdotH,4.0) ) * exp( -(ta*ta)/ m );\r\n        return val;//与roughness正相关 与alpha负相关 \r\n}\r\nfloat fresnelReflectance( vec3 H, vec3 V, float F0 )//半程方向 视线方向 常数\r\n{\r\n        float base = 1.0 - dot( V, H );  \r\n        float exponential = pow( base, 5.0 );\r\n        return exponential + F0 * ( 1.0 - exponential );//菲涅尔方程（Fresnel equations）\r\n}\r\nvoid RE_Direct_Physical_Specular( const in IncidentLight directLight, const in GeometricContext geometry, const in PhysicalMaterial material, inout ReflectedLight reflectedLight ) {\r\n        RE_Direct_Physical( directLight, geometry, material, reflectedLight ) ;\r\n        float dotNL = dot( geometry.normal, directLight.direction ); //法向量与入射方向夹角的余弦值 //漫反射强度\r\n        if(dotNL > 0.0){ //如果存在漫反射\r\n            vec3 h =  directLight.direction + geometry.viewDir ; // Unnormalized half-way vector  //半程方向\r\n            vec3 H = normalize( h ); //单位化\r\n            float dotNH = dot( geometry.normal , H ); //法线与半程方向夹角的余弦 //镜面反射强度\r\n            float PH = PHBeckmann( dotNH , roughness );//针对皮肤的高光项\r\n            float F = fresnelReflectance( H,geometry.viewDir,0.028 );//针对皮肤的高光项?\r\n            float frSpec = max( PH * F / dot(h,h) , 0.0 );\r\n            reflectedLight.directSpecular +=  dotNL * brightness_specular * frSpec * directLight.color ;//添加高光\r\n        }\r\n}\r\n#define RE_Direct_Physical_Scattering RE_Direct_Physical_Specular\r\n",
-  "./assets/avatar/shader/frag_MeshStandardMaterial.glsl": "#define STANDARD\r\n\r\n#ifdef PHYSICAL\r\n\t#define IOR\r\n\t#define SPECULAR\r\n#endif\r\n\r\nuniform vec3 diffuse;\r\nuniform vec3 emissive;\r\nuniform float roughness;\r\nuniform float metalness;\r\nuniform float opacity;\r\n\r\n#ifdef IOR\r\n\tuniform float ior;\r\n#endif\r\n\r\n#ifdef SPECULAR\r\n\tuniform float specularIntensity;\r\n\tuniform vec3 specularColor;\r\n\r\n\t#ifdef USE_SPECULARINTENSITYMAP\r\n\t\tuniform sampler2D specularIntensityMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SPECULARCOLORMAP\r\n\t\tuniform sampler2D specularColorMap;\r\n\t#endif\r\n#endif\r\n\r\n#ifdef USE_CLEARCOAT\r\n\tuniform float clearcoat;\r\n\tuniform float clearcoatRoughness;\r\n#endif\r\n\r\n#ifdef USE_SHEEN\r\n\tuniform vec3 sheenColor;\r\n\tuniform float sheenRoughness;\r\n\r\n\t#ifdef USE_SHEENCOLORMAP\r\n\t\tuniform sampler2D sheenColorMap;\r\n\t#endif\r\n\r\n\t#ifdef USE_SHEENROUGHNESSMAP\r\n\t\tuniform sampler2D sheenRoughnessMap;\r\n\t#endif\r\n#endif\r\n\r\nvarying vec3 vViewPosition;\r\n\r\n#include <common>\r\n#include <packing>\r\n#include <dithering_pars_fragment>\r\n#include <color_pars_fragment>\r\n#include <uv_pars_fragment>\r\n#include <uv2_pars_fragment>\r\n#include <map_pars_fragment>\r\n#include <alphamap_pars_fragment>\r\n#include <alphatest_pars_fragment>\r\n#include <aomap_pars_fragment>\r\n#include <lightmap_pars_fragment>\r\n#include <emissivemap_pars_fragment>\r\n#include <bsdfs>\r\n#include <cube_uv_reflection_fragment>\r\n#include <envmap_common_pars_fragment>\r\n#include <envmap_physical_pars_fragment>\r\n#include <fog_pars_fragment>\r\n#include <lights_pars_begin>\r\n#include <normal_pars_fragment>\r\n\r\n#include <lights_physical_pars_fragment>\r\n\r\n#include <transmission_pars_fragment>\r\n#include <shadowmap_pars_fragment>\r\n#include <bumpmap_pars_fragment>\r\n#include <normalmap_pars_fragment>\r\n#include <clearcoat_pars_fragment>\r\n#include <roughnessmap_pars_fragment>\r\n#include <metalnessmap_pars_fragment>\r\n#include <logdepthbuf_pars_fragment>\r\n#include <clipping_planes_pars_fragment>\r\n//////////////////////////////////////////////////////\r\nin vec3 instanceColorOut;\r\n//////////////////////////////////////////////////////\r\nvoid main() {\r\n\r\n\t#include <clipping_planes_fragment>\r\n\r\n\tvec4 diffuseColor = vec4( diffuse, opacity );\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tdiffuseColor.xyz +=instanceColorOut;\r\n\t/////////////////////////////////////////////////////////////////////\r\n\tReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );\r\n\tvec3 totalEmissiveRadiance = emissive;\r\n\r\n\t#include <logdepthbuf_fragment>\r\n\t#include <map_fragment>\r\n\t#include <color_fragment>\r\n\t#include <alphamap_fragment>\r\n\t#include <alphatest_fragment>\r\n\t#include <roughnessmap_fragment>\r\n\t#include <metalnessmap_fragment>\r\n\t#include <normal_fragment_begin>\r\n\t#include <normal_fragment_maps>\r\n\t#include <clearcoat_normal_fragment_begin>\r\n\t#include <clearcoat_normal_fragment_maps>\r\n\t#include <emissivemap_fragment>\r\n\r\n\t// accumulation\r\n\t#include <lights_physical_fragment>\r\n\t#include <lights_fragment_begin>\r\n\t#include <lights_fragment_maps>\r\n\t#include <lights_fragment_end>\r\n\r\n\t// modulation\r\n\t#include <aomap_fragment>\r\n\r\n\tvec3 totalDiffuse = reflectedLight.directDiffuse + reflectedLight.indirectDiffuse;\r\n\tvec3 totalSpecular = reflectedLight.directSpecular + reflectedLight.indirectSpecular;\r\n\r\n\t#include <transmission_fragment>\r\n\r\n\tvec3 outgoingLight = totalDiffuse + totalSpecular + totalEmissiveRadiance;\r\n\r\n\t#ifdef USE_CLEARCOAT\r\n\r\n\t\tfloat dotNVcc = saturate( dot( geometry.clearcoatNormal, geometry.viewDir ) );\r\n\r\n\t\tvec3 Fcc = F_Schlick( material.clearcoatF0, material.clearcoatF90, dotNVcc );\r\n\r\n\t\toutgoingLight = outgoingLight * ( 1.0 - clearcoat * Fcc ) + clearcoatSpecular * clearcoat;\r\n\r\n\t#endif\r\n\r\n\t#include <output_fragment>\r\n\t#include <tonemapping_fragment>\r\n\t#include <encodings_fragment>\r\n\t#include <fog_fragment>\r\n\t#include <premultiplied_alpha_fragment>\r\n\t#include <dithering_fragment>\r\n\r\n}",
-  "./assets/avatar/shader/vert_anim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\nin float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * animationFrameCount + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    mat4 test=mat4(\r\n        vec4(obesity ,0.,0., 0.),\r\n        vec4(0.,1.,0., 0.),\r\n        vec4(0.,0.,obesity, 0.),\r\n        vec4(0.,0.,0., 1.)\r\n    );\r\n    mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    vertex.position=(m2*test*m1*position).xyz;\r\n\r\n    vec3 normal=vertex.normal;\r\n    mat3 m3=mat4_mat3(m1);\r\n    mat3 test2=mat4_mat3(test);\r\n    mat3 m4=mat4_mat3(m2);\r\n    vertex.normal= m4*test2*m3*normal;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-1.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-1.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount));\r\n    if(frameIndex2>=animationFrameCount-1.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n    vertex.normal = (1. - weight) * vertex1.normal + weight * vertex2.normal;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    // float f=1.;\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
-  "./assets/avatar/shader/vert_anim_sim.glsl": "in vec3 instanceColorIn;\r\nout vec3 instanceColorOut;\r\n//////////////////////////////////////\r\nuniform sampler2D animationTexture;\r\nuniform float boneCount, animationFrameCount, animationTextureLength;\r\nuniform float time;\r\nin vec4 skinIndex, skinWeight; // 仅使用了绑定的第一个骨骼\r\nin float speed;//float speed=1.;//\r\n// in float obesity;\r\nin float moveMaxLength;\r\nin float animationStartTime;\r\nin float animationIndex; // float animationIndex=0.; // 动画类型// in float animationIndex; // 动画类型//\r\nin vec4 bodyScale; // 0:身体 1:头部 2:上肢 3:下肢\r\nstruct Vertex{\r\n    vec3 position;\r\n    vec3 normal;\r\n};\r\nfloat getBoneScale(float bone) { // 身体形变\r\n    if ( bone < 3.5 || (bone > 5.5 && bone < 6.5) || (bone > 15.5 && bone < 16.5) ) // 身体\r\n        return bodyScale[0];\r\n    if ( bone > 3.5 && bone < 5.5 ) // 头部\r\n        return bodyScale[1];\r\n    if ( bone > 6.5 && bone < 15.5 || (bone > 16.5 && bone < 25.5) ) // 上肢\r\n        return bodyScale[2];\r\n    if ( bone > 25.5 ) // 下肢\r\n        return bodyScale[3];\r\n}\r\nfloat computeBodyScale() {\r\n    return (\r\n        skinWeight[0] * getBoneScale(skinIndex[0]) + \r\n        skinWeight[1] * getBoneScale(skinIndex[1]) +\r\n        skinWeight[2] * getBoneScale(skinIndex[2]) +\r\n        skinWeight[3] * getBoneScale(skinIndex[3])\r\n    );\r\n}\r\nvec4 getAnimationItem(float index) { // 从texture中提取矩阵元素\r\n    float v = floor(index / animationTextureLength);\r\n    float u = index - v * animationTextureLength;\r\n    return texture(\r\n        animationTexture, \r\n        vec2( (0.5 + u) / animationTextureLength, (0.5 + v) / animationTextureLength )\r\n    );\r\n}\r\nmat4 computeAnimationMatrix(float boneIndex, float frameIndex) { // 计算一个骨骼的变换矩阵\r\n    float startPos = //4. * boneCount +\r\n            3. * (boneCount * (animationIndex  * (animationFrameCount-1.) + frameIndex) + boneIndex);\r\n    vec4 a=getAnimationItem(startPos + 0.);\r\n    vec4 b=getAnimationItem(startPos + 1.);\r\n    vec4 c=getAnimationItem(startPos + 2.);\r\n    \r\n    return mat4(\r\n        vec4(a.x,a.y,a.z, 0.),\r\n        vec4(a.a,b.x,b.y, 0.),\r\n        vec4(b.z,b.a,c.x, 0.),\r\n        vec4(c.y,c.z,c.a, 1.)\r\n    );\r\n}\r\nmat3 mat4_mat3(mat4 m){\r\n    return mat3(\r\n        m[0].xyz,\r\n        m[1].xyz,\r\n        m[2].xyz\r\n    );\r\n}\r\nVertex computeAnimationPos(float boneIndex, float frameIndex,Vertex vertex) { // 计算一个骨骼的变换矩阵\r\n    vec4 position=vec4(vertex.position, 1.);\r\n    // mat4 m1=computeAnimationMatrix( boneIndex,  0.);\r\n    // mat4 m2=computeAnimationMatrix( boneIndex,  frameIndex+1.);\r\n    // vertex.position=(m2*m1*position).xyz;\r\n    mat4 m=computeAnimationMatrix( boneIndex,  frameIndex);\r\n    vertex.position=(m*position).xyz;\r\n    return vertex;\r\n}\r\nVertex vertexBlending(Vertex vertex, float frameIndex) { // 动画形变, 计算4个骨骼的影响\r\n    if ( animationTextureLength < 0.5) return vertex; // 动画未加载 //点集渲染的时候可以用到\r\n    Vertex vertexResult;\r\n    vertexResult.position=vec3(0.,0.,0.);\r\n    // vertexResult.normal=vec3(0.,0.,0.);\r\n    for(int i=0;i<4;i++){\r\n        Vertex v=computeAnimationPos(skinIndex[i], frameIndex,vertex) ;\r\n        vertexResult.position+=skinWeight[i] * v.position;\r\n        // vertexResult.normal+=skinWeight[i] * v.normal;\r\n    }\r\n    return vertexResult;\r\n}\r\nVertex frameInterpolation(Vertex vertex) { // 点坐标插值, 考虑优化:变换矩阵插值\r\n    float m = floor((time + animationStartTime) * speed / (animationFrameCount-2.));\r\n    float temp = (time + animationStartTime) * speed - m * (animationFrameCount-2.);\r\n    float frameIndex1 = floor(temp);\r\n    float weight = temp - frameIndex1; // 插值权重\r\n    float frameIndex2 = float(int(frameIndex1 + 1.) % int(animationFrameCount-1.));\r\n    if(frameIndex2>=animationFrameCount-2.)frameIndex2=0.;\r\n    Vertex vertex1 = vertexBlending(vertex, frameIndex1);\r\n    Vertex vertex2 = vertexBlending(vertex, frameIndex2);\r\n    vertex.position = (1. - weight) * vertex1.position + weight * vertex2.position;\r\n\r\n    float max=moveMaxLength;//移动路线的长度\r\n    if(max>0.){\r\n        float direction=1.;\r\n        float x=0.25*(time + animationStartTime) * speed;\r\n\t    x=x-max*2.*floor(x/(max*2.));\r\n        if(x>max){\r\n            x=2.*max-x;\r\n            direction=-1.;\r\n        }\r\n        x-=max/2.;\r\n\t    vertex.position.x*=direction;\r\n\t    vertex.position.z*=direction;\r\n\t    vertex.position.z-=x;\r\n\r\n        vertex.normal.x*=direction;\r\n\t    vertex.normal.z*=direction;\r\n    }\r\n    return vertex;\r\n}\r\n//////////////////////////////////////",
-  "./assets/avatar/shader/vert_MeshStandardMaterial.glsl": "#define STANDARD\r\nvarying vec3 vViewPosition;\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvarying vec3 vWorldPosition;\r\n\r\n#endif\r\n\r\n#include <common>\r\n#include <uv_pars_vertex>\r\n#include <uv2_pars_vertex>\r\n#include <displacementmap_pars_vertex>\r\n#include <color_pars_vertex>\r\n#include <fog_pars_vertex>\r\n#include <normal_pars_vertex>\r\n#include <morphtarget_pars_vertex>\r\n#include <skinning_pars_vertex>\r\n#include <shadowmap_pars_vertex>\r\n#include <logdepthbuf_pars_vertex>\r\n#include <clipping_planes_pars_vertex>\r\nvoid main() {\r\n\t// gl_Position=vec4(0.,0.,-1000.,1.);\r\n\t// return;\r\n\t#include <uv_vertex>\r\n\t#include <uv2_vertex>\r\n\t#include <color_vertex>\r\n\r\n\t#include <beginnormal_vertex>\r\n\t#include <morphnormal_vertex>\r\n\t#include <skinbase_vertex>\r\n\t#include <skinnormal_vertex>\r\n\t#include <defaultnormal_vertex>\r\n\t#include <normal_vertex>\r\n\r\n\t#include <begin_vertex>\r\n\t#include <morphtarget_vertex>\r\n\t#include <skinning_vertex>\r\n\t#include <displacementmap_vertex>\r\n\t///////////////////////////////////////////\r\n\tVertex vertex;\r\n\tvertex.position=transformed;\r\n\tvertex.normal=vNormal;\r\n\t// transformed_temp=transformed;\r\n\t// vNormal_temp=vNormal;\r\n\tvertex=frameInterpolation(vertex);\r\n\t// transformed=transformed_temp;\r\n\t// vNormal=vNormal_temp;\r\n\ttransformed=vertex.position;\r\n\tvNormal=vertex.normal;\r\n\r\n    // vec4 temp=frameInterpolation(transformed);\r\n\t// transformed=temp.xyz;\r\n\t// float direction=temp.a;\r\n    instanceColorOut= instanceColorIn;//vNormal\r\n\t///////////////////////////////////////////\r\n\t#include <project_vertex>\r\n\t\r\n\t#include <logdepthbuf_vertex>\r\n\t#include <clipping_planes_vertex>\r\n\r\n\tvViewPosition = - mvPosition.xyz;\r\n\r\n\t#include <worldpos_vertex>\r\n\t#include <shadowmap_vertex>\r\n\t#include <fog_vertex>\r\n\r\n#ifdef USE_TRANSMISSION\r\n\r\n\tvWorldPosition = worldPosition.xyz;\r\n\r\n#endif\r\n}"
-};
-},{}],"lib/crowd/CrowdShader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdShader = void 0;
-var _my_shader = _interopRequireDefault(require("./my_shader.json"));
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var CrowdShader = /*#__PURE__*/function () {
-  function CrowdShader(opt) {
-    _classCallCheck(this, CrowdShader);
-    this.opt = opt;
-    this.path0 = "./assets/avatar/shader/";
-  }
-  _createClass(CrowdShader, [{
-    key: "init",
-    value: function () {
-      var _init = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var opt, vert, frag, lights_physical_pars_fragment2;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              opt = this.opt;
-              _context.next = 3;
-              return this.load("vert_MeshStandardMaterial");
-            case 3:
-              vert = _context.sent;
-              _context.t0 = this;
-              _context.t1 = vert;
-              _context.next = 8;
-              return this.load(opt["isSimShader"] ? "vert_anim_sim" : "vert_anim");
-            case 8:
-              _context.t2 = _context.sent;
-              vert = _context.t0.addGlsl.call(_context.t0, _context.t1, _context.t2);
-              _context.next = 12;
-              return this.load("frag_MeshStandardMaterial");
-            case 12:
-              frag = _context.sent;
-              if (!opt.scattering) {
-                _context.next = 20;
-                break;
-              }
-              _context.t3 = THREE.ShaderChunk["lights_physical_pars_fragment"];
-              _context.next = 17;
-              return this.load("frag_lights_physical_pars_fragment_Scattering");
-            case 17:
-              _context.t4 = _context.sent;
-              lights_physical_pars_fragment2 = _context.t3 + _context.t4;
-              frag = frag.replace('#include <lights_physical_pars_fragment>', lights_physical_pars_fragment2);
-            case 20:
-              // vert = vert.replace( '#include <project_vertex>', await this.load("vert_ProjectVertex") )
-              this.fragmentShader = frag;
-              this.vertexShader = vert;
-            case 22:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee, this);
-      }));
-      function init() {
-        return _init.apply(this, arguments);
-      }
-      return init;
-    }()
-  }, {
-    key: "addGlsl",
-    value: function addGlsl(origin, str0, tag) {
-      if (!tag) tag = '#include <common>';
-      var str1 = '\n' + str0 + '\n' + tag + '\n';
-      return origin.replace(tag, str1);
-    }
-  }, {
-    key: "load",
-    value: function load(name) {
-      var url = this.path0 + name + ".glsl";
-      if (!_my_shader.default[url]) {
-        console.log("加载shader", url);
-        _my_shader.default[url] = new Promise(function (resolve, reject) {
-          var xhr = new XMLHttpRequest();
-          xhr.onload = function () {
-            resolve(xhr.responseText);
-          };
-          xhr.onerror = function (event) {
-            return reject(event);
-          };
-          xhr.open('GET', url);
-          xhr.overrideMimeType("text/html;charset=utf-8");
-          xhr.send();
-        });
-      }
-      return _my_shader.default[url];
-    }
-  }]);
-  return CrowdShader;
-}();
-exports.CrowdShader = CrowdShader;
-},{"./my_shader.json":"lib/crowd/my_shader.json","three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdMaterial.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdMaterial = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _CrowdShader = require("./CrowdShader.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var assets_base64 = {};
-var assets = {};
-var CrowdMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
-  _inherits(CrowdMaterial, _THREE$ShaderMaterial);
-  var _super = _createSuper(CrowdMaterial);
-  function CrowdMaterial(parameters) {
-    var _this;
-    _classCallCheck(this, CrowdMaterial);
-    _this = _super.call(this);
-    _this.map = null;
-    _this.normalMap = null;
-    _this.setValues(parameters);
-    _this.uniforms = Object.assign({}, THREE.ShaderLib.standard.uniforms, _this.uniforms);
-    if (_this.uniforms.sssIntensity) window.sssIntensity = _this.uniforms.sssIntensity;
-    return _this;
-  }
-  _createClass(CrowdMaterial, [{
-    key: "updateMap",
-    value: function updateMap(pathPre, path0) {
-      var path = pathPre + path0;
-      var scope = this;
-      if (assets[path]) {
-        scope.useMap(assets[path]);
-      } else {
-        new THREE.TextureLoader().load(path, function (texture) {
-          console.log("crowd material updateMap", path);
-          for (var tag in scope.map) {
-            if (tag !== "source") texture[tag] = scope.map[tag];
-          }
-          assets[path] = texture;
-          scope.useMap(texture);
-        });
-      }
-    }
-  }, {
-    key: "useMap",
-    value: function useMap(texture) {
-      // this.map=texture//assets[path]
-      // this.map.needsUpdate=true
-      var preMesh = this.mesh; //this.mesh.pre
-      while (preMesh) {
-        preMesh.material.map = texture;
-        preMesh.material.map.needsUpdate = true;
-        preMesh = preMesh.pre;
-      }
-    }
-  }], [{
-    key: "create",
-    value: function () {
-      var _create = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(opt) {
-        var _this2 = this;
-        var material, shader, materialNew, i;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              material = opt["oldMaterial"];
-              shader = new _CrowdShader.CrowdShader(opt);
-              _context.next = 4;
-              return shader.init();
-            case 4:
-              materialNew = new CrowdMaterial({
-                uniforms: {
-                  brightness_specular: {
-                    value: 1.0
-                  },
-                  //未被使用
-                  sssIntensity: {
-                    value: 1.25 * 0.1 //0.85 
-                  },
-
-                  sssIntensity2: {
-                    //未被使用
-                    value: 1.0 //0.35 
-                  },
-
-                  CurveFactor: {
-                    value: 1.0
-                  }
-                  // sssLUT: assets.sssLUT//{ value: new TGALoader().load( './assets/textures/PreIntergated.TGA' ) },
-                }
-                // map:  material.map,//textureLoader.load( 'Head.png' ),
-                // normalMap: material.normalMap,//new THREE.TextureLoader().load( './assets/textures/Normal.png' ) ,
-              });
-
-              if (materialNew.normalMap && material.normalMap.path) {
-                //&&!opt.isSimShader){
-                setTimeout(function () {
-                  _this2.getTexture(material.normalMap.path).then(function (texture) {
-                    materialNew.normalMap = texture;
-                    materialNew.normalMap.needsUpdate = true;
-                    // materialNew.uniforms.normalMap.value=texture
-                    // materialNew.uniforms.normalMap={value:texture}
-                  });
-                }, 5000);
-              }
-              // materialNew.uniforms.sssIntensity.value=10
-
-              for (i in material) {
-                if (i !== "type") materialNew[i] = material[i];
-              }
-              for (i in shader) {
-                materialNew[i] = shader[i];
-              }
-              if (opt.useNormalMap) {
-                // materialNew.map=null
-                materialNew.aoMap = null;
-                materialNew.normalMap = null;
-                materialNew.metalnessMap = null;
-                materialNew.roughnessMap = null;
-              }
-              return _context.abrupt("return", materialNew);
-            case 10:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }));
-      function create(_x) {
-        return _create.apply(this, arguments);
-      }
-      return create;
-    }()
-  }, {
-    key: "getTexture_base64",
-    value: function () {
-      var _getTexture_base = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(path) {
-        var base64, imgbase64, w, h;
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              base64 = assets_base64[path];
-              if (base64) {
-                _context2.next = 4;
-                break;
-              }
-              console.log("缺少base64数据", path);
-              return _context2.abrupt("return", CrowdMaterial.getTexture(path));
-            case 4:
-              imgbase64 = base64[0];
-              w = base64[1];
-              h = base64[2];
-              return _context2.abrupt("return", new Promise(function (resolve, reject) {
-                var img = new Image();
-                img.src = imgbase64;
-                var canvas = document.createElement("canvas");
-                canvas.width = w;
-                canvas.height = h;
-                img.onload = function () {
-                  canvas.getContext('2d').drawImage(img, 0, 0, w, h);
-                  var texture = new THREE.CanvasTexture(canvas);
-                  texture.path = path;
-                  // texture.flipY=false;
-                  resolve(texture);
-                };
-              }));
-            case 8:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2);
-      }));
-      function getTexture_base64(_x2) {
-        return _getTexture_base.apply(this, arguments);
-      }
-      return getTexture_base64;
-    }()
-  }, {
-    key: "getTexture",
-    value: function () {
-      var _getTexture = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(path) {
-        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
-            case 0:
-              if (!assets[path]) assets[path] = new Promise(function (resolve, reject) {
-                var textureLoader = new THREE.TextureLoader();
-                textureLoader.load(path, function (texture) {
-                  // console.log(assets[path])
-                  resolve(texture);
-                });
-              });
-              return _context3.abrupt("return", assets[path]);
-            case 2:
-            case "end":
-              return _context3.stop();
-          }
-        }, _callee3);
-      }));
-      function getTexture(_x3) {
-        return _getTexture.apply(this, arguments);
-      }
-      return getTexture;
-    }()
-  }]);
-  return CrowdMaterial;
-}(THREE.ShaderMaterial);
-exports.CrowdMaterial = CrowdMaterial;
-CrowdMaterial.prototype.isMeshStandardMaterial = true;
-},{"three":"node_modules/three/build/three.module.js","./CrowdShader.js":"lib/crowd/CrowdShader.js"}],"lib/crowd/CrowdGeometry.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.LodGeometry = exports.CrowdGeometry = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var CrowdGeometry = /*#__PURE__*/function (_THREE$InstancedBuffe) {
-  _inherits(CrowdGeometry, _THREE$InstancedBuffe);
-  var _super = _createSuper(CrowdGeometry);
-  function CrowdGeometry(parameters) {
-    var _this;
-    _classCallCheck(this, CrowdGeometry);
-    _this = _super.call(this);
-    _this.oldGeometry = parameters.oldGeometry;
-    if (_this.oldGeometry.index !== null) {
-      // this.oldGeometry=this.oldGeometry.toNonIndexed();
-      _this.index = _this.oldGeometry.index;
-    }
-    for (var i in _this.oldGeometry.attributes) _this.setAttribute(i, _this.oldGeometry.attributes[i]);
-    return _this;
-  }
-  _createClass(CrowdGeometry, [{
-    key: "bindGeometry",
-    value: function bindGeometry(geometry) {
-      var attributes = geometry.attributes;
-      var tags = ['position', 'uv', 'skinIndex', 'skinWeight' //'normal'
-      ];
-
-      for (var i = 0; i < tags.length; i++) {
-        var name = tags[i];
-        if (attributes[name]) this.setAttribute(name, attributes[name]);
-      }
-      this.index = geometry.index; //geometry.index==null?
-      delete this.attributes.normal;
-      this.computeVertexNormals();
-    }
-  }], [{
-    key: "getLod",
-    value: function getLod(data) {
-      // if(data.dummy){//if(data instanceof CrowdGroup){
-      //     let data2={}
-      //     for(let i=0;i<data.children.length;i++){
-      //         data2[data.children[i].name]
-      //             =data.children[i].geometry
-      //     }
-      //     data=data2
-      // }
-      var result = {};
-      for (var meshName in data) {
-        result[meshName] = new LodGeometry(data[meshName]);
-      }
-      return result;
-    }
-  }, {
-    key: "getLod2",
-    value: function getLod2(data) {
-      // console.log(data)
-      // if(data.dummy){//if(data instanceof CrowdGroup){
-      //     let data2={}
-      //     for(let i=0;i<data.children.length;i++){
-      //         data2[data.children[i].name]
-      //             =data.children[i].geometry
-      //     }
-      //     data=data2
-      // }
-
-      console.log("data", data);
-      var result = {};
-      for (var meshName in data) {
-        result[meshName] = new TetrahedronGeometry(data[meshName]);
-      }
-      return result;
-    }
-  }]);
-  return CrowdGeometry;
-}(THREE.InstancedBufferGeometry);
-exports.CrowdGeometry = CrowdGeometry;
-var LodGeometry = /*#__PURE__*/function (_THREE$BufferGeometry) {
-  _inherits(LodGeometry, _THREE$BufferGeometry);
-  var _super2 = _createSuper(LodGeometry);
-  function LodGeometry(data) {
-    var _this2;
-    _classCallCheck(this, LodGeometry);
-    _this2 = _super2.call(this);
-    // if(data instanceof THREE.BufferGeometry){
-    //     this.init2(data)//从glb/gltf文件中读取的 (将所需数据提取出来，再使用init() )
-    // }else this.init(data)//从json文件中读取的
-    _this2.init(data);
-    return _this2;
-  }
-  _createClass(LodGeometry, [{
-    key: "init",
-    value: function init(data) {
-      var attributes = this.attributes; //var attributes={}
-      // console.log("attributes",attributes)
-      // console.log("data",data)
-      attributes.position = new THREE.BufferAttribute(new Float32Array(data.position), 3);
-      attributes.uv = new THREE.BufferAttribute(new Float32Array(data.uv), 2);
-      attributes.skinIndex = new THREE.BufferAttribute(new Uint8Array(data.skinIndex), 4);
-      attributes.skinWeight = new THREE.BufferAttribute(new Float32Array(data.skinWeight), 4);
-      // attributes.normal = 
-      //     new THREE.BufferAttribute(
-      //         new Float32Array(data.normal), 3
-      //     );
-      this.attributes = attributes;
-      if (data.index) {
-        this.index = new THREE.BufferAttribute(new Uint16Array(data.index), 1);
-      }
-    }
-  }]);
-  return LodGeometry;
-}(THREE.BufferGeometry);
-exports.LodGeometry = LodGeometry;
-var TetrahedronGeometry = /*#__PURE__*/function (_THREE$BufferGeometry2) {
-  _inherits(TetrahedronGeometry, _THREE$BufferGeometry2);
-  var _super3 = _createSuper(TetrahedronGeometry);
-  //生成四面体几何对象
-  function TetrahedronGeometry(data) {
-    var _this3;
-    _classCallCheck(this, TetrahedronGeometry);
-    //
-    _this3 = _super3.call(this);
-    _this3.init2(data);
-    return _this3;
-  }
-  _createClass(TetrahedronGeometry, [{
-    key: "init2",
-    value: function init2(geometry1) {
-      // if(!geometry1.attributes){
-      //     geometry1={
-      //         "attributes":geometry1,
-      //         "index":geometry1.index
-      //     }
-      // }
-      // console.log(geometry1)
-      var position1 = geometry1.attributes.position;
-      var max = [-999999, -999999, -999999];
-      var min = [999999, 999999, 999999];
-      for (var i = 0; i < position1.count; i++) {
-        for (var j = 0; j < 3; j++) {
-          var d = position1.array[3 * i + j];
-          if (d > max[j]) max[j] = d;
-          if (d < min[j]) min[j] = d;
-        }
-      }
-      // console.log("max",max)
-      // console.log("min",min)
-
-      // const geometry2 = new THREE.BoxGeometry( 1, 1, 1 )
-      var geometry2 = {
-        attributes: {
-          position: {
-            array: [-1, -1, -1, -1, 1, -1, 1, 1, -1, 1, -1, -1, -1, -1, 1, -1, 1, 1, 1, 1, 1, 1, -1, 1],
-            count: 8
-          }
-        },
-        index: {
-          array: [0, 1, 2,
-          //前面
-          0, 2, 3, 4, 6, 5,
-          //后面
-          4, 7, 6,
-          // 0,3,7,//下面
-          // 0,7,4,
-
-          3, 2, 6, 3, 6, 7, 2, 1, 5, 2, 5, 6, 1, 0, 4, 1, 4, 5],
-          array2: [0, 2, 1, 0, 5, 2, 0, 1, 5, 1, 5, 2 //上
-          ]
-        }
-      };
-      // console.log("geometry2",geometry2)
-      var count2 = geometry2.attributes.position.count;
-      var data = {
-        position: geometry2.attributes.position.array,
-        uv: [],
-        skinIndex: [],
-        skinWeight: []
-      };
-      for (var _i = 0; _i < count2; _i++) {
-        for (var _j = 0; _j < 3; _j++) data.position[_i * 3 + _j] = geometry2.attributes.position.array[_i * 3 + _j] > 0 ? max[_j] : min[_j];
-        for (var _j2 = 0; _j2 < 2; _j2++) data.uv.push(geometry1.attributes.uv.array[_i * 2 + _j2]);
-        for (var _j3 = 0; _j3 < 4; _j3++) data.skinIndex.push(geometry1.attributes.skinIndex.array[_i * 4 + _j3]);
-        for (var _j4 = 0; _j4 < 4; _j4++) data.skinWeight.push(geometry1.attributes.skinWeight.array[_i * 4 + _j4]);
-      }
-      data.index = geometry2.index.array2;
-      // console.log("data",data)
-      this.init(data);
-    }
-  }, {
-    key: "init",
-    value: function init(data) {
-      var attributes = this.attributes; //var attributes={}
-      attributes.position = new THREE.BufferAttribute(new Float32Array(data.position), 3);
-      attributes.uv = new THREE.BufferAttribute(new Float32Array(data.uv), 2);
-      attributes.skinIndex = new THREE.BufferAttribute(new Uint8Array(data.skinIndex), 4);
-      attributes.skinWeight = new THREE.BufferAttribute(new Float32Array(data.skinWeight), 4);
-      // attributes.normal = 
-      //     new THREE.BufferAttribute(
-      //         new Float32Array(data.normal), 3
-      //     );
-      this.attributes = attributes;
-      if (data.index) {
-        this.index = new THREE.BufferAttribute(new Uint16Array(data.index), 1);
-      }
-    }
-  }]);
-  return TetrahedronGeometry;
-}(THREE.BufferGeometry);
-},{"three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdPoints.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdPoints = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var CrowdPoints = /*#__PURE__*/function (_THREE$Points) {
-  _inherits(CrowdPoints, _THREE$Points);
-  var _super = _createSuper(CrowdPoints);
-  function CrowdPoints(instancedMesh) {
-    _classCallCheck(this, CrowdPoints);
-    // alert(instancedMesh.name)
-    // const vertexShader0 = `
-    // void main() {
-    //     vec3 pos = position;  
-    //     gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
-    //     gl_PointSize = 6.0;
-    // }`
-    // const fragmentShader0 = `
-    // void main() {
-    //     vec3 color = vec3(111./255.,82./255.,73./255.);
-    //     gl_FragColor = vec4(color, 1.0);
-    // }` 
-    // const material = new THREE.ShaderMaterial({
-    //     uniforms: {},
-    //     vertexShader,
-    //     fragmentShader
-    //   })
-    // console.log("instancedMesh.name",instancedMesh.name)
-
-    var vertexShader = instancedMesh.material.vertexShader;
-    vertexShader = vertexShader.replace('#include <fog_vertex>', '#include <fog_vertex> \n gl_PointSize = 2.0;');
-    vertexShader = vertexShader.replace('vertex.position.x*=direction;', '');
-    vertexShader = vertexShader.replace('vertex.position.z*=direction;', '');
-    var fragmentShader = "in vec3 instanceColorOut;\n        void main() {\n            vec3 color = vec3(.0);//100.*instanceColorOut;//vec3(111./255.,82./255.,73./255.);//\n            gl_FragColor = vec4(color, 1.0);\n        }";
-    instancedMesh.material.fragmentShader;
-    var uniforms = {};
-    var uniforms0 = instancedMesh.material.uniforms;
-    // var str0=""
-    // for(var i in uniform0)str0=str0+"'"+i+"',";
-    // console.log(str0)
-    var tags = ['diffuse', 'opacity', 'map', 'uvTransform', 'uv2Transform', 'alphaMap', 'alphaTest', 'envMap', 'flipEnvMap', 'reflectivity', 'ior', 'refractionRatio', 'aoMap', 'aoMapIntensity', 'lightMap', 'lightMapIntensity', 'emissiveMap', 'bumpMap', 'bumpScale', 'normalMap', 'normalScale', 'displacementMap', 'displacementScale', 'displacementBias', 'roughnessMap', 'metalnessMap', 'fogDensity', 'fogNear', 'fogFar', 'fogColor', 'ambientLightColor', 'lightProbe', 'directionalLights', 'directionalLightShadows', 'directionalShadowMap', 'directionalShadowMatrix', 'spotLights', 'spotLightShadows', 'spotLightMap', 'spotShadowMap', 'spotLightMatrix', 'pointLights', 'pointLightShadows', 'pointShadowMap', 'pointShadowMatrix', 'hemisphereLights', 'rectAreaLights', 'ltc_1', 'ltc_2', 'emissive', 'roughness', 'metalness', 'envMapIntensity', 'brightness_specular', 'sssIntensity', 'sssIntensity2', 'CurveFactor', 'sssLUT', 'textureData', 'headUV', 'bottomUV', 'time', 'boneCount', 'animationCount', 'animationFrameCount', 'animationTexture',
-    // 'animationTextureLength',
-    'cameraPosition'];
-    for (var i = 0; i < tags.length; i++) {
-      uniforms[tags[i]] = uniforms0[tags[i]];
-    }
-    // console.log(uniforms)
-    setInterval(function () {
-      // console.log(uniforms.time.value)
-      uniforms.time.value = uniforms0.time.value;
-    }, 0);
-    var material = new THREE.ShaderMaterial({
-      uniforms: uniforms,
-      //{},//instancedMesh.material.uniforms,
-      vertexShader: vertexShader,
-      fragmentShader: fragmentShader
-    });
-    var visibleList = instancedMesh.parent.visibleList;
-    var count = 0;
-    for (var _i = 0; _i < instancedMesh.meshTypeList.length; _i++) {
-      if (visibleList[_i] == 1) count++;
-    }
-    var positions = new Float32Array(count * 3); //instancedMesh.count是总共的化身数量，而不仅仅是可见的化身数量
-    var moveMaxLength = new Float32Array(count);
-    var speed = new Float32Array(count);
-    var uv = new Float32Array(count * 2);
-    var normal = new Float32Array(count * 3);
-    // const instanceColorIn=new  Float32Array(count*3)
-    count = 0;
-    for (var _i2 = 0; _i2 < instancedMesh.meshTypeList.length; _i2++) {
-      if (visibleList[_i2] == 1) {
-        var pos = instancedMesh.parent.getPosition(_i2); //const pos=instancedMesh.parent.getPosition(i)
-        var scale = instancedMesh.parent.getScale(_i2);
-        for (var j = 0; j < 3; j++) {
-          positions[3 * count + j] = pos[j];
-          normal[3 * count + j] = instancedMesh.geometry.attributes.normal.array[j];
-          // console.log(instancedMesh.parent.instanceColorIn)
-          // instanceColorIn[3*count+j] =instancedMesh.parent.instanceColorIn_All[instancedMesh.meshType].array[j]
-        }
-
-        for (var _j = 0; _j < 2; _j++) {
-          uv[2 * count + _j] = instancedMesh.geometry.attributes.uv.array[_j];
-        }
-        //
-        moveMaxLength[count] = instancedMesh.parent.moveMaxLength.array[_i2] * scale[0]; //getPosition(i)
-        speed[count] = instancedMesh.parent.speed.array[_i2] * scale[0];
-        // if(moveMaxLength[count]!==0)alert(moveMaxLength[count])
-        count = count + 1;
-      }
-    }
-    var geometry = new THREE.BufferGeometry();
-    geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-    geometry.setAttribute('moveMaxLength', new THREE.BufferAttribute(moveMaxLength, 1));
-    geometry.setAttribute('speed', new THREE.BufferAttribute(speed, 1));
-    geometry.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
-    geometry.setAttribute('normal', new THREE.BufferAttribute(normal, 3));
-    // geometry.setAttribute('instanceColorIn', new THREE.BufferAttribute(instanceColorIn, 3))
-    return _super.call(this, geometry, material); // console.log("instancedMesh/this",instancedMesh,this)
-    // console.log(geometry)
-  }
-  return _createClass(CrowdPoints);
-}(THREE.Points);
-exports.CrowdPoints = CrowdPoints;
-},{"three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdMesh.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdMesh = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _CrowdMaterial = require("./CrowdMaterial.js");
-var _CrowdGeometry = require("./CrowdGeometry.js");
-var _CrowdPoints = require("./CrowdPoints.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var CrowdMesh = /*#__PURE__*/function (_THREE$InstancedMesh) {
-  _inherits(CrowdMesh, _THREE$InstancedMesh);
-  var _super = _createSuper(CrowdMesh);
-  //THREE.InstancedMesh {//new THREE.Points(geometry, material)
-  function CrowdMesh(geometry, material2, count, isSimShader) {
-    var _this;
-    _classCallCheck(this, CrowdMesh);
-    var geometry2 = new _CrowdGeometry.CrowdGeometry({
-      "oldGeometry": geometry
-    });
-    // var material2=CrowdMaterial.create({
-    //     "oldMaterial":material,
-    //     "scattering":material.scattering,//true
-    //     "isSimShader":isSimShader
-    // })
-    _this = _super.call(this, geometry2, material2, count);
-    _this.isSimShader = isSimShader;
-    // this.geometry=geometry2
-    // this.material=material2
-    return _this;
-  }
-  _createClass(CrowdMesh, [{
-    key: "getCrowdPoints",
-    value: function getCrowdPoints() {
-      // alert(123)
-      // console.lot(this.visible)
-      var p = new _CrowdPoints.CrowdPoints(this);
-      p.name = this.name;
-      return p;
-      // return new CrowdPoints(this)
-    }
-  }, {
-    key: "init",
-    value: function init(originMesh, animationUrl, morphTargetUrl, textureData,
-    // textureUrl,
-    lightMapUrl, textureCount,
-    // [row, col]
-    camera, clock, animations, crowdGroup, meshTypeList, meshTypeListElem, meshType0) {
-      this.meshTypeList = meshTypeList;
-      this.meshTypeListElem = meshTypeListElem;
-      this.meshType = meshType0;
-      this.name = originMesh.name;
-      this.crowdGroup = crowdGroup;
-      this.animations = animations;
-      this.originMesh = originMesh;
-      this.animationUrl = animationUrl;
-      this.morphTargetUrl = morphTargetUrl;
-      this.textureData = textureData; //this.textureUrl = textureUrl;
-      this.textureCount = textureCount;
-      this.lightMapUrl = lightMapUrl;
-      this.camera = camera;
-      // this.uniforms;
-
-      this.clock = clock;
-      this.ifAnimated = !!animationUrl;
-      this.ifMorphTarget = !!morphTargetUrl;
-      this.dummy = new THREE.Object3D();
-      this.speed; // 动画速度
-      this.obesity;
-      this.moveMaxLength;
-      this.morphTargetWeight; // morph target 权重
-      this.animationStartTime;
-      this.animationType; // 动画类型
-      this.textureType; // 身体贴图类型 vec4
-      this.bodyScale; // 身体各部位缩放比例
-
-      // body 每个身体部位对应的贴图uv坐标位置
-      this.body = {
-        head: [],
-        hand: [],
-        bottom: []
-      };
-      ////////////////////////////////////////////////////////////////////////////////////////////
-      var crowd = crowdGroup.crowd;
-      // console.log(this.meshType)
-      // console.log(crowd.instanceColorIn_All[this.meshType])
-
-      // console.log(this.name)
-      if (crowd.instanceColorIn_All[this.name])
-        //if(crowd.instanceColorIn_All[this.meshType])//
-        this.instanceColorIn = new THREE.InstancedBufferAttribute(new Float32Array(this.count * 3), 3); //this.crowdGroup.instanceColorInVisible_All[this.name]
-      // else console.log("test")
-      // console.log(crowd.lodLevel)
-      var test0 = 1;
-      crowdGroup.lodLevel > 19 ? 3 : crowdGroup.lodLevel > 18 ? 100 : crowdGroup.lodLevel > 10 ? 1050 : 10000;
-      // console.log("this.count",this.count)
-      if (crowdGroup.lodLevel < 10) this.castShadow = true;
-      if (this.meshTypeListElem.length < 2) {
-        if (!crowdGroup.visible_instanceMatrix) {
-          // console.log(crowdGroup.lodLevel)
-
-          crowdGroup.visible_instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(this.count * 16 / test0), 16);
-          crowdGroup.visible_textureType = new THREE.InstancedBufferAttribute(new Uint8Array(this.count * 4 / test0), 4);
-          crowdGroup.visible_animationType = new THREE.InstancedBufferAttribute(new Uint8Array(this.count / test0), 1);
-          crowdGroup.visible_speed = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-          crowdGroup.visible_obesity = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-          crowdGroup.visible_moveMaxLength = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-          crowdGroup.visible_animationStartTime = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-          crowdGroup.visible_bodyScale = new THREE.InstancedBufferAttribute(new Float32Array(this.count * 4 / test0), 4);
-        }
-        this.instanceMatrix = crowdGroup.visible_instanceMatrix;
-        this.textureType = crowdGroup.visible_textureType;
-        this.animationType = crowdGroup.visible_animationType;
-        this.speed = crowdGroup.visible_speed;
-        this.obesity = crowdGroup.visible_obesity;
-        this.moveMaxLength = crowdGroup.visible_moveMaxLength;
-        this.animationStartTime = crowdGroup.visible_animationStartTime;
-        this.bodyScale = crowdGroup.visible_bodyScale;
-      } else {
-        //每个mesh单独进行设置缓冲区域
-        // console.log(crowd.lodLevel)
-        this.instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(this.count * 16 / test0), 16);
-        this.textureType = new THREE.InstancedBufferAttribute(new Uint8Array(this.count * 4 / test0), 4);
-        this.animationType = new THREE.InstancedBufferAttribute(new Uint8Array(this.count / test0), 1);
-        this.speed = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-        this.obesity = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-        this.moveMaxLength = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-        this.animationStartTime = new THREE.InstancedBufferAttribute(new Float32Array(this.count / test0), 1);
-        this.bodyScale = new THREE.InstancedBufferAttribute(new Float32Array(this.count * 4 / test0), 4);
-      }
-      if (this.instanceColorIn) this.instanceColorIn.origin = crowd.instanceColorIn_All[this.name]; //crowd.instanceColorIn_All[this.meshType]
-      this.instanceMatrix.origin = crowd.instanceMatrix;
-      this.textureType.origin = crowd.textureType;
-      this.animationType.origin = crowd.animationType;
-      this.speed.origin = crowd.speed;
-      this.obesity.origin = crowd.obesity;
-      this.moveMaxLength.origin = crowd.moveMaxLength;
-      this.animationStartTime.origin = crowd.animationStartTime;
-      this.bodyScale.origin = crowd.bodyScale;
-      this.buffer_all = [this.instanceMatrix, this.textureType, this.animationType, this.speed, this.obesity, this.moveMaxLength, this.animationStartTime, this.bodyScale];
-      if (this.instanceColorIn) {
-        // alert(76734)
-        this.instanceColorIn.name = "instanceColorIn";
-        this.buffer_all.push(this.instanceColorIn);
-      }
-      this.initMaterial();
-      this.initGeometry();
-      this.castShadow = true; // 阴影
-      this.receiveShadow = true;
-      this.frustumCulled = false;
-      var mat4 = new THREE.Matrix4();
-      mat4.set(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
-      for (var i = 0; i < this.count; i++) {
-        this.setMatrixAt(i, mat4);
-      }
-    }
-  }, {
-    key: "initMaterial",
-    value: function initMaterial() {
-      var uniforms = this.material.uniforms;
-      uniforms.textureData = {
-        value: this.textureData
-      }, uniforms.headUV = {
-        value: this.body.head
-      }; //{ value: new THREE.Vector4(...this.body.head) },
-      uniforms.bottomUV = {
-        value: this.body.bottom
-      }; //{ value: new THREE.Vector4(...this.body.bottom) }
-      if (this.ifAnimated) {
-        uniforms.time = {
-          value: 0
-        };
-        uniforms.boneCount = {
-          value: 0
-        };
-        uniforms.animationCount = {
-          value: 0
-        };
-        uniforms.animationFrameCount = {
-          value: 0
-        };
-        uniforms.animationTexture = {
-          value: new THREE.DataTexture(new Float32Array([0, 0, 0]), 1, 1, THREE.RGBFormat, THREE.FloatType)
-        };
-        uniforms.animationTextureLength = {
-          value: 0
-        };
-        this.initAnimation(uniforms); // 异步加载动画数据
-      }
-    }
-  }, {
-    key: "updateTexture",
-    value: function () {
-      var _updateTexture = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(url, cb) {
-        var textureData;
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return this.loadTexture(url);
-            case 2:
-              textureData = _context.sent;
-              textureData.flipY = false;
-              this.material.uniforms.textureData = {
-                value: textureData
-              };
-              if (cb) {
-                cb(textureData);
-              }
-            case 6:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee, this);
-      }));
-      function updateTexture(_x, _x2) {
-        return _updateTexture.apply(this, arguments);
-      }
-      return updateTexture;
-    }()
-  }, {
-    key: "initAnimation",
-    value: function initAnimation(uniforms) {
-      var animations = this.animations; //await this.loadAnimJSON(this.animationUrl);
-      var boneCount = this.originMesh.skeleton.bones.length; //84
-      uniforms.animationTexture.value.dispose();
-      uniforms.time = {
-        value: 0
-      };
-      uniforms.boneCount = {
-        value: boneCount
-      };
-      uniforms.animationFrameCount = {
-        value: animations.config[1] / boneCount / 12
-      }; //动画帧数 每个动画的帧数必须相同
-      uniforms.animationTexture = this.isSimShader ? animations.animationTexture2 : animations.animationTexture;
-      uniforms.animationTextureLength = {
-        value: animations.animationTextureLength
-      };
-      var scope = this;
-      updateAnimation();
-      function updateAnimation() {
-        var time = scope.clock.getElapsedTime();
-        uniforms.time = {
-          value: time
-        };
-        uniforms.cameraPosition = {
-          value: scope.camera.position
-        };
-        requestAnimationFrame(updateAnimation);
-      }
-    }
-  }, {
-    key: "initGeometry",
-    value: function initGeometry() {
-      var geometry = this.geometry; //new THREE.InstancedBufferGeometry();
-      geometry.setAttribute('animationIndex', this.animationType);
-      if (this.instanceColorIn) geometry.setAttribute('instanceColorIn', this.instanceColorIn);
-      if (this.ifAnimated) {
-        geometry.setAttribute('skinIndex', this.originMesh.geometry.attributes.skinIndex);
-        geometry.setAttribute('skinWeight', this.originMesh.geometry.attributes.skinWeight);
-        geometry.setAttribute('speed', this.speed);
-        geometry.setAttribute('obesity', this.obesity);
-        geometry.setAttribute('moveMaxLength', this.moveMaxLength);
-        geometry.setAttribute('animationStartTime', this.animationStartTime);
-        geometry.setAttribute('bodyScale', this.bodyScale);
-      }
-      geometry.setAttribute('textureIndex', this.textureType);
-    }
-  }, {
-    key: "getMatrixAt",
-    value: function getMatrixAt(index, matrix) {
-      matrix.fromArray(this.instanceMatrix.array, index * 16);
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var e = mat4.elements;
-      return [e[12], e[13], e[14]];
-    }
-  }], [{
-    key: "getCrowdMesh",
-    value: function () {
-      var _getCrowdMesh = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(
-      //getCrowdMesh
-      originMesh, animationUrl, morphTargetUrl, textureData,
-      // textureUrl,
-      lightMapUrl, textureCount,
-      // [row, col]
-      camera, clock, count, crowdGroup, meshTypeList, meshTypeListElem, meshType0, cb) {
-        var animations, material, isSimShader, useNormalMap, material2, mesh;
-        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) switch (_context2.prev = _context2.next) {
-            case 0:
-              // console.log("count",count)
-              // console.log("originMesh",originMesh)
-              originMesh.visible = false;
-              if (!(typeof crowdGroup.assets[animationUrl] == "undefined")) {
-                _context2.next = 5;
-                break;
-              }
-              _context2.next = 4;
-              return CrowdMesh.loadAnimJSON(animationUrl);
-            case 4:
-              crowdGroup.assets[animationUrl] = _context2.sent;
-            case 5:
-              animations = crowdGroup.assets[animationUrl];
-              material = originMesh.material;
-              isSimShader = crowdGroup.lodLevel > 15; //除了0,1,2,3
-              useNormalMap = crowdGroup.lodLevel > 5;
-              _context2.next = 11;
-              return _CrowdMaterial.CrowdMaterial.create({
-                "oldMaterial": material,
-                "scattering": material.scattering,
-                //true
-                "isSimShader": isSimShader,
-                "assets": crowdGroup.assets,
-                "useNormalMap": useNormalMap
-              });
-            case 11:
-              material2 = _context2.sent;
-              // material2.side=0//单面渲染 if(crowdGroup.lodLevel>18)material2.side=2//19
-              // console.log(originMesh.geometry)
-              mesh = new CrowdMesh(
-              //THREE.InstancedMesh(//
-              originMesh.geometry, material2,
-              //originMesh.material,
-              count, isSimShader //lod0和lod1使用高计算量的方法渲染，更远的使用用低计算量的方法渲染
-              );
-
-              mesh.material.mesh = mesh;
-              mesh.init(originMesh, animationUrl, morphTargetUrl, textureData,
-              // textureUrl,
-              lightMapUrl, textureCount,
-              // [row, col]
-              camera, clock, animations, crowdGroup, meshTypeList, meshTypeListElem, meshType0);
-              // console.log(
-              //     "getCrowdPoints()",
-              //     mesh.getCrowdPoints()
-              // )
-              // setTimeout(()=>{
-              //     window.scene.add(mesh.getCrowdPoints())
-              //     mesh.visible=false
-              // },5000)
-              cb(mesh);
-            case 16:
-            case "end":
-              return _context2.stop();
-          }
-        }, _callee2);
-      }));
-      function getCrowdMesh(_x3, _x4, _x5, _x6, _x7, _x8, _x9, _x10, _x11, _x12, _x13, _x14, _x15, _x16) {
-        return _getCrowdMesh.apply(this, arguments);
-      }
-      return getCrowdMesh;
-    }()
-  }, {
-    key: "loadAnimJSON_Old",
-    value: function loadAnimJSON_Old(path) {
-      return new Promise(function (resolve, reject) {
-        var animationLoader = new THREE.FileLoader();
-        animationLoader.load(path, function (data) {
-          var animationData = JSON.parse(data);
-          getAnimaTexture(animationData);
-          resolve(animationData);
-        });
-      });
-      function getAnimaTexture(animations) {
-        // 将动画数据保存为图片Texture格式//animations是读取的json对象
-        getAnimation2(animations);
-        // console.log(animations)
-        var animationData = animations.animation.flat();
-        var animationData2 = animations.animation2.flat();
-        var animationDataLength = animations.config.reduce(function (prev, cur) {
-          return prev + cur;
-        }, 0); // sum
-        var animationTextureLength = THREE.MathUtils.ceilPowerOfTwo(Math.sqrt(animationDataLength / 4));
-        animations.animationTextureLength = animationTextureLength;
-        animations.animationTexture = {
-          value: array2Texture(animationData, animationTextureLength)
-        };
-        animations.animationTexture2 = {
-          value: array2Texture(animationData2, animationTextureLength)
-        };
-      }
-      function array2Texture(array, length) {
-        var data = new Float32Array(length * length * 4); // RGB:3 RGBA:4
-        data.set(array);
-        var texture = new THREE.DataTexture(data, length, length, THREE.RGBAFormat, THREE.FloatType);
-        texture.needsUpdate = true;
-        return texture;
-      }
-      function getAnimation2(animations) {
-        console.log("getAnimation2 start");
-        animations.animation2 = [];
-        animations.config2 = [];
-        var frameNumber = parseInt(animations["frameNumber"]);
-        var boneNumber = animations.config[0] / ((frameNumber + 1) * 12); //animations["boneNumber"]
-        animations.boneNumber = boneNumber;
-        // console.log("animations.animation.length",animations.animation.length)
-        for (var i = 0; i < animations.animation.length; i++) {
-          var animation = animations.animation[i];
-          var animation2 = [];
-          // console.log("frameNumber,boneNumber:",frameNumber,boneNumber)
-          for (var f = 0; f < frameNumber; f++) {
-            for (var b = 0; b < boneNumber; b++) {
-              var m1 = getMatrix(animation, 0, b); //boneInverses
-              var m2 = getMatrix(animation, f + 1, b); //bones[i].matrixWorld
-              var m0 = m2.multiply(m1);
-              for (var k1 = 0; k1 < 4; k1++)
-              //4行
-              for (var k2 = 0; k2 < 3; k2++)
-              //3列
-              animation2.push(m0.elements[4 * k1 + k2]);
-            }
-          }
-          animations.animation2.push(animation2);
-          animations.config2.push(animation2.length);
-        }
-        console.log("getAnimation2 end");
-        function getMatrix(arr, f_i, b_i) {
-          var s = f_i * boneNumber * 12 + b_i * 12;
-          var m = new THREE.Matrix4();
-          m.set(arr[s + 0], arr[s + 3], arr[s + 6], arr[s + 9], arr[s + 1], arr[s + 4], arr[s + 7], arr[s + 10], arr[s + 2], arr[s + 5], arr[s + 8], arr[s + 11], 0, 0, 0, 1);
-          return m;
-        }
-      }
-    }
-  }, {
-    key: "loadAnimJSON",
-    value: function loadAnimJSON(path) {
-      return new Promise(function (resolve, reject) {
-        var loader = new THREE.FileLoader();
-        loader.setResponseType("arraybuffer");
-        loader.load(path, function (buffer) {
-          var itemSize1 = 4;
-          var itemSize2 = 2;
-          var headSize = 4;
-          var head = new Uint32Array(buffer.slice(0, headSize * itemSize1));
-          var config_len = head[0];
-          var config_0 = head[1];
-          var animationDataLength = head[2];
-          var frameNumber = head[3];
-          var config = [];
-          for (var i = 0; i < config_len; i++) config.push(config_0);
-          var animationTextureLength = THREE.MathUtils.ceilPowerOfTwo(Math.sqrt(animationDataLength / 4));
-          var length = animationTextureLength;
-          var data1 = new Uint16Array(buffer.slice(headSize * itemSize1, headSize * itemSize1 + head[2] * itemSize2));
-          var data1_ = new Uint16Array(length * length * 4);
-          data1_.set(data1);
-          var data2 = new Uint16Array(buffer.slice(headSize * itemSize1 + head[2] * itemSize2, buffer.byteLength));
-          var data2_ = new Uint16Array(length * length * 4);
-          data2_.set(data2);
-          var map1 = new THREE.DataTexture();
-          map1.type = THREE.HalfFloatType;
-          map1.image = {
-            data: data1_,
-            width: animationTextureLength,
-            height: animationTextureLength
-          };
-          map1.needsUpdate = true;
-          var map2 = new THREE.DataTexture();
-          map2.type = THREE.HalfFloatType;
-          map2.image = {
-            data: data2_,
-            width: animationTextureLength,
-            height: animationTextureLength
-          };
-          map2.needsUpdate = true;
-          var animationData = {
-            config: config,
-            frameNumber: frameNumber,
-            animationTextureLength: animationTextureLength,
-            animationTexture: {
-              value: map1
-            },
-            animationTexture2: {
-              value: map2
-            }
-          };
-          resolve(animationData);
-        }); //end
-      });
-    }
-  }, {
-    key: "loadTexture",
-    value: function loadTexture(path) {
-      return new Promise(function (resolve, reject) {
-        new THREE.TextureLoader().load(path, function (texture) {
-          // onLoad
-          texture.flipY = false;
-          resolve(texture);
-        }, null,
-        // onProgress
-        function (error) {
-          return reject(error);
-        } // onError
-        );
-      });
-    }
-  }]);
-  return CrowdMesh;
-}(THREE.InstancedMesh);
-exports.CrowdMesh = CrowdMesh;
-},{"three":"node_modules/three/build/three.module.js","./CrowdMaterial.js":"lib/crowd/CrowdMaterial.js","./CrowdGeometry.js":"lib/crowd/CrowdGeometry.js","./CrowdPoints.js":"lib/crowd/CrowdPoints.js"}],"lib/crowd/CrowdGroup.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdGroup = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _CrowdMesh = require("./CrowdMesh.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var CrowdGroup = /*#__PURE__*/function (_THREE$Group) {
-  _inherits(CrowdGroup, _THREE$Group);
-  var _super = _createSuper(CrowdGroup);
-  function CrowdGroup(opt) {
-    var _this;
-    _classCallCheck(this, CrowdGroup);
-    _this = _super.call(this);
-    _this.visibleList_needsUpdate0 = false;
-    var crowd = opt.crowdModel;
-    // const crowdModel=opt.crowdModel
-    _this.crowd = opt.crowd;
-    _this.crowdModel = opt.crowdModel;
-    _this.assets = crowd.assets;
-    _this.camera = opt.camera;
-    _this.count = opt.count;
-    _this.animPathPre = opt.animPathPre;
-    _this.dummy = crowd.dummy; //new THREE.Object3D();
-    _this.clock = crowd.clock; //new THREE.Clock()
-    _this.visibleList = new Int8Array(_this.count); //元素为0或1,0表示对象不可见，1表示对象可见
-
-    _this.lod = crowd.lod;
-    _this.instanceMatrix = crowd.instanceMatrix; //new THREE.InstancedBufferAttribute(new Float32Array(this.count*16), 16);
-    _this.textureType = crowd.textureType; //new THREE.InstancedBufferAttribute(new Uint8Array(this.count * 4), 4);
-    _this.animationType = crowd.animationType; //new THREE.InstancedBufferAttribute(new Uint8Array(this.count), 1);
-    _this.speed = crowd.speed; //new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.obesity = crowd.obesity;
-    _this.moveMaxLength = crowd.moveMaxLength;
-    _this.animationStartTime = crowd.animationStartTime; //new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.bodyScale = crowd.bodyScale; //new THREE.InstancedBufferAttribute(new Float32Array(this.count * 4), 4);
-    _this.instanceColorIn_All = crowd.instanceColorIn_All;
-    return _this;
-  }
-  _createClass(CrowdGroup, [{
-    key: "updateMap",
-    value: function updateMap(pathPre, data) {
-      // console.log("updateMap1")
-      for (var meshName in data) {
-        var path = data[meshName].map;
-        for (var i = 0; i < this.children.length; i++) {
-          if (this.children[i].name == meshName) {
-            this.children[i].material.updateMap(pathPre, path);
-          }
-        }
-      }
-      // console.log("updateMap2")
-    }
-  }, {
-    key: "init",
-    value: function init(groupOld, meshType, meshTypeList, meshTypeListElem, cb_) {
-      var arr = [];
-      groupOld.traverse(function (obj) {
-        if (obj.type == "Mesh" || obj.type == "SkinnedMesh") {
-          arr.push(obj);
-        }
-      });
-      this.createMeshAll(arr, meshType, meshTypeList, meshTypeListElem, function () {
-        if (cb_) cb_();
-      });
-
-      // let pre=this.pre
-      // for(let i=0;i<this.children.length;i++){
-      //     for(let j=0;j<pre.children.length;j++){
-      //         if(this.children[i].name==pre.children[j].name){
-      //             this.children[i].pre=pre.children[j]
-      //         }
-      //     }
-      // }
-    }
-  }, {
-    key: "useLod",
-    value: function useLod(lod0) {
-      if (Number.isInteger(lod0)) {
-        if (lod0 < this.lod.length) {
-          lod0 = this.lod[lod0];
-        } else {
-          console.log("lod编号错误");
-          return;
-        }
-      }
-      for (var i = 0; i < this.children.length; i++) {
-        var name1 = this.children[i].name;
-        var geometry1 = this.children[i].geometry;
-        for (var name2 in lod0) {
-          if (name1 == name2) {
-            geometry1.bindGeometry(lod0[name2]);
-          }
-        }
-      }
-    }
-  }, {
-    key: "createMeshAll",
-    value: function createMeshAll(arr, meshType, meshTypeList, meshTypeListElem, cb) {
-      var scope = this;
-      var indexFlag = 0;
-      function next(i) {
-        var mesh = arr[i];
-        // console.log("meshType",meshType)
-        // console.log(mesh,i,arr.length)
-        // console.log(mesh.name)
-        var meshType0 = meshType[mesh.name];
-        if (meshType0 == null) {
-          indexFlag++;
-          if (indexFlag == arr.length) {
-            cb();
-          } else {
-            next(i + 1);
-          }
-        } else {
-          // alert()
-          // console.log("scope.countMax",scope.countMax)
-          // console.log( meshTypeListElem[meshType0])
-          _CrowdMesh.CrowdMesh.getCrowdMesh(mesh,
-          //m,
-          scope.animPathPre,
-          //animPath,
-          false, "",
-          //this.filePath.male.superlowTexturePath,
-          false, 1,
-          //this.manager.config.male.textureCount,
-          scope.camera,
-          //this.camera,
-          scope.clock,
-          //new THREE.Clock(),//this.clock
-          scope.countMax,
-          //scope.countMax,
-          scope, meshTypeList[meshType0], meshTypeListElem[meshType0], meshType0, function (m2) {
-            m2.meshType = meshType0;
-            m2.meshTypeList = meshTypeList[meshType0];
-            m2.meshTypeListElem = meshTypeListElem[meshType0];
-            scope.add(m2);
-            indexFlag++;
-            if (indexFlag == arr.length) {
-              //if(scope.children.length==arr.length){
-              cb();
-            } else {
-              next(i + 1);
-            }
-          });
-        }
-      }
-      next(0);
-    }
-  }, {
-    key: "getMesh",
-    value: function getMesh(name) {
-      for (var i = 0; i < this.children.length; i++) {
-        if (this.children[i].name == name) return this.children[i];
-      }
-    }
-  }, {
-    key: "getCrowdPoints",
-    value: function getCrowdPoints() {
-      var CrowdPoints = new THREE.Object3D();
-      var i;
-      for (i = 0; i < this.children.length; i++) {
-        var child = this.children[i];
-        // alert(child.visible)
-        // if(child.visible){
-
-        var p = child.getCrowdPoints();
-        CrowdPoints.add(p);
-        break;
-        // }
-      }
-
-      if (i == this.children.length) return null;else return CrowdPoints;
-    }
-  }, {
-    key: "getMeshByMeshType",
-    value: function getMeshByMeshType(meshType) {
-      for (var i = 0; i < this.children.length; i++) {
-        if (this.children[i].meshType == meshType) return this.children[i];
-      }
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      if (!this.visible) return;
-      for (var i = 0; i < this.children.length; i++) {
-        var mesh = this.children[i];
-        for (var j = 0; j < mesh.buffer_all.length; j++) {
-          mesh.buffer_all[j].needsUpdate0 = true;
-        }
-      }
-      for (var _i = 0; _i < this.children.length; _i++) {
-        this.updateMesh(this.children[_i]);
-      }
-    }
-  }, {
-    key: "updateMesh",
-    value: function updateMesh(mesh) {
-      if (!mesh.visible) return; //如果这个对象不可见就不用更新
-      var index = 0;
-      // if(mesh.buffer_all.length==9){
-      //     console.log(mesh.name,mesh.buffer_all[8].name,mesh.buffer_all[8].array,mesh.buffer_all[8].origin.array)
-      // }
-
-      for (var i = 0; i < this.visibleList.length; i++) {
-        if (this.visibleList[i] == 1 && mesh.meshTypeList[i] == mesh.meshTypeId) {
-          for (var t = 0; t < mesh.buffer_all.length; t++) {
-            var buffer = mesh.buffer_all[t];
-            if (buffer.needsUpdate0) {
-              var itemSize = buffer.itemSize;
-              for (var j = 0; j < itemSize; j++) {
-                buffer.array[itemSize * index + j] = buffer.origin.array[itemSize * i + j];
-              }
-            }
-          }
-          index++;
-        }
-      }
-      for (var _t = 0; _t < mesh.buffer_all.length; _t++) {
-        var _buffer = mesh.buffer_all[_t];
-        if (_buffer.needsUpdate0) {
-          _buffer.needsUpdate = true;
-          _buffer.needsUpdate0 = false;
-        }
-      }
-      if (this.visibleList_needsUpdate0) {
-        // this.count=index
-        mesh.count = index;
-        mesh.visibleList_needsUpdate0 = false;
-      }
-    }
-  }, {
-    key: "getMatrixAt",
-    value: function getMatrixAt(index, matrix) {
-      matrix.fromArray(this.instanceMatrix.array, index * 16);
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var e = mat4.elements;
-      return [e[12], e[13], e[14]];
-    }
-  }, {
-    key: "getScale",
-    value: function getScale(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var position = new THREE.Vector3();
-      var quaternion = new THREE.Quaternion();
-      var scale = new THREE.Vector3();
-      mat4.decompose(position, quaternion, scale);
-      return [scale.x, scale.y, scale.z];
-    }
-  }]);
-  return CrowdGroup;
-}(THREE.Group);
-exports.CrowdGroup = CrowdGroup;
-},{"three":"node_modules/three/build/three.module.js","./CrowdMesh.js":"lib/crowd/CrowdMesh.js"}],"lib/crowd/PMGeometry.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PMGeometry = void 0;
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var PMGeometry = /*#__PURE__*/function () {
-  function PMGeometry(data) {
-    _classCallCheck(this, PMGeometry);
-    // console.log(type(data["vId"]),data["vId"])
-    // console.log(type(data["fId"]),data["fId"])
-    // console.log(type(data["index"]),data["index"])
-    for (var tag in data)
-    //这句命令没啥作用
-    if (data[tag]._ArrayData_) data[tag] = data[tag]._ArrayData_;
-    this.v = {};
-    this.f = {};
-    var l = data["vId"];
-    if (typeof data["fId"] == "number") {
-      data["fId"] = [data["fId"]];
-    }
-    for (var i = 0; i < data["fId"].length; i++) {
-      var fid0 = data["fId"][i];
-      var face0 = [l[data["index"][3 * i]], l[data["index"][3 * i + 1]], l[data["index"][3 * i + 2]]];
-      this.f[fid0] = face0;
-    }
-    for (var _i = 0; _i < data["vId"].length; _i++) {
-      var vid0 = data["vId"][_i];
-      var vertex0 = [data["position"][3 * _i], data["position"][3 * _i + 1], data["position"][3 * _i + 2], data["uv"][2 * _i], data["uv"][2 * _i + 1], data["skinIndex"][4 * _i], data["skinIndex"][4 * _i + 1], data["skinIndex"][4 * _i + 2], data["skinIndex"][4 * _i + 3], data["skinWeight"][4 * _i], data["skinWeight"][4 * _i + 1], data["skinWeight"][4 * _i + 2], data["skinWeight"][4 * _i + 3]];
-      this.v[vid0] = vertex0;
-    }
-  }
-  _createClass(PMGeometry, [{
-    key: "getJson2",
-    value: function getJson2() {
-      var data = this.getJson();
-      var data2 = {};
-      for (var tag in data) {
-        data2[tag] = {
-          "array": data[tag]
-        };
-      } //attributes.position
-      data2.position.count = data2.position.array.length / 3;
-      return {
-        "attributes": data2,
-        "index": data.index
-      };
-    }
-  }, {
-    key: "getJson",
-    value: function getJson() {
-      var data = {
-        "position": [],
-        "uv": [],
-        "skinWeight": [],
-        "skinIndex": [],
-        "index": []
-      };
-      var v_id = Object.keys(this.v);
-      var v = Object.values(this.v);
-      var f = Object.values(this.f);
-      var l = {};
-      for (var i = 0; i < v.length; i++) {
-        var v0 = v[i];
-        l[v_id[i]] = i;
-        data.position.push(v0[0]);
-        data.position.push(v0[1]);
-        data.position.push(v0[2]);
-        data.uv.push(v0[3]);
-        data.uv.push(v0[4]);
-        data.skinIndex.push(v0[5]);
-        data.skinIndex.push(v0[6]);
-        data.skinIndex.push(v0[7]);
-        data.skinIndex.push(v0[8]);
-        data.skinWeight.push(v0[9]);
-        data.skinWeight.push(v0[10]);
-        data.skinWeight.push(v0[11]);
-        data.skinWeight.push(v0[12]);
-      }
-      for (var _i2 = 0; _i2 < f.length; _i2++) {
-        for (var j = 0; j < 3; j++) {
-          var elem = l[f[_i2][j]];
-          data.index.push(elem);
-        }
-      }
-      return data;
-    }
-  }, {
-    key: "addIncrement",
-    value: function addIncrement(increment) {
-      var aI = increment["aI"];
-      // console.log(aI)
-      var aPos = increment["aPos"];
-      var aUV = increment["aUV"];
-      var aSkinWeight = increment["aSkinWeight"];
-      var aSkinIndex = increment["aSkinIndex"];
-      var bI = increment["bI"];
-      var bPos = increment["bPos"];
-      var bUV = increment["bUV"];
-      var bSkinWeight = increment["bSkinWeight"];
-      var bSkinIndex = increment["bSkinIndex"];
-      this.v[aI] = [aPos[0], aPos[1], aPos[2], aUV[0], aUV[1], aSkinIndex[0], aSkinIndex[1], aSkinIndex[2], aSkinIndex[3], aSkinWeight[0], aSkinWeight[1], aSkinWeight[2], aSkinWeight[3]];
-      this.v[bI] = [bPos[0], bPos[1], bPos[2], bUV[0], bUV[1], bSkinIndex[0], bSkinIndex[1], bSkinIndex[2], bSkinIndex[3], bSkinWeight[0], bSkinWeight[1], bSkinWeight[2], bSkinWeight[3]];
-      var faceRe = increment["faceRe"];
-      if (typeof faceRe == "number") {
-        faceRe = [faceRe];
-      }
-      // console.log(faceRe.length)
-      for (var i = 0; i < faceRe.length; i++) {
-        var face0 = this.f[faceRe[i]];
-        // console.log(this.name,faceRe[i],"face0",face0)
-        if (face0) for (var j = 0; j < 3; j++) {
-          if (face0[j] == aI) {
-            face0[j] = bI;
-          }
-        }
-      }
-      var x = increment["face"]["x"];
-      var y = increment["face"]["y"];
-      var z = increment["face"]["z"];
-      var d = increment["face"]["d"];
-      if (typeof x == "number") {
-        //if(!x instanceof(Array)){
-        x = [x];
-        y = [y];
-        z = [z];
-        d = [d];
-      }
-      // console.log("d",d)
-      for (var _i3 = 0; _i3 < d.length; _i3++) {
-        this.f[d[_i3]] = [x[_i3], y[_i3], z[_i3]];
-      }
-    }
-  }]);
-  return PMGeometry;
-}();
-exports.PMGeometry = PMGeometry;
-},{}],"lib/crowd/PMGroup.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PMGroup = void 0;
-var _PMGeometry = require("./PMGeometry.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var PMGroup = /*#__PURE__*/function () {
-  function PMGroup(data) {
-    _classCallCheck(this, PMGroup);
-    console.log(data);
-    this.children = {};
-    for (var meshName in data) {
-      this.children[meshName] = new _PMGeometry.PMGeometry(data[meshName]);
-      this.children[meshName].name = meshName;
-    }
-    console.log(this);
-  }
-  _createClass(PMGroup, [{
-    key: "getJson",
-    value: function getJson() {
-      var data = {};
-      for (var meshName in this.children) {
-        var geometry = this.children[meshName];
-        data[meshName] = geometry.getJson();
-      }
-      return data;
-    }
-  }, {
-    key: "getJson2",
-    value: function getJson2() {
-      var data = {};
-      for (var meshName in this.children) {
-        var geometry = this.children[meshName];
-        data[meshName] = geometry.getJson2();
-      }
-      return data;
-    }
-  }, {
-    key: "addPack",
-    value: function addPack(pack) {
-      // console.log(this)
-      // console.log(pack)
-      for (var meshName in this.children) {
-        // console.log(meshName)
-        var geometry = this.children[meshName];
-        if (!pack[meshName]) pack[meshName] = [];
-        // console.log(meshName,pack[meshName])
-        var pack0 = pack[meshName][0]; //外面有一层冗余的中括号
-        // if( pack0 instanceof Array )pack0=pack0[0]//判断外面是否有一层冗余的中括号
-        // console.log("pack0",pack0)
-        // if(pack0)
-        // for(let i=0;i<pack0.length;i++){
-        //     const j=pack0.length-1-i
-        //     const increment0=pack0[j]
-        //     geometry.addIncrement(increment0)
-        // }
-        if (pack0) {
-          // console.log("pack0.length",pack0.length)
-          for (var i = pack0.length - 1; i >= 0; i--) {
-            var increment0 = pack0[i];
-            geometry.addIncrement(increment0);
-          }
-        }
-      }
-      // for(let i=0;i<this.children.length;i++){
-      //     this.children[i].addIncrement(increment)
-      // }
-    }
-  }]);
-  return PMGroup;
-}();
-exports.PMGroup = PMGroup;
-},{"./PMGeometry.js":"lib/crowd/PMGeometry.js"}],"lib/crowd/PM.js":[function(require,module,exports) {
-var process = require("process");
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PM = void 0;
-var _CrowdGeometry = require("./CrowdGeometry.js");
-var _PMGroup = require("./PMGroup.js");
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var PM = /*#__PURE__*/function () {
-  function PM(opt, cb0) {
-    _classCallCheck(this, PM);
-    this.usePM = opt.usePM;
-    this.crowd = opt.crowd;
-    this.groupOld = opt.groupOld; //groupOld 是glb.scene
-    this.dataType = "bin"; //bin json
-
-    if (this.usePM) this.getBase_PM(cb0);else this.getBase_noPM(cb0);
-  }
-  _createClass(PM, [{
-    key: "init",
-    value: function init(cb00) {
-      //需要整个lod体系
-      this.crowd.lod_set();
-      if (this.usePM) this.loadIncrement(1, cb00);else this.loadMesh_noPM(2, cb00);
-    }
-  }, {
-    key: "getBase_PM",
-    value: function getBase_PM(cb0) {
-      var scope = this;
-      scope.loadJson(scope.crowd.pathLodGeo + "1.json", function (data) {
-        scope.pmGroup = new _PMGroup.PMGroup(data);
-        var lod0_ = _CrowdGeometry.CrowdGeometry.getLod2(scope.pmGroup.getJson2());
-        lod0_.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0_);
-        if (cb0) cb0(lod0_);
-        // scope.crowd.useLod(lod0_)
-
-        var lod0 = _CrowdGeometry.CrowdGeometry.getLod(data);
-        lod0.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0);
-        // scope.crowd.useLod(lod0)
-        // scope.cb(lod0)
-        // scope.loadIncrement(1)
-      });
-    }
-  }, {
-    key: "getBase_noPM",
-    value: function getBase_noPM(cb0) {
-      var scope = this;
-      var path = scope.crowd.pathLodGeo + "1.json";
-      scope.loadJson(path, function (data) {
-        var lod0 = _CrowdGeometry.CrowdGeometry.getLod(data);
-        var lod0_ = _CrowdGeometry.CrowdGeometry.getLod2(lod0);
-        lod0_.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0_);
-        if (cb0) cb0(lod0_);
-        // scope.crowd.useLod(lod0_)
-
-        lod0.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0);
-        // scope.crowd.useLod(lod0)
-        // scope.cb(lod0)
-
-        // scope.loadMesh_noPM(2)
-      });
-    }
-  }, {
-    key: "loadMesh_noPM",
-    value: function loadMesh_noPM(index, cb00) {
-      //1,2,3...20
-      var scope = this;
-      var path = scope.crowd.pathLodGeo + index + ".json";
-      scope.loadJson(path, function (data) {
-        var lod0 = _CrowdGeometry.CrowdGeometry.getLod(data);
-        lod0.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0);
-        scope.crowd.useLod(lod0);
-        scope.cb(lod0);
-        if (index < scope.crowd.lodCount - 1) {
-          scope.loadMesh_noPM(index + 1, cb00);
-        } else {
-          if (cb00) cb00();
-          scope.cb_last(scope.crowd.lod);
-        }
-      });
-    }
-  }, {
-    key: "loadIncrement",
-    value: function loadIncrement(index, cb00) {
-      //index=[1,3,..,19]
-      var scope = this;
-      function parsePack(data) {
-        scope.pmGroup.addPack(data);
-        window.group3a = scope.pmGroup;
-        var data_new = scope.pmGroup.getJson();
-        var lod0 = _CrowdGeometry.CrowdGeometry.getLod(data_new);
-        lod0.lodLevel = scope.crowd.lod.length;
-        scope.crowd.lod.push(lod0);
-        scope.crowd.useLod(lod0);
-
-        // scope.cb(lod0)
-        if (index < 19) {
-          //if(index<scope.crowd.lodCount-2){//index=[2,3,..,19]
-          scope.loadIncrement(index + 1, cb00);
-        } else {
-          if (cb00) cb00();
-          scope.cb_last(scope.crowd.lod);
-        }
-      }
-      if (this.dataType == "bin") {
-        scope.loadBin(scope.crowd.pathLodGeo + index + ".bin", parsePack);
-      } else {
-        scope.loadJson(scope.crowd.pathLodGeo + index + ".json.pack.json", parsePack);
-      }
-    }
-  }, {
-    key: "cb_last",
-    value: function cb_last(lod_last) {
-      var scope = this;
-      if (scope.crowd.lod_set) scope.crowd.lod_set();
-      scope.crowd.myLodController.cameraStatePre = "";
-      scope.crowd.update();
-    }
-  }, {
-    key: "loadBin",
-    value: function loadBin(path, cb_) {
-      // console.log(path)
-      var scope = this;
-      var loader = new THREE.FileLoader();
-      loader.setResponseType("arraybuffer");
-      loader.load(path, function (buffer) {
-        scope.bin2json(buffer, cb_);
-      });
-    }
-  }, {
-    key: "bin2json",
-    value: function bin2json(buffer, cb_) {
-      function process(buffer, cb_) {
-        var itemSize = 4;
-        var headLength = new Uint32Array(buffer.slice(0, itemSize))[0];
-        var head = new Uint32Array(buffer.slice(1 * itemSize, (1 + headLength) * itemSize));
-        var index = 1 + headLength;
-        // console.log(head)
-        var result = {};
-        for (var i = 0; i < head.length; i++) {
-          var buffer0 = buffer.slice(itemSize * index, itemSize * (index + head[i]));
-          var result0 = getName(buffer0);
-          var name = result0.name;
-          // console.log(name)
-          result[name] = [decompression(result0.buffer)]; //外面有多余的一层中括号
-          index = index + head[i];
-        }
-        // console.log("bin result:",result)
-        if (cb_) cb_(result);
-        // buffer.slice(0, headSize * itemSize1)
-      }
-
-      function getName(buffer) {
-        var itemSize = 4;
-        var nameLength = new Uint32Array(buffer.slice(0, itemSize))[0];
-        var name = "";
-        var index = 1;
-        for (var i = 0; i < nameLength; i++) {
-          //String.fromCharCode(97)
-          var code0 = new Uint32Array(buffer.slice(index * itemSize, (1 + index) * itemSize))[0];
-          // console.log("code0",code0)
-          var char0 = String.fromCharCode(code0);
-          name = name + char0;
-          index++;
-        }
-        // console.log(index*itemSize, buffer.byteLength)
-        buffer = buffer.slice(index * itemSize, buffer.byteLength);
-        return {
-          name: name,
-          buffer: buffer
-        };
-      }
-      function decompression(buffer) {
-        var intData = new Uint32Array(buffer);
-        var meshLength = intData[0];
-        var array1Length = intData[1];
-        var array2Length = intData[2];
-        var array3Length = intData[3];
-        // console.log(meshLength);
-        // console.log(array1Length);
-        // console.log(array2Length);
-        // console.log(array3Length);
-        var nodeList = [];
-        var data = new Float32Array(buffer);
-        for (var i = 0; i < meshLength; i++) {
-          var node = {
-            aI: 0,
-            bI: 0,
-            aPos: [],
-            bPos: [],
-            cPos: [],
-            aUV: [],
-            aSkinWeight: [],
-            aSkinIndex: [],
-            bUV: [],
-            bSkinWeight: [],
-            bSkinIndex: [],
-            faceRe: [],
-            face: {
-              x: [],
-              y: [],
-              z: [],
-              d: []
-            }
-          };
-          var start = i * 35 + 4;
-          node.aI = data[start];
-          node.bI = data[start + 1];
-          for (var j = 0; j < 3; j++) {
-            node.aPos.push(data[start + 2 + j]);
-            node.bPos.push(data[start + 5 + j]);
-            node.cPos.push(data[start + 8 + j]);
-          }
-          for (var _j = 0; _j < 2; _j++) {
-            node.aUV.push(data[start + 11 + _j]);
-            node.bUV.push(data[start + 21 + _j]);
-          }
-          for (var _j2 = 0; _j2 < 4; _j2++) {
-            node.aSkinWeight.push(data[start + 13 + _j2]);
-            node.aSkinIndex.push(data[start + 17 + _j2]);
-            node.bSkinWeight.push(data[start + 23 + _j2]);
-            node.bSkinIndex.push(data[start + 27 + _j2]);
-          }
-          var faceRestart = data[start + 31] + array1Length + 4;
-          var facestart = data[start + 32] + array1Length + array2Length + 4;
-          var faceReLength = data[start + 33];
-          var faceLength = data[start + 34];
-          for (var _j3 = 0; _j3 < faceReLength; _j3++) {
-            node.faceRe.push(data[faceRestart + _j3]);
-          }
-          for (var _j4 = 0; _j4 < faceLength; _j4++) {
-            node.face.x.push(data[facestart + _j4 * 4]);
-            node.face.y.push(data[facestart + _j4 * 4 + 1]);
-            node.face.z.push(data[facestart + _j4 * 4 + 2]);
-            node.face.d.push(data[facestart + _j4 * 4 + 3]);
-          }
-          nodeList.push(node);
-        }
-        // console.log( nodeList )
-        return nodeList;
-      }
-      process(buffer, cb_);
-    }
-  }, {
-    key: "loadJson",
-    value: function loadJson(path, cb_) {
-      var rawFile = new XMLHttpRequest();
-      rawFile.overrideMimeType("application/json");
-      rawFile.open("GET", path, true);
-      rawFile.onreadystatechange = function () {
-        if (rawFile.readyState === 4 && rawFile.status == "200") {
-          var str = rawFile.responseText;
-          var data = JSON.parse(str);
-          if (cb_) cb_(data);
-        }
-      };
-      rawFile.send(null);
-    }
-  }]);
-  return PM;
-}();
-exports.PM = PM;
-},{"./CrowdGeometry.js":"lib/crowd/CrowdGeometry.js","./PMGroup.js":"lib/crowd/PMGroup.js","three":"node_modules/three/build/three.module.js","process":"node_modules/process/browser.js"}],"lib/crowd/CrowdModel.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdModel = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _CrowdGroup = require("./CrowdGroup.js");
-var _PM = require("./PM.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var CrowdModel = /*#__PURE__*/function (_THREE$Object3D) {
-  _inherits(CrowdModel, _THREE$Object3D);
-  var _super = _createSuper(CrowdModel);
-  function CrowdModel(opt, crowd0) {
-    var _this;
-    _classCallCheck(this, CrowdModel);
-    _this = _super.call(this);
-    _this.pathTexture = opt.pathTexture;
-    // alert(opt.pathTexture)
-
-    _this.meshType = opt.meshType;
-    _this.meshTypeList = opt.meshTypeList;
-    _this.meshTypeListElem = opt.meshTypeListElem;
-    _this.assets = opt.assets; //{}//防止资源重复加载
-    _this.count = opt.count;
-    _this.camera = opt.camera;
-    _this.clock = crowd0.clock; //new THREE.Clock()
-    _this.instanceMatrix = crowd0.instanceMatrix; //new THREE.InstancedBufferAttribute(new Float32Array(this.count*16), 16);
-    _this.textureType = crowd0.textureType; // new THREE.InstancedBufferAttribute(new Uint8Array(this.count * 4), 4);
-    _this.animationType = crowd0.animationType; //new THREE.InstancedBufferAttribute(new Uint8Array(this.count), 1);
-    _this.speed = crowd0.speed; //new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.obesity = crowd0.obesity; //new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.moveMaxLength = crowd0.moveMaxLength; // new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.animationStartTime = crowd0.animationStartTime; //new THREE.InstancedBufferAttribute(new Float32Array(this.count), 1);
-    _this.bodyScale = crowd0.bodyScale; // new THREE.InstancedBufferAttribute(new Float32Array(this.count * 4), 4);
-
-    _this.useColorTag = opt.useColorTag; //["CloW_A_kuzi_geo","CloW_A_waitao_geo1","CloW_A_xiezi_geo","hair"]
-    _this.instanceColorIn_All = crowd0.instanceColorIn_All;
-    _this.visibleList_needsUpdate0 = false;
-    _this.lodCount = crowd0.lodCount;
-    _this.lodList = crowd0.lodList;
-    _this.lod = []; //里面存放的元素为 仿照mesh类型 自定义的结构
-    _this.lod_distance = crowd0.lod_distance; //[15,25,50,75,100]
-    _this.lod_geometry = crowd0.lod_geometry;
-    var scope = _assertThisInitialized(_this);
-    // let crowd=scope
-    var lod_visible = opt.lod_visible;
-    opt.lod_set = function () {
-      // console.log("lod_visible",lod_visible)
-      for (var i = 0; i < scope.children.length; i++) {
-        var crowdGroup0 = scope.children[i];
-        // for (let j = 0; j < lod_visible.length; j++) {
-        //     if (i >= lod_visible[j][1]) {
-        //         var mesh = crowdGroup0.getMeshByMeshType(lod_visible[j][0])
-        //         if (mesh) mesh.visible = false
-        //     }
-        // }
-        for (var name in lod_visible) {
-          var level = lod_visible[name];
-          // console.log(i,level,i >= level,name)
-          if (i >= level) {
-            var mesh = crowdGroup0.getMesh(name);
-            // console.log(mesh)
-            if (mesh) mesh.visible = false;
-          }
-        }
-      }
-    };
-    _this.myLodController = crowd0.myLodController; //new CrowdLod(this)
-
-    _this.lod_set = opt.lod_set;
-    opt.crowd = crowd0;
-    opt.crowdModel = _assertThisInitialized(_this);
-    // let count=this.count
-    for (var i = 0; i < 1 + _this.lod_distance.length; i++) {
-      //层级数量由lod_distance数组的长度确定
-      // if(i<5)opt.count=10
-      // else if(i<10)opt.count=50
-      // else if(i<15)opt.count=100
-      // else if(i<20)opt.count=300
-      // else opt.count=count
-      var child = new _CrowdGroup.CrowdGroup(opt);
-      child.countMax = opt.lod_avatarCount[i];
-      child.lodLevel = i;
-      _this.add(child);
-    }
-    _this.children[_this.children.length - 1].visible = false; //最后一个层级使用点集的方式进行渲染
-    // this.lod_set()
-
-    _this.usePM = true; //window.id==0
-    _this.pathLodGeo = opt.pathLodGeo;
-    _this.pathTextureConfig = opt.pathTextureConfig;
-    return _this;
-  }
-  _createClass(CrowdModel, [{
-    key: "createPre",
-    value: function createPre() {
-      //生成LOD的前向索引
-      var pre = null;
-      for (var i = 0; i < this.children.length; i++) {
-        //层级数量由lod_distance数组的长度确定
-        var group = this.children[i];
-        group.pre = pre;
-        for (var k = 0; k < group.children.length; k++) {
-          var mesh = group.children[k];
-          if (pre == null) mesh.pre = null;else for (var j = 0; j < pre.children.length; j++) {
-            var mesh_pre = pre.children[j];
-            if (mesh.name == mesh_pre.name) {
-              mesh.pre = mesh_pre;
-            }
-          }
-        }
-        pre = group;
-      }
-    }
-  }, {
-    key: "init",
-    value: function init(groupOld, cb_) {
-      var scope = this;
-      this.pm = new _PM.PM({
-        "crowd": scope,
-        "groupOld": groupOld,
-        "usePM": scope.usePM
-      }, function () {
-        initChild(0);
-      });
-      function initChild(i) {
-        scope.children[i].init(
-        //初始化所有子节点，本来是要等待动画数据的加载，采用预加载后应该就不用等待了
-        groupOld, scope.meshType, scope.meshTypeList, scope.meshTypeListElem, function () {
-          if (i + 1 < scope.children.length) initChild(i + 1);else {
-            for (var i0 = 0; i0 < scope.children.length; i0++) {
-              for (var j0 = 0; j0 < scope.children[i0].children.length; j0++) {
-                scope.children[i0].children[j0].meshTypeId = scope.meshTypeId;
-              }
-            }
-            // window.timeTest.measure("update start")
-            scope.myLodController.cameraStatePre = "";
-            scope.update();
-            scope.createPre();
-            // window.timeTest.measure("update end")
-            if (cb_) cb_();
-            scope.pm.init(function () {
-              console.log("test");
-              loadTexture();
-            });
-          }
-        });
-      }
-      function loadTexture() {
-        // console.log("loadTexture start!",scope.pathTextureConfig)
-        scope.pm.loadJson(scope.pathTextureConfig, function (data) {
-          // console.log(data)
-          scope.updateMap(data);
-        });
-      }
-    }
-  }, {
-    key: "updateMap",
-    value: function updateMap(data) {
-      // console.log("crowd updatemap")
-      // for(var i=this.children.length-1;i>15;i--){
-      // this.children[this.children.length-1].updateMap(data)
-      var i0 = this.children.length > 7 ? 7 : this.children.length - 1;
-      // alert(this.pathTexture+";"+"./assets/textures_sim1/")
-      this.children[i0].updateMap(this.pathTexture, data); //this.children[i0].updateMap("./assets/textures_sim1/",data)
-      // this.children[0].updateMap("./assets/textures/",data)
-      // }
-      // console.log(this.parent)
-      // const scope=this
-      // setTimeout(()=>{
-      //     scope.parent.visible=true
-      // },10000)
-    }
-  }, {
-    key: "useLod",
-    value: function useLod(lod0) {
-      if (lod0.lodLevel) lod0 = lod0.lodLevel;
-      // if(this.lodLevel==lod0)
-      //     return
-      // for(let i=1;i<this.children.length;i++){//0组对象不更新LOD
-      for (var i = 0; i < this.children.length; i++) {
-        var geometryLod = this.lod_geometry[i];
-        lod0 = Math.min(lod0, geometryLod);
-        this.children[i].useLod(lod0);
-        // this.lodLevel=lod0
-      }
-    }
-  }, {
-    key: "setColor",
-    value: function setColor(avatarIndex, color, meshName) {
-      var buffer = this.instanceColorIn_All[meshName];
-      if (buffer) for (var j = 0; j < 3; j++) buffer.array[avatarIndex * 3 + j] = color[j];
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      for (var i = 0; i < this.children.length; i++) {
-        for (var j = 0; j < this.lodList.length; j++) {
-          this.children[i].visibleList[j] = this.lodList[j] == i ? 1 : 0;
-        }
-        this.children[i].visibleList_needsUpdate0 = true;
-        this.children[i].update();
-      }
-    }
-  }, {
-    key: "getCrowdPoints",
-    value: function getCrowdPoints() {
-      var child = this.children[this.children.length - 1];
-      // console.log(child)
-      return child.getCrowdPoints();
-    }
-  }]);
-  return CrowdModel;
-}(THREE.Object3D);
-exports.CrowdModel = CrowdModel;
-},{"three":"node_modules/three/build/three.module.js","./CrowdGroup.js":"lib/crowd/CrowdGroup.js","./PM.js":"lib/crowd/PM.js"}],"lib/crowd/BVH.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.BVHTree = BVHTree;
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function BVHTree(model, radius) {
-  //console.log("BVHTree");
-  //let start_time = performance.now();
-  var contentArray = [];
-  var AABBArray = [];
-  var MortonArray = [];
-
-  //获取包围盒
-  var rootBox = new THREE.Box3();
-  rootBox.min = new THREE.Vector3(Infinity, Infinity, Infinity);
-  rootBox.max = new THREE.Vector3(-Infinity, -Infinity, -Infinity);
-  // console.log(rootBox);
-  for (var i = 0; i < model.count; i++) {
-    var p = model.getPosition(i);
-    // console.log(p)
-    if (p[0] < rootBox.min.x) rootBox.min.x = p[0];
-    if (p[1] < rootBox.min.y) rootBox.min.y = p[1];
-    if (p[2] < rootBox.min.z) rootBox.min.z = p[2];
-    if (p[0] > rootBox.max.x) rootBox.max.x = p[0];
-    if (p[1] > rootBox.max.y) rootBox.max.y = p[1];
-    if (p[2] > rootBox.max.z) rootBox.max.z = p[2];
-  }
-  //设置范围
-  rootBox.min.x -= radius;
-  rootBox.min.y -= radius;
-  rootBox.min.z -= radius;
-  rootBox.max.x += radius;
-  rootBox.max.y += radius;
-  rootBox.max.z += radius;
-  // let rootBox = new THREE.Box3().setFromObject(model);
-  // console.log(rootBox)
-  //scene.add(new THREE.Box3Helper(rootBox));
-
-  for (var _i = 0; _i < model.count; _i++) {
-    var position = model.getPosition(_i);
-    var aabbBox = new THREE.Box3().setFromCenterAndSize(new THREE.Vector3(position[0], position[1], position[2]), new THREE.Vector3(radius * 2, radius * 2, radius * 2));
-    // let aabbBox = new THREE.Box3().setFromObject(model.children[i]);
-    //scene.add(new THREE.Box3Helper(aabbBox));
-    AABBArray.push(aabbBox);
-    contentArray.push(_i);
-    var vec3 = new THREE.Vector3(0, 0, 0);
-    AABBArray[_i].getCenter(vec3);
-    var mortonCode = Morton(vec3.y + rootBox.max.y, vec3.x + rootBox.max.x, vec3.z + rootBox.max.z);
-    MortonArray.push(mortonCode);
-  }
-  contentArray.sort(function (a, b) {
-    return MortonArray[a] - MortonArray[b];
-  });
-  var rootNode = new BVHNode(rootBox, contentArray, 0, contentArray.length);
-  Divide(rootNode, contentArray, 0, contentArray.length, model, contentArray, radius);
-
-  //console.log(performance.now() - start_time);
-  return rootNode;
-}
-function Morton(a, b, c) {
-  //console.log("Morton");
-  var a1 = a.toString();
-  var b1 = b.toString();
-  var c1 = c.toString();
-  var res = [];
-  var aIndex = a1.indexOf('.');
-  var bIndex = b1.indexOf('.');
-  var cIndex = c1.indexOf('.');
-  for (var i = aIndex - 1, j = bIndex - 1, k = cIndex - 1; i > -1 || j > -1 || k > -1; i--, j--, k--) {
-    if (k < 0) res.unshift('0');else res.unshift(c1[k]);
-    if (j < 0) res.unshift('0');else res.unshift(b1[j]);
-    if (i < 0) res.unshift('0');else res.unshift(a1[i]);
-  }
-  res.push('.');
-  for (var _i2 = aIndex + 1, _j = bIndex + 1, _k = cIndex + 1; _i2 < a1.length || _j < b1.length || _k < c1.length; _i2++, _j++, _k++) {
-    if (_i2 >= a1.length) res.push('0');else res.push(a1[_i2]);
-    if (_j >= b1.length) res.push('0');else res.push(b1[_j]);
-    if (_k >= c1.length) res.push('0');else res.push(c1[_k]);
-  }
-  var temp = res.join('');
-  return parseFloat(temp).toFixed(9);
-}
-function BVHNode(aabbbox, contentArr, start, end) {
-  //console.log("BVHNode");
-  //该节点的AABB包围盒
-  this.aabbbox = aabbbox;
-  //该节点的包围盒包含的构件的'索引',即AABBArray[contentArray[i]]才是构件
-  this.contentArray = contentArr;
-  // this.worldPosition = new Vector3();
-  this.start = start;
-  this.end = end;
-  this.prev = null;
-  this.next = null;
-}
-function Divide(rootNode, objArray, start, end, model, contentArray, radius) {
-  //将节点作为根节点来二分BVH树
-  //console.log("Divide");
-  if (objArray.length <= 200) {
-    rootNode.start = start;
-    rootNode.end = end;
-    return rootNode;
-  }
-  rootNode.start = start;
-  rootNode.end = end;
-  var split = Math.ceil((start + end) / 2);
-  var preArray = [];
-  var nextArray = [];
-  var preAABB = new THREE.Box3().set(new THREE.Vector3(Infinity, Infinity, Infinity), new THREE.Vector3(-Infinity, -Infinity, -Infinity));
-  var nextAABB = new THREE.Box3().set(new THREE.Vector3(Infinity, Infinity, Infinity), new THREE.Vector3(-Infinity, -Infinity, -Infinity));
-  for (var i = start; i < split; i++) {
-    // preGroup.add(model.getPosition(contentArray[i]));
-    preArray.push(contentArray[i]);
-    var p = model.getPosition(contentArray[i]);
-    if (p[0] < preAABB.min.x) preAABB.min.x = p[0];
-    if (p[1] < preAABB.min.y) preAABB.min.y = p[1];
-    if (p[2] < preAABB.min.z) preAABB.min.z = p[2];
-    if (p[0] > preAABB.max.x) preAABB.max.x = p[0];
-    if (p[1] > preAABB.max.y) preAABB.max.y = p[1];
-    if (p[2] > preAABB.max.z) preAABB.max.z = p[2];
-  }
-  preAABB.min.x -= radius;
-  preAABB.min.y -= radius;
-  preAABB.min.z -= radius;
-  preAABB.max.x += radius;
-  preAABB.max.y += radius;
-  preAABB.max.z += radius;
-  for (var _i3 = split; _i3 < end; _i3++) {
-    // nextGroup.add(model.children[contentArray[i]].clone());
-    nextArray.push(contentArray[_i3]);
-    var _p = model.getPosition(contentArray[_i3]);
-    if (_p[0] < nextAABB.min.x) nextAABB.min.x = _p[0];
-    if (_p[1] < nextAABB.min.y) nextAABB.min.y = _p[1];
-    if (_p[2] < nextAABB.min.z) nextAABB.min.z = _p[2];
-    if (_p[0] > nextAABB.max.x) nextAABB.max.x = _p[0];
-    if (_p[1] > nextAABB.max.y) nextAABB.max.y = _p[1];
-    if (_p[2] > nextAABB.max.z) nextAABB.max.z = _p[2];
-  }
-  nextAABB.min.x -= radius;
-  nextAABB.min.y -= radius;
-  nextAABB.min.z -= radius;
-  nextAABB.max.x += radius;
-  nextAABB.max.y += radius;
-  nextAABB.max.z += radius;
-
-  // let preAABB = new THREE.Box3().;
-  // Scene.add(new Box3Helper(preAABB, Math.random()*0xffffff));
-  // let nextAABB = new THREE.Box3().;
-  // Scene.add(new Box3Helper(nextAABB,Math.random()*0xffffff));
-  var preNode = new BVHNode(preAABB, preArray);
-  // preGroup.getWorldPosition(preNode.worldPosition);
-  var nextNode = new BVHNode(nextAABB, nextArray);
-  // nextGroup.getWorldPosition(nextNode.worldPosition);
-  rootNode.prev = preNode;
-  rootNode.next = nextNode;
-  Divide(preNode, preArray, start, split, model, contentArray, radius);
-  Divide(nextNode, nextArray, split, end, model, contentArray, radius);
-}
-},{"three":"node_modules/three/build/three.module.js"}],"lib/crowd/CrowdLod.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CrowdLod = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _BVH = require("./BVH");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var CrowdLod = /*#__PURE__*/function () {
-  function CrowdLod(crowd) {
-    var _this = this;
-    _classCallCheck(this, CrowdLod);
-    this.open = true; //是否开启LOD功能
-    this.cameraStatePre = ""; //上一次更新的时候相机的状态
-    this.cameraStatePreFrame = ""; //上一帧相机的状态
-    this.crowd = crowd;
-    this.countAll = crowd.count;
-    // console.log(this.crowd)
-    // 构建bvh
-    this.bvhOpen = false; //true;//
-    this.bvh = null;
-    this.camera = crowd.camera;
-    this.radius = 1000; //0.6//1 //化身包围球的最大半径
-    this.lod_distance = crowd.lod_distance; //[15,25,50,75,100]//2000,10000
-    this.lod_distance_max = this.lod_distance[this.lod_distance.length - 1];
-    this.lod_distanceSqua = [];
-    for (var i = 0; i < this.lod_distance.length; i++) {
-      this.lod_distanceSqua.push(Math.pow(this.lod_distance[i], 2));
-    }
-    this.frustum = new THREE.Frustum();
-    setTimeout(function () {
-      CrowdLod.frustumCulling(_this); //启动遮挡剔除 
-    }, 3000);
-
-    // window.test=()=>{
-    //     CrowdLod.frustumCulling(scope)
-    // }
-    var scope = this;
-    window.addEventListener('resize', function () {
-      scope.cameraStatePre = "";
-    }, false);
-  }
-  _createClass(CrowdLod, [{
-    key: "getCameraState",
-    value: function getCameraState() {
-      var p = this.camera.position;
-      var r = this.camera.rotation;
-      return p.x + "," + p.y + "," + p.z + "," + r.x + "," + r.y + "," + r.z;
-    }
-  }, {
-    key: "AABBDect",
-    value: function AABBDect(frustum, aabbBox) {
-      for (var i = 0; i < frustum.planes.length; i++) {
-        var p = new THREE.Vector3(aabbBox.min.x, aabbBox.min.y, aabbBox.min.z);
-        if (frustum.planes[i].normal.x >= 0) p.x = aabbBox.max.x;
-        if (frustum.planes[i].normal.y >= 0) p.y = aabbBox.max.y;
-        if (frustum.planes[i].normal.z >= 0) p.z = aabbBox.max.z;
-        // let n = new THREE.Vector3(aabbBox.max.x,aabbBox.max.y,aabbBox.max.z);
-        // if (frustum.planes[i].normal.x >= 0) n.x = aabbBox.min.x;
-        // if (frustum.planes[i].normal.x >= 0) n.y = aabbBox.min.y;
-        // if (frustum.planes[i].normal.x >= 0) n.z = aabbBox.min.z;
-        var nt = frustum.planes[i].normal.x * p.x + frustum.planes[i].normal.y * p.y + frustum.planes[i].normal.z * p.z;
-        if (nt < -frustum.planes[i].constant) {
-          return false;
-        }
-      }
-      return true;
-    }
-  }, {
-    key: "TraverseBVH",
-    value: function TraverseBVH(root, frustum, Array) {
-      // console.log("TraverseBVH");
-      if (!this.AABBDect(frustum, root.aabbbox)) {
-        return null;
-      }
-      var stack = [];
-      stack.push(root);
-      while (stack.length > 0) {
-        root = stack.pop();
-        if (root.prev != null && this.AABBDect(frustum, root.prev.aabbbox)) {
-          stack.push(root.prev);
-        }
-        if (root.next != null && this.AABBDect(frustum, root.next.aabbbox)) {
-          stack.push(root.next);
-        }
-        if (root.prev == null && root.next == null) {
-          for (var i = 0; i < root.contentArray.length; i++) {
-            Array.push(root.contentArray[i]);
-          }
-        }
-      }
-    }
-  }], [{
-    key: "frustumCulling",
-    value: function frustumCulling(scope) {
-      //每帧执行一次
-      // let startTime = Date.now();
-      var cameraState = scope.getCameraState();
-      // if (cameraState == scope.cameraStatePreFrame&&scope.open)//相机停止了运动 且系统启动LOD功能
-      if (scope.open)
-        //系统启动LOD功能
-        if (cameraState !== scope.cameraStatePre) {
-          //如果先将状态发生了改变
-          if (scope.bvhOpen) {
-            // if (true)
-            //     if (true) {
-            // 更新视锥体
-            var matrix = new THREE.Matrix4().multiplyMatrices(scope.camera.projectionMatrix, scope.camera.matrixWorldInverse);
-            scope.frustum.setFromProjectionMatrix(matrix);
-            for (var i = 0; i < scope.countAll; i++) {
-              //遍历所有化身的位置
-              if (scope.crowd.lodList[i] == -2) continue; //lodList==-2指的是始终不显示这个化身
-              else scope.crowd.lodList[i] = -1;
-            }
-            var p0 = scope.crowd.getPosition(0);
-            if (scope.bvh == null && (p0[0] != 0 || p0[1] != 0 || p0[2] != 0)) {
-              console.log("build BVH");
-              scope.bvh = (0, _BVH.BVHTree)(scope.crowd, scope.radius);
-              // console.log(scope.bvh)
-            }
-            // 确定BVH的可视性
-            var arrayList = [];
-            if (scope.bvh != null) scope.TraverseBVH(scope.bvh, scope.frustum, arrayList);
-            // console.log(arrayList)
-            for (var _i = 0; _i < arrayList.length; _i++) {
-              var p = scope.crowd.getPosition(arrayList[_i]);
-              var point = new THREE.Vector3(p[0], p[1], p[2]);
-              var s = camera.position.clone().sub(point);
-              if (
-              //距离非常远，lod精度最低
-              s.x >= scope.lod_distance_max || s.y >= scope.lod_distance_max || s.z >= scope.lod_distance_max) {
-                scope.crowd.lodList[arrayList[_i]] = scope.lod_distance.length;
-              } else {
-                //距离较近具体判断lod等级
-                var distance = s.x * s.x + s.y * s.y + s.z * s.z;
-                scope.crowd.lodList[arrayList[_i]] = scope.lod_distanceSqua.length; //4
-                for (var j = 0; j < scope.lod_distanceSqua.length; j++) {
-                  //j=0 1 2 3
-                  if (distance < scope.lod_distanceSqua[j]) {
-                    scope.crowd.lodList[arrayList[_i]] = j;
-                    break;
-                  }
-                }
-              }
-            }
-          } else {
-            var _matrix = new THREE.Matrix4().multiplyMatrices(scope.camera.projectionMatrix, scope.camera.matrixWorldInverse);
-            scope.frustum.setFromProjectionMatrix(_matrix);
-            for (var _i2 = 0; _i2 < scope.countAll; _i2++) {
-              //遍历所有化身的位置
-              if (scope.crowd.lodList[_i2] == -2) continue; //lodList==-2指的是始终不显示这个化身
-              // if (window.visibleArea)
-              //     if(!window.visibleArea[i]){
-              //         scope.crowd.lodList[i] = -1
-              //         continue
-              //     }
-              scope.crowd.lodList[_i2] = 0; //默认显示最低等级的化身
-              var _p = scope.crowd.getPosition(_i2);
-              var _point = new THREE.Vector3(_p[0], _p[1], _p[2]);
-              // 视锥剔除
-              // console.log(scope.frustum)
-              for (var _j = 0; _j < scope.frustum.planes.length - 2; _j++) {
-                //遍历4个视锥面
-                if (scope.frustum.planes[_j].distanceToPoint(_point) < -scope.radius) {
-                  scope.crowd.lodList[_i2] = -1; //不可见
-                  break;
-                }
-              }
-              // LOD
-              if (scope.crowd.lodList[_i2] !== -1) {
-                var s = camera.position.clone().sub(_point);
-                if (
-                //距离非常远，lod精度最低
-                s.x >= scope.lod_distance_max || s.y >= scope.lod_distance_max || s.z >= scope.lod_distance_max) {
-                  scope.crowd.lodList[_i2] = scope.lod_distance.length;
-                } else {
-                  //距离较近具体判断lod等级
-                  var _distance = s.x * s.x + s.y * s.y + s.z * s.z;
-                  scope.crowd.lodList[_i2] = scope.lod_distanceSqua.length; //4
-                  for (var _j2 = 0; _j2 < scope.lod_distanceSqua.length; _j2++) {
-                    //j=0 1 2 3
-                    if (_distance < scope.lod_distanceSqua[_j2]) {
-                      scope.crowd.lodList[_i2] = _j2;
-                      break;
-                    }
-                  }
-                }
-              } else {
-                // scope.crowd.lodList[i]=scope.lod_distance.length//不可见的对象使用超低模渲染
-              }
-            }
-          }
-          scope.crowd.update();
-          scope.cameraStatePre = cameraState;
-        }
-      scope.cameraStatePreFrame = cameraState;
-      requestAnimationFrame(function () {
-        CrowdLod.frustumCulling(scope);
-      });
-      // setTimeout(()=>{//每秒更新一次
-      //     CrowdLod.frustumCulling(scope)
-      // },3000)
-    }
-  }]);
-  return CrowdLod;
-}();
-exports.CrowdLod = CrowdLod;
-},{"three":"node_modules/three/build/three.module.js","./BVH":"lib/crowd/BVH.js"}],"lib/crowd/Crowd.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Crowd = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _CrowdModel = require("./CrowdModel.js");
-var _CrowdLod = require("./CrowdLod.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var Crowd = /*#__PURE__*/function (_THREE$Object3D) {
-  _inherits(Crowd, _THREE$Object3D);
-  var _super = _createSuper(Crowd);
-  function Crowd(opt) {
-    var _this;
-    _classCallCheck(this, Crowd);
-    _this = _super.call(this);
-    // alert(opt.pathTexture)
-    _this.camera = opt.camera;
-    _this.dummy = new THREE.Object3D();
-    _this.count = opt.count;
-    _this.clock = new THREE.Clock();
-    _this.instanceMatrix = new THREE.InstancedBufferAttribute(new Float32Array(_this.count * 16), 16);
-    _this.textureType = new THREE.InstancedBufferAttribute(new Uint8Array(_this.count * 4), 4);
-    _this.animationType = new THREE.InstancedBufferAttribute(new Uint8Array(_this.count), 1);
-    _this.speed = new THREE.InstancedBufferAttribute(new Float32Array(_this.count), 1);
-    _this.obesity = new THREE.InstancedBufferAttribute(new Float32Array(_this.count), 1);
-    _this.moveMaxLength = new THREE.InstancedBufferAttribute(new Float32Array(_this.count), 1);
-    _this.animationStartTime = new THREE.InstancedBufferAttribute(new Float32Array(_this.count), 1);
-    _this.bodyScale = new THREE.InstancedBufferAttribute(new Float32Array(_this.count * 4), 4);
-    _this.useColorTag = opt.useColorTag; //["CloW_A_kuzi_geo","CloW_A_waitao_geo1","CloW_A_xiezi_geo","hair"]
-    // console.log("useColorTag",opt.useColorTag)
-    _this.instanceColorIn_All = {};
-    for (var i = 0; i < _this.useColorTag.length; i++) {
-      var meshName = _this.useColorTag[i];
-      _this.instanceColorIn_All[meshName] = new THREE.InstancedBufferAttribute(new Float32Array(_this.count * 3), 3);
-    }
-    _this.lodCount = 21; //几何lod层级的个数
-    // this.lodLevel=20//this.lodCount-1//当前的lod层级编号 //
-    _this.lodList = new Int8Array(_this.count);
-    var e = [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1];
-    for (var _i = 0; _i < _this.count; _i++) {
-      _this.lodList[_i] = -1;
-      for (var j = 0; j < 16; j++) _this.instanceMatrix.array[16 * _i + j] = e[j];
-    }
-    _this.lod_distance = opt.lod_distance; //[15,25,50,75,100]
-    _this.lod_geometry = opt.lod_geometry;
-    _this.myLodController = new _CrowdLod.CrowdLod(_assertThisInitialized(_this));
-    _this.opt = opt;
-    _this.meshType = opt.meshType;
-    _this.meshTypeList = {};
-    _this.meshTypeListElem = {};
-    for (var _i2 = 0; _i2 < _this.meshType.length; _i2++) {
-      var arr = Object.values(_this.meshType[_i2]);
-      for (var _j = 0; _j < arr.length; _j++) {
-        _this.meshTypeList[arr[_j]] = [];
-        _this.meshTypeListElem[arr[_j]] = {}; //[]
-      }
-    }
-
-    for (var _i3 = 0; _i3 < _this.meshType.length; _i3++) {
-      var _arr = Object.values(_this.meshType[_i3]);
-      // let data={}
-      for (var _j2 = 0; _j2 < _arr.length; _j2++) {
-        _this.meshTypeListElem[_arr[_j2]][_i3] = true; //.push(i)
-      }
-      // this.meshTypeListElem[arr[j]]=Object.keys(data)
-    }
-    // console.log("meshTypeListElem",this.meshTypeListElem)
-    for (var _i4 in _this.meshTypeListElem) {
-      var data = _this.meshTypeListElem[_i4];
-      var _arr2 = Object.keys(data);
-      for (var _j3 = 0; _j3 < _arr2.length; _j3++) {
-        _arr2[_j3] = parseInt(_arr2[_j3]);
-      }
-      _this.meshTypeListElem[_i4] = _arr2;
-    }
-    for (var type in _this.meshTypeList) {
-      var list = _this.meshTypeList[type];
-      for (var _i5 = 0; _i5 < _this.count; _i5++) {
-        var _arr3 = _this.meshTypeListElem[type];
-        var index = Math.floor(Math.random() * _arr3.length);
-        var k = _arr3[index]; //Math.floor(Math.random()*2)//i%2//
-        list.push(k);
-      }
-    }
-    // console.log("this.meshTypeList",this.meshTypeList)
-
-    _this.CrowdPoints = new THREE.Object3D();
-    _this.CrowdPoints.position.y = 0.2;
-    return _this;
-  }
-  _createClass(Crowd, [{
-    key: "init",
-    value: function init(groups) {
-      for (var i = 0; i < groups.length; i++) {
-        var groupOld = groups[i];
-        // const child=new CrowdModel(this.opt,this)
-        var child = new _CrowdModel.CrowdModel({
-          camera: this.opt.camera,
-          count: this.opt.count,
-          //self.modelManager.modelList[modelType].ModelCount,
-          animPathPre: this.opt.animPathPre,
-          //self.modelManager.modelList[modelType].pathAnima,
-
-          pathLodGeo: this.opt.pathLodGeo[i],
-          pathTextureConfig: this.opt.pathTextureConfig[i],
-          useColorTag: this.opt.useColorTag,
-          meshType: this.opt.meshType[i],
-          meshTypeList: this.meshTypeList,
-          meshTypeListElem: this.meshTypeListElem,
-          assets: this.opt.assets,
-          lod_distance: this.opt.lod_distance,
-          lod_geometry: this.opt.lod_geometry,
-          lod_avatarCount: this.opt.lod_avatarCount,
-          lod_visible: this.opt.lod_visible[i],
-          pathTexture: this.opt.pathTexture[i]
-        }, this);
-        child.meshTypeId = this.children.length;
-        child.init(groupOld);
-        this.add(child);
-      }
-    }
-  }, {
-    key: "getMatrixAt",
-    value: function getMatrixAt(index, matrix) {
-      matrix.fromArray(this.instanceMatrix.array, index * 16);
-    }
-  }, {
-    key: "setMatrixAt",
-    value: function setMatrixAt(index, matrix) {
-      matrix.toArray(this.instanceMatrix.array, index * 16);
-      this.instanceMatrix.needsUpdate0 = true;
-    }
-  }, {
-    key: "getPosition",
-    value: function getPosition(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var e = mat4.elements;
-      return [e[12], e[13], e[14]];
-    }
-  }, {
-    key: "getRotation",
-    value: function getRotation(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var position = new THREE.Vector3();
-      var quaternion = new THREE.Quaternion();
-      var scale = new THREE.Vector3();
-      mat4.decompose(position, quaternion, scale);
-      var euler = new THREE.Euler(0, 0, 0, 'XYZ');
-      euler.setFromQuaternion(quaternion);
-      return [euler.x, euler.y, euler.z];
-    }
-  }, {
-    key: "getScale",
-    value: function getScale(avatarIndex) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var position = new THREE.Vector3();
-      var quaternion = new THREE.Quaternion();
-      var scale = new THREE.Vector3();
-      mat4.decompose(position, quaternion, scale);
-      return [scale.x, scale.y, scale.z];
-    }
-  }, {
-    key: "setPosition",
-    value: function setPosition(avatarIndex, pos) {
-      _CrowdLod.CrowdLod;
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      mat4.elements[12] = pos[0];
-      mat4.elements[13] = pos[1];
-      mat4.elements[14] = pos[2];
-      this.setMatrixAt(avatarIndex, mat4);
-      // console.log(pos)
-    }
-  }, {
-    key: "setScale",
-    value: function setScale(avatarIndex, size) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var position = new THREE.Vector3();
-      var quaternion = new THREE.Quaternion();
-      var scale = new THREE.Vector3();
-      mat4.decompose(position, quaternion, scale);
-      var euler = new THREE.Euler(0, 0, 0, 'XYZ');
-      euler.setFromQuaternion(quaternion);
-      this.dummy.scale.set(size[0], size[1], size[2]);
-      this.dummy.rotation.set(euler.x, euler.y, euler.z);
-      this.dummy.position.set(position.x, position.y, position.z);
-      this.dummy.updateMatrix();
-      this.setMatrixAt(avatarIndex, this.dummy.matrix);
-    }
-  }, {
-    key: "setRotation",
-    value: function setRotation(avatarIndex, rot) {
-      var mat4 = new THREE.Matrix4();
-      this.getMatrixAt(avatarIndex, mat4);
-      var position = new THREE.Vector3();
-      var quaternion = new THREE.Quaternion();
-      var scale = new THREE.Vector3();
-      mat4.decompose(position, quaternion, scale);
-      this.dummy.scale.set(scale.x, scale.y, scale.z);
-      this.dummy.rotation.set(rot[0], rot[1], rot[2]);
-      this.dummy.position.set(position.x, position.y, position.z);
-      this.dummy.updateMatrix();
-      this.setMatrixAt(avatarIndex, this.dummy.matrix);
-    }
-  }, {
-    key: "move",
-    value: function move(avatarIndex, dPos) {
-      var pos = this.getPosition(avatarIndex);
-      this.setPosition(avatarIndex, [pos[0] + dPos[0], pos[1] + dPos[1], pos[2] + dPos[2]]);
-    }
-  }, {
-    key: "rotation",
-    value: function rotation(avatarIndex, dRot) {
-      var rot = this.getRotation(avatarIndex);
-      this.setRotation(avatarIndex, [rot[0] + dRot[0], rot[1] + dRot[1], rot[2] + dRot[2]]);
-    }
-  }, {
-    key: "setTexture",
-    value: function setTexture(avatarIndex, type) {
-      // 设置贴图类型
-      this.textureType.array[avatarIndex * 4] = type[0]; // 大部分区域
-      this.textureType.array[avatarIndex * 4 + 1] = type[1]; // 头部和手部
-      this.textureType.array[avatarIndex * 4 + 2] = type[2]; // 裤子
-      this.textureType.array[avatarIndex * 4 + 3] = type[3];
-    }
-  }, {
-    key: "setBodyScale",
-    value: function setBodyScale(avatarIndex, scale) {
-      // 设置身体部位缩放
-      this.bodyScale.array[avatarIndex * 4] = scale[0];
-      this.bodyScale.array[avatarIndex * 4 + 1] = scale[1];
-      this.bodyScale.array[avatarIndex * 4 + 2] = scale[2];
-      this.bodyScale.array[avatarIndex * 4 + 3] = scale[3];
-    }
-  }, {
-    key: "setAnimation",
-    value: function setAnimation(avatarIndex, type, offset) {
-      // 设置动画类型
-      this.animationType.array[avatarIndex] = type;
-      this.animationStartTime.array[avatarIndex] = offset;
-      this.animationType.needsUpdate0 = true;
-      this.animationStartTime.needsUpdate0 = true;
-    }
-  }, {
-    key: "setSpeed",
-    value: function setSpeed(avatarIndex, speed) {
-      // 设置动画速度
-      this.speed.array[avatarIndex] = speed;
-      this.speed.needsUpdate0 = true;
-    }
-  }, {
-    key: "setObesity",
-    value: function setObesity(avatarIndex, obesity) {
-      // 设置动画速度
-      this.obesity.array[avatarIndex] = obesity;
-      this.obesity.needsUpdate0 = true;
-    }
-  }, {
-    key: "setMoveMaxLength",
-    value: function setMoveMaxLength(avatarIndex, moveMaxLength) {
-      // 设置动画速度
-      this.moveMaxLength.array[avatarIndex] = moveMaxLength;
-      this.moveMaxLength.needsUpdate0 = true;
-    }
-  }, {
-    key: "useLod",
-    value: function useLod(lod0) {
-      for (var i = 0; i < this.children.length; i++) this.children[i].useLod(lod0);
-    }
-  }, {
-    key: "setColor",
-    value: function setColor(avatarIndex, color, meshName) {
-      // 设置动画速度
-
-      // for(var i=0;i<this.children.length;i++)
-      //     this.children[i].setColor(avatarIndex, color,meshName)
-      var buffer = this.instanceColorIn_All[meshName];
-      // console.log(buffer)
-      // console.log(buffer,avatarIndex, color,meshName)
-      if (buffer) for (var j = 0; j < 3; j++) buffer.array[avatarIndex * 3 + j] = color[j];
-    }
-  }, {
-    key: "update",
-    value: function update() {
-      // let startTime = Date.now();
-      for (var i = 0; i < this.children.length; i++) this.children[i].update();
-      // let endTime = Date.now();
-      // console.log("update时间",endTime - startTime)
-      // this.children[0].update()
-
-      for (var _i6 = this.CrowdPoints.children.length - 1; _i6 >= 0; _i6--) {
-        this.CrowdPoints.remove(this.CrowdPoints.children[_i6]);
-      }
-      // console.log("this.CrowdPoints.children.length",this.CrowdPoints.children.length)
-      for (var i = 0; i < 1; i++) {
-        //for(var i=1;i<2;i++){//for(var i=0;i<this.children.length;i++){
-        var child = this.children[i];
-        this.CrowdPoints.add(child.getCrowdPoints());
-      }
-      // console.log("this.CrowdPoints.children.length",this.CrowdPoints.children.length)
-    }
-  }]);
-  return Crowd;
-}(THREE.Object3D);
-exports.Crowd = Crowd;
-},{"three":"node_modules/three/build/three.module.js","./CrowdModel.js":"lib/crowd/CrowdModel.js","./CrowdLod.js":"lib/crowd/CrowdLod.js"}],"config/avatar/sceneConifg_woman01.json":[function(require,module,exports) {
-module.exports = [{
-  "path": ["assets/avatar/sim/woman01/"],
-  "pathTexture": ["./assets/avatar/textures_sim1/woman01/"],
-  "meshType": [{
-    "CloW_A_body_geo": "coat",
-    "CloW_A_kuzi_geo": "trousers",
-    "CloW_A_shangyi_geo": "coat",
-    "CloW_A_waitao_geo1": "coat",
-    "CloW_A_xiezi_geo": "xiezi",
-    "CloW_E_eyeLeft_geo02": "eye",
-    "CloW_E_eyeRight_geo01": "eye",
-    "eyelash": "eyelash",
-    "hair": "hair",
-    "head": "head",
-    "teeth": null
-  }],
-  "lod_visible": [{
-    "CloW_A_kuzi_geo": 5,
-    "CloW_A_shangyi_geo": 4,
-    "head": 4,
-    "CloW_A_body_geo": 3,
-    "CloW_A_waitao_geo1": 3,
-    "CloW_A_xiezi_geo": 3,
-    "CloW_E_eyeLeft_geo02": 2,
-    "CloW_E_eyeRight_geo01": 2,
-    "eyelash": 2,
-    "hair": 3
-  }],
-  "useColorTag": ["CloW_A_kuzi_geo", "CloW_A_shangyi_geo", "CloW_A_waitao_geo1", "CloW_A_xiezi_geo"],
-  "walkAnimationList": [5, 8],
-  "sitAnimationList": [],
-  "standAnimationList": [0, 1, 2, 3, 4, 6, 7, 9, 10, 11, 12],
-  "pathAnima": "assets/avatar/animation_woman0.bin",
-  "lod_distance": [5, 15, 30, 60, 100],
-  "lod_geometry": [20, 15, 1, 0, 0],
-  "lod_avatarCount": [200, 900, 3240, 8800, 12600]
-}];
-},{}],"src/LoadingProgressive/AvatarManager.js":[function(require,module,exports) {
-var define;
-var process = require("process");
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.AvatarManager = void 0;
-var _GLTFLoader = require("three/examples/jsm/loaders/GLTFLoader");
-var _Crowd = require("../../lib/crowd/Crowd.js");
-var _sceneConifg_woman = _interopRequireDefault(require("../../config/avatar/sceneConifg_woman01.json"));
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return exports; }; var exports = {}, Op = Object.prototype, hasOwn = Op.hasOwnProperty, defineProperty = Object.defineProperty || function (obj, key, desc) { obj[key] = desc.value; }, $Symbol = "function" == typeof Symbol ? Symbol : {}, iteratorSymbol = $Symbol.iterator || "@@iterator", asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator", toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag"; function define(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: !0, configurable: !0, writable: !0 }), obj[key]; } try { define({}, ""); } catch (err) { define = function define(obj, key, value) { return obj[key] = value; }; } function wrap(innerFn, outerFn, self, tryLocsList) { var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator, generator = Object.create(protoGenerator.prototype), context = new Context(tryLocsList || []); return defineProperty(generator, "_invoke", { value: makeInvokeMethod(innerFn, self, context) }), generator; } function tryCatch(fn, obj, arg) { try { return { type: "normal", arg: fn.call(obj, arg) }; } catch (err) { return { type: "throw", arg: err }; } } exports.wrap = wrap; var ContinueSentinel = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var IteratorPrototype = {}; define(IteratorPrototype, iteratorSymbol, function () { return this; }); var getProto = Object.getPrototypeOf, NativeIteratorPrototype = getProto && getProto(getProto(values([]))); NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype); var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype); function defineIteratorMethods(prototype) { ["next", "throw", "return"].forEach(function (method) { define(prototype, method, function (arg) { return this._invoke(method, arg); }); }); } function AsyncIterator(generator, PromiseImpl) { function invoke(method, arg, resolve, reject) { var record = tryCatch(generator[method], generator, arg); if ("throw" !== record.type) { var result = record.arg, value = result.value; return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) { invoke("next", value, resolve, reject); }, function (err) { invoke("throw", err, resolve, reject); }) : PromiseImpl.resolve(value).then(function (unwrapped) { result.value = unwrapped, resolve(result); }, function (error) { return invoke("throw", error, resolve, reject); }); } reject(record.arg); } var previousPromise; defineProperty(this, "_invoke", { value: function value(method, arg) { function callInvokeWithMethodAndArg() { return new PromiseImpl(function (resolve, reject) { invoke(method, arg, resolve, reject); }); } return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(innerFn, self, context) { var state = "suspendedStart"; return function (method, arg) { if ("executing" === state) throw new Error("Generator is already running"); if ("completed" === state) { if ("throw" === method) throw arg; return doneResult(); } for (context.method = method, context.arg = arg;;) { var delegate = context.delegate; if (delegate) { var delegateResult = maybeInvokeDelegate(delegate, context); if (delegateResult) { if (delegateResult === ContinueSentinel) continue; return delegateResult; } } if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) { if ("suspendedStart" === state) throw state = "completed", context.arg; context.dispatchException(context.arg); } else "return" === context.method && context.abrupt("return", context.arg); state = "executing"; var record = tryCatch(innerFn, self, context); if ("normal" === record.type) { if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue; return { value: record.arg, done: context.done }; } "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg); } }; } function maybeInvokeDelegate(delegate, context) { var methodName = context.method, method = delegate.iterator[methodName]; if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator.return && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel; var record = tryCatch(method, delegate.iterator, context.arg); if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel; var info = record.arg; return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel); } function pushTryEntry(locs) { var entry = { tryLoc: locs[0] }; 1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry); } function resetTryEntry(entry) { var record = entry.completion || {}; record.type = "normal", delete record.arg, entry.completion = record; } function Context(tryLocsList) { this.tryEntries = [{ tryLoc: "root" }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0); } function values(iterable) { if (iterable) { var iteratorMethod = iterable[iteratorSymbol]; if (iteratorMethod) return iteratorMethod.call(iterable); if ("function" == typeof iterable.next) return iterable; if (!isNaN(iterable.length)) { var i = -1, next = function next() { for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next; return next.value = undefined, next.done = !0, next; }; return next.next = next; } } return { next: doneResult }; } function doneResult() { return { value: undefined, done: !0 }; } return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), defineProperty(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) { var ctor = "function" == typeof genFun && genFun.constructor; return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name)); }, exports.mark = function (genFun) { return Object.setPrototypeOf ? Object.setPrototypeOf(genFun, GeneratorFunctionPrototype) : (genFun.__proto__ = GeneratorFunctionPrototype, define(genFun, toStringTagSymbol, "GeneratorFunction")), genFun.prototype = Object.create(Gp), genFun; }, exports.awrap = function (arg) { return { __await: arg }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, asyncIteratorSymbol, function () { return this; }), exports.AsyncIterator = AsyncIterator, exports.async = function (innerFn, outerFn, self, tryLocsList, PromiseImpl) { void 0 === PromiseImpl && (PromiseImpl = Promise); var iter = new AsyncIterator(wrap(innerFn, outerFn, self, tryLocsList), PromiseImpl); return exports.isGeneratorFunction(outerFn) ? iter : iter.next().then(function (result) { return result.done ? result.value : iter.next(); }); }, defineIteratorMethods(Gp), define(Gp, toStringTagSymbol, "Generator"), define(Gp, iteratorSymbol, function () { return this; }), define(Gp, "toString", function () { return "[object Generator]"; }), exports.keys = function (val) { var object = Object(val), keys = []; for (var key in object) keys.push(key); return keys.reverse(), function next() { for (; keys.length;) { var key = keys.pop(); if (key in object) return next.value = key, next.done = !1, next; } return next.done = !0, next; }; }, exports.values = values, Context.prototype = { constructor: Context, reset: function reset(skipTempReset) { if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined); }, stop: function stop() { this.done = !0; var rootRecord = this.tryEntries[0].completion; if ("throw" === rootRecord.type) throw rootRecord.arg; return this.rval; }, dispatchException: function dispatchException(exception) { if (this.done) throw exception; var context = this; function handle(loc, caught) { return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught; } for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i], record = entry.completion; if ("root" === entry.tryLoc) return handle("end"); if (entry.tryLoc <= this.prev) { var hasCatch = hasOwn.call(entry, "catchLoc"), hasFinally = hasOwn.call(entry, "finallyLoc"); if (hasCatch && hasFinally) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } else if (hasCatch) { if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0); } else { if (!hasFinally) throw new Error("try statement without catch or finally"); if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc); } } } }, abrupt: function abrupt(type, arg) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) { var finallyEntry = entry; break; } } finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null); var record = finallyEntry ? finallyEntry.completion : {}; return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record); }, complete: function complete(record, afterLoc) { if ("throw" === record.type) throw record.arg; return "break" === record.type || "continue" === record.type ? this.next = record.arg : "return" === record.type ? (this.rval = this.arg = record.arg, this.method = "return", this.next = "end") : "normal" === record.type && afterLoc && (this.next = afterLoc), ContinueSentinel; }, finish: function finish(finallyLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.finallyLoc === finallyLoc) return this.complete(entry.completion, entry.afterLoc), resetTryEntry(entry), ContinueSentinel; } }, catch: function _catch(tryLoc) { for (var i = this.tryEntries.length - 1; i >= 0; --i) { var entry = this.tryEntries[i]; if (entry.tryLoc === tryLoc) { var record = entry.completion; if ("throw" === record.type) { var thrown = record.arg; resetTryEntry(entry); } return thrown; } } throw new Error("illegal catch attempt"); }, delegateYield: function delegateYield(iterable, resultName, nextLoc) { return this.delegate = { iterator: values(iterable), resultName: resultName, nextLoc: nextLoc }, "next" === this.method && (this.arg = undefined), ContinueSentinel; } }, exports; }
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //let Crowd=Pack// 
-var AvatarManager = /*#__PURE__*/function () {
-  function AvatarManager(scene, camera) {
-    _classCallCheck(this, AvatarManager);
-    return;
-    window.scene = scene;
-    this.scene = scene;
-    this.camera = camera;
-    this.assets = {}; //为了防止资源重复加载，相同路径的资源只加载一次
-    // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
-    // this.sum_count = 0; //当前row_index前面行的人数总和
-    // this.row_count = 0; //当前行的可放置人数
-    this.initPos(); //this.initPos_test()//this.initPos_old()
-    this.init(); //this.init_test()//
-  }
-  _createClass(AvatarManager, [{
-    key: "initPos_old",
-    value: function initPos_old() {
-      this.poslist = [];
-      var c = {
-        "x": [-124000, 126000, 2000],
-        "y": [-1530.26 + 3000, -1530.26 + 3000, 2000],
-        "z": [-3000, 15000, 2000]
-      };
-      for (var x = c.x[0]; x <= c.x[1]; x = x + c.x[2]) for (var y = c.y[0]; y <= c.y[1]; y = y + c.y[2]) for (var z = c.z[0]; z <= c.z[1]; z = z + c.z[2]) {
-        this.poslist.push([x, y, z]);
-      }
-      c = {
-        "x": [-124000, 126000, 2000],
-        "y": [-7430.26 + 4000, -7430.26 + 4000, 2000],
-        "z": [-3000, 15000, 2000]
-      };
-      for (var _x = c.x[0]; _x <= c.x[1]; _x = _x + c.x[2]) for (var _y = c.y[0]; _y <= c.y[1]; _y = _y + c.y[2]) for (var _z = c.z[0]; _z <= c.z[1]; _z = _z + c.z[2]) {
-        this.poslist.push([_x, _y, _z]);
-      }
-      c = {
-        "x": [-124000, 126000, 2000],
-        "y": [-12230.26 + 3500, -12230.26 + 3500, 2000],
-        "z": [-3000, 15000, 2000]
-      };
-      for (var _x2 = c.x[0]; _x2 <= c.x[1]; _x2 = _x2 + c.x[2]) for (var _y2 = c.y[0]; _y2 <= c.y[1]; _y2 = _y2 + c.y[2]) for (var _z2 = c.z[0]; _z2 <= c.z[1]; _z2 = _z2 + c.z[2]) {
-        this.poslist.push([_x2, _y2, _z2]);
-      }
-    }
-  }, {
-    key: "initPos",
-    value: function initPos() {
-      this.poslist = [];
-      var c = {
-        "x": [-121000, 117000, 2000],
-        "y": [2286, 2286, 2000],
-        "z": [-4000, 16000, 2000]
-      };
-      for (var x = c.x[0]; x <= c.x[1]; x = x + c.x[2]) for (var y = c.y[0]; y <= c.y[1]; y = y + c.y[2]) for (var z = c.z[0]; z <= c.z[1]; z = z + c.z[2]) {
-        this.poslist.push([x, y, z]);
-      }
-    }
-  }, {
-    key: "initPos_test",
-    value: function initPos_test() {
-      this.poslist = [];
-      var c = {
-        "x": [-121000, 117000, 2000],
-        "y": [2286, 2286, 2000],
-        "z": [-4000, 16000, 2000]
-      };
-      for (var x = c.x[0]; x <= c.x[1]; x = x + c.x[2]) for (var y = c.y[0]; y <= c.y[1]; y = y + c.y[2]) for (var z = c.z[0]; z <= c.z[1]; z = z + c.z[2]) {
-        this.poslist.push([x, y, z]);
-      }
-    }
-  }, {
-    key: "getConfig",
-    value: function getConfig() {
-      var config = _sceneConifg_woman.default;
-      for (var i = 0; i < config.length; i++) {
-        var c1 = config[i];
-
-        // for(let j=0;j<c1.path.length;j++)
-        //     c1.path[j]       =c1.path[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
-        // for(let j=0;j<c1.pathTexture.length;j++)
-        //     c1.pathTexture[j]=c1.pathTexture[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
-        // c1.pathAnima=c1.pathAnima.replace(new RegExp("assets/","gm"),"assets/avatar/")
-
-        c1.lod_distance = [5000, 15000, 30000, 60000, 100000];
-        c1.lod_geometry = [20, 15, 1, 0, 0];
-        c1.lod_avatarCount = [200, 900, 3240, 8800, 12600];
-      }
-      console.log(config);
-      return config[0];
-    }
-  }, {
-    key: "init",
-    value: function init() {
-      function r(arr) {
-        var randomIndex = Math.floor(Math.random() * arr.length);
-        return arr[randomIndex];
-      }
-      var c = this.getConfig();
-      var self = this;
-      new _GLTFLoader.GLTFLoader().load(c.path + "sim.glb", /*#__PURE__*/function () {
-        var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(glb0) {
-          return _regeneratorRuntime().wrap(function _callee$(_context) {
-            while (1) switch (_context.prev = _context.next) {
-              case 0:
-                process([glb0.scene], 0);
-              case 1:
-              case "end":
-                return _context.stop();
-            }
-          }, _callee);
-        }));
-        return function (_x3) {
-          return _ref.apply(this, arguments);
-        };
-      }());
-      function process(scenes) {
-        var crowd = new _Crowd.Crowd({
-          camera: self.camera,
-          assets: {},
-          animPathPre: c.pathAnima,
-          count: self.poslist.length,
-          lod_avatarCount: c.lod_avatarCount,
-          lod_distance: c.lod_distance,
-          lod_geometry: c.lod_geometry,
-          lod_visible: c.lod_visible,
-          meshType: c.meshType,
-          pathLodGeo: [c.path + "LOD/"],
-          pathTexture: c.pathTexture,
-          pathTextureConfig: [c.path + "texture_names.json"],
-          useColorTag: c.useColorTag
-        });
-        for (var i00 = 0; i00 < crowd.count; i00++) {
-          var p = self.poslist[i00]; //[i00*1500-50,100,0]
-          crowd.setPosition(i00, [p[0] + (2 * Math.random() - 1) * 500, p[1] - 2000, p[2] + (2 * Math.random() - 1) * 500]);
-          crowd.setRotation(i00, [0, Math.random() * 30, 0]);
-          crowd.setAnimation(i00, r(c.standAnimationList), Math.random() * 10000);
-          crowd.setSpeed(i00, 1 + 4 * Math.random());
-          crowd.setScale(i00, [-900, -900 * (1 - 0.2 + 0.2 * Math.random()), 900]);
-          crowd.setObesity(i00, 0.8 + 0.4 * Math.random());
-          var j = 10;
-          crowd.setColor(i00, [j * Math.random() * 2, j * Math.random(), j * Math.random()], "CloW_A_kuzi_geo");
-          crowd.setColor(i00, [j * Math.random() * 2, j * Math.random(), j * Math.random()], "CloW_A_waitao_geo1");
-        }
-        crowd.init(scenes);
-        self.scene.add(crowd);
-        // crowd.visible=false
-        // self.scene.add(crowd.CrowdPoints)
-      }
-    }
-  }, {
-    key: "init_test",
-    value: function init_test() {
-      window.camera.position.set(-112955.14889055162, -1060.26, 15389.89423682258);
-      window.camera.position.set(-112769.81911025316, -460.26, 15631.057800327242);
-      window.camera.rotation.set(2.9971475897725877, 0.019309738726166568, -3.1387840775235243);
-      window.camera.position.set(-113613.07101287028, -1310.26, 13639.167352406446);
-      window.camera.rotation.set(2.798170084677891, -0.25254251780158277, 3.052478889142581);
-      window.camera.position.set(-113316.52150201441, -1220.26, 14942.784975382892);
-      window.camera.rotation.set(2.9596643731833536, -0.24159278294367525, 3.0976081453913644);
-      function r(arr) {
-        var randomIndex = 1; //Math.floor(Math.random() * arr.length)
-        return arr[randomIndex];
-      }
-      var c = this.getConfig1();
-      var self = this;
-      new _GLTFLoader.GLTFLoader().load(c.path + "sim.glb", /*#__PURE__*/function () {
-        var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(glb0) {
-          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-            while (1) switch (_context2.prev = _context2.next) {
-              case 0:
-                glb0.scene.traverse(function (o) {
-                  if (o instanceof THREE.Mesh) {
-                    // console.log(o.material)
-                    o.material.metalness = 0;
-                    o.material.roughness = 1;
-                    console.log(o.name);
-                    if (o.name == "CloW_A_xiezi_geo") o.visible = false;
-                    if (
-                    //o.name=="head"||
-                    // o.name=="CloW_A_body_geo"
-                    o.name == "hair") {
-                      o.material.side = 2;
-                      // console.log(o)
-                      //o.material.scattering=true
-                    }
-
-                    if (o.name == "CloM_B_body_geo2" || o.name == "CloM_C_head_geo") {
-                      o.material.scattering = true;
-                    }
-                    // if(o.name=="CloW_C_body_geo1"){
-                    //     o.material.color.r=0.7
-                    //     o.material.color.g=1.
-                    //     o.material.color.b=1.
-
-                    // }
-                  }
-                });
-
-                process([glb0.scene], 0);
-              case 2:
-              case "end":
-                return _context2.stop();
-            }
-          }, _callee2);
-        }));
-        return function (_x4) {
-          return _ref2.apply(this, arguments);
-        };
-      }());
-      function process(scenes) {
-        var crowd = new _Crowd.Crowd({
-          camera: self.camera,
-          assets: {},
-          animPathPre: c.pathAnima,
-          count: self.poslist.length,
-          lod_avatarCount: c.lod_avatarCount,
-          lod_distance: c.lod_distance,
-          lod_geometry: c.lod_geometry,
-          lod_visible: c.lod_visible,
-          meshType: c.meshType,
-          pathLodGeo: [c.path + "LOD/"],
-          pathTexture: c.pathTexture,
-          pathTextureConfig: [c.path + "texture_names.json"],
-          useColorTag: c.useColorTag
-        });
-        for (var i00 = 0; i00 < crowd.count; i00++) {
-          var p = self.poslist[i00]; //[i00*1500-50,100,0]
-          crowd.setPosition(i00, [p[0], p[1] - 2000, p[2]]);
-          crowd.setRotation(i00, [0, 0.1 * Math.PI, 0]);
-          crowd.setAnimation(i00, r(c.standAnimationList), 0.1 * i00);
-          crowd.setSpeed(i00, 0);
-          crowd.setScale(i00, [-900, -900 * (1 - 0.2 + 0.1), 900]);
-          crowd.setObesity(i00, 0.8 + 0.2);
-          var j = 10;
-          crowd.setColor(i00, [j, j, j], "CloW_A_kuzi_geo");
-          crowd.setColor(i00, [j, j, j], "CloW_A_waitao_geo1");
-        }
-        crowd.init(scenes);
-        self.scene.add(crowd);
-        // crowd.visible=false
-        // self.scene.add(crowd.CrowdPoints)
-      }
-    }
-  }]);
-  return AvatarManager;
-}();
-exports.AvatarManager = AvatarManager;
-},{"three/examples/jsm/loaders/GLTFLoader":"node_modules/three/examples/jsm/loaders/GLTFLoader.js","../../lib/crowd/Crowd.js":"lib/crowd/Crowd.js","../../config/avatar/sceneConifg_woman01.json":"config/avatar/sceneConifg_woman01.json","three":"node_modules/three/build/three.module.js","process":"node_modules/process/browser.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61543,8 +59660,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Loader = void 0;
-var _configOP = _interopRequireDefault(require("../../config/configOP7.json"));
-var _configOP2 = _interopRequireDefault(require("../../config/configOP8.json"));
+var _configOP = _interopRequireDefault(require("../../config/configOP6.json"));
+var _configOP2 = _interopRequireDefault(require("../../config/configOP7.json"));
+var _configOP3 = _interopRequireDefault(require("../../config/configOP8.json"));
 var THREE = _interopRequireWildcard(require("three"));
 var _statsModule = _interopRequireDefault(require("three/examples/jsm/libs/stats.module.js"));
 var _PlayerControl = require("../../lib/playerControl/PlayerControl.js");
@@ -61552,7 +59670,6 @@ var _OrbitControls = require("three/examples/jsm/controls/OrbitControls.js");
 var _Building = require("./Building.js");
 var _LightProducer = require("./LightProducer.js");
 var _Panel = require("./Panel.js");
-var _AvatarManager = require("./AvatarManager.js");
 var _MoveManager = require("../../lib/playerControl/MoveManager.js");
 var _SkyController = require("../../lib/threejs/SkyController");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -61567,6 +59684,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //RGBMLoader
+// import {AvatarManager } from './AvatarManager.js'
 var Loader = /*#__PURE__*/function () {
   function Loader(body) {
     _classCallCheck(this, Loader);
@@ -61581,7 +59699,7 @@ var Loader = /*#__PURE__*/function () {
     this.initWander();
     this.panel = new _Panel.Panel(this);
     this.building = new _Building.Building(this.scene, this.camera);
-    new _AvatarManager.AvatarManager(this.scene, this.camera);
+    if (typeof AvatarManager !== "undefined") new AvatarManager(this.scene, this.camera);
   }
   _createClass(Loader, [{
     key: "initScene",
@@ -61669,7 +59787,7 @@ var Loader = /*#__PURE__*/function () {
   }, {
     key: "setSpeed",
     value: function setSpeed() {
-      for (var i = 0; i < this.config.pathList.length; i++) for (var j = 0; j < this.config.pathList[i].length; j++) {
+      if (this.config.pathList) for (var i = 0; i < this.config.pathList.length; i++) for (var j = 0; j < this.config.pathList[i].length; j++) {
         this.config.pathList[i][j][6] /= this.speed;
       }
     }
@@ -61677,7 +59795,7 @@ var Loader = /*#__PURE__*/function () {
     key: "initWander",
     value: function initWander() {
       this.wanderList = [];
-      for (var i = 0; i < this.config.pathList.length; i++) {
+      if (this.config.pathList) for (var i = 0; i < this.config.pathList.length; i++) {
         this.wanderList.push(new _MoveManager.MoveManager(this.camera, this.config.pathList[i]));
       }
       var self = this;
@@ -61704,7 +59822,7 @@ document.addEventListener('DOMContentLoaded', function () {
     id = id + "=";
     return window.location.search.split(id).length > 1 ? window.location.search.split(id)[1].split("&")[0] : null;
   };
-  var config = getParam('scene') == "haiNing" ? _configOP.default : _configOP2.default;
+  var config = getParam('scene') == "haiNing0" ? _configOP.default : getParam('scene') == "haiNing" ? _configOP2.default : _configOP3.default;
   config.src.main.speed = getParam('speed') ? getParam('speed') : config.src.main.speed;
   config.src.main.autoMove = getParam('autoMove');
   config.src.main.render = getParam('render');
@@ -61728,7 +59846,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.configALL = config;
   new Loader(document.body);
 });
-},{"../../config/configOP7.json":"config/configOP7.json","../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","./AvatarManager.js":"src/LoadingProgressive/AvatarManager.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../config/configOP6.json":"config/configOP6.json","../../config/configOP7.json":"config/configOP7.json","../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

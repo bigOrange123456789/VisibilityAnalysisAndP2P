@@ -1,3 +1,4 @@
+import config_haiNing0 from '../../config/configOP6.json';
 import config_haiNing from '../../config/configOP7.json';
 import config_gkd     from '../../config/configOP8.json';
 import * as THREE from "three";
@@ -8,7 +9,7 @@ import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitContro
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
-import {AvatarManager } from './AvatarManager.js'
+// import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 export class Loader{
@@ -25,7 +26,8 @@ export class Loader{
         this.initWander()
         this.panel=new Panel(this)
         this.building=new Building(this.scene,this.camera)
-        new AvatarManager(this.scene,this.camera)
+        if(typeof AvatarManager!=="undefined")
+            new AvatarManager(this.scene,this.camera)
     }
     async initScene(){
         this.renderer = new THREE.WebGLRenderer({
@@ -113,6 +115,7 @@ export class Loader{
         new SkyController(this.scene,this.camera,this.renderer)
     }
     setSpeed(){
+        if(this.config.pathList)
         for(let i=0;i<this.config.pathList.length;i++)
             for(let j=0;j<this.config.pathList[i].length;j++){
                 this.config.pathList[i][j][6]/=this.speed
@@ -120,6 +123,7 @@ export class Loader{
     }
     initWander() {
         this.wanderList=[]
+        if(this.config.pathList)
         for(let i=0;i<this.config.pathList.length;i++){
             this.wanderList.push(
                 new MoveManager(this.camera, this.config.pathList[i])
@@ -150,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 null
     }
     const config=
+        getParam('scene')=="haiNing0"?config_haiNing0:
         getParam('scene')=="haiNing"?config_haiNing:
         config_gkd
     config.src.main.speed       =getParam('speed')?getParam('speed'):config.src.main.speed

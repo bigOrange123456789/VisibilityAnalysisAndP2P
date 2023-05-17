@@ -1315,7 +1315,28 @@
             "block2Kernel": {}
         },
         "Visibility":{
+            "areaInfList":[
+                {
+                    "x": [
+                        -121000,
+                        117000,
+                        2000
+                    ],
+                    "y": [
+                        2286.5,
+                        2286.5,
+                        2000
+                    ],
+                    "z": [
+                        -4000,
+                        16000,
+                        2000
+                    ],
+                    "r": 250
+                }
+            ],
             "componentNum":1278,
+            "sceneId":"haiNing0",
             "urlVdServer":"http://39.98.206.0:8091"
         },
         "P2P":{

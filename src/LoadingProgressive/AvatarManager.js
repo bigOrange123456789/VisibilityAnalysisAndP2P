@@ -4,7 +4,7 @@ import conifg_woman01     from '../../config/avatar/sceneConifg_woman01.json';
 import * as THREE from "three"
 export class AvatarManager {
     constructor(scene, camera) {
-        return
+        // return
         window.scene=scene
         this.scene = scene
         this.camera = camera

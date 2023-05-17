@@ -15,7 +15,7 @@ class PackCache{
     console.log()
   }
   get(path){
-    if(path.split(this.sceneId).length>1){
+    if(typeof path=="string"&&path.split(this.sceneId).length>1){
       const fileId=path.split(this.sceneId)[1]
       return this.data[fileId]
     }else return null

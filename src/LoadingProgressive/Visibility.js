@@ -9,10 +9,7 @@ export class Visibility{
         // areaInf["max"][1]-=0.5
         this.areaInf=this.initAreaInfList()[0]
         console.log("this.areaInf",this.areaInf)
-        if(false){
-            this.areaInf["min"][1]=Math.floor(this.areaInf["min"][1])
-            this.areaInf["max"][1]=Math.floor(this.areaInf["max"][1])
-        }
+        
         this.camera=camera
         this.meshes=meshes//用于可见性剔除
         this.componentNum=this.config.componentNum//8437//1278
@@ -66,6 +63,12 @@ export class Visibility{
         this.visualList_request={}//记录资源列表的请求是否已经发送
         for(let i=0;i<this.config.areaInfList.length;i++){
             const c=this.config.areaInfList[i]
+            if(true){
+                c.y[0]=Math.floor(c.y[0])
+                c.y[1]=Math.floor(c.y[1])
+                // this.areaInf["min"][1]=Math.floor(this.areaInf["min"][1])
+                // this.areaInf["max"][1]=Math.floor(this.areaInf["max"][1])
+            }
             this.areaInfList.push({
                 "min": [c.x[0],c.y[0],c.z[0]],
                 "max": [c.x[1],c.y[1],c.z[1]],

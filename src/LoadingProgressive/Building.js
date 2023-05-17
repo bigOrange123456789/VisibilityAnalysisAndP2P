@@ -261,7 +261,7 @@ export class Building{
         var url=self.config.path+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
             const zipLoader=new ZipLoader()
-            if(self.config.crossOriginSocket.length>0){
+            if(self.config.crossOriginSocket&&self.config.crossOriginSocket.length>0){
                 const i=Math.floor(Math.random()*self.config.crossOriginSocket.length)
                 zipLoader.crossOriginSocket=self.config.crossOriginSocket[i]
             }

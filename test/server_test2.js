@@ -35,7 +35,7 @@ function test2(n){//npm install puppeteer
     for (let i = 0; i < browsers.length; i++) {
       const browser = browsers[i];
       const page = await browser.newPage();
-      await page.goto('http://42.192.188.161:'+port);
+      await page.goto('http://1.13.198.213/:'+port);
       // setTimeout(()=>{
       //   test(n-1)
       // },1000)
@@ -44,4 +44,4 @@ function test2(n){//npm install puppeteer
     // 关闭所有浏览器窗口
     // await Promise.all(browsers.map(browser => browser.close()));
   })();
-}test2(100)
+}test2(200)

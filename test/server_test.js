@@ -65,4 +65,4 @@ function test(n){//npm install puppeteer
     // 关闭所有浏览器窗口
     // await Promise.all(browsers.map(browser => browser.close()));
   })();
-}test(2)
+}test(0)
