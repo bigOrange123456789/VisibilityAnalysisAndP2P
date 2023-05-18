@@ -44,11 +44,11 @@ export class SamplePointList{
             )
         }
         load1(()=>{
-            // load2(()=>{
-                // load3(()=>{
+            load2(()=>{
+                load3(()=>{
                     self.init(createSphere,parentGroup,meshes,entropy)
-                // })
-            // })
+                })
+            })
         })
     }
     getPosIndex(x,y,z){
@@ -323,13 +323,13 @@ export class SamplePointList{
         }
         const raycaster = new THREE.Raycaster();
         function checkIntersection() {
+            // console.log(self.list)
             raycaster.setFromCamera(mouse, camera);
             // 检测交叉物体
-            // console.log(self.list)
             const intersects = raycaster.intersectObjects(self.list);
-            // console.log("intersects",intersects)
             if (intersects.length > 0) {// 有交叉物体                
                 const sphere=intersects[0].object
+                console.log("交叉的物体为:",sphere)
                 self.sphere=sphere
                 self.arrow.position.set(
                     sphere.position.x,
@@ -356,9 +356,7 @@ export class SamplePointList{
                 if(sphere.visibleArea)
                     self.showSphere(sphere.visibleArea)
                 sphere.material.color.g=sphere.material.color.b=0
-                
                 console.log("视点球:",sphere,sphere.vvd)              
-                
             }
             raycaster.setFromCamera(mouse, camera);
             const intersects2= raycaster.intersectObjects(self.meshes);

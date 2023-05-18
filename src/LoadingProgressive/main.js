@@ -1,6 +1,6 @@
-import config_haiNing0 from '../../config/configOP6.json';
-import config_haiNing from '../../config/configOP7.json';
-import config_gkd     from '../../config/configOP8.json';
+import config_haiNing0 from '../../config/LoadingProgressive/configOP6.json';
+import config_haiNing from '../../config/LoadingProgressive/configOP7.json';
+import config_gkd     from '../../config/LoadingProgressive/configOP8.json';
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
@@ -96,7 +96,7 @@ export class Loader{
         requestAnimationFrame(this.animate)
     }
     animate(){
-        // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
+        this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
         this.stats.update()
         // console.log(this.config)
         if(this.config.render!=="false")

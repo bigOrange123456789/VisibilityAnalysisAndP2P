@@ -1,7 +1,7 @@
 {
     "src": {
         "Building_new": {
-            "path": "assets/space8.glb",
+            "path": "assets/space6_sim.glb",
             "parentGroup": {
                 "scale": {
                     "x": 1,
@@ -11,18 +11,21 @@
             },
             "createSphere": {
                 "x": [
-                    -880,880,
-                    110
+                    -121000,
+                    117000,
+                    2000
                 ],
                 "y": [
-                    -110,440,
-                    110
+                    2286.5,
+                    2286.5,
+                    2000
                 ],
                 "z": [
-                    -990,1100,
-                    110
+                    -4000,
+                    16000,
+                    2000
                 ],
-                "r": 30
+                "r": 500
             },
             "kernelPosition": "-110,40,-10",
             "entropy": {},
@@ -3908,25 +3911,25 @@
                 "117000,2286.5,14000": 39,
                 "117000,2286.5,16000": 39
             },
-            "block2Kernel": {},
-            "updateColor":false
+            "block2Kernel": {}
         },
         "SamplePointList":{
-            "path1":"assets/configVVD-model8.json",
+            "path1":"assets/configVVD-model6.json",
             "path2":"assets/VisibleArea.json",
             "path3":"assets/voxel.json"
+
         },
         "main": {
             "camera": {
                 "position": {
-                    "x":-319.59561744433125,
-                    "y": 11.793830543966546,
-                    "z": 323.70333357412926
+                    "x": -16312.508094925646,
+                    "y": 166486.41950347368,
+                    "z": -4627.776476675272
                 },
                 "rotation": {
-                    "x": 0.029181544549116867,
-                    "y": -0.5576086281997055,
-                    "z": 0.015444821123026083
+                    "x": -1.6056924647274597,
+                    "y": -0.00043290278573630754,
+                    "z": -3.1291928613971494
                 },
                 "target": {
                     "x": -22958.633680551236,

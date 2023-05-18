@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy
+            )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -247,7 +247,7 @@ export class Building{
         window.light.visible=true
         for(let id=0;id<this.meshes.length;id++){
             const mesh=this.meshes[id]
-            if(self.config.updateColor){
+            if(this.config.updateColor){
                 let t=id*256*256*256/2665
                 mesh.material.color.r=0.5*((t&0xff)    )/255
                 mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
@@ -307,8 +307,8 @@ export class Building{
                     mesh.myId=self.meshes.length
                     if(false)colorList.push(self.getColor2(mesh))
                     
-                    if(self.config.updateColor){
-                        let t=mesh.myId*256*256*256/2665
+                    if(true)if(self.config.updateColor){
+                        let t=mesh.myId*256*256*256/1320 //2665
                         mesh.material.color.r=0.5*((t&0xff)    )/255
                         mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
                         mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
@@ -555,20 +555,21 @@ export class Building{
         })
     }
     saveMesh2(mesh,name){
-        const array1=mesh.geometry.attributes.position.data.array
-        const array2=[]
-        for(let i=0;i<array1.length/4;i++)
-            for(let j=0;j<3;j++){
-                array2.push(
-                    array1[4*i+j]
-                )
-            }
-        mesh.geometry.attributes.position = new THREE.BufferAttribute(
-            new Float32Array(
-                array2//mesh.geometry.attributes.position.data.array
-            ), 
-            3//4
-        )//mesh.geometry.attributes.position.itemSize)
+        console.log(mesh)
+        if(mesh.geometry.attributes.position.data){
+            const array1=mesh.geometry.attributes.position.data.array
+            const array2=[]
+            for(let i=0;i<array1.length/4;i++)
+                for(let j=0;j<3;j++)
+                    array2.push(
+                        array1[4*i+j]
+                    )
+            mesh.geometry.attributes.position = new THREE.BufferAttribute(
+                new Float32Array(array2), 
+                3//4
+            )//mesh.geometry.attributes.position.itemSize)
+        }
+        
         delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
 
         const scene=new THREE.Scene()

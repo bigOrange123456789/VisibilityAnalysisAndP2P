@@ -117,7 +117,7 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"config/configOP6.json":[function(require,module,exports) {
+})({"config/LoadingProgressive/configOP6.json":[function(require,module,exports) {
 module.exports = {
   "FlipY": false,
   "src": {
@@ -1466,7 +1466,7 @@ module.exports = {
     }
   }
 };
-},{}],"config/configOP7.json":[function(require,module,exports) {
+},{}],"config/LoadingProgressive/configOP7.json":[function(require,module,exports) {
 module.exports = {
   "src": {
     "Building_new": {
@@ -2822,7 +2822,7 @@ module.exports = {
     }
   }
 };
-},{}],"config/configOP8.json":[function(require,module,exports) {
+},{}],"config/LoadingProgressive/configOP8.json":[function(require,module,exports) {
 module.exports = {
   "src": {
     "Building_new": {
@@ -54369,13 +54369,14 @@ var WaterController = /*#__PURE__*/function () {
     _classCallCheck(this, WaterController);
     this.water = this.initWater(mesh);
     var self = this;
-    // const animate=()=>{
-    //     // const sun=window.sun?window.sun:new THREE.Vector3(-200,800,-600)
-    //     const sun=new THREE.Vector3(-200,800,-600)
-    //     requestAnimationFrame(animate)
-    //     self.water.material.uniforms['sunDirection'].value.copy(sun).normalize()
-    //     self.water.material.uniforms['time'].value += 1.0/120.0
-    // };animate()
+    var animate = function animate() {
+      // const sun=window.sun?window.sun:new THREE.Vector3(-200,800,-600)
+      var sun = new THREE.Vector3(-200, 800, -600);
+      requestAnimationFrame(animate);
+      self.water.material.uniforms['sunDirection'].value.copy(sun).normalize();
+      self.water.material.uniforms['time'].value += 1.0 / 120.0;
+    };
+    animate();
   }
   _createClass(WaterController, [{
     key: "initWater",
@@ -54383,9 +54384,9 @@ var WaterController = /*#__PURE__*/function () {
       return new _Water.Water(mesh.geometry, {
         textureWidth: 512,
         textureHeight: 512,
-        // waterNormals: new THREE.TextureLoader().load('assets/waternormals.jpg',function(texture){
-        //     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-        // }),
+        waterNormals: new THREE.TextureLoader().load('assets/waternormals.jpg', function (texture) {
+          texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
+        }),
         sunDirection: new THREE.Vector3(),
         sunColor: 0xffffff,
         waterColor: 0x001e0f,
@@ -55026,7 +55027,7 @@ exports.LightProducer = LightProducer;
 module.exports = {
   "src": {
     "Building_new": {
-      "path": "assets/space8.glb",
+      "path": "assets/space6_sim.glb",
       "parentGroup": {
         "scale": {
           "x": 1,
@@ -55035,10 +55036,10 @@ module.exports = {
         }
       },
       "createSphere": {
-        "x": [-880, 880, 110],
-        "y": [-110, 440, 110],
-        "z": [-990, 1100, 110],
-        "r": 30
+        "x": [-121000, 117000, 2000],
+        "y": [2286.5, 2286.5, 2000],
+        "z": [-4000, 16000, 2000],
+        "r": 250
       },
       "kernelPosition": "-110,40,-10",
       "entropy": {},
@@ -58924,25 +58925,24 @@ module.exports = {
         "117000,2286.5,14000": 39,
         "117000,2286.5,16000": 39
       },
-      "block2Kernel": {},
-      "updateColor": false
+      "block2Kernel": {}
     },
     "SamplePointList": {
-      "path1": "assets/configVVD-model8.json",
+      "path1": "assets/configVVD-model6.json",
       "path2": "assets/VisibleArea.json",
       "path3": "assets/voxel.json"
     },
     "main": {
       "camera": {
         "position": {
-          "x": -319.59561744433125,
-          "y": 11.793830543966546,
-          "z": 323.70333357412926
+          "x": -16312.508094925646,
+          "y": 166486.41950347368,
+          "z": -4627.776476675272
         },
         "rotation": {
-          "x": 0.029181544549116867,
-          "y": -0.5576086281997055,
-          "z": 0.015444821123026083
+          "x": -1.6056924647274597,
+          "y": -0.00043290278573630754,
+          "z": -3.1291928613971494
         },
         "target": {
           "x": -22958.633680551236,
@@ -59660,9 +59660,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 exports.Loader = void 0;
-var _configOP = _interopRequireDefault(require("../../config/configOP6.json"));
-var _configOP2 = _interopRequireDefault(require("../../config/configOP7.json"));
-var _configOP3 = _interopRequireDefault(require("../../config/configOP8.json"));
+var _configOP = _interopRequireDefault(require("../../config/LoadingProgressive/configOP6.json"));
+var _configOP2 = _interopRequireDefault(require("../../config/LoadingProgressive/configOP7.json"));
+var _configOP3 = _interopRequireDefault(require("../../config/LoadingProgressive/configOP8.json"));
 var THREE = _interopRequireWildcard(require("three"));
 var _statsModule = _interopRequireDefault(require("three/examples/jsm/libs/stats.module.js"));
 var _PlayerControl = require("../../lib/playerControl/PlayerControl.js");
@@ -59763,7 +59763,7 @@ var Loader = /*#__PURE__*/function () {
   }, {
     key: "animate",
     value: function animate() {
-      // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
+      this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.stats.update();
       // console.log(this.config)
       if (this.config.render !== "false") this.renderer.render(this.scene, this.camera);
@@ -59846,7 +59846,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.configALL = config;
   new Loader(document.body);
 });
-},{"../../config/configOP6.json":"config/configOP6.json","../../config/configOP7.json":"config/configOP7.json","../../config/configOP8.json":"config/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../config/LoadingProgressive/configOP6.json":"config/LoadingProgressive/configOP6.json","../../config/LoadingProgressive/configOP7.json":"config/LoadingProgressive/configOP7.json","../../config/LoadingProgressive/configOP8.json":"config/LoadingProgressive/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","three/examples/jsm/controls/OrbitControls.js":"node_modules/three/examples/jsm/controls/OrbitControls.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -59871,7 +59871,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50316" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56293" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

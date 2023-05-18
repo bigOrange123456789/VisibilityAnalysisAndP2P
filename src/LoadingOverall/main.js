@@ -23,8 +23,14 @@ export class Loader{
             canvas:this.canvas,
             preserveDrawingBuffer:true
         })
+        // console.log(this.body.clientWidth,this.body.clientHeight)
 
-        this.renderer.setSize(this.body.clientWidth,this.body.clientHeight)
+        // this.renderer.setSize(
+        //     this.body.clientWidth,//window.innerWidth,//
+        //     this.body.clientHeight//window.innerHeight//
+        //     )
+        // this.resize()
+        
         this.renderer.setPixelRatio(window.devicePixelRatio)
         window.renderer=this.renderer
         this.body.appendChild(this.renderer.domElement)
@@ -62,6 +68,8 @@ export class Loader{
         
         this.scene.add(this.camera)
 
+        this.resize()
+
         // this.playerControl=new PlayerControl(this.camera)
         // this.playerControl.target.set(
         //     this.config.camera.target.x,
@@ -86,13 +94,16 @@ export class Loader{
         requestAnimationFrame(this.animate)
     }
     resize(){
-        this.canvas.width = window.innerWidth;//this.body.clientWidth
-        this.canvas.height = window.innerHeight;//this.body.clientHeight
+        this.canvas.width = this.body.clientWidth//window.innerWidth;//
+        this.canvas.height = window.innerHeight;//this.body.clientHeight//
         this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
         this.camera.updateProjectionMatrix()
         this.renderer.setSize(this.canvas.width, this.canvas.height)
     }
 }
 document.addEventListener('DOMContentLoaded', () => {
+    // console.log(
+    //         "window.innerHeight:",window.innerHeight,
+    //         "document.body.clientHeight:",document.body.clientHeight)
     new Loader(document.body)
 })
