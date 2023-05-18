@@ -1,3 +1,4 @@
+const usePVD=true
 const configList=[
   {
     sceneId:"haiNing0",
@@ -19,63 +20,64 @@ const configList=[
     ],
     path:"dist/assets/configVVD-model6.json"
   },
-  {
-    sceneId:"haiNing",
-    areaId:0,
-    "x": [
-        -124000,
-        126000,
-        2000
-    ],
-    "y": [
-        -19000,
-        3000,
-        2000
-    ],
-    "z": [
-        -20000,
-        24000,
-        2000
-    ],
-    path:"dist/assets/configVVD-model7.json"
-  },
-  {
-    sceneId:"gkd",
-    areaId:0,
-    x: [
-      -815,879,
-      11
-    ],
-    y: [
-        16,16,
-        11
-    ],
-    z: [
-        -962,1084,
-        11
-    ],
-    path:"dist/assets/configVVD-model8.json"
-  },
-  {
-    sceneId:"gkd",
-    areaId:1,
-    "x": [
-      -880,880,
-      110
-    ],
-    "y": [
-      -110,440,
-      110
-    ],
-    "z": [
-      -990,1100,
-      110
-    ],
-    path:"dist/assets/configVVD-model8_1.json"
-  }
+  // {
+  //   sceneId:"haiNing",
+  //   areaId:0,
+  //   "x": [
+  //       -124000,
+  //       126000,
+  //       2000
+  //   ],
+  //   "y": [
+  //       -19000,
+  //       3000,
+  //       2000
+  //   ],
+  //   "z": [
+  //       -20000,
+  //       24000,
+  //       2000
+  //   ],
+  //   path:"dist/assets/configVVD-model7.json"
+  // },
+  // {
+  //   sceneId:"gkd",
+  //   areaId:0,
+  //   x: [
+  //     -815,879,
+  //     11
+  //   ],
+  //   y: [
+  //       16,16,
+  //       11
+  //   ],
+  //   z: [
+  //       -962,1084,
+  //       11
+  //   ],
+  //   path:"dist/assets/configVVD-model8.json"
+  // },
+  // {
+  //   sceneId:"gkd",
+  //   areaId:1,
+  //   "x": [
+  //     -880,880,
+  //     110
+  //   ],
+  //   "y": [
+  //     -110,440,
+  //     110
+  //   ],
+  //   "z": [
+  //     -990,1100,
+  //     110
+  //   ],
+  //   path:"dist/assets/configVVD-model8_1.json"
+  // }
 ]
 class VD{
-  constructor(areaInf){
+  constructor(areaInf,usePVD){
+    this.usePVD=usePVD
     this.id=areaInf.sceneId+"&"+areaInf.areaId
     console.log('version:02(node --max_old_space_size=8192 server_vd)')
     this.areaInf={
@@ -93,7 +95,8 @@ class VD{
     const self=this
     // self.VisibleArea
     self.databaseEvd={}
-    // self.databasePvd={}
+    if(this.usePVD)
+    self.databasePvd={}
     require('jsonfile').readFile(
         path, 
         (err, jsonData)=>{
@@ -109,7 +112,11 @@ class VD{
               "6":d["6"],
               // "a":VisibleArea[vid]//visible area
             }
-            // databasePvd[getPosIndex(vid)]=d["pvd"]
+            if(self.usePVD)
+            self.databaseEvd[self.getPosIndex(vid)]['pvd']=d["pvd"]
+            // console.log(self.usePVD)
+            // self.databasePvd[self.getPosIndex(vid)]=d["pvd"]
+            // console.log(d["pvd"])
           }
           console.log("初始化完成")
     });
@@ -145,10 +152,10 @@ class VD{
     // if(index==1350)console.log(1350,vid)//-116000,1000,12000
     return index// return [xi,yi,zi,index]
   }
-  static getVdList(configList){
+  static getVdList(configList,usePVD){
     const vdList=[]
     for(let i=0;i<configList.length;i++)
-      vdList.push(new VD(configList[i]))
+      vdList.push(new VD(configList[i],usePVD))
     return vdList
   } 
   static getEvd(info,vdList){
@@ -165,7 +172,7 @@ class VD{
     return null
   }
 }
-const vdList=VD.getVdList(configList)
+const vdList=VD.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
 const ip=8091
 const server=require('http').createServer(function (request, response) {

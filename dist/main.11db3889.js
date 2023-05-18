@@ -1420,7 +1420,8 @@ module.exports = {
         "1277": 0
       },
       "blocking": {},
-      "block2Kernel": {}
+      "block2Kernel": {},
+      "updateColor": true
     },
     "Visibility": {
       "areaInfList": [{
@@ -1431,13 +1432,14 @@ module.exports = {
       }],
       "componentNum": 1278,
       "sceneId": "haiNing0",
-      "urlVdServer": "http://39.98.206.0:8091"
+      "urlVdServer": "http://localhost:8091",
+      "list2Len": 0
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
     },
     "Detection": {
-      "urlDetectionServer": "http://123.57.58.224:9999",
+      "urlDetectionServer": "http://localhost:9999",
       "maxBackDelay": 10
     },
     "SamplePointList": {
@@ -1462,7 +1464,9 @@ module.exports = {
         },
         "near": 10,
         "far": 5000000
-      }
+      },
+      "speed": 150,
+      "pathList": [[[-116237.6, 1669.74, 11978.66, -0.13851, -1.46712, -0.13777, 200], [-110354.89, 1669.74, 14042.09, -0.08339, 0.05769, 0.00481, 200], [-110365.48, 1669.74, 6572.13, -0.08302, 0.48846, 0.03902, 200], [-111007.27, 1669.74, 5132.29, -1.17393, 1.44485, 1.17108, 200], [-110606.68, 1669.74, 5920.54, -3.01874, -0.1065, -3.12847, 200], [-109921.06, 1669.74, 12285.65, -1.23945, -1.42267, -1.23605, 200], [87081.83, 1669.74, 12505.47, -1.02085, -1.45541, -1.01787, 200], [113539.7, 1669.74, 10015.13, -0.03847, 0.22454, 0.00856, 200], [111181.58, 1669.74, -2647.44, -2.08175, 1.43057, 2.08596, 200], [107299.5, 1669.74, -6122.54, -2.48544, 1.37619, 2.49462, 200], [85992.87, 1669.74, -2860.93, -3.03066, 0.10623, 3.12978, 200], [85317.84, 1669.74, 4110.88, -3.08526, 0.16961, 3.13207, 200], [75758.41, 1669.74, 7903.7, -0.09676, 0.08331, 0.00807, 200], [76119.35, 1669.74, -1049.77, -2.06192, 1.44219, 2.06537, 200], [-47413.73, 1669.74, -1597.38, -1.65431, 1.50002, 1.65451, 200], [-57873.97, 1669.74, 12649.29, -1.73554, 1.49827, 1.73595, 200]]]
     }
   }
 };
@@ -2769,7 +2773,7 @@ module.exports = {
       },
       "blocking": {},
       "block2Kernel": {},
-      "updateColor": true,
+      "updateColor": false,
       "instanceUse": false,
       "useIndirectMaterial": false,
       "crossOriginSocket": ["49.234.135.98:8081"]
@@ -2817,7 +2821,7 @@ module.exports = {
         "near": 10,
         "far": 5000000
       },
-      "speed": 10,
+      "speed": 80,
       "pathList": [[[-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000], [-54865.63, -1530.26, 13039.32, -2.1177, -1.5529, -2.11778, 1000], [-36767.63, -1530.26, -1362.69, -0.00625, -1.0161, -0.00531, 500], [55787.57, -1530.26, -1737.73, 1.8086, -1.5059, 1.80908, 1000], [-44907.4, -1530.26, 12147.79, 2.04046, 1.51057, -2.0412, 2000]], [[-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 1000], [13590.9, -7430.26, 13247.66, 1.52432, -1.38584, 1.52352, 500], [85050.92, -7430.26, 12626.6, 0.26428, 0.39225, -0.10309, 1000], [85167.57, -7430.26, -1571.08, 1.02457, 1.26256, -1.00292, 500], [11514.32, -7430.26, -2564.01, 1.54904, 1.39331, -1.5487, 1000], [-35731.63, -7430.26, -2748.36, 2.87731, -0.45912, 3.02224, 1000], [-32115.98, -7430.26, 13644.9, 1.52432, -1.38584, 1.52352, 500]], [[-54079.8, -12230.26, 14735.95, 0.61764, -1.22167, 0.58858, 500], [96813.41, -12230.26, 12620.34, 0.19579, 0.89129, -0.15308, 2000], [94847.93, -12230.26, -3258.34, 0.93118, 1.47867, -0.92916, 500], [-51565.47, -12230.26, -2663.95, 1.87617, 1.43547, -1.87883, 2000]]]
     }
   }
@@ -43295,6 +43299,7 @@ var Visibility = /*#__PURE__*/function () {
     this.meshes = meshes; //用于可见性剔除
     this.componentNum = this.config.componentNum; //8437//1278
     this.vd = new Array(this.componentNum); //{}//当前每个构件的可见度
+    this.pvd = new Array(this.componentNum);
     this.visualList = {}; //用于视点的可见资源列表
 
     this.prePoint = ""; //视点变化就进行加载 (或者添加了新的模型) 
@@ -43432,6 +43437,7 @@ var Visibility = /*#__PURE__*/function () {
       }, 200);
       setInterval(function () {
         scope.getList();
+        scope.getList2();
       }, 1500);
       console.log("开始动态加载资源");
     }
@@ -43458,7 +43464,7 @@ var Visibility = /*#__PURE__*/function () {
     key: "getList",
     value: function getList() {
       var _this2 = this;
-      console.log("*");
+      // console.log("*")
       var self = this;
       var vd_had = 0;
       var vd_hading = 0;
@@ -43476,11 +43482,7 @@ var Visibility = /*#__PURE__*/function () {
       // console.log(arr)
       if (loaded) {
         // const posIndex=posIndexAll[3]
-        var t0 = performance.now();
-        window.t = {};
         var d = this.getDirection();
-        window.t.t1 = performance.now() - t0;
-        t0 = performance.now();
         var _loop = function _loop(_i) {
           var getVD = function getVD(j) {
             var posIndex = arr[j][3];
@@ -43507,8 +43509,6 @@ var Visibility = /*#__PURE__*/function () {
         for (var _i = 0; _i < this.componentNum; _i++) {
           _loop(_i);
         }
-        window.t.t2 = performance.now() - t0;
-        t0 = performance.now();
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
           return {
@@ -43519,12 +43519,10 @@ var Visibility = /*#__PURE__*/function () {
           return item.value > 0;
         }).sort(function (a, b) {
           return b.value - a.value;
-        });
-        list = list.map(function (value, index) {
+        }).map(function (value, index) {
           return value.index;
         });
-        window.t.t3 = performance.now() - t0;
-        t0 = performance.now();
+        // console.log("list1.length",list.length)
         if (list.length > 0) this.loading(list);
         // list.filter((value, index) => index<list.length-i )
         // console.log(list.length)
@@ -43539,9 +43537,59 @@ var Visibility = /*#__PURE__*/function () {
       }
     }
   }, {
+    key: "getList2",
+    value: function getList2() {
+      var _this3 = this;
+      //PVD
+      if (!this.config.list2Len) return;
+      var self = this;
+      var posIndexAll = this.getPosIndex();
+      var arr = posIndexAll[5];
+      var loaded = true;
+      for (var i = 0; i < arr.length; i++) {
+        var posIndex0 = arr[i][3];
+        if (!this.visualList[posIndex0]) {
+          loaded = false;
+          this.request(posIndex0);
+        }
+      }
+      if (loaded) {
+        var _loop2 = function _loop2(_i2) {
+          var getPVD = function getPVD(j) {
+            var posIndex = arr[j][3];
+            var weight = arr[j][4];
+            var visualList0 = self.visualList[posIndex];
+            var pvd = _i2 in visualList0["pvd"] ? visualList0["pvd"][_i2] : 0;
+            return pvd * weight;
+          };
+          _this3.pvd[_i2] = 0;
+          for (var j = 0; j < arr.length; j++) _this3.pvd[_i2] += getPVD(j);
+        };
+        for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
+          _loop2(_i2);
+        }
+        var list2 = this.pvd.map(function (value, index) {
+          return {
+            value: value,
+            index: index
+          };
+        }).filter(function (item) {
+          return item.value > 0;
+        }).sort(function (a, b) {
+          return b.value - a.value;
+        }).filter(function (value, index) {
+          return index < _this3.config.list2Len;
+        }).map(function (value, index) {
+          return value.index;
+        });
+        console.log("list2.length", list2.length);
+        if (list2.length > 0) this.loading(list2);
+      }
+    }
+  }, {
     key: "getListOld",
     value: function getListOld() {
-      var _this3 = this;
+      var _this4 = this;
       var self = this;
       var vd_had = 0;
       var vd_hading = 0;
@@ -43560,31 +43608,31 @@ var Visibility = /*#__PURE__*/function () {
       if (loaded) {
         // const posIndex=posIndexAll[3]
         var d = this.getDirection();
-        var _loop2 = function _loop2(_i2) {
+        var _loop3 = function _loop3(_i3) {
           var getVD = function getVD(j) {
             var posIndex = arr[j][3];
             var weight = arr[j][4];
             var visualList0 = self.visualList[posIndex];
-            var vd1 = _i2 in visualList0["1"] ? visualList0["1"][_i2] : 0;
-            var vd2 = _i2 in visualList0["2"] ? visualList0["2"][_i2] : 0;
-            var vd3 = _i2 in visualList0["3"] ? visualList0["3"][_i2] : 0;
-            var vd4 = _i2 in visualList0["4"] ? visualList0["4"][_i2] : 0;
-            var vd5 = _i2 in visualList0["5"] ? visualList0["5"][_i2] : 0;
-            var vd6 = _i2 in visualList0["6"] ? visualList0["6"][_i2] : 0;
+            var vd1 = _i3 in visualList0["1"] ? visualList0["1"][_i3] : 0;
+            var vd2 = _i3 in visualList0["2"] ? visualList0["2"][_i3] : 0;
+            var vd3 = _i3 in visualList0["3"] ? visualList0["3"][_i3] : 0;
+            var vd4 = _i3 in visualList0["4"] ? visualList0["4"][_i3] : 0;
+            var vd5 = _i3 in visualList0["5"] ? visualList0["5"][_i3] : 0;
+            var vd6 = _i3 in visualList0["6"] ? visualList0["6"][_i3] : 0;
             // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
             return (vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5]) * weight;
           };
 
           // this.vd[i]=getVD(posIndex)//posIndexAll[3]
-          _this3.vd[_i2] = 0;
+          _this4.vd[_i3] = 0;
           for (var _j = 0; _j < arr.length; _j++) {
             // console.log()
-            _this3.vd[_i2] += getVD(_j);
+            _this4.vd[_i3] += getVD(_j);
           }
-          if (Object.keys(_this3.meshes).length !== 0 && _this3.meshes[_i2]) vd_had += _this3.vd[_i2];else vd_hading += _this3.vd[_i2];
+          if (Object.keys(_this4.meshes).length !== 0 && _this4.meshes[_i3]) vd_had += _this4.vd[_i3];else vd_hading += _this4.vd[_i3];
         };
-        for (var _i2 = 0; _i2 < this.componentNum; _i2++) {
-          _loop2(_i2);
+        for (var _i3 = 0; _i3 < this.componentNum; _i3++) {
+          _loop3(_i3);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
         var list = this.vd.map(function (value, index) {
@@ -43598,12 +43646,12 @@ var Visibility = /*#__PURE__*/function () {
           return b.value - a.value;
         });
         if (false) {
-          var _i3 = 0;
+          var _i4 = 0;
           // console.log(list,list.length)
-          for (var sum = 0; _i3 < list.length && sum < 4 * Math.PI / 300; _i3++, sum = sum + list[list.length - 1 - _i3].value); //console.log(i);
-          console.log("不加载数量:", _i3);
+          for (var sum = 0; _i4 < list.length && sum < 4 * Math.PI / 300; _i4++, sum = sum + list[list.length - 1 - _i4].value); //console.log(i);
+          console.log("不加载数量:", _i4);
           var list2 = [];
-          for (var j = 0; j < list.length - _i3; j++) list2.push(list[j].index);
+          for (var j = 0; j < list.length - _i4; j++) list2.push(list[j].index);
           list = list2;
         } else {
           list = list.map(function (value, index) {
@@ -43649,8 +43697,8 @@ var Visibility = /*#__PURE__*/function () {
         }
 
         window.visibleArea = {};
-        if (visualList0["a"]) for (var _i4 = 0; _i4 < visualList0["a"].length; _i4++) {
-          window.visibleArea[visualList0["a"][_i4]] = true;
+        if (visualList0["a"]) for (var _i5 = 0; _i5 < visualList0["a"].length; _i5++) {
+          window.visibleArea[visualList0["a"][_i5]] = true;
         }
       }
     }
@@ -43707,7 +43755,7 @@ var Visibility = /*#__PURE__*/function () {
   }, {
     key: "getPosIndex",
     value: function getPosIndex() {
-      var _this4 = this;
+      var _this5 = this;
       //加载和剔除都调用这个函数
       this.setArea();
       var self = this;
@@ -43720,14 +43768,14 @@ var Visibility = /*#__PURE__*/function () {
       var distanceMax = Math.pow(Math.pow(dl[0], 2) + Math.pow(dl[1], 2) + Math.pow(dl[2], 2), 0.5);
       var getPosIndex0 = function getPosIndex0(x, y, z) {
         if (x > max[0] || y > max[1] || z > max[2] || x < min[0] || y < min[1] || z < min[2]) {
-          _this4.border = true; //视点在采样区域之外
+          _this5.border = true; //视点在采样区域之外
           if (x > max[0]) x = max[0];
           if (y > max[1]) y = max[1];
           if (z > max[2]) z = max[2];
           if (x < min[0]) x = min[0];
           if (y < min[1]) y = min[1];
           if (z < min[2]) z = min[2];
-        } else _this4.border = false;
+        } else _this5.border = false;
         var x2 = self.camera.position.x;
         var y2 = self.camera.position.y;
         var z2 = self.camera.position.z;
@@ -43749,12 +43797,12 @@ var Visibility = /*#__PURE__*/function () {
       var y = c.position.y;
       var z = c.position.z;
       var arr = [];
-      for (var _i5 = -1; _i5 < 2; _i5 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i5 * dl[0], y + j * dl[1], z + k * dl[2]));
+      for (var _i6 = -1; _i6 < 2; _i6 += 2) for (var j = -1; j < 2; j += 2) for (var k = -1; k < 2; k += 2) arr.push(getPosIndex0(x + _i6 * dl[0], y + j * dl[1], z + k * dl[2]));
       var a0 = getPosIndex0(x, y, z);
       arr.push(a0);
       var sum = 0;
-      for (var _i6 = 0; _i6 < arr.length; _i6++) sum += arr[_i6][4];
-      if (sum !== 0) for (var _i7 = 0; _i7 < arr.length; _i7++) arr[_i7][4] / sum;
+      for (var _i7 = 0; _i7 < arr.length; _i7++) sum += arr[_i7][4];
+      if (sum !== 0) for (var _i8 = 0; _i8 < arr.length; _i8++) arr[_i8][4] / sum;
       a0.push(arr);
       return a0;
     }
@@ -43922,6 +43970,7 @@ var Detection = /*#__PURE__*/function () {
     this.updateGroupList = [];
     this.meshes = meshes;
     this.dectionURL = this.config.urlDetectionServer;
+    // if(!this.config.Detection)return
     this.date = this.getTime();
     // this.time0=performance.now()
     // this.
@@ -54574,6 +54623,17 @@ var Building = /*#__PURE__*/function () {
         mesh.material.side = 0; //THREE.DoubleSide
       }
 
+      if (true) {
+        // mesh.material.color.r/=2
+        // mesh.material.color.g/=2
+        // mesh.material.color.b/=2
+        mesh.material.metalness = 0.25;
+        // console.log(
+        //     mesh.material.metalness,
+        //     mesh.material.shininess
+        // )
+      }
+
       if (false) mesh.material = new THREE.MeshBasicMaterial({
         color: id
       });
@@ -55027,7 +55087,7 @@ exports.LightProducer = LightProducer;
 module.exports = {
   "src": {
     "Building_new": {
-      "path": "assets/space6_sim.glb",
+      "path": "assets/space7.glb",
       "parentGroup": {
         "scale": {
           "x": 1,
@@ -55036,9 +55096,9 @@ module.exports = {
         }
       },
       "createSphere": {
-        "x": [-121000, 117000, 2000],
-        "y": [2286.5, 2286.5, 2000],
-        "z": [-4000, 16000, 2000],
+        "x": [-124000, 126000, 2000],
+        "y": [-19000, 3000, 2000],
+        "z": [-20000, 24000, 2000],
         "r": 250
       },
       "kernelPosition": "-110,40,-10",
@@ -58925,12 +58985,8 @@ module.exports = {
         "117000,2286.5,14000": 39,
         "117000,2286.5,16000": 39
       },
-      "block2Kernel": {}
-    },
-    "SamplePointList": {
-      "path1": "assets/configVVD-model6.json",
-      "path2": "assets/VisibleArea.json",
-      "path3": "assets/voxel.json"
+      "block2Kernel": {},
+      "updateColor": false
     },
     "main": {
       "camera": {
@@ -59827,6 +59883,7 @@ document.addEventListener('DOMContentLoaded', function () {
   config.src.main.autoMove = getParam('autoMove');
   config.src.main.render = getParam('render');
   config.src.Detection.backURL = getParam('backURL');
+  if (getParam('list2Len')) config.src.Visibility.list2Len = parseFloat(getParam('list2Len'));
   if (getParam('testTime')) config.src.Detection.testTime = parseFloat(getParam('testTime'));
   if (getParam('maxBackDelay')) config.src.Detection.maxBackDelay = parseFloat(getParam('maxBackDelay'));
   if (getParam('backURL') !== null) {
@@ -59871,7 +59928,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56293" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "51552" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

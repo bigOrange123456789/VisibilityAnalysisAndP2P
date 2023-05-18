@@ -21,7 +21,7 @@ function process(index){
     
 }
 let index=0
-const number=529
+const number=8437
 const interval=setInterval(()=>{
     process(index)
     console.log(index)

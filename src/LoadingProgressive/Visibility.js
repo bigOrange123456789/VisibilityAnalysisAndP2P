@@ -13,7 +13,8 @@ export class Visibility{
         this.camera=camera
         this.meshes=meshes//用于可见性剔除
         this.componentNum=this.config.componentNum//8437//1278
-        this.vd=new Array(this.componentNum)//{}//当前每个构件的可见度
+        this.vd =new Array(this.componentNum)//{}//当前每个构件的可见度
+        this.pvd=new Array(this.componentNum)
         this.visualList={}//用于视点的可见资源列表
         
 
@@ -127,6 +128,7 @@ export class Visibility{
 		},200)
         setInterval(()=>{
             scope.getList()
+            scope.getList2()
         },1500)
 		console.log("开始动态加载资源")
     }
@@ -146,7 +148,7 @@ export class Visibility{
 		console.log("开始动态加载资源")
     }
     getList(){
-        console.log("*")
+        // console.log("*")
         const self=this
         let vd_had=0
         let vd_hading=0
@@ -164,12 +166,7 @@ export class Visibility{
         // console.log(arr)
         if(loaded){
             // const posIndex=posIndexAll[3]
-            let t0=performance.now()
-            window.t={}
             const d=this.getDirection()
-
-            window.t.t1=performance.now()-t0
-            t0=performance.now()
 
             for(let i=0;i<this.componentNum;i++){
                 const getVD=(j)=>{
@@ -197,8 +194,6 @@ export class Visibility{
                 else vd_hading+=this.vd[i]
             } 
             
-            window.t.t2=performance.now()-t0
-            t0=performance.now()
 
             document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
             
@@ -206,12 +201,8 @@ export class Visibility{
             let list=this.vd.map((value, index) => ({ value, index }))
                 .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
-            
-            list=list.map((value, index) => value.index )
-            
-            window.t.t3=performance.now()-t0
-            t0=performance.now()
-
+                .map((value, index) => value.index )
+            // console.log("list1.length",list.length)
             if(list.length>0)this.loading(list)
             // list.filter((value, index) => index<list.length-i )
             // console.log(list.length)
@@ -223,6 +214,42 @@ export class Visibility{
             //     .sort((a, b) => b.value - a.value)
             //     .map((value, index) => value.index )
             // if(list.length>0)this.loading(list)
+        }
+    }
+    getList2(){//PVD
+        if(!this.config.list2Len)return
+        const self=this
+        const posIndexAll=this.getPosIndex()
+        const arr=posIndexAll[5]
+        let loaded=true
+        for(let i=0;i<arr.length;i++){
+            const posIndex0=arr[i][3]
+            if(!this.visualList[posIndex0]){
+                loaded=false
+                this.request(posIndex0)
+            }
+        }
+        if(loaded){
+            for(let i=0;i<this.componentNum;i++){
+                const getPVD=(j)=>{
+                    const posIndex=arr[j][3]
+                    const weight=arr[j][4]
+                    const visualList0=self.visualList[posIndex] 
+                    const pvd=i in visualList0["pvd"]?visualList0["pvd"][i]:0
+                    return pvd*weight
+                }
+                this.pvd[i]=0
+                for(let j=0;j<arr.length;j++)
+                    this.pvd[i]+=getPVD(j)
+            } 
+            
+            let list2=this.pvd.map((value, index) => ({ value, index }))
+                .filter(item => item.value > 0)
+                .sort((a, b) => b.value - a.value)
+                .filter((value, index) => index < this.config.list2Len)
+                .map((value, index) => value.index )
+            console.log("list2.length",list2.length)
+            if(list2.length>0)this.loading(list2)
         }
     }
     getListOld(){

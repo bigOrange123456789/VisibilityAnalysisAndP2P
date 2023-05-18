@@ -4,6 +4,7 @@ export class Detection {//需要服务器
         this.updateGroupList=[]
         this.meshes=meshes
         this.dectionURL=this.config.urlDetectionServer
+        // if(!this.config.Detection)return
         this.date=this.getTime()
         // this.time0=performance.now()
         // this.

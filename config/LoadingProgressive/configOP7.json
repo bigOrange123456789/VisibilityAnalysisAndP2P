@@ -1312,7 +1312,7 @@
             },
             "blocking": {},
             "block2Kernel": {},
-            "updateColor":true,
+            "updateColor":false,
             "instanceUse":false,
             "useIndirectMaterial":false,
             "crossOriginSocket":[
@@ -1372,7 +1372,7 @@
                 "near": 10,
                 "far": 5000000
             },
-            "speed":10,
+            "speed":80,
             "pathList":[
                 [
                     [-116237.6, -1530.26, 11978.66, -0.11063, -1.49565, -0.11032, 1000]

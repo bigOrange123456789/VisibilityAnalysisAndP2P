@@ -172,6 +172,16 @@ export class Building{
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
+        if(true){
+            // mesh.material.color.r/=2
+            // mesh.material.color.g/=2
+            // mesh.material.color.b/=2
+            mesh.material.metalness=0.25
+            // console.log(
+            //     mesh.material.metalness,
+            //     mesh.material.shininess
+            // )
+        }
         if(false)mesh.material=new THREE.MeshBasicMaterial({color:id})
         if(this.config.useIndirectMaterial){
             mesh.material=new IndirectMaterial(mesh.material)

@@ -51,12 +51,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        new SamplePointList(
-            this.config.createSphere,
-            this.parentGroup,
-            this.meshes,
-            this.config.entropy
-            )
+        // new SamplePointList(
+        //     this.config.createSphere,
+        //     this.parentGroup,
+        //     this.meshes,
+        //     this.config.entropy
+        //     )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -573,7 +573,9 @@ export class Building{
         delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
 
         const scene=new THREE.Scene()
-        scene.add(mesh)
+        const mesh2=mesh.clone()
+        mesh2.applyMatrix4(mesh.matrixWorld);
+        scene.add(mesh2)
         new GLTFExporter().parse(scene,function(result){
             var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
             let link = document.createElement('a')

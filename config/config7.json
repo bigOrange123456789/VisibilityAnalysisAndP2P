@@ -3912,7 +3912,7 @@
                 "117000,2286.5,16000": 39
             },
             "block2Kernel": {},
-            "updateColor":true
+            "updateColor":false
         },
         "main": {
             "camera": {

@@ -161,6 +161,8 @@ document.addEventListener('DOMContentLoaded', () => {
     config.src.main.autoMove    =getParam('autoMove')
     config.src.main.render      =getParam('render')
     config.src.Detection.backURL=getParam('backURL')
+    if(getParam('list2Len'))
+        config.src.Visibility.list2Len=parseFloat(getParam('list2Len'))
     if(getParam('testTime'))
         config.src.Detection.testTime=parseFloat(getParam('testTime'))
     if(getParam('maxBackDelay'))
