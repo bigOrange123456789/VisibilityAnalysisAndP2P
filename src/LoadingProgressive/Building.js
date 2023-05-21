@@ -96,7 +96,8 @@ export class Building{
         this.visibiity=new Visibility(
             camera,
             list=>self.loading(list),
-            this.meshes
+            this.meshes,
+            this.detection
         )
     }
     createFloor(){
@@ -214,7 +215,6 @@ export class Building{
                     metalness: 0.5
                 }),
                 instance_info)
-            
             mesh.lod=[mesh,mesh2]
             // mesh.lod=[mesh,mesh]
             // mesh.visible=false
@@ -241,8 +241,7 @@ export class Building{
         this.visibiity.prePoint2=""//重新进行可见剔除
 
         mesh.myId=id
-        this.detection.receiveMesh(mesh)
-        
+        this.detection.receiveMesh(mesh)   
     }
     loadGLB(id,cb){
         if(this.meshes_info[id])return
@@ -303,10 +302,13 @@ export class Building{
                 gltf.scene.traverse(o=>{
                     if(o instanceof THREE.Mesh){  
                         o.delay={
-                            load   :self.meshes_info[id].loaded   -self.meshes_info[id].request,
-                            forward:self.meshes_info[id].forwarded-self.meshes_info[id].loaded,
-                            parse  :self.meshes_info[id].parsed   -self.meshes_info[id].forwarded
+                            load   :self.meshes_info[id].loaded   -self.meshes_info[id].request,  //加载延迟
+                            forward:self.meshes_info[id].forwarded-self.meshes_info[id].loaded,   //转发延迟
+                            parse  :self.meshes_info[id].parsed   -self.meshes_info[id].forwarded,//解析延迟
+                            
+                            parsed :self.meshes_info[id].parsed,//解析完成的时刻
                         }
+                        
                         o.LoadDelay   =self.meshes_info[id].loaded   -self.meshes_info[id].request
                         o.originType="centerServer"
                         self.addMesh(id,o)
@@ -338,7 +340,9 @@ export class Building{
                         o.delay={
                             load   :0,
                             forward:0,
-                            parse  :performance.now()-self.meshes_info[cid].request
+                            parse  :performance.now()-self.meshes_info[cid].request,
+
+                            parsed :self.meshes_info[id].parsed,//解析完成的时刻
                         }
                         o.originType="edgeP2P"
                         self.addMesh(cid,o)

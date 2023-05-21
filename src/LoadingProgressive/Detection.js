@@ -3,6 +3,8 @@ export class Detection {//需要服务器
         this.config=window.configALL.src.Detection
         this.updateGroupList=[]
         this.meshes=meshes
+        this.demandResponseDelay={}
+
         this.dectionURL=this.config.urlDetectionServer
         // if(!this.config.Detection)return
         this.date=this.getTime()
@@ -89,6 +91,39 @@ export class Detection {//需要服务器
             "count":count
         }
     }
+    getDemandResponseDelay(){
+        let delay=0
+        let delayMax=0
+        let count=0
+        let count_preLoad_used  =0
+        let count_preLoad_noUsed=0
+        for(let id in this.meshes){
+            const mesh=this.meshes[id]
+            if(this.demandResponseDelay[id]){
+                // if(mesh.originType==originType){//延迟只统计通过Server获取的
+                let delay0=mesh.delay["parsed"]-this.demandResponseDelay[id].start
+                if(delay0<=0){
+                    delay0=0
+                    count_preLoad_used++
+                }
+                if(delay0>delayMax) delayMax=delay0
+                delay+=delay0
+                count++
+            }else{
+                count_preLoad_noUsed++
+            }
+            
+            // }
+            // console.log(id,mesh.delay["parsed"],this.demandResponseDelay[id].start,delay)
+        }
+        return {
+            "ave":delay/count,
+            "max":delayMax,
+            "count":count,
+            "count_preLoad_used":count_preLoad_used,
+            "count_preLoad_noUsed":count_preLoad_noUsed
+        }
+    }
     getDelay(delayType,originType){
         let delay=0
         let delayMax=0
@@ -119,6 +154,16 @@ export class Detection {//需要服务器
         if(mesh.originType=="centerServer")this.count_mesh_server++
         else if(mesh.originType=="edgeP2P")this.count_mesh_p2p++
         else console.log("error:mesh.originType")
+    }
+    addDemand(list){
+        // this.demandResponseDelay={}
+        for(let i=0;i<list.length;i++){
+            const meshId=list[i]
+            if(!this.demandResponseDelay[meshId]){
+                this.demandResponseDelay[meshId]={start:performance.now()}
+                if(this.meshes[meshId])this.demandResponseDelay[meshId]["end"]=performance.now()
+            }
+        }
     }
     count_mesh_p2p_NotUsed(){
         let count=0
@@ -204,6 +249,7 @@ export class Detection {//需要服务器
                 forward:this.getDelay("forward","centerServer"),
                 parse:this.getDelay("parse","centerServer"),
                 parse_edgeP2P:this.getDelay("parse","edgeP2P"),
+                demandResponse:this.getDemandResponseDelay(),
             },
 
             frameCount:this.frameCount,//测试所用的帧数

@@ -1,7 +1,8 @@
 export class Visibility{
-    constructor(camera,loading,meshes) {
+    constructor(camera,loading,meshes,detection) {
         this.config=window.configALL.src.Visibility
         this.urlVdServer=this.config.urlVdServer//"http://150.158.24.191:8091"
+        this.detection=detection
         console.log("urlVdServer",this.urlVdServer)
         // console.log("areaInf",areaInf)
         // console.log(areaInf["min"])
@@ -202,6 +203,7 @@ export class Visibility{
                 .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
                 .map((value, index) => value.index )
+            self.detection.addDemand(list)
             // console.log("list1.length",list.length)
             if(list.length>0)this.loading(list)
             // list.filter((value, index) => index<list.length-i )

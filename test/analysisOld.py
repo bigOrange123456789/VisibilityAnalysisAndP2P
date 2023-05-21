@@ -67,12 +67,6 @@ class Analysis:
             self.getSum(p2pFlag,["plumpness","sum"]),
             self.getSum(p2pFlag,["plumpness","num"])
          ),
-         "平均响应延迟":self.getSum(p2pFlag,["delay","demandResponse","ave"])/n,
-         "最大响应延迟":self.getSum(p2pFlag,["delay","demandResponse","max"])/n,
-
-         "预加载被使用":self.getSum(p2pFlag,["delay","demandResponse","count_preLoad_used"])/n,
-         "预加载未使用":self.getSum(p2pFlag,["delay","demandResponse","count_preLoad_noUsed"])/n,
-
          "平均加载延迟":self.getSum(p2pFlag,["delay","load","ave"])/n,
          "最大加载延迟":self.getSum(p2pFlag,["delay","load","max"])/n,
 

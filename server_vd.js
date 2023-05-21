@@ -20,66 +20,67 @@ const configList=[
     ],
     path:"dist/assets/configVVD-model6.json"
   },
-  // {
-  //   sceneId:"haiNing",
-  //   areaId:0,
-  //   "x": [
-  //       -124000,
-  //       126000,
-  //       2000
-  //   ],
-  //   "y": [
-  //       -19000,
-  //       3000,
-  //       2000
-  //   ],
-  //   "z": [
-  //       -20000,
-  //       24000,
-  //       2000
-  //   ],
-  //   path:"dist/assets/configVVD-model7.json"
-  // },
-  // {
-  //   sceneId:"gkd",
-  //   areaId:0,
-  //   x: [
-  //     -815,879,
-  //     11
-  //   ],
-  //   y: [
-  //       16,16,
-  //       11
-  //   ],
-  //   z: [
-  //       -962,1084,
-  //       11
-  //   ],
-  //   path:"dist/assets/configVVD-model8.json"
-  // },
-  // {
-  //   sceneId:"gkd",
-  //   areaId:1,
-  //   "x": [
-  //     -880,880,
-  //     110
-  //   ],
-  //   "y": [
-  //     -110,440,
-  //     110
-  //   ],
-  //   "z": [
-  //     -990,1100,
-  //     110
-  //   ],
-  //   path:"dist/assets/configVVD-model8_1.json"
-  // }
+  {
+    sceneId:"haiNing",
+    areaId:0,
+    "x": [
+        -124000,
+        126000,
+        2000
+    ],
+    "y": [
+        -19000,
+        3000,
+        2000
+    ],
+    "z": [
+        -20000,
+        24000,
+        2000
+    ],
+    path:"dist/assets/configVVD-model7.json"
+  },
+  {
+    sceneId:"gkd",
+    areaId:0,
+    x: [
+      -815,879,
+      11
+    ],
+    y: [
+        16,16,
+        11
+    ],
+    z: [
+        -962,1084,
+        11
+    ],
+    path:"dist/assets/configVVD-model8.json"
+  },
+  {
+    sceneId:"gkd",
+    areaId:1,
+    "x": [
+      -880,880,
+      110
+    ],
+    "y": [
+      -110,440,
+      110
+    ],
+    "z": [
+      -990,1100,
+      110
+    ],
+    path:"dist/assets/configVVD-model8_1.json"
+  }
 ]
+console.log('version:02(node --max_old_space_size=8192 server_vd)')
 class VD{
   constructor(areaInf,usePVD){
     this.usePVD=usePVD
     this.id=areaInf.sceneId+"&"+areaInf.areaId
-    console.log('version:02(node --max_old_space_size=8192 server_vd)')
+    console.log(this.id)
     this.areaInf={
       "min": [areaInf.x[0],areaInf.y[0],areaInf.z[0]],
       "max": [areaInf.x[1],areaInf.y[1],areaInf.z[1]],
@@ -174,7 +175,7 @@ class VD{
 }
 const vdList=VD.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
-const ip=8091
+const port=8091
 const server=require('http').createServer(function (request, response) {
     // let index;
     let info;
@@ -193,8 +194,8 @@ const server=require('http').createServer(function (request, response) {
         console.log("error 没有找到对应数据",info)
       }
     });
-}).listen(ip, '0.0.0.0', function () {
-  console.log("listening to client:"+ip);
+}).listen(port, '0.0.0.0', function () {
+  console.log("listening to client:"+port);
 });
 server.on('close',()=>{
   console.log('服务关闭')

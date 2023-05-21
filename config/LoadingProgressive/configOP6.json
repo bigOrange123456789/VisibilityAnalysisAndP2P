@@ -1345,7 +1345,7 @@
             "urlP2pControllerServer":"http://139.196.217.153:8010"
         },
         "Detection":{
-            "urlDetectionServer":"http://localhost:9999",
+            "urlDetectionServer":"http://123.57.58.224:9999",
             "maxBackDelay":10
         },
         "SamplePointList": {

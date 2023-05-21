@@ -1,10 +1,9 @@
-import config from '../../config/config.json'
 import * as THREE from "three";
 import * as dat from "dat.gui";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 export class SamplePointList{
     constructor(createSphere,parentGroup,meshes,entropy){
-        this.config=config.src.SamplePointList
+        this.config=window.configALL.src.SamplePointList
         this.createSphere=createSphere
         // console.log("visibleArea",visibleArea)
         window.showVDbyColor="evd"
@@ -137,7 +136,7 @@ export class SamplePointList{
         };
     }
     init(createSphere,parentGroup,meshes,entropy){
-        this.config=config.src.SamplePointList
+        this.config=window.configALL.src.SamplePointList
         this.parentGroup=parentGroup
         this.meshes=meshes
         this.azimuthAngle=0//偏航角
@@ -180,7 +179,7 @@ export class SamplePointList{
             getMul(d,d1),getMul(d,d2),getMul(d,d3),getMul(d,d4),getMul(d,d5),getMul(d,d6)
         ]
     }
-    showVDbyColor(){
+    showVDbyColor_old(){
         const self=this
         const d=this.getDirection()
         for(let i=0;i<self.meshes.length;i++){
@@ -211,11 +210,43 @@ export class SamplePointList{
             }
         }
     }
+    showVDbyColor(){
+        const self=this
+        const d=this.getDirection()
+        for(let i=0;i<self.meshes.length;i++){
+            const mesh=self.meshes[i]
+            const evd=mesh.vvd1*d[0]+
+                     mesh.vvd2*d[1]+
+                     mesh.vvd3*d[2]+
+                     mesh.vvd4*d[3]+
+                     mesh.vvd5*d[4]+
+                     mesh.vvd6*d[5]
+            const pvd=mesh.pvd
+            const color=mesh.material.color
+            if(evd!==0){
+                color.r=1-evd*50
+                if(color.r<0.3)color.r=0.3
+                color.g=color.b=0
+                mesh.material.opacity=1
+            }
+            // else if(pvd!==0){
+            //     color.g=1-pvd*50
+            //     if(color.g<0.3)color.g=0.3
+            //     color.r=color.b=0
+            //     mesh.material.opacity=1
+            // }
+            else{
+                color.r=0.
+                color.g=color.b=0.5
+                mesh.material.opacity=1//0.1
+            }
+        }
+    }
     createArrow(){
         const self=this
         const origin = new THREE.Vector3(0, 0, 0); // 箭头起点
         const direction = new THREE.Vector3(1, 0, 0); // 箭头方向
-        const length = 5; // 箭头长度
+        const length = 10; // 箭头长度
         const color = 0xff0000; // 箭头颜色
 
         const arrowHelper = new THREE.Object3D()
@@ -284,7 +315,11 @@ export class SamplePointList{
                     let geometry = new THREE.SphereGeometry( 
                             c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
                             8,4);
-                    let material = new THREE.MeshBasicMaterial( {color:0x008f8f} );
+                    let material = new THREE.MeshBasicMaterial( {
+                        color:0x008f8f,
+                        opacity:0.01,
+                        transparent:true
+                    } );
                     material.color.r=0.5
                     material.color.g=material.color.b=1
                     const sphere = new THREE.Mesh( geometry, material );

@@ -4,14 +4,13 @@ import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 // import { GLTFExporter } from "./three/examples/jsm/exporters/GLTFExporter.js";
 import { saveAs } from 'file-saver';
-import config from '../../config/config.json'
 import { Array3D } from './Array3D.js'
 import { SamplePointList } from './SamplePointList.js'
 export class Building{
     constructor(scene){
         this.scene=scene
         
-        this.config=config.src.Building_new
+        this.config=window.configALL.src.Building_new
         window.config0=this.config
         this.parentGroup = new THREE.Group()
 
@@ -51,12 +50,12 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        // new SamplePointList(
-        //     this.config.createSphere,
-        //     this.parentGroup,
-        //     this.meshes,
-        //     this.config.entropy
-        //     )
+        new SamplePointList(
+            this.config.createSphere,
+            this.parentGroup,
+            this.meshes,
+            this.config.entropy
+            )
         
         // this.createCube2(this.config.createSphere)
         // this.createKernel(this.config.block2Kernel)
@@ -307,12 +306,13 @@ export class Building{
                     mesh.myId=self.meshes.length
                     if(false)colorList.push(self.getColor2(mesh))
                     
-                    if(true)if(self.config.updateColor){
+                    if(true){//if(self.config.updateColor){
+                        // console.log(mesh.myId)
                         let t=mesh.myId*256*256*256/1320 //2665
                         mesh.material.color.r=0.5*((t&0xff)    )/255
                         mesh.material.color.g=0.5*((t&0xff00)>>8 )/255
                         mesh.material.color.b=0.5*((t&0xff0000)>>16)/255
-                        mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
+                        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
                     }
                     
                     // mesh.material.opacity=1

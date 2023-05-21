@@ -1,7 +1,7 @@
 {
     "src": {
         "Building_new": {
-            "path": "assets/space7.glb",
+            "path": "assets/space6_sim.glb",
             "parentGroup": {
                 "scale": {
                     "x": 1,
@@ -11,21 +11,21 @@
             },
             "createSphere": {
                 "x": [
-                    -124000,
-                    126000,
+                    -121000,
+                    117000,
                     2000
                 ],
                 "y": [
-                    -19000,
-                    3000,
+                    2286.5,
+                    2286.5,
                     2000
                 ],
                 "z": [
-                    -20000,
-                    24000,
+                    -4000,
+                    16000,
                     2000
                 ],
-                "r": 250
+                "r": 500
             },
             "kernelPosition": "-110,40,-10",
             "entropy": {},
@@ -3911,8 +3911,13 @@
                 "117000,2286.5,14000": 39,
                 "117000,2286.5,16000": 39
             },
-            "block2Kernel": {},
-            "updateColor":false
+            "block2Kernel": {}
+        },
+        "SamplePointList":{
+            "path1":"assets/configVVD-model6.json",
+            "path2":"assets/VisibleArea.json",
+            "path3":"assets/voxel.json"
+
         },
         "main": {
             "camera": {
