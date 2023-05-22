@@ -2854,7 +2854,7 @@ module.exports = {
       "instanceUse": true,
       "useIndirectMaterial": false,
       "waterCidList": [175, 180],
-      "crossOriginSocket": ["49.234.135.98:8081"]
+      "crossOriginSocket": []
     },
     "Visibility": {
       "areaInfList": [{
@@ -53927,6 +53927,17 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
       vertexShader: IndirectMaterial.prototype.vertexShader,
       fragmentShader: IndirectMaterial.prototype.fragmentShader
     });
+    // console.log(materialOld.type)
+    // this.type="MeshStandardMaterial"
+    // for(let i in materialOld){
+    // 	if(
+    // 		i!=="type"
+    // 		&&i!="uniforms"
+    // 		&&i!="vertexShader"
+    // 		&&i!="fragmentShader"
+    // 	)
+    // 		this[i]=materialOld[i]
+    // }
     _this.uniforms.GBufferd.value = _this._initLitRenderTarget().texture;
     _this.uniforms.DDGIVolume.value.origin = param.origin;
     _this.uniforms.DDGIVolume.value.probeGridCounts = param.probeGridCounts;
@@ -53949,6 +53960,28 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
       _this.uniforms.emissiveMap.value = node.material.emissiveMap;
     }
     window.indirectMaterial = _assertThisInitialized(_this);
+
+    // const tagList=[
+    // 	"type",
+    // 	"isMeshStandardMaterial",
+
+    // 	"roughness",
+    // 	"metalness",
+    // 	"map",
+    // 	"lightMap",
+    // 	"lightMapIntensity",
+    // 	"aoMap",
+    // 	"aoMapIntensity",
+    // 	"emissive",
+    // 	"emissiveIntensity",
+    // 	"emissiveMap",
+    // 	"bumpMap",
+    // 	"bumpScale",
+    // ]
+    // for(let i=0;i<tagList.length;i++){
+    // 	const tag=tagList[i]
+    // 	this[tag]=materialOld[tag]
+    // }
     return _this;
   }
   _createClass(IndirectMaterial, [{
@@ -54127,6 +54160,7 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
               return _context.abrupt("return", new Promise(function (resolve, reject) {
                 new THREE.FileLoader().load('probeIrradiance.json', function (data) {
                   var J = JSON.parse(data);
+                  console.log(J);
                   var texture = array2Texture(J.data, J.width, J.height);
                   texture.param = J.param;
                   texture.param.origin = new THREE.Vector3(J.param.origin.x, J.param.origin.y, J.param.origin.z);
@@ -54195,12 +54229,17 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
               return IndirectMaterial.loadGLSL('indirectFS');
             case 5:
               IndirectMaterial.prototype.fragmentShader = _context3.sent;
-              _context3.next = 8;
+              //document.getElementById('indirectFS').innerHTML
+
+              // console.log("vertexShader:",  IndirectMaterial.prototype.vertexShader)
+              console.log("fragmentShader:", IndirectMaterial.prototype.fragmentShader);
+              _context3.next = 9;
               return IndirectMaterial.Json2Texture();
-            case 8:
+            case 9:
               IndirectMaterial.prototype.probeIrradiance = _context3.sent;
+              console.log("probeIrradiance", IndirectMaterial.prototype.probeIrradiance);
               if (cb) cb();
-            case 10:
+            case 12:
             case "end":
               return _context3.stop();
           }
@@ -54238,7 +54277,7 @@ var IndirectMaterial = /*#__PURE__*/function (_THREE$ShaderMaterial) {
     }()
   }]);
   return IndirectMaterial;
-}(THREE.ShaderMaterial); // IndirectMaterial0.prototype.isMeshStandardMaterial = true;
+}(THREE.ShaderMaterial);
 exports.IndirectMaterial = IndirectMaterial;
 },{"three":"node_modules/three/build/three.module.js","pako":"node_modules/pako/index.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"node_modules/three/examples/jsm/objects/Water.js":[function(require,module,exports) {
 "use strict";
@@ -54692,6 +54731,13 @@ var Building = /*#__PURE__*/function () {
         color: id
       });
       if (this.config.useIndirectMaterial) {
+        // console.log(mesh.material)
+        // mesh.material.onBeforeCompile=shader=>{
+        //     console.log({
+        //         "v":shader.vertexShader,
+        //         "f":shader.fragmentShader
+        //     })
+        // }
         mesh.material = new _IndirectMaterial.IndirectMaterial(mesh.material);
       }
       // console.log("THREE.DoubleSide",THREE.DoubleSide)
@@ -54784,6 +54830,7 @@ var Building = /*#__PURE__*/function () {
         if (self.config.crossOriginSocket && self.config.crossOriginSocket.length > 0) {
           var i = Math.floor(Math.random() * self.config.crossOriginSocket.length);
           zipLoader.crossOriginSocket = self.config.crossOriginSocket[i];
+          console.log(zipLoader.crossOriginSocket);
         }
         zipLoader.load(url, function () {}, function () {
           console.log("加载失败：" + id);
@@ -56060,7 +56107,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57447" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52515" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

@@ -42,7 +42,7 @@ export class Building{
     }
     loadConfigInstance(cb){
         const self=this
-        const matrix2str=(instanceMatrix)=>{
+        const matrix2str=instanceMatrix=>{
             let str=""
             console.log(instanceMatrix.length,"instanceMatrix.length")
             for(let i=0;i<Object.keys(instanceMatrix).length;i++){
@@ -185,6 +185,13 @@ export class Building{
         }
         if(false)mesh.material=new THREE.MeshBasicMaterial({color:id})
         if(this.config.useIndirectMaterial){
+            // console.log(mesh.material)
+            // mesh.material.onBeforeCompile=shader=>{
+            //     console.log({
+            //         "v":shader.vertexShader,
+            //         "f":shader.fragmentShader
+            //     })
+            // }
             mesh.material=new IndirectMaterial(mesh.material)
         }
         // console.log("THREE.DoubleSide",THREE.DoubleSide)
@@ -273,6 +280,7 @@ export class Building{
             if(self.config.crossOriginSocket&&self.config.crossOriginSocket.length>0){
                 const i=Math.floor(Math.random()*self.config.crossOriginSocket.length)
                 zipLoader.crossOriginSocket=self.config.crossOriginSocket[i]
+                console.log(zipLoader.crossOriginSocket)
             }
 		    zipLoader.load( url,()=>{
 		    },()=>{

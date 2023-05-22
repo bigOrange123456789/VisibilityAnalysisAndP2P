@@ -126,6 +126,7 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 			vertexShader: IndirectMaterial.prototype.vertexShader,
 			fragmentShader: IndirectMaterial.prototype.fragmentShader
 		})
+		window.indirectMaterial=this
 		this.uniforms.GBufferd.value = this._initLitRenderTarget().texture
 		this.uniforms.DDGIVolume.value.origin = param.origin
 		this.uniforms.DDGIVolume.value.probeGridCounts = param.probeGridCounts
