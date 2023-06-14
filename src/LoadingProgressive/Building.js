@@ -13,17 +13,23 @@ export class Building{
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
         this.scene=scene
+        window.save=(data,name)=>{
+            self.saveJson(data,name?name:"test.json")
+        }
         
         this.config=window.configALL.src.Building_new
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()
-        this.parentGroup.scale.set(
-            this.config.parentGroup.scale.x,
-            this.config.parentGroup.scale.y,
-            this.config.parentGroup.scale.z
-        )
+        // var k0=10
+        // this.parentGroup.scale.set(
+        //     this.config.parentGroup.scale.x*k0,
+        //     this.config.parentGroup.scale.y*k0,
+        //     this.config.parentGroup.scale.z*k0
+        // )
         scene.add(this.parentGroup)
+        // this.test()
+        // return
         this.meshes={}
         window.meshes=this.meshes
         this.meshes_info={}
@@ -39,6 +45,31 @@ export class Building{
                 self.start()
             })
         })
+    }
+    test(){
+        const sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        this.parentGroup.add(sphere)
+        var self=this
+        const loader = new GLTFLoader();
+        loader.load("cube.glb", gltf=>{
+            // console.log(id)
+            var arr=gltf.scene.children
+            for(let i=0;i<arr.length;i++){
+                arr[i].material.transparent=true
+                arr[i].material.opacity=0.1
+            }
+            gltf.scene.traverse(o=>{
+                if(o instanceof THREE.Mesh){                    
+                    // self.addMesh(id,o)
+                }
+            })
+            self.parentGroup.add(gltf.scene)
+            
+        }, undefined, function (error) {
+            console.error(error);
+        });
     }
     loadConfigInstance(cb){
         const self=this
@@ -239,8 +270,9 @@ export class Building{
             mesh.LoadDelay =mesh0.LoadDelay
             mesh.originType=mesh0.originType
             mesh.delay     =mesh0.delay
+            mesh.config0=this.meshes_info[id]
         }
-
+        const self=this
         setTimeout(()=>{
             self.meshes[id]=mesh
         },1000)
@@ -394,18 +426,32 @@ export class Building{
     }
     loading(list){
         const self=this;
-        for(let i=0;i<50&&i<list.length;i++){
+        window.list=list
+        const NUMBER=50//50
+        const TIME=1500//100
+        window.NUMBER=NUMBER
+        window.TIME0=TIME
+        for(let i=0;i<NUMBER&&i<list.length;i++){
             this.loadZip(list[i])
         }
         setTimeout(()=>{
-            for(let i=50;i<list.length;i++){
+            for(let i=NUMBER;i<list.length;i++){
                 self.loadZip(list[i])
             }
-        },100)
+        },TIME)
     }
     saveStr(str,name){
         var myBlob=new Blob([str], { type: 'text/plain' })
         let link = document.createElement('a')
+        link.href = URL.createObjectURL(myBlob)
+        link.download = name
+        link.click()
+    }
+    saveJson(data,name){
+        const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
+        
+        const myBlob = new Blob([jsonData], { type: 'application/json' });
+        const link = document.createElement('a');
         link.href = URL.createObjectURL(myBlob)
         link.download = name
         link.click()

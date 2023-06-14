@@ -7,6 +7,20 @@ import { RTXGINetwork } from './network/RTXGINetwork';
 import { StateCode } from "./network/StateCode"
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
+////////////////////////////////////////////////////
+const litRenderTarget = new THREE.WebGLRenderTarget(
+    window.innerWidth,
+    window.innerHeight,
+    {
+      minFilter: THREE.NearestFilter,
+      magFilter: THREE.NearestFilter,
+      format: THREE.RGBAFormat,
+      type: THREE.FloatType
+    }
+  )
+// litRenderTarget.texture.type = 1015
+// litRenderTarget.texture.format = 1023
+///////////////////////////////////////////////////////
 const ui=new UI()
 
 import {Light} from "./Light"
@@ -99,7 +113,7 @@ function initRender() {
 		window.material=indirectMaterial
         node.diffuseMaterial = node.material
 		node.indirectMaterial = indirectMaterial
-		node.material=node.indirectMaterial
+		// node.material=node.indirectMaterial
 		models.push(node)
       }
     })
@@ -189,7 +203,21 @@ function initRTXGINetwork()
 * render
 */
 function render() {
-    renderer.render(scene, camera)
+
+      for (var i = 0; i < models.length; i++) {
+		models[i].material = models[i].diffuseMaterial
+	  }
+	  renderer.setRenderTarget(litRenderTarget)
+	  renderer.render(scene, camera)
+	  for (var i = 0; i < models.length; i++) {
+		models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
+		models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
+		models[i].indirectMaterial.uniforms.GBufferd.value = litRenderTarget.texture;
+		models[i].material = models[i].indirectMaterial//models[i].indirectShader;
+	  }
+	  renderer.setRenderTarget(null)
+	  renderer.render(scene, camera)
+
 }
 
 /**

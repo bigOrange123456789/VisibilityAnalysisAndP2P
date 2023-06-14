@@ -24247,6 +24247,7 @@ function WebGLRenderer( parameters ) {
 		//
 
 		background.render( currentRenderList, scene, camera, forceClear );
+		// window.background=background
 
 		// render scene
 

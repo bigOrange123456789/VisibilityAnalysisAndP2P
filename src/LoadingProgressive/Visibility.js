@@ -198,7 +198,8 @@ export class Visibility{
 
             document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
             
-            
+            // console.log(this.vd)
+            window.vd=this.vd
             let list=this.vd.map((value, index) => ({ value, index }))
                 .filter(item => item.value > 0)
                 .sort((a, b) => b.value - a.value)
@@ -206,6 +207,7 @@ export class Visibility{
             self.detection.addDemand(list)
             // console.log("list1.length",list.length)
             if(list.length>0)this.loading(list)
+
             // list.filter((value, index) => index<list.length-i )
             // console.log(list.length)
             // list=list.map((value, index) => value.index )

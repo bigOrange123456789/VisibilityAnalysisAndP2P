@@ -2870,7 +2870,7 @@ module.exports = {
       }],
       "componentNum": 8437,
       "sceneId": "gkd",
-      "urlVdServer": "http://39.98.206.0:8091"
+      "urlVdServer": "http://localhost:8091"
     },
     "P2P": {
       "urlP2pControllerServer": "http://139.196.217.153:8010"
@@ -43511,6 +43511,9 @@ var Visibility = /*#__PURE__*/function () {
           _loop(_i);
         }
         document.getElementById("plumpness").innerHTML = "饱满度:" + (100 * vd_had / (vd_had + vd_hading)).toFixed(4) + "%";
+
+        // console.log(this.vd)
+        window.vd = this.vd;
         var list = this.vd.map(function (value, index) {
           return {
             value: value,
@@ -43526,6 +43529,7 @@ var Visibility = /*#__PURE__*/function () {
         self.detection.addDemand(list);
         // console.log("list1.length",list.length)
         if (list.length > 0) this.loading(list);
+
         // list.filter((value, index) => index<list.length-i )
         // console.log(list.length)
         // list=list.map((value, index) => value.index )
@@ -44006,6 +44010,10 @@ var Detection = /*#__PURE__*/function () {
       console.log("end");
       scope.finish();
     }, scope.testTime * 1000);
+    window.getTimeList = function () {
+      var config = scope.getTimeList();
+      window.save(config, "result_n" + window.NUMBER + "t" + window.TIME0 + ".json");
+    };
   }
   _createClass(Detection, [{
     key: "recordPlumpness",
@@ -44095,6 +44103,16 @@ var Detection = /*#__PURE__*/function () {
         "count_preLoad_used": count_preLoad_used,
         "count_preLoad_noUsed": count_preLoad_noUsed
       };
+    }
+  }, {
+    key: "getTimeList",
+    value: function getTimeList() {
+      var config = {};
+      for (var id in this.meshes) {
+        var mesh = this.meshes[id];
+        config[id] = mesh.config0;
+      }
+      return config;
     }
   }, {
     key: "getDelay",
@@ -54571,11 +54589,21 @@ var Building = /*#__PURE__*/function () {
     document.getElementById("LoadProgress").innerHTML = "";
     var self = this;
     this.scene = scene;
+    window.save = function (data, name) {
+      self.saveJson(data, name ? name : "test.json");
+    };
     this.config = window.configALL.src.Building_new;
     this.NumberOfComponents = this.config.NumberOfComponents;
     this.parentGroup = new THREE.Group();
-    this.parentGroup.scale.set(this.config.parentGroup.scale.x, this.config.parentGroup.scale.y, this.config.parentGroup.scale.z);
+    // var k0=10
+    // this.parentGroup.scale.set(
+    //     this.config.parentGroup.scale.x*k0,
+    //     this.config.parentGroup.scale.y*k0,
+    //     this.config.parentGroup.scale.z*k0
+    // )
     scene.add(this.parentGroup);
+    // this.test()
+    // return
     this.meshes = {};
     window.meshes = this.meshes;
     this.meshes_info = {};
@@ -54592,6 +54620,34 @@ var Building = /*#__PURE__*/function () {
     });
   }
   _createClass(Building, [{
+    key: "test",
+    value: function test() {
+      var sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
+      var sphereMaterial = new THREE.MeshBasicMaterial({
+        color: 0xffffff
+      });
+      var sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+      this.parentGroup.add(sphere);
+      var self = this;
+      var loader = new _GLTFLoader.GLTFLoader();
+      loader.load("cube.glb", function (gltf) {
+        // console.log(id)
+        var arr = gltf.scene.children;
+        for (var i = 0; i < arr.length; i++) {
+          arr[i].material.transparent = true;
+          arr[i].material.opacity = 0.1;
+        }
+        gltf.scene.traverse(function (o) {
+          if (o instanceof THREE.Mesh) {
+            // self.addMesh(id,o)
+          }
+        });
+        self.parentGroup.add(gltf.scene);
+      }, undefined, function (error) {
+        console.error(error);
+      });
+    }
+  }, {
     key: "loadConfigInstance",
     value: function loadConfigInstance(cb) {
       var self = this;
@@ -54781,7 +54837,9 @@ var Building = /*#__PURE__*/function () {
         mesh.LoadDelay = mesh0.LoadDelay;
         mesh.originType = mesh0.originType;
         mesh.delay = mesh0.delay;
+        mesh.config0 = this.meshes_info[id];
       }
+      var self = this;
       setTimeout(function () {
         self.meshes[id] = mesh;
       }, 1000);
@@ -54961,20 +55019,38 @@ var Building = /*#__PURE__*/function () {
     key: "loading",
     value: function loading(list) {
       var self = this;
-      for (var i = 0; i < 50 && i < list.length; i++) {
+      window.list = list;
+      var NUMBER = 50; //50
+      var TIME = 1500; //100
+      window.NUMBER = NUMBER;
+      window.TIME0 = TIME;
+      for (var i = 0; i < NUMBER && i < list.length; i++) {
         this.loadZip(list[i]);
       }
       setTimeout(function () {
-        for (var _i = 50; _i < list.length; _i++) {
+        for (var _i = NUMBER; _i < list.length; _i++) {
           self.loadZip(list[_i]);
         }
-      }, 100);
+      }, TIME);
     }
   }, {
     key: "saveStr",
     value: function saveStr(str, name) {
       var myBlob = new Blob([str], {
         type: 'text/plain'
+      });
+      var link = document.createElement('a');
+      link.href = URL.createObjectURL(myBlob);
+      link.download = name;
+      link.click();
+    }
+  }, {
+    key: "saveJson",
+    value: function saveJson(data, name) {
+      var jsonData = JSON.stringify(data); //JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
+
+      var myBlob = new Blob([jsonData], {
+        type: 'application/json'
       });
       var link = document.createElement('a');
       link.href = URL.createObjectURL(myBlob);
@@ -55929,6 +56005,9 @@ var Loader = /*#__PURE__*/function () {
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
     this.initScene();
+
+    // this.building=new Building(this.scene,this.camera)
+    // return
     this.initSky();
     this.setSpeed();
     this.initWander();
@@ -56001,7 +56080,22 @@ var Loader = /*#__PURE__*/function () {
       this.light.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
       this.stats.update();
       // console.log(this.config)
-      if (this.config.render !== "false") this.renderer.render(this.scene, this.camera);
+      if (this.config.render !== "false")
+        // this.renderer.render(this.scene,this.camera)
+        {
+          //   for (var i = 0; i < models.length; i++) {
+          //     models[i].material = models[i].diffuseMaterial
+          //   }
+          //   renderer.setRenderTarget(litRenderTarget)
+          //   renderer.render(scene, camera)
+          //   for (var i = 0; i < models.length; i++) {
+          //     models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
+          //     models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
+          //     models[i].material = models[i].indirectMaterial//models[i].indirectShader;
+          //   }
+          //   renderer.setRenderTarget(null)
+          renderer.render(this.scene, this.camera);
+        }
       requestAnimationFrame(this.animate);
     }
   }, {
@@ -56107,7 +56201,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52515" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60483" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

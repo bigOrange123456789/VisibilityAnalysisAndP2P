@@ -21,6 +21,11 @@ export class Loader{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
+        
+
+        
+        // this.building=new Building(this.scene,this.camera)
+        // return
         this.initSky()
         this.setSpeed()
         this.initWander()
@@ -100,7 +105,21 @@ export class Loader{
         this.stats.update()
         // console.log(this.config)
         if(this.config.render!=="false")
-            this.renderer.render(this.scene,this.camera)
+            // this.renderer.render(this.scene,this.camera)
+            {
+                //   for (var i = 0; i < models.length; i++) {
+                //     models[i].material = models[i].diffuseMaterial
+                //   }
+                //   renderer.setRenderTarget(litRenderTarget)
+                //   renderer.render(scene, camera)
+                //   for (var i = 0; i < models.length; i++) {
+                //     models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
+                //     models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
+                //     models[i].material = models[i].indirectMaterial//models[i].indirectShader;
+                //   }
+                //   renderer.setRenderTarget(null)
+                  renderer.render(this.scene,this.camera)
+            }
         requestAnimationFrame(this.animate)
     }
     resize(){

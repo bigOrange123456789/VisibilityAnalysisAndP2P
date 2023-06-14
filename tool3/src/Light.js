@@ -1,10 +1,11 @@
 import * as THREE from '../build/three.module'
 export class Light{
     constructor(){
-        this.directionalLightGroup= []
-        this.pointLightGroup=[]
-        this.spotLightGroup=[]
-        // this.init(rtxgiNetwork,scene)
+      // this.object=new THREE.Object3D()
+      this.directionalLightGroup= []
+      this.pointLightGroup=[]
+      this.spotLightGroup=[]
+      // this.init(rtxgiNetwork,scene)
     }
     init(rtxgiNetwork,scene) {
         if(rtxgiNetwork.directionalLightCt == 1)

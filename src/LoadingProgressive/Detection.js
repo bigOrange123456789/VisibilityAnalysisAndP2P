@@ -42,6 +42,10 @@ export class Detection {//需要服务器
             console.log("end")
             scope.finish()
         },scope.testTime*1000)
+        window.getTimeList=()=>{
+            const config=scope.getTimeList()
+            window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
+        }
     }
     recordPlumpness(){
         let s=document.getElementById("plumpness").innerHTML
@@ -123,6 +127,14 @@ export class Detection {//需要服务器
             "count_preLoad_used":count_preLoad_used,
             "count_preLoad_noUsed":count_preLoad_noUsed
         }
+    }
+    getTimeList(){
+        const config={}
+        for(let id in this.meshes){
+            const mesh=this.meshes[id]
+            config[id]=mesh.config0
+        }
+        return config
     }
     getDelay(delayType,originType){
         let delay=0
