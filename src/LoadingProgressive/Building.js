@@ -8,6 +8,7 @@ import { Detection } from './Detection.js'
 import {ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 import { WaterController  } from '../../lib/threejs/WaterController'
+import { material } from "gltf-pipeline/lib/ForEach.js"
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
@@ -39,7 +40,6 @@ export class Building{
         this.p2p=new P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
-        
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
                 self.start()
@@ -100,7 +100,6 @@ export class Building{
             this.loadJson(
                 this.config.path+"info.json",
                 data=>{
-                    console.log(data)
                     self.instance_info=data.instanceMatrix
                     self.colorList=data.colorList
                     if(false)matrix2str(data.instanceMatrix)
@@ -215,7 +214,7 @@ export class Building{
             // )
         }
         if(false)mesh.material=new THREE.MeshBasicMaterial({color:id})
-        if(this.config.useIndirectMaterial){
+        if(false)if(this.config.useIndirectMaterial){
             // console.log(mesh.material)
             // mesh.material.onBeforeCompile=shader=>{
             //     console.log({
@@ -244,15 +243,94 @@ export class Building{
             const mesh0=mesh
             const instance_info=this.instance_info[id]
             const geometry=mesh.geometry
-            const mesh2=this.getInstancedMesh(geometry,mesh.material,instance_info)
+            const mesh2=this.getInstancedMesh(
+                geometry,
+                // new THREE.MeshPhongMaterial({ 
+                //     color:color ,
+                //     shininess:100,
+                //     map:mesh.material.map,
+                //     // metalness: 0.5
+                // }),
+                new THREE.MeshStandardMaterial({
+                    color:color ,
+                    map:mesh.material.map,
+
+                    bumpScale: 1,
+                    clipIntersection:  false,
+                    clipShadows :false,
+                    clippingPlanes:null,
+                    colorWrite: 
+                    true,
+                    displacementBias:0,
+                    displacementMap: null,
+                    displacementScale: 1,
+                    dithering: false,
+                    emissiveIntensity: 
+                    1,
+                    emissiveMap
+                    : 
+                    null,
+                    envMap
+                    : 
+                    null,
+                    envMapIntensity
+                    : 
+                    1,
+                    metalness: 0.95,
+                    // metalnessMap: material.metalnessMap,
+                    // normalMap: material.normalMap,
+                    normalMapType
+                    : 
+                    0,
+                    opacity
+                    : 
+                    1,
+                    polygonOffset
+                    : 
+                    false,
+                    polygonOffsetFactor
+                    : 
+                    0,
+                    polygonOffsetUnits
+                    : 
+                    0,
+                    precision
+                    : 
+                    null,
+                    premultipliedAlpha
+                    : 
+                    false,
+                    roughness: 0.1,
+                    
+                }),
+
+                instance_info)
             mesh2.visible=false
             mesh=this.getInstancedMesh(
                 geometry,
-                new THREE.MeshStandardMaterial({ 
+                // new THREE.MeshStandardMaterial({ 
+                //     color:color ,
+                //     metalness: 0.5
+                // }),
+                new THREE.MeshPhongMaterial({ 
                     color:color ,
-                    metalness: 0.5
+                    shininess:300,
+                    // metalness: 0.5
                 }),
                 instance_info)
+            mesh.castShadow = true
+            mesh.receiveShadow = true
+            mesh2.castShadow = true
+            mesh2.receiveShadow = true
+            //////////
+            mesh.material1=mesh.material
+            mesh2.material1=mesh2.material
+            mesh.material2=
+            mesh2.material2=new IndirectMaterial(mesh.material)
+
+            // mesh2.material=mesh.material=mesh.material2
+            
+            ///////////////
             mesh.lod=[mesh,mesh2]
             // mesh.lod=[mesh,mesh]
             // mesh.visible=false
@@ -427,17 +505,28 @@ export class Building{
     loading(list){
         const self=this;
         window.list=list
-        const NUMBER=50//50
-        const TIME=1500//100
+        const NUMBER=50//50//50
+        const TIME=1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
+        
         for(let i=0;i<NUMBER&&i<list.length;i++){
+            // if(!this.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第1批),构件编号"+list[i])
             this.loadZip(list[i])
         }
+        // if(!window.flag000){
+        //     console.log("完成第一批请求")
+        //     window.flag000=true
+        // }
         setTimeout(()=>{
             for(let i=NUMBER;i<list.length;i++){
+                // if(!self.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第2批),构件编号"+list[i])
                 self.loadZip(list[i])
             }
+            // if(!window.flag001){
+            //     console.log("完成第二批请求")
+            //     window.flag001=true
+            // }
         },TIME)
     }
     saveStr(str,name){

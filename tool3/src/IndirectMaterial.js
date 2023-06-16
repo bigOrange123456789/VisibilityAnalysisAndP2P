@@ -95,6 +95,10 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 					type: 't', 
 					value: IndirectMaterial.prototype.probeIrradiance0//null 
 				},
+				probeDistance:{ 
+					type: 't', 
+					value: null 
+				},
 				// probeDistance: { type: 't', value: null },
 				screenWidth: { value: window.innerWidth },
 				screenHeight: { value: window.innerHeight },

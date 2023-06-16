@@ -6,6 +6,8 @@ export class Light{
       this.pointLightGroup=[]
       this.spotLightGroup=[]
       // this.init(rtxgiNetwork,scene)
+
+      
     }
     init(rtxgiNetwork,scene) {
         if(rtxgiNetwork.directionalLightCt == 1)

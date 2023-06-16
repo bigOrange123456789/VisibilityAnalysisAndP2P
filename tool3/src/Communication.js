@@ -1,11 +1,10 @@
 import * as THREE from 'three'
 import { StateCode } from "./network/StateCode"
-export class Communication{
-    constructor(camera,rtxgiNetwork,ui,light,models){
-        this.camera=camera
-        this.rtxgiNetwork=rtxgiNetwork
-        this.ui=ui
-        this.light=light
+import { RTXGINetwork } from './network/RTXGINetwork';
+export class Communication extends RTXGINetwork{
+    constructor(){
+        super()
+        this.sceneId = window.location.href.split('/').pop()
 
         this.updateProbe = false;
 
@@ -21,20 +20,27 @@ export class Communication{
 
         //syncClientPointLightToServer
         this.plightIndex = 0;
-
-        //syncClientVolumeDescToServer
-        this.sendIdFinish=false
+        this.onready=()=>{console.log(11)}
+    }
+    init(camera,ui,light,models){
+        this.camera=camera
+        this.ui=ui
+        this.light=light
 
         const self=this
+        let asyncScene=false
         const animate=()=>{
-              /*volume desc async*/
-            if(rtxgiNetwork.ready() &&!this.sendIdFinish){
-                // this.syncClientVolumeDescToServer();
-                this.sendIdFinish=true
+            if(self.ready() &&!self.isDescTouch){
+                self.syncClientVolumeDescToServer();
             }
-    
-            if(rtxgiNetwork != undefined 
-              &&rtxgiNetwork.ready()){
+            // /*init threejs evi*/
+            if(self.isDescTouch && !asyncScene)
+            {
+                self.onready()
+                asyncScene = true;
+            }
+
+            if(self.isDescTouch && asyncScene&&self.ready()){
                 self.syncClientCameraToServer()
                 self.syncClientDirectionalLightToServer()
                 self.syncClientPointLightToServer()
@@ -46,61 +52,45 @@ export class Communication{
     }
     send(data){
         var jsonStr = JSON.stringify(data);
-        var enc = new TextEncoder();
-        var jsonUint8 = enc.encode(jsonStr);
+        var jsonUint8 = new TextEncoder().encode(jsonStr);
         var msg = new Uint8Array(jsonUint8.length);
         msg.set(jsonUint8, 0);
-        const rtxgiNetwork=this.rtxgiNetwork
-        if(rtxgiNetwork != undefined && rtxgiNetwork.ready())
-            rtxgiNetwork.C2SSocket.send(msg);
+        if(this.ready())this.C2SSocket.send(msg);
     }
     updateIndirectMaterial(models){
-        const rtxgiNetwork=this.rtxgiNetwork
+        const rtxgiNetwork=this
         if(this.updateProbe){//保证光照探针的刷新频率不会过高
             this.totalTime = 0.0;
             this.stopUpdate = false;
-          }else{
+        }else{
               this.totalTime += 1.0;
               if(this.totalTime > this.waitFrame)
               {
                 this.syncClientAttachServerStop();
                 this.stopUpdate = true;
               }
-          }
-          
-          /*update irradiance and distance*/
-        //   if(rtxgiNetwork.IrradianceTex != null && 
-        //   rtxgiNetwork.DistanceTex != null && !this.stopUpdate)
-          {
-            for (var i = 0; i < models.length; i++) {
-              const irradianceLoader = rtxgiNetwork.IrradianceTex;
-              models[i].indirectMaterial.probeIrradianceUpdate(irradianceLoader) ;
-            //   const probeDistanceLoader = rtxgiNetwork.DistanceTex;
-            //   models[i].indirectMaterial.uniforms.probeDistance.value = probeDistanceLoader;
-            //   console.log({
-            //     probeDistanceLoader:probeDistanceLoader,
-            //     irradianceLoader:irradianceLoader
-            //   })
-            }
+        }
+        for (var i = 0; i < models.length; i++) {
+            const irradianceLoader = rtxgiNetwork.IrradianceTex;
+            models[i].indirectMaterial.probeIrradianceUpdate(irradianceLoader) ;
+            const probeDistanceLoader = rtxgiNetwork.DistanceTex;
+            models[i].indirectMaterial.uniforms.probeDistance.value = probeDistanceLoader;
+        }
               
-              this.updateProbe = false;//探针更新完成
-              this.stopUpdate = false;
-          }
+        this.updateProbe = false;//探针更新完成
+        this.stopUpdate = false;
+          
     }
     syncClientAttachServerStop()//让服务器停止发送信息
     {
-        return
-        const rtxgiNetwork=this.rtxgiNetwork
-        let volumeDescReqJson = 
-        {
+        this.send({
             type: StateCode.C2S_RTXGI_StopUpdate,
-            sceneId: rtxgiNetwork.sceneId
-        };
-        this.send(volumeDescReqJson);
+            sceneId: this.sceneId
+        })
     }
     syncClientCameraToServer(){
         const camera=this.camera
-        const rtxgiNetwork=this.rtxgiNetwork
+        const rtxgiNetwork=this
         var cameraMatrix = new THREE.Matrix4();
         cameraMatrix.makeRotationFromQuaternion(camera.quaternion);
         /*camera forward*/
@@ -150,7 +140,7 @@ export class Communication{
         this.send(cameraJson);
     }
     syncClientDirectionalLightToServer(){
-        const rtxgiNetwork=this.rtxgiNetwork
+        const rtxgiNetwork=this
         const ui=this.ui
         const light=this.light
         if(!ui.dlightChange)
@@ -179,7 +169,7 @@ export class Communication{
         this.send(lightJson)
     }
     syncClientPointLightToServer(){
-        const rtxgiNetwork=this.rtxgiNetwork
+        const rtxgiNetwork=this
         const ui=this.ui
         const light=this.light
         if(!ui.plightChange)
@@ -207,7 +197,7 @@ export class Communication{
         this.send(lightJson)
     }
     syncClientSpotLightToServer(){
-        const rtxgiNetwork=this.rtxgiNetwork
+        const rtxgiNetwork=this
         const ui=this.ui
         const light=this.light
         if(!ui.slightChange)
@@ -244,17 +234,11 @@ export class Communication{
         };
         this.send(lightJson);
     }
-    syncClientVolumeDescToServer()
-    {
-        alert(123)
-        const rtxgiNetwork=this.rtxgiNetwork
-        let volumeDescReqJson = 
-        {
+    syncClientVolumeDescToServer(){//与服务器建立连接
+        console.log("与服务器建立连接")
+        this.send({
             type: StateCode.C2S_RTXGI_VolumeDesc,
-            sceneId: rtxgiNetwork.sceneId
-        };
-        this.send(volumeDescReqJson)
-    }
-
-    
+            sceneId: this.sceneId
+        })
+    }    
 }

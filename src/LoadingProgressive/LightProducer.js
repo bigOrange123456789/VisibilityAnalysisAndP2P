@@ -11,9 +11,9 @@ class LightProducer{
 
         // Lights 
         const x=0.
-        const ambient = new THREE.AmbientLight( 0xffffff ,0.);//new THREE.AmbientLight( 0xffffff ,.8);
-        scene.add( ambient );
-        ambient.name="ambient"
+        // const ambient = new THREE.AmbientLight( 0xffffff ,0.);//new THREE.AmbientLight( 0xffffff ,.8);
+        // scene.add( ambient );
+        // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
         // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
@@ -24,19 +24,19 @@ class LightProducer{
         window.light=light
         // return
 
-        const Light3 = new THREE.DirectionalLight( 0xcffffff,2 );
-        // Light3.rotation.set(0.5*Math.PI,0,0)
-        Light3.position.x= -112955.1488905516
-        window.light=Light3
-        // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
-        light.add( Light3 )
+        // const Light3 = new THREE.DirectionalLight( 0xcffffff,2 );
+        // // Light3.rotation.set(0.5*Math.PI,0,0)
+        // Light3.position.x= -112955.1488905516
+        // window.light=Light3
+        // // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
+        // light.add( Light3 )
 
-        const Light4 = new THREE.PointLight( 0xcffffff,x+0.5 );
-        Light4.rotation.set(0,0,0)
-        Light4.position.x=-112955.14889055162
-        // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
-        light.add( Light4 )
-        window.light=Light4
+        // const Light4 = new THREE.PointLight( 0xcffffff,5 );
+        // Light4.rotation.set(0,0,0)
+        // Light4.position.x=-112955.14889055162
+        // // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
+        // light.add( Light4 )
+        // window.light=Light4
 
         // const Light2 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
         // Light2.rotation.set(Math.PI/2,0,0)//窄侧面
@@ -73,10 +73,10 @@ class LightProducer{
 
 
         // Lights 
-        const x=0.
+        const x=3.//0.5
         const ambient = new THREE.AmbientLight( 0xffffff ,0.8);//new THREE.AmbientLight( 0xffffff ,.8);
         scene.add( ambient );
-        ambient.name="ambient"
+        // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
         // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
@@ -87,13 +87,32 @@ class LightProducer{
         window.light=light
         // return
 
-        const Light3 = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
-        Light3.rotation.set(Math.PI*3/4,0,0)
+        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
+        directionalLight.rotation.set(Math.PI*3/4,0,0)
         // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
-        light.add( Light3 )
+        directionalLight.shadow.camera.near = 0.1 //产生阴影的最近距离
+        directionalLight.shadow.camera.far = 1000 //产生阴影的最远距离
+        directionalLight.shadow.camera.left = -100 //产生阴影距离位置的最左边位置
+        directionalLight.shadow.camera.right = 100 //最右边
+        directionalLight.shadow.camera.top = 100 //最上边
+        directionalLight.shadow.camera.bottom = -100 //最下面
+        //这两个值决定使用多少像素生成阴影 默认512
+        // directionalLight.shadow.mapSize.height = 1024;
+        // directionalLight.shadow.mapSize.width = 1024;
+        // directionalLight.intensity = 4
+        //告诉平行光需要开启阴影投射
+        directionalLight.castShadow = true
+        directionalLight.shadow.bias = -0.0005;
+        directionalLight.shadow.mapSize.width = 2048; 
+        directionalLight.shadow.mapSize.height = 2048;
+        light.add( directionalLight )
 
-        const Light4 = new THREE.PointLight( 0xcffffff,x+0.5 );
-        Light4.rotation.set(0,0,Math.PI/2)
+        const Light4 = new THREE.PointLight( 0xcffffff,x+0.5-3.3 );
+        // Light4.castShadow = true
+        // Light4.shadow.bias = -0.0005;
+        // Light4 .shadow.mapSize.width = 2048; 
+        // Light4 .shadow.mapSize.height = 2048;
+        // Light4.rotation.set(0,0,Math.PI/2)
         // Light4.position.set(79878.19719674486,  15386.419503473677,2313.777302798459 );
         light.add( Light4 )
 

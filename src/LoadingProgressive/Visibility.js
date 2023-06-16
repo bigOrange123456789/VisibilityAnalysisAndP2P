@@ -9,7 +9,6 @@ export class Visibility{
         // areaInf["min"][1]-=0.5
         // areaInf["max"][1]-=0.5
         this.areaInf=this.initAreaInfList()[0]
-        console.log("this.areaInf",this.areaInf)
         
         this.camera=camera
         this.meshes=meshes//用于可见性剔除
@@ -83,7 +82,6 @@ export class Visibility{
             })
             this.visualList_request[i]={}
         }
-        console.log("this.areaInfList",this.areaInfList)
         return this.areaInfList
     }
     getDirection(){

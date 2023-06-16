@@ -35,17 +35,50 @@ export class Loader{
             new AvatarManager(this.scene,this.camera)
     }
     async initScene(){
-        this.renderer = new THREE.WebGLRenderer({
-            alpha:true,
-            antialias: true,
-            canvas:this.canvas,
-            preserveDrawingBuffer:true
-        })
+        // this.renderer = new THREE.WebGLRenderer({
+        //     alpha:true,
+        //     antialias: true,
+        //     canvas:this.canvas,
+        //     preserveDrawingBuffer:true
+        // })
+        // this.renderer.setSize(this.body.clientWidth,this.body.clientHeight)
+        // this.renderer.setPixelRatio(window.devicePixelRatio)
+        // this.body.appendChild(this.renderer.domElement)
 
-        this.renderer.setSize(this.body.clientWidth,this.body.clientHeight)
+        // // 渲染器开启阴影效果
+        // this.renderer.shadowMap.enabled = true
+
+        this.renderer = new THREE.WebGLRenderer({ 
+            antialias: true,
+            alpha:true,
+            canvas:this.canvas
+        })
         this.renderer.setPixelRatio(window.devicePixelRatio)
-        window.renderer=this.renderer
+		this.renderer.setSize(this.body.clientWidth,this.body.clientHeight)
+		// 告诉渲染器需要阴影效果
+		this.renderer.shadowMap.enabled = true
+		this.renderer.shadowMapSoft = true;
+		this.renderer.setClearColor(0xcccccc)
+		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
+		this.renderer.shadowMap.autoUpdate = true;
+		this.renderer.tonemapping = THREE.NoToneMapping;
+		this.renderer.setScissorTest = true;
+		this.renderer.outputEncoding = THREE.sRGBEncoding;
         this.body.appendChild(this.renderer.domElement)
+        window.renderer=this.renderer
+        //////////////////
+        //////////////////////////////////////
+		this.litRenderTarget = new THREE.WebGLRenderTarget(
+			window.innerWidth,
+			window.innerHeight,
+			{
+			minFilter: THREE.NearestFilter,
+			magFilter: THREE.NearestFilter,
+			format: THREE.RGBAFormat,
+			type: THREE.FloatType
+			}
+		)
+        //////////////////
 
 
         this.stats = new Stats();
@@ -107,17 +140,33 @@ export class Loader{
         if(this.config.render!=="false")
             // this.renderer.render(this.scene,this.camera)
             {
+                this.scene.traverse(node=>{
+                    if(node instanceof THREE.Mesh){
+                        if(node.material2)node.material = node.material1
+                    }
+                })
                 //   for (var i = 0; i < models.length; i++) {
-                //     models[i].material = models[i].diffuseMaterial
+                //     models[i].material = models[i].material2//diffuseMaterial
                 //   }
-                //   renderer.setRenderTarget(litRenderTarget)
-                //   renderer.render(scene, camera)
+                  renderer.setRenderTarget(this.litRenderTarget)
+                  renderer.render(this.scene, this.camera)
+
+                this.scene.traverse(node=>{
+                    if(node instanceof THREE.Mesh){
+                        if(node.material1){
+                            node.material = node.material2
+                            node.material.uniforms.screenWidth.value = renderer.domElement.width;
+                            node.material.uniforms.screenHeight.value = renderer.domElement.height;
+                            node.material.uniforms.GBufferd.value = this.litRenderTarget.texture;
+                        }
+                    }
+                })  
                 //   for (var i = 0; i < models.length; i++) {
                 //     models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
                 //     models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
                 //     models[i].material = models[i].indirectMaterial//models[i].indirectShader;
                 //   }
-                //   renderer.setRenderTarget(null)
+                  renderer.setRenderTarget(null)
                   renderer.render(this.scene,this.camera)
             }
         requestAnimationFrame(this.animate)
@@ -165,7 +214,7 @@ export class Loader{
         
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -202,4 +251,4 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     window.configALL=config
     new Loader(document.body)
-})
+// })

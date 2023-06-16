@@ -2,6 +2,7 @@
 import json
 import os
 import pandas as pd
+import matplotlib.pyplot as plt
 class pack:
     def __init__(self,config):
         self.time0=config['time0']
@@ -14,6 +15,21 @@ class pack:
     def p(self):
         print("size:",self.size,"\ttime1:",self.time1,"\ttime2",self.time2)
 class Predict:
+    def draw(self):
+        plt.subplot(1, 3, 1)
+        list0=self.initList('parsed')
+        for y0 in range(len(list0)):
+            id=str(list0[y0])
+            request=self.result[id]['request']
+            loaded=self.result[id]['loaded']
+            parsed=self.result[id]["parsed"]
+            x=[request,loaded,parsed]
+            y=[y0+1,y0+1,y0+1]
+            # plt.plot(x, y, linewidth=0.1)
+            plt.plot(x, y, linewidth=0.1, marker='o', markersize=1)
+        plt.xlabel('time(ms)')
+        plt.ylabel('ID of packet')
+        plt.title('1:processing time of packet')
     def initPackSize(self):
         path="../dist/assets/space8Zip"
         self.packSize=[]
@@ -47,8 +63,10 @@ class Predict:
             )
         self.send()
         self.decode()
+        # self.draw()
     
-
+    def request(self):
+        print()
     def send(self):
         for pack in self.packList:
             pack.time1=pack.time0+pack.size/self.speed['send']
