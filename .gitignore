@@ -22,8 +22,8 @@
 ! /dist/assets/ 
 
 # 忽略 /dist/ 目录及其下的所有文件
-/test/data/
-/test/detection/
+/analysis/p2p/data/
+/analysis/p2p/detection/
 
 # 忽略 /dist/ 目录及其下的所有文件
 /dist/assets/configVVD.json

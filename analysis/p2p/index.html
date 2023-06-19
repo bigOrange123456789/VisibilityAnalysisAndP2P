@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>VisibilityAnalysisAndP2P</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="">
+    <style>
+        #number {
+            color: rgb(128, 0, 0);
+            font-size: 15px;
+            font-weight: normal;
+            position: fixed;
+            left: 0px;
+            top: 50px;
+        }
+    </style>
+    <!-- <script src="./socket.io.js"></script>
+    <script src="./adapter.js"></script> -->
+    <script src="http://youku3d.com/smart3d/lib/socket.io.js"></script>
+    <script src="http://youku3d.com/smart3d/lib/adapter.js"></script>
+    <script>
+        // const renderURL="localhost:2002"
+        const renderURL="42.192.188.161:8106"
+        const socketURL=location.host
+        const getPreParam=id=>{
+            id=id+"="
+            return window.location.search.split(id).length>1?
+                    window.location.search.split(id)[1].split("&")[0]:
+                    null
+        }
+        const socket = io.connect(socketURL,{transports:['websocket','xhr-polling','jsonp-polling']})
+        window.socket=socket
+        window.start=config0=>{
+            let config={
+                userId:socket.id,
+                useP2P:true,
+                autoMove:1,
+                render:false,
+                renderURL:renderURL
+            }
+            if(config0)
+                for(const tag in config0)
+                    config[tag]=config0[tag]
+            socket.emit('page2server',config)
+        }
+        window.start_list=configList=>{
+            socket.emit('page2server',configList)
+        }
+        window.start1=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start2=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:false,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start3=()=>{
+            let config={
+                scene:"haiNing",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start4=()=>{
+            let config={
+                scene:"haiNing",
+                autoMove:1,
+                useP2P:false,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start5=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:true,
+                useP2P:true,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start6=()=>{
+            let config={
+                scene:"haiNing",
+                autoMove:true,
+                useP2P:true,
+                speed:1,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:true,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start7=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                maxBackDelay:10,
+                
+                testTime:2*60,
+                userId:socket.id,
+                render:false,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start8=()=>{
+            let config={
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                maxBackDelay:0,
+                
+                testTime:0,
+                userId:socket.id,
+                render:false,
+                renderURL:renderURL,
+            }
+            socket.emit('page2server',config)
+        }
+        window.start9=()=>{
+            window.socket.emit('page2server',{
+                scene:"gkd",
+                autoMove:1,
+                useP2P:true,
+                speed:1,
+                maxBackDelay:100,
+                
+                testTime:60,
+                userId:socket.id,
+                render:false,
+                renderURL:renderURL,
+            })
+        }
+        socket.on('server2page',  data=> {
+            const g=id=>{
+                const value= getPreParam(id)==null  ?data[id]:getPreParam(id)
+                return id+"="+value
+            }
+            location.href="http://"+data.renderURL+"/"
+                +"?"+g("scene")
+                +"&"+g("autoMove")
+                +"&"+g("useP2P")
+                +"&"+g("speed")
+
+                +"&"+g("maxBackDelay")
+                +"&"+g("testTime")
+                +"&"+g("userId")
+                +"&"+g("render")
+                +"&backURL=http://"+location.host
+        })
+        socket.on("userCount",  data=> {
+            document.getElementById("number").innerHTML="用户数量:"+data
+            console.log("userCount",data)
+        })
+        //http://localhost:2002/?useP2P=false&scene=haiNing0&autoMove=0&testTime=60&maxBackDelay=0&list2Len=1800
+    </script>
+</head>
+<body>
+    <h1 id="number"></h1>
+</body>
