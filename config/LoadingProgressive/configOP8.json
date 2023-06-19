@@ -32,7 +32,7 @@
             "block2Kernel": {},
             "updateColor":false,
             "instanceUse":true,
-            "useIndirectMaterial":true,
+            "useIndirectMaterial":false,
             "waterCidList":[175,180],
             "crossOriginSocket":[
             ]

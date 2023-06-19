@@ -140,34 +140,42 @@ export class Loader{
         if(this.config.render!=="false")
             // this.renderer.render(this.scene,this.camera)
             {
-                this.scene.traverse(node=>{
-                    if(node instanceof THREE.Mesh){
-                        if(node.material2)node.material = node.material1
-                    }
-                })
+                
                 //   for (var i = 0; i < models.length; i++) {
                 //     models[i].material = models[i].material2//diffuseMaterial
                 //   }
-                  renderer.setRenderTarget(this.litRenderTarget)
-                  renderer.render(this.scene, this.camera)
+                  
 
-                this.scene.traverse(node=>{
-                    if(node instanceof THREE.Mesh){
-                        if(node.material1){
-                            node.material = node.material2
-                            node.material.uniforms.screenWidth.value = renderer.domElement.width;
-                            node.material.uniforms.screenHeight.value = renderer.domElement.height;
-                            node.material.uniforms.GBufferd.value = this.litRenderTarget.texture;
+                if(this.config.useIndirectMaterial){
+                    this.scene.traverse(node=>{
+                        if(node instanceof THREE.Mesh){
+                            if(node.material2)node.material = node.material1
                         }
-                    }
-                })  
+                    })
+                    renderer.setRenderTarget(this.litRenderTarget)
+                    renderer.render(this.scene, this.camera)
+                    this.scene.traverse(node=>{
+                        if(node instanceof THREE.Mesh){
+                            if(node.material1){
+                                node.material = node.material2
+                                node.material.uniforms.screenWidth.value = renderer.domElement.width;
+                                node.material.uniforms.screenHeight.value = renderer.domElement.height;
+                                node.material.uniforms.GBufferd.value = this.litRenderTarget.texture;
+                            }
+                        }
+                    })  
+                    renderer.setRenderTarget(null)
+                    renderer.render(this.scene,this.camera)
+                }else{
+                    renderer.render(this.scene,this.camera)
+                }
+                
                 //   for (var i = 0; i < models.length; i++) {
                 //     models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
                 //     models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
                 //     models[i].material = models[i].indirectMaterial//models[i].indirectShader;
                 //   }
-                  renderer.setRenderTarget(null)
-                  renderer.render(this.scene,this.camera)
+                  
             }
         requestAnimationFrame(this.animate)
     }
@@ -249,6 +257,7 @@ export class Loader{
         add('userId') 
         config.src.Detection.backURL=backURL    
     }
+    config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
     window.configALL=config
     new Loader(document.body)
 // })

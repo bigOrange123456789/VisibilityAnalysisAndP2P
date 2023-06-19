@@ -203,119 +203,45 @@ export class Building{
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
-        if(true){
-            // mesh.material.color.r/=2
-            // mesh.material.color.g/=2
-            // mesh.material.color.b/=2
-            mesh.material.metalness=0.25
-            // console.log(
-            //     mesh.material.metalness,
-            //     mesh.material.shininess
-            // )
-        }
-        if(false)mesh.material=new THREE.MeshBasicMaterial({color:id})
-        if(false)if(this.config.useIndirectMaterial){
-            // console.log(mesh.material)
-            // mesh.material.onBeforeCompile=shader=>{
-            //     console.log({
-            //         "v":shader.vertexShader,
-            //         "f":shader.fragmentShader
-            //     })
-            // }
-            mesh.material=new IndirectMaterial(mesh.material)
-        }
-        // console.log("THREE.DoubleSide",THREE.DoubleSide)
- 
-        // mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=((t&0xff))/255
-        // mesh.geometry.computeVertexNormals()
-        // mesh=new THREE.Mesh(
-        //     mesh.geometry,
-        //     new THREE.MeshBasicMaterial()
-        // )
-        // let t=id*256*256*256/259 ///2665
-        // mesh.material.color.r=1.*((t&0xff)    )/255
-        // mesh.material.color.g=1.*((t&0xff00)>>8 )/255
-        // mesh.material.color.b=1.*((t&0xff0000)>>16)/255
+
+        const color=this.colorList[id]
+        mesh.material=new THREE.MeshStandardMaterial({
+            color:color ,
+            map:mesh.material.map,
+
+            bumpScale: 1,
+            displacementBias:0,
+            displacementScale: 1,
+            emissiveIntensity: 1,
+            envMapIntensity:1,
+            metalness: 0.95,
+            roughness: 0.1+0.4,
+            // shininess:300,
+        })
+        
         if(this.instance_info){
             const meshOld=mesh
             mesh.materialOld=mesh.material
-            const color=this.colorList[id]
+            
             const mesh0=mesh
             const instance_info=this.instance_info[id]
             const geometry=mesh.geometry
             const mesh2=this.getInstancedMesh(
                 geometry,
-                // new THREE.MeshPhongMaterial({ 
-                //     color:color ,
-                //     shininess:100,
-                //     map:mesh.material.map,
-                //     // metalness: 0.5
-                // }),
-                new THREE.MeshStandardMaterial({
-                    color:color ,
-                    map:mesh.material.map,
-
-                    bumpScale: 1,
-                    clipIntersection:  false,
-                    clipShadows :false,
-                    clippingPlanes:null,
-                    colorWrite: 
-                    true,
-                    displacementBias:0,
-                    displacementMap: null,
-                    displacementScale: 1,
-                    dithering: false,
-                    emissiveIntensity: 
-                    1,
-                    emissiveMap
-                    : 
-                    null,
-                    envMap
-                    : 
-                    null,
-                    envMapIntensity
-                    : 
-                    1,
-                    metalness: 0.95,
-                    // metalnessMap: material.metalnessMap,
-                    // normalMap: material.normalMap,
-                    normalMapType
-                    : 
-                    0,
-                    opacity
-                    : 
-                    1,
-                    polygonOffset
-                    : 
-                    false,
-                    polygonOffsetFactor
-                    : 
-                    0,
-                    polygonOffsetUnits
-                    : 
-                    0,
-                    precision
-                    : 
-                    null,
-                    premultipliedAlpha
-                    : 
-                    false,
-                    roughness: 0.1,
-                    
-                }),
-
+                mesh.material,
                 instance_info)
             mesh2.visible=false
             mesh=this.getInstancedMesh(
                 geometry,
-                // new THREE.MeshStandardMaterial({ 
-                //     color:color ,
-                //     metalness: 0.5
-                // }),
-                new THREE.MeshPhongMaterial({ 
+                new THREE.MeshStandardMaterial({ 
                     color:color ,
-                    shininess:300,
-                    // metalness: 0.5
+                    bumpScale: 1,
+                    displacementBias:0,
+                    displacementScale: 1,
+                    emissiveIntensity: 1,
+                    envMapIntensity:1,
+                    metalness: 0.95,
+                    roughness: 0.1+0.4,
                 }),
                 instance_info)
             mesh.castShadow = true
@@ -323,11 +249,12 @@ export class Building{
             mesh2.castShadow = true
             mesh2.receiveShadow = true
             //////////
-            mesh.material1=mesh.material
-            mesh2.material1=mesh2.material
-            mesh.material2=
-            mesh2.material2=new IndirectMaterial(mesh.material)
-
+            if(this.config.useIndirectMaterial){
+                mesh.material1=mesh.material
+                mesh2.material1=mesh2.material
+                mesh.material2=
+                mesh2.material2=new IndirectMaterial(mesh.material)
+            }
             // mesh2.material=mesh.material=mesh.material2
             
             ///////////////

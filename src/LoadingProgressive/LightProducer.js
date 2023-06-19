@@ -87,7 +87,7 @@ class LightProducer{
         window.light=light
         // return
 
-        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
+        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
         directionalLight.rotation.set(Math.PI*3/4,0,0)
         // Light3.position.set( 35606.39387447974,  10386.419503473677,  14736.423572 );
         directionalLight.shadow.camera.near = 0.1 //产生阴影的最近距离
@@ -106,6 +106,12 @@ class LightProducer{
         directionalLight.shadow.mapSize.width = 2048; 
         directionalLight.shadow.mapSize.height = 2048;
         light.add( directionalLight )
+
+
+        // const directionalLight2 = new THREE.DirectionalLight( 0xcffffff,x+1.5 );
+        // directionalLight2.position.set(-1,0,0)
+        // directionalLight2.lookAt(new THREE.Vector3(0,0,0))
+        // light.add( directionalLight2 )
 
         const Light4 = new THREE.PointLight( 0xcffffff,x+0.5-3.3 );
         // Light4.castShadow = true
