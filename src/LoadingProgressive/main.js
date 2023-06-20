@@ -12,6 +12,12 @@ import {Panel } from './Panel.js'
 // import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
+
+import { RenderPass } from "../../lib/threejs/postprocessing/RenderPass.js";
+import { ShaderPass } from "../../lib/threejs/postprocessing/ShaderPass.js";
+import { UnrealBloomPass} from "../../lib/threejs/postprocessing/UnrealBloomPass.js";
+import { EffectComposer } from "../../lib/threejs/postprocessing/EffectComposer.js";
+
 export class Loader{
     constructor(body){
         this.speed=1
@@ -112,6 +118,7 @@ export class Loader{
         window.camera=this.camera
         
         this.scene.add(this.camera)
+        window.scene=this.scene
 
         this.playerControl=new PlayerControl(this.camera,this.config["FlipY"])
         this.playerControl.target.set(
@@ -127,30 +134,64 @@ export class Loader{
         // this.orbitControl.target = camera_tar[id].clone()
 
 
-        this.light=new LightProducer().scene
-        this.scene.add(this.light)
+        this.lightProducer=new LightProducer(this.scene)
         this.animate = this.animate.bind(this)
+        this.composer =this.initComposer()
+        this.composer2=this.initComposer2()
         
         requestAnimationFrame(this.animate)
     }
+    initComposer(){//设置光晕
+        var composer = new EffectComposer(renderer)//效果组合器
+        composer.addPass(
+            new RenderPass(scene, camera)
+        );
+        composer.addPass(
+            new UnrealBloomPass(//创建通道
+                new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
+                0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
+                2,//0.3,//参数三：bloomRadius 泛光散发半径
+                0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
+            )
+        );
+        return composer
+    }
+    initComposer2(){//设置光晕
+        console.log(this.composer)
+
+        // 最终真正渲染到屏幕上的效果合成器 finalComposer 
+        const vs="varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}"
+        const fs="uniform sampler2D baseTexture;uniform sampler2D bloomTexture;varying vec2 vUv;void main() {gl_FragColor = ( vec4( 0.0 ) * texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );}"
+        const shaderPass = new ShaderPass(
+            new THREE.ShaderMaterial({
+                uniforms: {//renderTarget1 renderTarget2
+                  baseTexture: { value: this.litRenderTarget.texture },
+                  bloomTexture: { value: this.composer.renderTarget2.texture },
+                },
+                vertexShader: vs,
+                fragmentShader: fs,
+                defines: {},
+            }),
+            'baseTexture',
+        ); // 创建自定义的着色器Pass，详细见下
+        shaderPass.needsSwap = true;
+        console.log(this.renderer,this.composer.renderTarget2.texture)
+            
+        const finalComposer = new EffectComposer(renderer)
+        finalComposer.addPass(shaderPass)
+        // finalComposer.render()
+        return finalComposer
+    }
     animate(){
-        this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
+        // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
+        this.lightProducer.setPos(this.camera.position)
         this.stats.update()
         // console.log(this.config)
-        if(this.config.render!=="false")
-            // this.renderer.render(this.scene,this.camera)
-            {
-                
-                //   for (var i = 0; i < models.length; i++) {
-                //     models[i].material = models[i].material2//diffuseMaterial
-                //   }
-                  
-
+        if(this.config.render!=="false"){
                 if(this.config.useIndirectMaterial){
                     this.scene.traverse(node=>{
-                        if(node instanceof THREE.Mesh){
+                        if(node instanceof THREE.Mesh)
                             if(node.material2)node.material = node.material1
-                        }
                     })
                     renderer.setRenderTarget(this.litRenderTarget)
                     renderer.render(this.scene, this.camera)
@@ -167,16 +208,23 @@ export class Loader{
                     renderer.setRenderTarget(null)
                     renderer.render(this.scene,this.camera)
                 }else{
-                    renderer.render(this.scene,this.camera)
+                    // renderer.render(this.scene,this.camera)
+
+                    // this.camera.layers.set(0);
+                    
+                    // this.camera.layers.set(1);   
+                    // renderer.render(this.scene,this.camera)
+
+                    // renderer.setRenderTarget(this.litRenderTarget)
+                    // renderer.render(this.scene,this.camera)
+                    this.composer.render()
+                    // this.composer2.render()
+                    // renderer.setRenderTarget(null)
+
+
                 }
-                
-                //   for (var i = 0; i < models.length; i++) {
-                //     models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
-                //     models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
-                //     models[i].material = models[i].indirectMaterial//models[i].indirectShader;
-                //   }
                   
-            }
+        }
         requestAnimationFrame(this.animate)
     }
     resize(){

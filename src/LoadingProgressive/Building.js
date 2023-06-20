@@ -203,10 +203,9 @@ export class Building{
             mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
-
-        const color=this.colorList[id]
+        if(mesh.material.transparent)console.log(id)
         mesh.material=new THREE.MeshStandardMaterial({
-            color:color ,
+            color:mesh.material.color ,
             map:mesh.material.map,
 
             bumpScale: 1,
@@ -218,6 +217,14 @@ export class Building{
             roughness: 0.1+0.4,
             // shininess:300,
         })
+        if(id==171||id==174){
+            // mesh.material.color.r=1
+            mesh.material.metalness=0
+            mesh.material.roughness=0
+        }
+        // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
+        
+        // mesh.material.shininess = 10;
         
         if(this.instance_info){
             const meshOld=mesh
@@ -233,8 +240,10 @@ export class Building{
             mesh2.visible=false
             mesh=this.getInstancedMesh(
                 geometry,
-                new THREE.MeshStandardMaterial({ 
-                    color:color ,
+                new THREE.MeshStandardMaterial({
+                    color:this.colorList[id] ,
+                    map:null,
+        
                     bumpScale: 1,
                     displacementBias:0,
                     displacementScale: 1,
@@ -242,6 +251,7 @@ export class Building{
                     envMapIntensity:1,
                     metalness: 0.95,
                     roughness: 0.1+0.4,
+                    // shininess:300,
                 }),
                 instance_info)
             mesh.castShadow = true
@@ -432,7 +442,7 @@ export class Building{
     loading(list){
         const self=this;
         window.list=list
-        const NUMBER=350//50//50
+        const NUMBER=50//350//50//50
         const TIME=1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
