@@ -1,5 +1,5 @@
 import * as THREE from "three";
-import { Lensflare, LensflareElement } from '../../lib/threejs/Lensflare.js';
+import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
 class LightProducer{
     constructor(scene,camera){
         this.camera=camera
