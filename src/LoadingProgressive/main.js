@@ -4,7 +4,7 @@ import config_gkd     from '../../config/LoadingProgressive/configOP8.json';
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
-import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+// import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
@@ -18,7 +18,11 @@ import { ShaderPass } from "../../lib/threejs/postprocessing/ShaderPass.js";
 import { UnrealBloomPass} from "../../lib/threejs/postprocessing/UnrealBloomPass.js";
 import { EffectComposer } from "../../lib/threejs/postprocessing/EffectComposer.js";
 
-export class Loader{
+import { 
+    GodRaysFakeSunShader, GodRaysDepthMaskShader, GodRaysCombineShader, GodRaysGenerateShader 
+} from '../../lib/threejs/GodRaysShader.js';
+
+export class Main{
     constructor(body){
         this.speed=1
         this.config=window.configALL.src.main
@@ -27,15 +31,17 @@ export class Loader{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        
+        this.composer =this.initComposer()
+        this.initPostprocessing()
+
+        this.animate = this.animate.bind(this)
+        requestAnimationFrame(this.animate)
 
         
-        // this.building=new Building(this.scene,this.camera)
-        // return
         this.initSky()
-        this.setSpeed()
         this.initWander()
         this.panel=new Panel(this)
+        new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
         if(typeof AvatarManager!=="undefined")
             new AvatarManager(this.scene,this.camera)
@@ -53,6 +59,7 @@ export class Loader{
 
         // // 渲染器开启阴影效果
         // this.renderer.shadowMap.enabled = true
+
 
         this.renderer = new THREE.WebGLRenderer({ 
             antialias: true,
@@ -103,6 +110,7 @@ export class Loader{
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
+
         window.camera=this.camera
         this.camera.position.set(
             this.config.camera.position.x,
@@ -133,13 +141,77 @@ export class Loader{
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
 
+    }
+    initPostprocessing( ) {
+        const renderTargetWidth  = window.innerWidth 
+        const renderTargetHeight = window.innerHeight
+        const godrayRenderTargetResolutionMultiplier = 1.0 / 4.0;
+        const adjustedWidth = renderTargetWidth * godrayRenderTargetResolutionMultiplier;
+        const adjustedHeight = renderTargetHeight * godrayRenderTargetResolutionMultiplier;
+        const godraysMaskShader = GodRaysDepthMaskShader;
+        const godraysGenShader = GodRaysGenerateShader;
+        const godraysCombineShader = GodRaysCombineShader;
+        const godraysFakeSunShader = GodRaysFakeSunShader;
 
-        this.lightProducer=new LightProducer(this.scene)
-        this.animate = this.animate.bind(this)
-        this.composer =this.initComposer()
-        this.composer2=this.initComposer2()
+        const scene = new THREE.Scene();
+		const camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 );
+		camera.position.z = 100;
+		scene.add( camera );
+        const postprocessing = { 
+            enabled: true ,
+            scene : scene,
+            camera: camera,
+            rtTextureColors:new THREE.WebGLRenderTarget( renderTargetWidth, renderTargetHeight ),//基本渲染结果
+            rtTextureDepth : new THREE.WebGLRenderTarget( renderTargetWidth, renderTargetHeight ),    //深度信息
+            rtTextureDepthMask : new THREE.WebGLRenderTarget( renderTargetWidth, renderTargetHeight ),//有些位置没有深度?
+
+            rtTextureGodRays1 : new THREE.WebGLRenderTarget( adjustedWidth, adjustedHeight ),
+            rtTextureGodRays2 : new THREE.WebGLRenderTarget( adjustedWidth, adjustedHeight ),//云隙光
+            godrayMaskUniforms : THREE.UniformsUtils.clone( godraysMaskShader.uniforms ),
+            godrayGenUniforms  : THREE.UniformsUtils.clone( godraysGenShader.uniforms ),
+            godrayCombineUniforms : THREE.UniformsUtils.clone( godraysCombineShader.uniforms ),
+            godraysFakeSunUniforms : THREE.UniformsUtils.clone( godraysFakeSunShader.uniforms ),
+        };
+
+        // god-ray shaders
+        postprocessing.materialGodraysDepthMask = new THREE.ShaderMaterial( {//深度？
+            uniforms: postprocessing.godrayMaskUniforms,
+            vertexShader: godraysMaskShader.vertexShader,
+            fragmentShader: godraysMaskShader.fragmentShader
+        } );
+        postprocessing.materialGodraysGenerate = new THREE.ShaderMaterial( {//生成
+            uniforms: postprocessing.godrayGenUniforms,
+            vertexShader: godraysGenShader.vertexShader,
+            fragmentShader: godraysGenShader.fragmentShader
+        } );        
+        postprocessing.materialGodraysCombine = new THREE.ShaderMaterial( {//合并
+            uniforms: postprocessing.godrayCombineUniforms,
+            vertexShader: godraysCombineShader.vertexShader,
+            fragmentShader: godraysCombineShader.fragmentShader
+        } );
+        postprocessing.materialGodraysFakeSun = new THREE.ShaderMaterial( {//假太阳？
+            uniforms: postprocessing.godraysFakeSunUniforms,
+            vertexShader: godraysFakeSunShader.vertexShader,
+            fragmentShader: godraysFakeSunShader.fragmentShader
+        } );
+        postprocessing.godraysFakeSunUniforms.bgColor.value.setHex(  0x000511 );//背景颜色
+        postprocessing.godraysFakeSunUniforms.sunColor.value.setHex( 0xffee00 );//太阳颜色
+        postprocessing.godrayCombineUniforms.fGodRayIntensity.value = 0.75;//云隙光强度
+
+        postprocessing.quad = new THREE.Mesh(//？
+            new THREE.PlaneGeometry( 1.0, 1.0 ),
+            postprocessing.materialGodraysGenerate//生成
+        );
+        postprocessing.quad.position.z = - 9900;
+        postprocessing.scene.add( postprocessing.quad );
         
-        requestAnimationFrame(this.animate)
+        this.postprocessing=postprocessing
+        this.clipPosition = new THREE.Vector4();
+        this.screenSpacePosition=new THREE.Vector3()
+        this.materialDepth = new THREE.MeshDepthMaterial();
+        
+        return postprocessing
+
     }
     initComposer(){//设置光晕
         var composer = new EffectComposer(renderer)//效果组合器
@@ -157,8 +229,6 @@ export class Loader{
         return composer
     }
     initComposer2(){//设置光晕
-        console.log(this.composer)
-
         // 最终真正渲染到屏幕上的效果合成器 finalComposer 
         const vs="varying vec2 vUv;void main() {vUv = uv;gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );}"
         const fs="uniform sampler2D baseTexture;uniform sampler2D bloomTexture;varying vec2 vUv;void main() {gl_FragColor = ( vec4( 0.0 ) * texture2D( baseTexture, vUv ) + vec4( 1.0 ) * texture2D( bloomTexture, vUv ) );}"
@@ -183,8 +253,6 @@ export class Loader{
         return finalComposer
     }
     animate(){
-        // this.light.position.set(this.camera.position.x,this.camera.position.y,this.camera.position.z)
-        this.lightProducer.setPos(this.camera.position)
         this.stats.update()
         // console.log(this.config)
         if(this.config.render!=="false"){
@@ -207,22 +275,105 @@ export class Loader{
                     })  
                     renderer.setRenderTarget(null)
                     renderer.render(this.scene,this.camera)
-                }else{
-                    // renderer.render(this.scene,this.camera)
-
-                    // this.camera.layers.set(0);
-                    
-                    // this.camera.layers.set(1);   
-                    // renderer.render(this.scene,this.camera)
-
-                    // renderer.setRenderTarget(this.litRenderTarget)
-                    // renderer.render(this.scene,this.camera)
+                }else if(false){
                     this.composer.render()
-                    // this.composer2.render()
-                    // renderer.setRenderTarget(null)
+                }else if ( this.postprocessing.enabled ) {
+                    const postprocessing=this.postprocessing
+                    const camera=this.camera
+                    const clipPosition=this.clipPosition
+                    const screenSpacePosition=this.screenSpacePosition
+                    const scene=this.scene
+                    scene.overrideMaterial = this.materialDepth;
 
+                    //开始计算太阳在屏幕上的位置
+                    //-237.50849965878336, y: 85, z: 108.83829170522338
+                    clipPosition.x = -237.5 //0  //sunPosition.x;
+					clipPosition.y = 85     //100//sunPosition.y;
+					clipPosition.z = 108    //0  //sunPosition.z;
+                    //0, 1000, - 1000
+                    clipPosition.x = 0  //sunPosition.x;
+					clipPosition.y = 1000 //sunPosition.y;
+					clipPosition.z =-1000 //sunPosition.z;
+                    const sunPosition = new THREE.Vector3( 0, 1000, - 1000 );
+                    clipPosition.x = sunPosition.x;
+					clipPosition.y = sunPosition.y;
+					clipPosition.z = sunPosition.z;
+					clipPosition.w = 1
+					clipPosition.applyMatrix4( camera.matrixWorldInverse ).applyMatrix4( camera.projectionMatrix );
+                    // console.log(clipPosition)
+                    clipPosition.x /= clipPosition.w;
+					clipPosition.y /= clipPosition.w;
+                    screenSpacePosition.x = ( clipPosition.x + 1 ) / 2; // transform from [-1,1] to [0,1]
+					screenSpacePosition.y = ( clipPosition.y + 1 ) / 2; // transform from [-1,1] to [0,1]
+					screenSpacePosition.z = clipPosition.z; // needs to stay in clip space for visibilty checks
+                    // Give it to the god-ray and sun shaders
+					postprocessing.godrayGenUniforms[ 'vSunPositionScreenSpace' ].value.copy( screenSpacePosition );
+					postprocessing.godraysFakeSunUniforms[ 'vSunPositionScreenSpace' ].value.copy( screenSpacePosition );
+                    
 
-                }
+                    function filterGodRays( inputTex, renderTarget, stepSize ) {
+                        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysGenerate;
+                        postprocessing.godrayGenUniforms[ 'fStepSize' ].value = stepSize;
+                        postprocessing.godrayGenUniforms[ 'tInput' ].value = inputTex;
+                        renderer.setRenderTarget( renderTarget );
+                        renderer.render( postprocessing.scene, postprocessing.camera );
+                        postprocessing.scene.overrideMaterial = null;
+        
+                    }
+                    function getStepSize( filterLen, tapsPerPass, pass ) {
+                        return filterLen * Math.pow( tapsPerPass, - pass );
+                    }
+					
+					// -- Draw sky and sun --
+					// Clear colors and depths, will clear to sky color
+                    renderer.setRenderTarget( postprocessing.rtTextureColors );
+					renderer.clear( true, true, false );//color , depth , stencil模具//清除缓冲区。默认为true
+					
+                    screenSpacePosition.x *= window.innerWidth;
+					screenSpacePosition.y *= window.innerHeight;
+					postprocessing.godraysFakeSunUniforms[ 'fAspect' ].value = window.innerWidth / window.innerHeight;
+					postprocessing.scene.overrideMaterial = postprocessing.materialGodraysFakeSun;
+					renderer.setRenderTarget( postprocessing.rtTextureColors );
+					renderer.render( postprocessing.scene, postprocessing.camera );
+                    
+					// -- Draw scene objects --
+					// Colors
+					scene.overrideMaterial = null;
+					renderer.setRenderTarget( postprocessing.rtTextureColors );
+					renderer.render( scene, camera );
+					// Depth
+					renderer.setRenderTarget( postprocessing.rtTextureDepth );
+					renderer.clear();
+					renderer.render( scene, camera );
+					//
+					postprocessing.godrayMaskUniforms[ 'tInput' ].value = postprocessing.rtTextureDepth.texture;
+					postprocessing.scene.overrideMaterial = postprocessing.materialGodraysDepthMask;
+					renderer.setRenderTarget( postprocessing.rtTextureDepthMask );
+					renderer.render( postprocessing.scene, postprocessing.camera );
+					// -- Render god-rays --
+					// Maximum length of god-rays (in texture space [0,1]X[0,1])
+					const filterLen = 1.0;
+					// Samples taken by filter
+					const TAPS_PER_PASS = 6.0;
+					// Pass order could equivalently be 3,2,1 (instead of 1,2,3), which
+					// would start with a small filter support and grow to large. however
+					// the large-to-small order produces less objectionable aliasing artifacts that
+					// appear as a glimmer along the length of the beams
+					// pass 1 - render into first ping-pong target
+					filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize( filterLen, TAPS_PER_PASS, 1.0 ) );
+					// pass 2 - render into second ping-pong target
+					filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize( filterLen, TAPS_PER_PASS, 2.0 ) );
+					// pass 3 - 1st RT
+					filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize( filterLen, TAPS_PER_PASS, 3.0 ) );
+					// final pass - composite god-rays onto colors
+					postprocessing.godrayCombineUniforms[ 'tColors' ].value = postprocessing.rtTextureColors.texture;
+					postprocessing.godrayCombineUniforms[ 'tGodRays' ].value = postprocessing.rtTextureGodRays2.texture;
+					postprocessing.scene.overrideMaterial = postprocessing.materialGodraysCombine;
+					renderer.setRenderTarget( null );
+					renderer.render( postprocessing.scene, postprocessing.camera );
+					postprocessing.scene.overrideMaterial = null;
+				}
+
                   
         }
         requestAnimationFrame(this.animate)
@@ -246,6 +397,7 @@ export class Loader{
             }
     }
     initWander() {
+        this.setSpeed()
         this.wanderList=[]
         if(this.config.pathList)
         for(let i=0;i<this.config.pathList.length;i++){
@@ -270,7 +422,7 @@ export class Loader{
         
     }
 }
-// document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -307,5 +459,5 @@ export class Loader{
     }
     config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
     window.configALL=config
-    new Loader(document.body)
-// })
+    new Main(document.body)
+})

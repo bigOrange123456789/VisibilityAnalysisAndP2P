@@ -1,7 +1,8 @@
 import * as THREE from "three";
 import { Lensflare, LensflareElement } from '../../lib/threejs/Lensflare.js';
 class LightProducer{
-    constructor(scene){
+    constructor(scene,camera){
+        this.camera=camera
         this.object=new THREE.Object3D()
         scene.add(this.object)
         this.objectMove=new THREE.Object3D()
@@ -21,6 +22,13 @@ class LightProducer{
         //         position.z+origin.z
         //     )
         // }
+
+        this.animate = this.animate.bind(this)
+        requestAnimationFrame(this.animate)
+    }
+    animate(){
+        this.setPos(this.camera.position)
+        requestAnimationFrame(this.animate)
     }
     add_lensflares(){
         const textureFlare3 = new THREE.TextureLoader().load( 'assets/textures/lensflare/lensflare0_alpha.png' );

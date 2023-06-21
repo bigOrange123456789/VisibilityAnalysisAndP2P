@@ -44,7 +44,8 @@ export class Detection {//需要服务器
         },scope.testTime*1000)
         window.getTimeList=()=>{
             const config=scope.getTimeList()
-            window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
+            // window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
+            window.save(config,"result.json")
         }
     }
     recordPlumpness(){

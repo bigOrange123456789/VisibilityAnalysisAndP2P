@@ -26,7 +26,7 @@ def test():
         plt.show()# 显示图形
 if __name__ == "__main__":#开始执行代码
     Main({
-        "pack_num":529,
+        "pack_num":2000,#529,
         "path_vdList":"data/vd0.json",
         "path_file":"../../dist/assets/space8Zip",
         "path_result":

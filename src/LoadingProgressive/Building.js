@@ -1,14 +1,13 @@
 import * as THREE from "three"
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
-import { saveAs } from 'file-saver'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
+//import { GLTFLoader } from './GLTFLoader2.js'//
 import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
 import {ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 import { WaterController  } from '../../lib/threejs/WaterController'
-import { material } from "gltf-pipeline/lib/ForEach.js"
+
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
@@ -315,6 +314,64 @@ export class Building{
             console.error(error);
         });
     }
+    loadZip_test(id,cb){
+        if(this.meshes_info[id])return
+        this.detection.receivePack("server")
+        this.meshes_info[id]={request:performance.now()}//请求
+        this.detection.request("zip")
+        const self=this
+        var url=self.config.path+id+".zip"
+	    const zipLoader=new ZipLoader()
+		zipLoader.load( 
+            url,
+            ()=>{},
+            ()=>{}).then( ( zip )=>{//解析压缩包
+                self.meshes_info[id].loaded=performance.now()//加载完成
+                // new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
+                //     self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
+                //     const loader = new GLTFLoader(self.loaderZip);
+                //     loader.load(zip.find( /\.(gltf|glb)$/i )[0], () => {
+                //         self.meshes_info[id].parsed=performance.now()//解析完成
+                //         self.meshes[id]={"config0":self.meshes_info[id]}
+                //     });
+                // },()=>{});
+                new Promise( function ( resolve, reject ) {
+                    new THREE.TextureLoader().load( 
+                    'assets/textures/test/0.png',
+                    ()=>{
+                        self.meshes_info[id].parsed=performance.now()//解析完成
+                        self.meshes[id]={"config0":self.meshes_info[id]}
+                    } );
+                })
+                
+		    });
+    }
+    loadZip_test2(id,cb){
+        if(this.meshes_info[id])return
+        this.detection.receivePack("server")
+        this.meshes_info[id]={request:performance.now()}//请求
+        this.detection.request("zip")
+        const self=this
+        var url=self.config.path+id+".zip"
+        var url=self.config.path+"0.zip"
+	    const zipLoader=new ZipLoader()
+		zipLoader.load( 
+            url,
+            ()=>{},
+            ()=>{}).then( ( zip )=>{//解析压缩包
+                self.meshes_info[id].loaded=performance.now()//加载完成
+                new Promise( function ( resolve, reject ) {
+                    new THREE.TextureLoader().load( 
+                        'assets/textures/test/'+id+'.png',
+                    ()=>{
+                        console.log(id)
+                        self.meshes_info[id].parsed=performance.now()//解析完成
+                        self.meshes[id]={"config0":self.meshes_info[id]}
+                    } );
+                })
+                
+		    });
+    }
     loadZip(id,cb){
         if(this.meshes_info[id])return
         this.detection.receivePack("server")
@@ -366,6 +423,7 @@ export class Building{
                         
                         o.LoadDelay   =self.meshes_info[id].loaded   -self.meshes_info[id].request
                         o.originType="centerServer"
+                        // if(!o.material.map)console.log(779)
                         self.addMesh(id,o)
                     }
                 })
@@ -440,9 +498,11 @@ export class Building{
         }
     }
     loading(list){
+        // for(let i=0;i<30;i++)this.loadZip(i)
+        // return
         const self=this;
         window.list=list
-        const NUMBER=50//350//50//50
+        const NUMBER=350//50//350//50//50
         const TIME=1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
