@@ -79,7 +79,7 @@ export class Godrays{
         clipPosition.x = 0  //sunPosition.x;
         clipPosition.y = 1000 //sunPosition.y;
         clipPosition.z =-1000 //sunPosition.z;
-        const sunPosition = new THREE.Vector3( 0, 1000, - 1000 );
+        const sunPosition = new THREE.Vector3( 0, 1000*100, - 1000*100 );
         clipPosition.x = sunPosition.x;
         clipPosition.y = sunPosition.y;
         clipPosition.z = sunPosition.z;

@@ -55882,11 +55882,12 @@ var Building = /*#__PURE__*/function () {
         roughness: 0.1 + 0.4
         // shininess:300,
       });
-
+      // mesh.material.side=2
       if (id == 171 || id == 174) {
         // mesh.material.color.r=1
         mesh.material.metalness = 0;
         mesh.material.roughness = 0;
+        mesh.material.envMapIntensity = 0;
       }
       // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
 
@@ -56607,16 +56608,16 @@ var LightProducer = /*#__PURE__*/function () {
 
       var directionalLight = new THREE.DirectionalLight(0xcffffff, x + 0.5 + 0.5);
       directionalLight.shadow.camera.near = -1000; //0.01 //产生阴影的最近距离
-      directionalLight.shadow.camera.far = 5000; //产生阴影的最远距离
+      directionalLight.shadow.camera.far = 3000; //产生阴影的最远距离
       directionalLight.shadow.camera.left = -1000; //产生阴影距离位置的最左边位置
       directionalLight.shadow.camera.right = 1000; //最右边
-      directionalLight.shadow.camera.top = 1000; //最上边
+      directionalLight.shadow.camera.top = 500; //最上边
       directionalLight.shadow.camera.bottom = -100; //最下面
       //告诉平行光需要开启阴影投射
       directionalLight.castShadow = true;
       // directionalLight.shadow.bias = -0.0005;
-      directionalLight.shadow.mapSize.width = 2048 * 4;
-      directionalLight.shadow.mapSize.height = 2048 * 4; //这两个值决定使用多少像素生成阴影 默认512
+      directionalLight.shadow.mapSize.width = 2048;
+      directionalLight.shadow.mapSize.height = 2048; //这两个值决定使用多少像素生成阴影 默认512
       this.objectMove.add(directionalLight);
       // directionalLight.target = new THREE.Object3D();
       // directionalLight.target.origin=new THREE.Object3D(10,10,10)
@@ -57611,7 +57612,7 @@ var Godrays = /*#__PURE__*/function () {
       clipPosition.x = 0; //sunPosition.x;
       clipPosition.y = 1000; //sunPosition.y;
       clipPosition.z = -1000; //sunPosition.z;
-      var sunPosition = new THREE.Vector3(0, 1000, -1000);
+      var sunPosition = new THREE.Vector3(0, 1000 * 100, -1000 * 100);
       clipPosition.x = sunPosition.x;
       clipPosition.y = sunPosition.y;
       clipPosition.z = sunPosition.z;
@@ -59294,6 +59295,7 @@ var _MoveManager = require("../../lib/playerControl/MoveManager.js");
 var _SkyController = require("../../lib/threejs/SkyController");
 var _Postprocessing = require("./postprocessing/Postprocessing.js");
 var _UnrealBloom = require("./postprocessing/UnrealBloom.js");
+var _RGBELoader = require("three/examples/jsm/loaders/RGBELoader.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -59308,6 +59310,7 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 // import {AvatarManager } from './AvatarManager.js'
+// import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 var Main = /*#__PURE__*/function () {
   function Main(body) {
     _classCallCheck(this, Main);
@@ -59321,7 +59324,8 @@ var Main = /*#__PURE__*/function () {
     this.unrealBloom = new _UnrealBloom.UnrealBloom(this.camera, this.scene);
     this.animate = this.animate.bind(this);
     requestAnimationFrame(this.animate);
-    this.initSky();
+
+    // this.initSky()
     this.initWander();
     this.panel = new _Panel.Panel(this);
     new _LightProducer.LightProducer(this.scene, this.camera);
@@ -59332,7 +59336,7 @@ var Main = /*#__PURE__*/function () {
     key: "initScene",
     value: function () {
       var _initScene = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        var statsContainer;
+        var statsContainer, self;
         return _regeneratorRuntime().wrap(function _callee$(_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -59403,7 +59407,16 @@ var Main = /*#__PURE__*/function () {
 
               // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
               // this.orbitControl.target = camera_tar[id].clone()
-            case 35:
+              self = this;
+              this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(function (_ref) {
+                var envMap = _ref.envMap;
+                self.scene.background = envMap;
+              });
+              this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(function (_ref2) {
+                var envMap = _ref2.envMap;
+                self.scene.environment = envMap;
+              });
+            case 38:
             case "end":
               return _context.stop();
           }
@@ -59414,6 +59427,23 @@ var Main = /*#__PURE__*/function () {
       }
       return initScene;
     }()
+  }, {
+    key: "getCubeMapTexture",
+    value: function getCubeMapTexture(path) {
+      var scope = this;
+      return new Promise(function (resolve, reject) {
+        //'.exr'
+        new _RGBELoader.RGBELoader().setDataType(THREE.FloatType).load(path, function (texture) {
+          var pmremGenerator = new THREE.PMREMGenerator(scope.renderer);
+          pmremGenerator.compileEquirectangularShader();
+          var envMap = pmremGenerator.fromEquirectangular(texture).texture;
+          pmremGenerator.dispose();
+          resolve({
+            envMap: envMap
+          });
+        }, undefined, reject);
+      });
+    }
   }, {
     key: "animate",
     value: function animate() {
@@ -59529,7 +59559,7 @@ document.addEventListener('DOMContentLoaded', function () {
   window.configALL = config;
   new Main(document.body);
 });
-},{"../../config/LoadingProgressive/configOP6.json":"config/LoadingProgressive/configOP6.json","../../config/LoadingProgressive/configOP7.json":"config/LoadingProgressive/configOP7.json","../../config/LoadingProgressive/configOP8.json":"config/LoadingProgressive/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js","./postprocessing/Postprocessing.js":"src/LoadingProgressive/postprocessing/Postprocessing.js","./postprocessing/UnrealBloom.js":"src/LoadingProgressive/postprocessing/UnrealBloom.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"../../config/LoadingProgressive/configOP6.json":"config/LoadingProgressive/configOP6.json","../../config/LoadingProgressive/configOP7.json":"config/LoadingProgressive/configOP7.json","../../config/LoadingProgressive/configOP8.json":"config/LoadingProgressive/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js","./postprocessing/Postprocessing.js":"src/LoadingProgressive/postprocessing/Postprocessing.js","./postprocessing/UnrealBloom.js":"src/LoadingProgressive/postprocessing/UnrealBloom.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -59554,7 +59584,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62470" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60217" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

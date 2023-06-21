@@ -15,6 +15,10 @@ import { SkyController  } from '../../lib/threejs/SkyController'
 
 import{Postprocessing}from"./postprocessing/Postprocessing.js"
 import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+
+// import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+
 export class Main{
     constructor(body){
         this.speed=1
@@ -24,6 +28,7 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
+        
         this.Postprocessing=new Postprocessing(this.camera,this.scene)
         this.unrealBloom=new UnrealBloom(this.camera,this.scene)
 
@@ -31,7 +36,7 @@ export class Main{
         requestAnimationFrame(this.animate)
 
         
-        this.initSky()
+        // this.initSky()
         this.initWander()
         this.panel=new Panel(this)
         new LightProducer(this.scene,this.camera)
@@ -134,6 +139,41 @@ export class Main{
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
 
+        const self=this
+        this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
+            ({ envMap }) => {
+              self.scene.background = envMap
+            }
+          )
+        this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+            ({ envMap }) => {
+              self.scene.environment = envMap
+            }
+        )
+        
+
+    }
+    getCubeMapTexture(path) {
+        var scope = this
+        return new Promise((resolve, reject) => {//'.exr'
+            new RGBELoader()
+            .setDataType(THREE.FloatType)
+            .load(
+                path,
+                texture => {
+                const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
+                pmremGenerator.compileEquirectangularShader()
+
+                const envMap =
+                    pmremGenerator.fromEquirectangular(texture).texture
+                pmremGenerator.dispose()
+
+                resolve({ envMap })
+                },
+                undefined,
+                reject
+            )
+        })
     }
     animate(){
         this.stats.update()

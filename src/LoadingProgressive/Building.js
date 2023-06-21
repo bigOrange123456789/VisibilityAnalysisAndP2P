@@ -216,10 +216,12 @@ export class Building{
             roughness: 0.1+0.4,
             // shininess:300,
         })
+        // mesh.material.side=2
         if(id==171||id==174){
             // mesh.material.color.r=1
             mesh.material.metalness=0
             mesh.material.roughness=0
+            mesh.material.envMapIntensity=0
         }
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
         
