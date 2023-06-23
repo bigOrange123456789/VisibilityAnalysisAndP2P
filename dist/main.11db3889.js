@@ -44795,7 +44795,7 @@ var Visibility = /*#__PURE__*/function () {
           this.vd[i] = vd1 * d[0] + vd2 * d[1] + vd3 * d[2] + vd4 * d[3] + vd5 * d[4] + vd6 * d[5];
           if (this.meshes[i].lod) {
             for (var j = 0; j < this.meshes[i].lod.length; j++) this.meshes[i].lod[j].visible = false;
-            if (this.vd[i] > Math.PI / (6 * 400)) this.meshes[i].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
+            if (this.vd[i] > Math.PI / (40 * 6 * 400)) this.meshes[i].lod[1].visible = true; //this.meshes[i].lod[0].visible=true
             else if (this.vd[i] > 0) this.meshes[i].lod[0].visible = true;
           } else {
             this.meshes[i].visible = this.vd[i] > 0;
@@ -56188,7 +56188,7 @@ var Building = /*#__PURE__*/function () {
       // return
       var self = this;
       window.list = list;
-      var NUMBER = 350; //50//350//50//50
+      var NUMBER = 30; //50//350//50//50
       var TIME = 1200; //100
       window.NUMBER = NUMBER;
       window.TIME0 = TIME;
@@ -56616,8 +56616,8 @@ var LightProducer = /*#__PURE__*/function () {
       //告诉平行光需要开启阴影投射
       directionalLight.castShadow = true;
       // directionalLight.shadow.bias = -0.0005;
-      directionalLight.shadow.mapSize.width = 2048;
-      directionalLight.shadow.mapSize.height = 2048; //这两个值决定使用多少像素生成阴影 默认512
+      directionalLight.shadow.mapSize.width = 2 * 2048;
+      directionalLight.shadow.mapSize.height = 2 * 2048; //这两个值决定使用多少像素生成阴影 默认512
       this.objectMove.add(directionalLight);
       // directionalLight.target = new THREE.Object3D();
       // directionalLight.target.origin=new THREE.Object3D(10,10,10)
@@ -58017,7 +58017,499 @@ var ShaderPass = /*#__PURE__*/function (_Pass) {
   return ShaderPass;
 }(_Pass2.Pass);
 exports.ShaderPass = ShaderPass;
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/math/SimplexNoise.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SimplexNoise = void 0;
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+// Ported from Stefan Gustavson's java implementation
+// http://staffwww.itn.liu.se/~stegu/simplexnoise/simplexnoise.pdf
+// Read Stefan's excellent paper for details on how this code works.
+//
+// Sean McCullough banksean@gmail.com
+//
+// Added 4D noise
+/**
+ * You can pass in a random number generator object if you like.
+ * It is assumed to have a random() method.
+ */
+var SimplexNoise = /*#__PURE__*/function () {
+  function SimplexNoise(r = Math) {
+    _classCallCheck(this, SimplexNoise);
+    this.grad3 = [[1, 1, 0], [-1, 1, 0], [1, -1, 0], [-1, -1, 0], [1, 0, 1], [-1, 0, 1], [1, 0, -1], [-1, 0, -1], [0, 1, 1], [0, -1, 1], [0, 1, -1], [0, -1, -1]];
+    this.grad4 = [[0, 1, 1, 1], [0, 1, 1, -1], [0, 1, -1, 1], [0, 1, -1, -1], [0, -1, 1, 1], [0, -1, 1, -1], [0, -1, -1, 1], [0, -1, -1, -1], [1, 0, 1, 1], [1, 0, 1, -1], [1, 0, -1, 1], [1, 0, -1, -1], [-1, 0, 1, 1], [-1, 0, 1, -1], [-1, 0, -1, 1], [-1, 0, -1, -1], [1, 1, 0, 1], [1, 1, 0, -1], [1, -1, 0, 1], [1, -1, 0, -1], [-1, 1, 0, 1], [-1, 1, 0, -1], [-1, -1, 0, 1], [-1, -1, 0, -1], [1, 1, 1, 0], [1, 1, -1, 0], [1, -1, 1, 0], [1, -1, -1, 0], [-1, 1, 1, 0], [-1, 1, -1, 0], [-1, -1, 1, 0], [-1, -1, -1, 0]];
+    this.p = [];
+    for (var i = 0; i < 256; i++) {
+      this.p[i] = Math.floor(r.random() * 256);
+    }
+
+    // To remove the need for index wrapping, double the permutation table length
+    this.perm = [];
+    for (var _i = 0; _i < 512; _i++) {
+      this.perm[_i] = this.p[_i & 255];
+    }
+
+    // A lookup table to traverse the simplex around a given point in 4D.
+    // Details can be found where this table is used, in the 4D noise method.
+    this.simplex = [[0, 1, 2, 3], [0, 1, 3, 2], [0, 0, 0, 0], [0, 2, 3, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 2, 3, 0], [0, 2, 1, 3], [0, 0, 0, 0], [0, 3, 1, 2], [0, 3, 2, 1], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 3, 2, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [1, 2, 0, 3], [0, 0, 0, 0], [1, 3, 0, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [2, 3, 0, 1], [2, 3, 1, 0], [1, 0, 2, 3], [1, 0, 3, 2], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [2, 0, 3, 1], [0, 0, 0, 0], [2, 1, 3, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [2, 0, 1, 3], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [3, 0, 1, 2], [3, 0, 2, 1], [0, 0, 0, 0], [3, 1, 2, 0], [2, 1, 0, 3], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [3, 1, 0, 2], [0, 0, 0, 0], [3, 2, 0, 1], [3, 2, 1, 0]];
+  }
+  _createClass(SimplexNoise, [{
+    key: "dot",
+    value: function dot(g, x, y) {
+      return g[0] * x + g[1] * y;
+    }
+  }, {
+    key: "dot3",
+    value: function dot3(g, x, y, z) {
+      return g[0] * x + g[1] * y + g[2] * z;
+    }
+  }, {
+    key: "dot4",
+    value: function dot4(g, x, y, z, w) {
+      return g[0] * x + g[1] * y + g[2] * z + g[3] * w;
+    }
+  }, {
+    key: "noise",
+    value: function noise(xin, yin) {
+      var n0; // Noise contributions from the three corners
+      var n1;
+      var n2;
+      // Skew the input space to determine which simplex cell we're in
+      var F2 = 0.5 * (Math.sqrt(3.0) - 1.0);
+      var s = (xin + yin) * F2; // Hairy factor for 2D
+      var i = Math.floor(xin + s);
+      var j = Math.floor(yin + s);
+      var G2 = (3.0 - Math.sqrt(3.0)) / 6.0;
+      var t = (i + j) * G2;
+      var X0 = i - t; // Unskew the cell origin back to (x,y) space
+      var Y0 = j - t;
+      var x0 = xin - X0; // The x,y distances from the cell origin
+      var y0 = yin - Y0;
+
+      // For the 2D case, the simplex shape is an equilateral triangle.
+      // Determine which simplex we are in.
+      var i1; // Offsets for second (middle) corner of simplex in (i,j) coords
+
+      var j1;
+      if (x0 > y0) {
+        i1 = 1;
+        j1 = 0;
+
+        // lower triangle, XY order: (0,0)->(1,0)->(1,1)
+      } else {
+        i1 = 0;
+        j1 = 1;
+      } // upper triangle, YX order: (0,0)->(0,1)->(1,1)
+
+      // A step of (1,0) in (i,j) means a step of (1-c,-c) in (x,y), and
+      // a step of (0,1) in (i,j) means a step of (-c,1-c) in (x,y), where
+      // c = (3-sqrt(3))/6
+      var x1 = x0 - i1 + G2; // Offsets for middle corner in (x,y) unskewed coords
+      var y1 = y0 - j1 + G2;
+      var x2 = x0 - 1.0 + 2.0 * G2; // Offsets for last corner in (x,y) unskewed coords
+      var y2 = y0 - 1.0 + 2.0 * G2;
+      // Work out the hashed gradient indices of the three simplex corners
+      var ii = i & 255;
+      var jj = j & 255;
+      var gi0 = this.perm[ii + this.perm[jj]] % 12;
+      var gi1 = this.perm[ii + i1 + this.perm[jj + j1]] % 12;
+      var gi2 = this.perm[ii + 1 + this.perm[jj + 1]] % 12;
+      // Calculate the contribution from the three corners
+      var t0 = 0.5 - x0 * x0 - y0 * y0;
+      if (t0 < 0) n0 = 0.0;else {
+        t0 *= t0;
+        n0 = t0 * t0 * this.dot(this.grad3[gi0], x0, y0); // (x,y) of grad3 used for 2D gradient
+      }
+
+      var t1 = 0.5 - x1 * x1 - y1 * y1;
+      if (t1 < 0) n1 = 0.0;else {
+        t1 *= t1;
+        n1 = t1 * t1 * this.dot(this.grad3[gi1], x1, y1);
+      }
+      var t2 = 0.5 - x2 * x2 - y2 * y2;
+      if (t2 < 0) n2 = 0.0;else {
+        t2 *= t2;
+        n2 = t2 * t2 * this.dot(this.grad3[gi2], x2, y2);
+      }
+
+      // Add contributions from each corner to get the final noise value.
+      // The result is scaled to return values in the interval [-1,1].
+      return 70.0 * (n0 + n1 + n2);
+    }
+
+    // 3D simplex noise
+  }, {
+    key: "noise3d",
+    value: function noise3d(xin, yin, zin) {
+      var n0; // Noise contributions from the four corners
+      var n1;
+      var n2;
+      var n3;
+      // Skew the input space to determine which simplex cell we're in
+      var F3 = 1.0 / 3.0;
+      var s = (xin + yin + zin) * F3; // Very nice and simple skew factor for 3D
+      var i = Math.floor(xin + s);
+      var j = Math.floor(yin + s);
+      var k = Math.floor(zin + s);
+      var G3 = 1.0 / 6.0; // Very nice and simple unskew factor, too
+      var t = (i + j + k) * G3;
+      var X0 = i - t; // Unskew the cell origin back to (x,y,z) space
+      var Y0 = j - t;
+      var Z0 = k - t;
+      var x0 = xin - X0; // The x,y,z distances from the cell origin
+      var y0 = yin - Y0;
+      var z0 = zin - Z0;
+
+      // For the 3D case, the simplex shape is a slightly irregular tetrahedron.
+      // Determine which simplex we are in.
+      var i1; // Offsets for second corner of simplex in (i,j,k) coords
+
+      var j1;
+      var k1;
+      var i2; // Offsets for third corner of simplex in (i,j,k) coords
+      var j2;
+      var k2;
+      if (x0 >= y0) {
+        if (y0 >= z0) {
+          i1 = 1;
+          j1 = 0;
+          k1 = 0;
+          i2 = 1;
+          j2 = 1;
+          k2 = 0;
+
+          // X Y Z order
+        } else if (x0 >= z0) {
+          i1 = 1;
+          j1 = 0;
+          k1 = 0;
+          i2 = 1;
+          j2 = 0;
+          k2 = 1;
+
+          // X Z Y order
+        } else {
+          i1 = 0;
+          j1 = 0;
+          k1 = 1;
+          i2 = 1;
+          j2 = 0;
+          k2 = 1;
+        } // Z X Y order
+      } else {
+        // x0<y0
+
+        if (y0 < z0) {
+          i1 = 0;
+          j1 = 0;
+          k1 = 1;
+          i2 = 0;
+          j2 = 1;
+          k2 = 1;
+
+          // Z Y X order
+        } else if (x0 < z0) {
+          i1 = 0;
+          j1 = 1;
+          k1 = 0;
+          i2 = 0;
+          j2 = 1;
+          k2 = 1;
+
+          // Y Z X order
+        } else {
+          i1 = 0;
+          j1 = 1;
+          k1 = 0;
+          i2 = 1;
+          j2 = 1;
+          k2 = 0;
+        } // Y X Z order
+      }
+
+      // A step of (1,0,0) in (i,j,k) means a step of (1-c,-c,-c) in (x,y,z),
+      // a step of (0,1,0) in (i,j,k) means a step of (-c,1-c,-c) in (x,y,z), and
+      // a step of (0,0,1) in (i,j,k) means a step of (-c,-c,1-c) in (x,y,z), where
+      // c = 1/6.
+      var x1 = x0 - i1 + G3; // Offsets for second corner in (x,y,z) coords
+      var y1 = y0 - j1 + G3;
+      var z1 = z0 - k1 + G3;
+      var x2 = x0 - i2 + 2.0 * G3; // Offsets for third corner in (x,y,z) coords
+      var y2 = y0 - j2 + 2.0 * G3;
+      var z2 = z0 - k2 + 2.0 * G3;
+      var x3 = x0 - 1.0 + 3.0 * G3; // Offsets for last corner in (x,y,z) coords
+      var y3 = y0 - 1.0 + 3.0 * G3;
+      var z3 = z0 - 1.0 + 3.0 * G3;
+      // Work out the hashed gradient indices of the four simplex corners
+      var ii = i & 255;
+      var jj = j & 255;
+      var kk = k & 255;
+      var gi0 = this.perm[ii + this.perm[jj + this.perm[kk]]] % 12;
+      var gi1 = this.perm[ii + i1 + this.perm[jj + j1 + this.perm[kk + k1]]] % 12;
+      var gi2 = this.perm[ii + i2 + this.perm[jj + j2 + this.perm[kk + k2]]] % 12;
+      var gi3 = this.perm[ii + 1 + this.perm[jj + 1 + this.perm[kk + 1]]] % 12;
+      // Calculate the contribution from the four corners
+      var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0;
+      if (t0 < 0) n0 = 0.0;else {
+        t0 *= t0;
+        n0 = t0 * t0 * this.dot3(this.grad3[gi0], x0, y0, z0);
+      }
+      var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1;
+      if (t1 < 0) n1 = 0.0;else {
+        t1 *= t1;
+        n1 = t1 * t1 * this.dot3(this.grad3[gi1], x1, y1, z1);
+      }
+      var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2;
+      if (t2 < 0) n2 = 0.0;else {
+        t2 *= t2;
+        n2 = t2 * t2 * this.dot3(this.grad3[gi2], x2, y2, z2);
+      }
+      var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3;
+      if (t3 < 0) n3 = 0.0;else {
+        t3 *= t3;
+        n3 = t3 * t3 * this.dot3(this.grad3[gi3], x3, y3, z3);
+      }
+
+      // Add contributions from each corner to get the final noise value.
+      // The result is scaled to stay just inside [-1,1]
+      return 32.0 * (n0 + n1 + n2 + n3);
+    }
+
+    // 4D simplex noise
+  }, {
+    key: "noise4d",
+    value: function noise4d(x, y, z, w) {
+      // For faster and easier lookups
+      var grad4 = this.grad4;
+      var simplex = this.simplex;
+      var perm = this.perm;
+
+      // The skewing and unskewing factors are hairy again for the 4D case
+      var F4 = (Math.sqrt(5.0) - 1.0) / 4.0;
+      var G4 = (5.0 - Math.sqrt(5.0)) / 20.0;
+      var n0; // Noise contributions from the five corners
+      var n1;
+      var n2;
+      var n3;
+      var n4;
+      // Skew the (x,y,z,w) space to determine which cell of 24 simplices we're in
+      var s = (x + y + z + w) * F4; // Factor for 4D skewing
+      var i = Math.floor(x + s);
+      var j = Math.floor(y + s);
+      var k = Math.floor(z + s);
+      var l = Math.floor(w + s);
+      var t = (i + j + k + l) * G4; // Factor for 4D unskewing
+      var X0 = i - t; // Unskew the cell origin back to (x,y,z,w) space
+      var Y0 = j - t;
+      var Z0 = k - t;
+      var W0 = l - t;
+      var x0 = x - X0; // The x,y,z,w distances from the cell origin
+      var y0 = y - Y0;
+      var z0 = z - Z0;
+      var w0 = w - W0;
+
+      // For the 4D case, the simplex is a 4D shape I won't even try to describe.
+      // To find out which of the 24 possible simplices we're in, we need to
+      // determine the magnitude ordering of x0, y0, z0 and w0.
+      // The method below is a good way of finding the ordering of x,y,z,w and
+      // then find the correct traversal order for the simplex we’re in.
+      // First, six pair-wise comparisons are performed between each possible pair
+      // of the four coordinates, and the results are used to add up binary bits
+      // for an integer index.
+      var c1 = x0 > y0 ? 32 : 0;
+      var c2 = x0 > z0 ? 16 : 0;
+      var c3 = y0 > z0 ? 8 : 0;
+      var c4 = x0 > w0 ? 4 : 0;
+      var c5 = y0 > w0 ? 2 : 0;
+      var c6 = z0 > w0 ? 1 : 0;
+      var c = c1 + c2 + c3 + c4 + c5 + c6;
+
+      // simplex[c] is a 4-vector with the numbers 0, 1, 2 and 3 in some order.
+      // Many values of c will never occur, since e.g. x>y>z>w makes x<z, y<w and x<w
+      // impossible. Only the 24 indices which have non-zero entries make any sense.
+      // We use a thresholding to set the coordinates in turn from the largest magnitude.
+      // The number 3 in the "simplex" array is at the position of the largest coordinate.
+      var i1 = simplex[c][0] >= 3 ? 1 : 0;
+      var j1 = simplex[c][1] >= 3 ? 1 : 0;
+      var k1 = simplex[c][2] >= 3 ? 1 : 0;
+      var l1 = simplex[c][3] >= 3 ? 1 : 0;
+      // The number 2 in the "simplex" array is at the second largest coordinate.
+      var i2 = simplex[c][0] >= 2 ? 1 : 0;
+      var j2 = simplex[c][1] >= 2 ? 1 : 0;
+      var k2 = simplex[c][2] >= 2 ? 1 : 0;
+      var l2 = simplex[c][3] >= 2 ? 1 : 0;
+      // The number 1 in the "simplex" array is at the second smallest coordinate.
+      var i3 = simplex[c][0] >= 1 ? 1 : 0;
+      var j3 = simplex[c][1] >= 1 ? 1 : 0;
+      var k3 = simplex[c][2] >= 1 ? 1 : 0;
+      var l3 = simplex[c][3] >= 1 ? 1 : 0;
+      // The fifth corner has all coordinate offsets = 1, so no need to look that up.
+      var x1 = x0 - i1 + G4; // Offsets for second corner in (x,y,z,w) coords
+      var y1 = y0 - j1 + G4;
+      var z1 = z0 - k1 + G4;
+      var w1 = w0 - l1 + G4;
+      var x2 = x0 - i2 + 2.0 * G4; // Offsets for third corner in (x,y,z,w) coords
+      var y2 = y0 - j2 + 2.0 * G4;
+      var z2 = z0 - k2 + 2.0 * G4;
+      var w2 = w0 - l2 + 2.0 * G4;
+      var x3 = x0 - i3 + 3.0 * G4; // Offsets for fourth corner in (x,y,z,w) coords
+      var y3 = y0 - j3 + 3.0 * G4;
+      var z3 = z0 - k3 + 3.0 * G4;
+      var w3 = w0 - l3 + 3.0 * G4;
+      var x4 = x0 - 1.0 + 4.0 * G4; // Offsets for last corner in (x,y,z,w) coords
+      var y4 = y0 - 1.0 + 4.0 * G4;
+      var z4 = z0 - 1.0 + 4.0 * G4;
+      var w4 = w0 - 1.0 + 4.0 * G4;
+      // Work out the hashed gradient indices of the five simplex corners
+      var ii = i & 255;
+      var jj = j & 255;
+      var kk = k & 255;
+      var ll = l & 255;
+      var gi0 = perm[ii + perm[jj + perm[kk + perm[ll]]]] % 32;
+      var gi1 = perm[ii + i1 + perm[jj + j1 + perm[kk + k1 + perm[ll + l1]]]] % 32;
+      var gi2 = perm[ii + i2 + perm[jj + j2 + perm[kk + k2 + perm[ll + l2]]]] % 32;
+      var gi3 = perm[ii + i3 + perm[jj + j3 + perm[kk + k3 + perm[ll + l3]]]] % 32;
+      var gi4 = perm[ii + 1 + perm[jj + 1 + perm[kk + 1 + perm[ll + 1]]]] % 32;
+      // Calculate the contribution from the five corners
+      var t0 = 0.6 - x0 * x0 - y0 * y0 - z0 * z0 - w0 * w0;
+      if (t0 < 0) n0 = 0.0;else {
+        t0 *= t0;
+        n0 = t0 * t0 * this.dot4(grad4[gi0], x0, y0, z0, w0);
+      }
+      var t1 = 0.6 - x1 * x1 - y1 * y1 - z1 * z1 - w1 * w1;
+      if (t1 < 0) n1 = 0.0;else {
+        t1 *= t1;
+        n1 = t1 * t1 * this.dot4(grad4[gi1], x1, y1, z1, w1);
+      }
+      var t2 = 0.6 - x2 * x2 - y2 * y2 - z2 * z2 - w2 * w2;
+      if (t2 < 0) n2 = 0.0;else {
+        t2 *= t2;
+        n2 = t2 * t2 * this.dot4(grad4[gi2], x2, y2, z2, w2);
+      }
+      var t3 = 0.6 - x3 * x3 - y3 * y3 - z3 * z3 - w3 * w3;
+      if (t3 < 0) n3 = 0.0;else {
+        t3 *= t3;
+        n3 = t3 * t3 * this.dot4(grad4[gi3], x3, y3, z3, w3);
+      }
+      var t4 = 0.6 - x4 * x4 - y4 * y4 - z4 * z4 - w4 * w4;
+      if (t4 < 0) n4 = 0.0;else {
+        t4 *= t4;
+        n4 = t4 * t4 * this.dot4(grad4[gi4], x4, y4, z4, w4);
+      }
+
+      // Sum up and scale the result to cover the range [-1,1]
+      return 27.0 * (n0 + n1 + n2 + n3 + n4);
+    }
+  }]);
+  return SimplexNoise;
+}();
+exports.SimplexNoise = SimplexNoise;
+},{}],"node_modules/three/examples/jsm/shaders/SSAOShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SSAOShader = exports.SSAODepthShader = exports.SSAOBlurShader = void 0;
+var _three = require("three");
+/**
+ * References:
+ * http://john-chapman-graphics.blogspot.com/2013/01/ssao-tutorial.html
+ * https://learnopengl.com/Advanced-Lighting/SSAO
+ * https://github.com/McNopper/OpenGL/blob/master/Example28/shader/ssao.frag.glsl
+ */
+
+var SSAOShader = {
+  defines: {
+    'PERSPECTIVE_CAMERA': 1,
+    'KERNEL_SIZE': 32
+  },
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'tNormal': {
+      value: null
+    },
+    'tDepth': {
+      value: null
+    },
+    'tNoise': {
+      value: null
+    },
+    'kernel': {
+      value: null
+    },
+    'cameraNear': {
+      value: null
+    },
+    'cameraFar': {
+      value: null
+    },
+    'resolution': {
+      value: new _three.Vector2()
+    },
+    'cameraProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'cameraInverseProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'kernelRadius': {
+      value: 8
+    },
+    'minDistance': {
+      value: 0.005
+    },
+    'maxDistance': {
+      value: 0.05
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tuniform sampler2D tDiffuse;\n\t\tuniform sampler2D tNormal;\n\t\tuniform sampler2D tDepth;\n\t\tuniform sampler2D tNoise;\n\n\t\tuniform vec3 kernel[ KERNEL_SIZE ];\n\n\t\tuniform vec2 resolution;\n\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\t\tuniform mat4 cameraProjectionMatrix;\n\t\tuniform mat4 cameraInverseProjectionMatrix;\n\n\t\tuniform float kernelRadius;\n\t\tuniform float minDistance; // avoid artifacts caused by neighbour fragments with minimal depth difference\n\t\tuniform float maxDistance; // avoid the influence of fragments which are too far away\n\n\t\tvarying vec2 vUv;\n\n\t\t#include <packing>\n\n\t\tfloat getDepth( const in vec2 screenPosition ) {\n\n\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\n\t\t}\n\n\t\tfloat getLinearDepth( const in vec2 screenPosition ) {\n\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\n\t\t\t\tfloat fragCoordZ = texture2D( tDepth, screenPosition ).x;\n\t\t\t\tfloat viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );\n\t\t\t\treturn viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );\n\n\t\t\t#else\n\n\t\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\n\t\t\t#endif\n\n\t\t}\n\n\t\tfloat getViewZ( const in float depth ) {\n\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\n\t\t\t\treturn perspectiveDepthToViewZ( depth, cameraNear, cameraFar );\n\n\t\t\t#else\n\n\t\t\t\treturn orthographicDepthToViewZ( depth, cameraNear, cameraFar );\n\n\t\t\t#endif\n\n\t\t}\n\n\t\tvec3 getViewPosition( const in vec2 screenPosition, const in float depth, const in float viewZ ) {\n\n\t\t\tfloat clipW = cameraProjectionMatrix[2][3] * viewZ + cameraProjectionMatrix[3][3];\n\n\t\t\tvec4 clipPosition = vec4( ( vec3( screenPosition, depth ) - 0.5 ) * 2.0, 1.0 );\n\n\t\t\tclipPosition *= clipW; // unprojection.\n\n\t\t\treturn ( cameraInverseProjectionMatrix * clipPosition ).xyz;\n\n\t\t}\n\n\t\tvec3 getViewNormal( const in vec2 screenPosition ) {\n\n\t\t\treturn unpackRGBToNormal( texture2D( tNormal, screenPosition ).xyz );\n\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tfloat depth = getDepth( vUv );\n\t\t\tfloat viewZ = getViewZ( depth );\n\n\t\t\tvec3 viewPosition = getViewPosition( vUv, depth, viewZ );\n\t\t\tvec3 viewNormal = getViewNormal( vUv );\n\n\t\t\tvec2 noiseScale = vec2( resolution.x / 4.0, resolution.y / 4.0 );\n\t\t\tvec3 random = vec3( texture2D( tNoise, vUv * noiseScale ).r );\n\n\t\t\t// compute matrix used to reorient a kernel vector\n\n\t\t\tvec3 tangent = normalize( random - viewNormal * dot( random, viewNormal ) );\n\t\t\tvec3 bitangent = cross( viewNormal, tangent );\n\t\t\tmat3 kernelMatrix = mat3( tangent, bitangent, viewNormal );\n\n\t\t float occlusion = 0.0;\n\n\t\t for ( int i = 0; i < KERNEL_SIZE; i ++ ) {\n\n\t\t\t\tvec3 sampleVector = kernelMatrix * kernel[ i ]; // reorient sample vector in view space\n\t\t\t\tvec3 samplePoint = viewPosition + ( sampleVector * kernelRadius ); // calculate sample point\n\n\t\t\t\tvec4 samplePointNDC = cameraProjectionMatrix * vec4( samplePoint, 1.0 ); // project point and calculate NDC\n\t\t\t\tsamplePointNDC /= samplePointNDC.w;\n\n\t\t\t\tvec2 samplePointUv = samplePointNDC.xy * 0.5 + 0.5; // compute uv coordinates\n\n\t\t\t\tfloat realDepth = getLinearDepth( samplePointUv ); // get linear depth from depth texture\n\t\t\t\tfloat sampleDepth = viewZToOrthographicDepth( samplePoint.z, cameraNear, cameraFar ); // compute linear depth of the sample view Z value\n\t\t\t\tfloat delta = sampleDepth - realDepth;\n\n\t\t\t\tif ( delta > minDistance && delta < maxDistance ) { // if fragment is before sample point, increase occlusion\n\n\t\t\t\t\tocclusion += 1.0;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tocclusion = clamp( occlusion / float( KERNEL_SIZE ), 0.0, 1.0 );\n\n\t\t\tgl_FragColor = vec4( vec3( 1.0 - occlusion ), 1.0 );\n\n\t\t}"
+};
+exports.SSAOShader = SSAOShader;
+var SSAODepthShader = {
+  defines: {
+    'PERSPECTIVE_CAMERA': 1
+  },
+  uniforms: {
+    'tDepth': {
+      value: null
+    },
+    'cameraNear': {
+      value: null
+    },
+    'cameraFar': {
+      value: null
+    }
+  },
+  vertexShader: "varying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: "uniform sampler2D tDepth;\n\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\n\t\tvarying vec2 vUv;\n\n\t\t#include <packing>\n\n\t\tfloat getLinearDepth( const in vec2 screenPosition ) {\n\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\n\t\t\t\tfloat fragCoordZ = texture2D( tDepth, screenPosition ).x;\n\t\t\t\tfloat viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );\n\t\t\t\treturn viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );\n\n\t\t\t#else\n\n\t\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\n\t\t\t#endif\n\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tfloat depth = getLinearDepth( vUv );\n\t\t\tgl_FragColor = vec4( vec3( 1.0 - depth ), 1.0 );\n\n\t\t}"
+};
+exports.SSAODepthShader = SSAODepthShader;
+var SSAOBlurShader = {
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'resolution': {
+      value: new _three.Vector2()
+    }
+  },
+  vertexShader: "varying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: "uniform sampler2D tDiffuse;\n\n\t\tuniform vec2 resolution;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvec2 texelSize = ( 1.0 / resolution );\n\t\t\tfloat result = 0.0;\n\n\t\t\tfor ( int i = - 2; i <= 2; i ++ ) {\n\n\t\t\t\tfor ( int j = - 2; j <= 2; j ++ ) {\n\n\t\t\t\t\tvec2 offset = ( vec2( float( i ), float( j ) ) ) * texelSize;\n\t\t\t\t\tresult += texture2D( tDiffuse, vUv + offset ).r;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tgl_FragColor = vec4( vec3( result / ( 5.0 * 5.0 ) ), 1.0 );\n\n\t\t}"
+};
+exports.SSAOBlurShader = SSAOBlurShader;
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58042,7 +58534,371 @@ var CopyShader = {
   fragmentShader: /* glsl */"\n\n\t\tuniform float opacity;\n\n\t\tuniform sampler2D tDiffuse;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = texture2D( tDiffuse, vUv );\n\t\t\tgl_FragColor.a *= opacity;\n\n\n\t\t}"
 };
 exports.CopyShader = CopyShader;
-},{}],"node_modules/three/examples/jsm/postprocessing/MaskPass.js":[function(require,module,exports) {
+},{}],"node_modules/three/examples/jsm/postprocessing/SSAOPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SSAOPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+var _SimplexNoise = require("../math/SimplexNoise.js");
+var _SSAOShader = require("../shaders/SSAOShader.js");
+var _CopyShader = require("../shaders/CopyShader.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var SSAOPass = /*#__PURE__*/function (_Pass) {
+  _inherits(SSAOPass, _Pass);
+  var _super = _createSuper(SSAOPass);
+  function SSAOPass(scene, camera, width, height) {
+    var _this;
+    _classCallCheck(this, SSAOPass);
+    _this = _super.call(this);
+    _this.width = width !== undefined ? width : 512;
+    _this.height = height !== undefined ? height : 512;
+    _this.clear = true;
+    _this.camera = camera;
+    _this.scene = scene;
+    _this.kernelRadius = 8;
+    _this.kernelSize = 32;
+    _this.kernel = [];
+    _this.noiseTexture = null;
+    _this.output = 0;
+    _this.minDistance = 0.005;
+    _this.maxDistance = 0.1;
+    _this._visibilityCache = new Map();
+
+    //
+
+    _this.generateSampleKernel();
+    _this.generateRandomKernelRotations();
+
+    // beauty render target
+
+    var depthTexture = new _three.DepthTexture();
+    depthTexture.format = _three.DepthStencilFormat;
+    depthTexture.type = _three.UnsignedInt248Type;
+    _this.beautyRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      type: _three.HalfFloatType
+    });
+
+    // normal render target with depth buffer
+
+    _this.normalRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType,
+      depthTexture: depthTexture
+    });
+
+    // ssao render target
+
+    _this.ssaoRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      type: _three.HalfFloatType
+    });
+    _this.blurRenderTarget = _this.ssaoRenderTarget.clone();
+
+    // ssao material
+
+    _this.ssaoMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSAOShader.SSAOShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSAOShader.SSAOShader.uniforms),
+      vertexShader: _SSAOShader.SSAOShader.vertexShader,
+      fragmentShader: _SSAOShader.SSAOShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.ssaoMaterial.uniforms['tDiffuse'].value = _this.beautyRenderTarget.texture;
+    _this.ssaoMaterial.uniforms['tNormal'].value = _this.normalRenderTarget.texture;
+    _this.ssaoMaterial.uniforms['tDepth'].value = _this.normalRenderTarget.depthTexture;
+    _this.ssaoMaterial.uniforms['tNoise'].value = _this.noiseTexture;
+    _this.ssaoMaterial.uniforms['kernel'].value = _this.kernel;
+    _this.ssaoMaterial.uniforms['cameraNear'].value = _this.camera.near;
+    _this.ssaoMaterial.uniforms['cameraFar'].value = _this.camera.far;
+    _this.ssaoMaterial.uniforms['resolution'].value.set(_this.width, _this.height);
+    _this.ssaoMaterial.uniforms['cameraProjectionMatrix'].value.copy(_this.camera.projectionMatrix);
+    _this.ssaoMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(_this.camera.projectionMatrixInverse);
+
+    // normal material
+
+    _this.normalMaterial = new _three.MeshNormalMaterial();
+    _this.normalMaterial.blending = _three.NoBlending;
+
+    // blur material
+
+    _this.blurMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSAOShader.SSAOBlurShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSAOShader.SSAOBlurShader.uniforms),
+      vertexShader: _SSAOShader.SSAOBlurShader.vertexShader,
+      fragmentShader: _SSAOShader.SSAOBlurShader.fragmentShader
+    });
+    _this.blurMaterial.uniforms['tDiffuse'].value = _this.ssaoRenderTarget.texture;
+    _this.blurMaterial.uniforms['resolution'].value.set(_this.width, _this.height);
+
+    // material for rendering the depth
+
+    _this.depthRenderMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSAOShader.SSAODepthShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSAOShader.SSAODepthShader.uniforms),
+      vertexShader: _SSAOShader.SSAODepthShader.vertexShader,
+      fragmentShader: _SSAOShader.SSAODepthShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.depthRenderMaterial.uniforms['tDepth'].value = _this.normalRenderTarget.depthTexture;
+    _this.depthRenderMaterial.uniforms['cameraNear'].value = _this.camera.near;
+    _this.depthRenderMaterial.uniforms['cameraFar'].value = _this.camera.far;
+
+    // material for rendering the content of a render target
+
+    _this.copyMaterial = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_CopyShader.CopyShader.uniforms),
+      vertexShader: _CopyShader.CopyShader.vertexShader,
+      fragmentShader: _CopyShader.CopyShader.fragmentShader,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      blendSrc: _three.DstColorFactor,
+      blendDst: _three.ZeroFactor,
+      blendEquation: _three.AddEquation,
+      blendSrcAlpha: _three.DstAlphaFactor,
+      blendDstAlpha: _three.ZeroFactor,
+      blendEquationAlpha: _three.AddEquation
+    });
+    _this.fsQuad = new _Pass2.FullScreenQuad(null);
+    _this.originalClearColor = new _three.Color();
+    return _this;
+  }
+  _createClass(SSAOPass, [{
+    key: "dispose",
+    value: function dispose() {
+      // dispose render targets
+
+      this.beautyRenderTarget.dispose();
+      this.normalRenderTarget.dispose();
+      this.ssaoRenderTarget.dispose();
+      this.blurRenderTarget.dispose();
+
+      // dispose materials
+
+      this.normalMaterial.dispose();
+      this.blurMaterial.dispose();
+      this.copyMaterial.dispose();
+      this.depthRenderMaterial.dispose();
+
+      // dipsose full screen quad
+
+      this.fsQuad.dispose();
+    }
+  }, {
+    key: "render",
+    value: function render(renderer, writeBuffer /*, readBuffer, deltaTime, maskActive */) {
+      if (renderer.capabilities.isWebGL2 === false) this.noiseTexture.format = _three.LuminanceFormat;
+
+      // render beauty
+
+      renderer.setRenderTarget(this.beautyRenderTarget);
+      renderer.clear();
+      renderer.render(this.scene, this.camera);
+
+      // render normals and depth (honor only meshes, points and lines do not contribute to SSAO)
+
+      this.overrideVisibility();
+      this.renderOverride(renderer, this.normalMaterial, this.normalRenderTarget, 0x7777ff, 1.0);
+      this.restoreVisibility();
+
+      // render SSAO
+
+      this.ssaoMaterial.uniforms['kernelRadius'].value = this.kernelRadius;
+      this.ssaoMaterial.uniforms['minDistance'].value = this.minDistance;
+      this.ssaoMaterial.uniforms['maxDistance'].value = this.maxDistance;
+      this.renderPass(renderer, this.ssaoMaterial, this.ssaoRenderTarget);
+
+      // render blur
+
+      this.renderPass(renderer, this.blurMaterial, this.blurRenderTarget);
+
+      // output result to screen
+
+      switch (this.output) {
+        case SSAOPass.OUTPUT.SSAO:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.ssaoRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSAOPass.OUTPUT.Blur:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSAOPass.OUTPUT.Beauty:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSAOPass.OUTPUT.Depth:
+          this.renderPass(renderer, this.depthRenderMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSAOPass.OUTPUT.Normal:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.normalRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSAOPass.OUTPUT.Default:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget.texture;
+          this.copyMaterial.blending = _three.CustomBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        default:
+          console.warn('THREE.SSAOPass: Unknown output type.');
+      }
+    }
+  }, {
+    key: "renderPass",
+    value: function renderPass(renderer, passMaterial, renderTarget, clearColor, clearAlpha) {
+      // save original state
+      renderer.getClearColor(this.originalClearColor);
+      var originalClearAlpha = renderer.getClearAlpha();
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+
+      // setup pass state
+      renderer.autoClear = false;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.fsQuad.material = passMaterial;
+      this.fsQuad.render(renderer);
+
+      // restore original state
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "renderOverride",
+    value: function renderOverride(renderer, overrideMaterial, renderTarget, clearColor, clearAlpha) {
+      renderer.getClearColor(this.originalClearColor);
+      var originalClearAlpha = renderer.getClearAlpha();
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+      renderer.autoClear = false;
+      clearColor = overrideMaterial.clearColor || clearColor;
+      clearAlpha = overrideMaterial.clearAlpha || clearAlpha;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.scene.overrideMaterial = overrideMaterial;
+      renderer.render(this.scene, this.camera);
+      this.scene.overrideMaterial = null;
+
+      // restore original state
+
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(width, height) {
+      this.width = width;
+      this.height = height;
+      this.beautyRenderTarget.setSize(width, height);
+      this.ssaoRenderTarget.setSize(width, height);
+      this.normalRenderTarget.setSize(width, height);
+      this.blurRenderTarget.setSize(width, height);
+      this.ssaoMaterial.uniforms['resolution'].value.set(width, height);
+      this.ssaoMaterial.uniforms['cameraProjectionMatrix'].value.copy(this.camera.projectionMatrix);
+      this.ssaoMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(this.camera.projectionMatrixInverse);
+      this.blurMaterial.uniforms['resolution'].value.set(width, height);
+    }
+  }, {
+    key: "generateSampleKernel",
+    value: function generateSampleKernel() {
+      var kernelSize = this.kernelSize;
+      var kernel = this.kernel;
+      for (var i = 0; i < kernelSize; i++) {
+        var sample = new _three.Vector3();
+        sample.x = Math.random() * 2 - 1;
+        sample.y = Math.random() * 2 - 1;
+        sample.z = Math.random();
+        sample.normalize();
+        var scale = i / kernelSize;
+        scale = _three.MathUtils.lerp(0.1, 1, scale * scale);
+        sample.multiplyScalar(scale);
+        kernel.push(sample);
+      }
+    }
+  }, {
+    key: "generateRandomKernelRotations",
+    value: function generateRandomKernelRotations() {
+      var width = 4,
+        height = 4;
+      var simplex = new _SimplexNoise.SimplexNoise();
+      var size = width * height;
+      var data = new Float32Array(size);
+      for (var i = 0; i < size; i++) {
+        var x = Math.random() * 2 - 1;
+        var y = Math.random() * 2 - 1;
+        var z = 0;
+        data[i] = simplex.noise3d(x, y, z);
+      }
+      this.noiseTexture = new _three.DataTexture(data, width, height, _three.RedFormat, _three.FloatType);
+      this.noiseTexture.wrapS = _three.RepeatWrapping;
+      this.noiseTexture.wrapT = _three.RepeatWrapping;
+      this.noiseTexture.needsUpdate = true;
+    }
+  }, {
+    key: "overrideVisibility",
+    value: function overrideVisibility() {
+      var scene = this.scene;
+      var cache = this._visibilityCache;
+      scene.traverse(function (object) {
+        cache.set(object, object.visible);
+        if (object.isPoints || object.isLine) object.visible = false;
+      });
+    }
+  }, {
+    key: "restoreVisibility",
+    value: function restoreVisibility() {
+      var scene = this.scene;
+      var cache = this._visibilityCache;
+      scene.traverse(function (object) {
+        var visible = cache.get(object);
+        object.visible = visible;
+      });
+      cache.clear();
+    }
+  }]);
+  return SSAOPass;
+}(_Pass2.Pass);
+exports.SSAOPass = SSAOPass;
+SSAOPass.OUTPUT = {
+  'Default': 0,
+  'SSAO': 1,
+  'Blur': 2,
+  'Beauty': 3,
+  'Depth': 4,
+  'Normal': 5
+};
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../math/SimplexNoise.js":"node_modules/three/examples/jsm/math/SimplexNoise.js","../shaders/SSAOShader.js":"node_modules/three/examples/jsm/shaders/SSAOShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/postprocessing/MaskPass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59082,6 +59938,7 @@ exports.UnrealBloom = void 0;
 var THREE = _interopRequireWildcard(require("three"));
 var _RenderPass = require("three/examples/jsm/postprocessing/RenderPass.js");
 var _ShaderPass = require("three/examples/jsm/postprocessing/ShaderPass.js");
+var _SSAOPass = require("three/examples/jsm/postprocessing/SSAOPass.js");
 var _MyEffectComposer = require("./src/MyEffectComposer.js");
 var _MyUnrealBloomPass = require("./src/MyUnrealBloomPass.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -59093,25 +59950,22 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
 var UnrealBloom = /*#__PURE__*/function () {
-  function UnrealBloom(camera, scene) {
+  function UnrealBloom(camera, scene, renderer) {
     _classCallCheck(this, UnrealBloom);
     this.camera = camera;
     this.scene = scene;
     this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
-    this.composer = this.initComposer();
+    this.composer = this.initComposer(renderer);
     // this.composer2=this.initComposer2()
   }
   _createClass(UnrealBloom, [{
     key: "initComposer",
-    value: function initComposer() {
+    value: function initComposer(renderer) {
       //设置光晕
-      this.renderer2 = new THREE.WebGLRenderer({
-        antialias: true,
-        alpha: true,
-        canvas: renderer.canvas
-      });
+      console.log(renderer);
       var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
       composer.addPass(new _RenderPass.RenderPass(scene, camera));
+      composer.addPass(this.getSSAO());
       composer.addPass(new _MyUnrealBloomPass.MyUnrealBloomPass(
       //创建通道
       new THREE.Vector2(window.innerWidth, window.innerHeight),
@@ -59124,6 +59978,21 @@ var UnrealBloom = /*#__PURE__*/function () {
       ));
 
       return composer;
+    }
+  }, {
+    key: "getSSAO",
+    value: function getSSAO() {
+      //https://juejin.cn/post/7224683165989732412
+      var saoPass = new _SSAOPass.SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+      // console.log(SSAOPass.OUTPUT)
+      // saoPass.params.output = SSAOPass.OUTPUT.Default;
+      // saoPass.params.saoBias = 0.5;
+      // saoPass.params.saoIntensity = 0.05;
+      // saoPass.params.saoScale = 100;
+      // saoPass.params.saoKernelRadius = 10;
+      // saoPass.params.saoMinResolution = 0;
+      // saoPass.params.saoBlur = true;
+      return saoPass;
     }
   }, {
     key: "initComposer2",
@@ -59190,7 +60059,7 @@ var UnrealBloom = /*#__PURE__*/function () {
   return UnrealBloom;
 }();
 exports.UnrealBloom = UnrealBloom;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59210,9 +60079,9 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } // Postprocessing
 var Postprocessing = /*#__PURE__*/function () {
-  function Postprocessing(camera, scene) {
+  function Postprocessing(camera, scene, renderer) {
     _classCallCheck(this, Postprocessing);
-    this.unrealBloom = new _UnrealBloom.UnrealBloom(camera, scene);
+    this.unrealBloom = new _UnrealBloom.UnrealBloom(camera, scene, renderer);
     this.godrays = new _Godrays.Godrays(camera, scene);
     this.init();
   }
@@ -59320,8 +60189,9 @@ var Main = /*#__PURE__*/function () {
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
     this.initScene();
-    this.Postprocessing = new _Postprocessing.Postprocessing(this.camera, this.scene);
-    this.unrealBloom = new _UnrealBloom.UnrealBloom(this.camera, this.scene);
+    this.Postprocessing = new _Postprocessing.Postprocessing(this.camera, this.scene, this.renderer);
+    // this.unrealBloom=new UnrealBloom(this.camera,this.scene)
+
     this.animate = this.animate.bind(this);
     requestAnimationFrame(this.animate);
 
@@ -59355,6 +60225,7 @@ var Main = /*#__PURE__*/function () {
 
               this.renderer = new THREE.WebGLRenderer({
                 antialias: true,
+                //抗锯齿
                 alpha: true,
                 canvas: this.canvas
               });
@@ -59584,7 +60455,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60217" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61427" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

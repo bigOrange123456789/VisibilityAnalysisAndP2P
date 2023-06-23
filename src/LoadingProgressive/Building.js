@@ -504,7 +504,7 @@ export class Building{
         // return
         const self=this;
         window.list=list
-        const NUMBER=350//50//350//50//50
+        const NUMBER=30//50//350//50//50
         const TIME=1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME

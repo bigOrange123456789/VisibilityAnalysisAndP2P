@@ -8,8 +8,8 @@ import{Godrays}from"./Godrays.js"
 import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
-    constructor(camera,scene){
-        this.unrealBloom=new UnrealBloom(camera,scene)
+    constructor(camera,scene,renderer){
+        this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays=new Godrays(camera,scene)
         this.init()
     }

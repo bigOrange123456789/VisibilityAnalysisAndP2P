@@ -86,13 +86,12 @@ class LightProducer{
         //告诉平行光需要开启阴影投射
         directionalLight.castShadow = true
         // directionalLight.shadow.bias = -0.0005;
-        directionalLight.shadow.mapSize.width = 2048; 
-        directionalLight.shadow.mapSize.height = 2048;//这两个值决定使用多少像素生成阴影 默认512
+        directionalLight.shadow.mapSize.width = 2*2048; 
+        directionalLight.shadow.mapSize.height = 2*2048;//这两个值决定使用多少像素生成阴影 默认512
         this.objectMove.add( directionalLight )
         // directionalLight.target = new THREE.Object3D();
         // directionalLight.target.origin=new THREE.Object3D(10,10,10)
         directionalLight.target.position.set(10,-5,10)
-        
         
         window.target=directionalLight.target
         this.targetList.push(directionalLight.target)

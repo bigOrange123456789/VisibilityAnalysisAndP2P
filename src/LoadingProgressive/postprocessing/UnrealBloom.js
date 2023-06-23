@@ -1,28 +1,28 @@
 import * as THREE from "three"
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
+import { SSAOPass } from   'three/examples/jsm/postprocessing/SSAOPass.js';
 
 import { MyEffectComposer } from "./src/MyEffectComposer.js";
 
 import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
 export class UnrealBloom{
-    constructor(camera,scene){
+    constructor(camera,scene,renderer){
         this.camera=camera
         this.scene=scene
         this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
-        this.composer=this.initComposer()
+        this.composer=this.initComposer(renderer)
         // this.composer2=this.initComposer2()
         
     }
-    initComposer(){//设置光晕
-        this.renderer2 = new THREE.WebGLRenderer({ 
-            antialias: true,
-            alpha:true,
-            canvas:renderer.canvas
-        })
+    initComposer(renderer){//设置光晕
+        console.log(renderer)
         var composer = new MyEffectComposer(renderer)//效果组合器
         composer.addPass(
             new RenderPass(scene, camera)
+        );
+        composer.addPass(
+            this.getSSAO()
         );
         composer.addPass(
             new MyUnrealBloomPass(//创建通道
@@ -32,7 +32,20 @@ export class UnrealBloom{
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
         );
+        
         return composer
+    }
+    getSSAO(){//https://juejin.cn/post/7224683165989732412
+        let saoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+        // console.log(SSAOPass.OUTPUT)
+        // saoPass.params.output = SSAOPass.OUTPUT.Default;
+        // saoPass.params.saoBias = 0.5;
+        // saoPass.params.saoIntensity = 0.05;
+        // saoPass.params.saoScale = 100;
+        // saoPass.params.saoKernelRadius = 10;
+        // saoPass.params.saoMinResolution = 0;
+        // saoPass.params.saoBlur = true;
+        return saoPass
     }
     initComposer2(){//设置光晕
         this.litRenderTarget = new THREE.WebGLRenderTarget(

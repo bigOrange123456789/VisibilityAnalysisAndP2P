@@ -29,8 +29,8 @@ export class Main{
 
         this.initScene()
         
-        this.Postprocessing=new Postprocessing(this.camera,this.scene)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene)
+        this.Postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene)
 
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
@@ -60,7 +60,7 @@ export class Main{
 
 
         this.renderer = new THREE.WebGLRenderer({ 
-            antialias: true,
+            antialias: true,//抗锯齿
             alpha:true,
             canvas:this.canvas
         })
