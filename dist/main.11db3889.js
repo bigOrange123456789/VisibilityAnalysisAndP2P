@@ -40440,10 +40440,18 @@ function MouseManager() {
     console.log(event);
   };
   this.init = function () {
-    document.addEventListener('mousemove', scope.onMouseMove, true);
-    document.addEventListener('mouseup', scope.onMouseUp, true);
-    document.addEventListener('mousedown', scope.onMouseDown, true);
-    document.addEventListener('mousewheel', scope.onMouseWheel, false);
+    document.addEventListener('mousemove', function (event) {
+      if (!window.inPanel) scope.onMouseMove(event);
+    }, true);
+    document.addEventListener('mouseup', function (event) {
+      if (!window.inPanel) scope.onMouseUp(event);
+    }, true);
+    document.addEventListener('mousedown', function (event) {
+      if (!window.inPanel) scope.onMouseDown(event);
+    }, true);
+    document.addEventListener('mousewheel', function (event) {
+      if (!window.inPanel) scope.onMouseWheel(event);
+    }, false);
   };
 }
 function KeyboardManager() {
@@ -55889,6 +55897,10 @@ var Building = /*#__PURE__*/function () {
         mesh.material.roughness = 0;
         mesh.material.envMapIntensity = 0;
       }
+      mesh.material.metalness0 = mesh.material.metalness; //-0.5
+      mesh.material.roughness0 = mesh.material.roughness; //-0.5
+      mesh.material.envMapIntensity0 = mesh.material.envMapIntensity; //-0.5
+      mesh.material.emissiveIntensity0 = mesh.material.emissiveIntensity; //-0.5
       // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
 
       // mesh.material.shininess = 10;
@@ -56621,10 +56633,11 @@ var LightProducer = /*#__PURE__*/function () {
       this.objectMove.add(directionalLight);
       // directionalLight.target = new THREE.Object3D();
       // directionalLight.target.origin=new THREE.Object3D(10,10,10)
-      directionalLight.target.position.set(10, -5, 10);
+      directionalLight.target.position.set(1, -0.5, 1);
       window.target = directionalLight.target;
       this.targetList.push(directionalLight.target);
       this.objectMove.add(directionalLight.target);
+      this.directionalLight = directionalLight;
 
       // const directionalLight2 = new THREE.DirectionalLight( 0xcffffff,x+1.5 );
       // directionalLight2.position.set(-1,0,0)
@@ -57033,7 +57046,2308 @@ var Panel = /*#__PURE__*/function () {
   return Panel;
 }();
 exports.Panel = Panel;
-},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+},{"../../lib/ui/MyUI_sim.js":"lib/ui/MyUI_sim.js"}],"node_modules/three/examples/jsm/libs/lil-gui.module.min.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = exports.StringController = exports.OptionController = exports.NumberController = exports.GUI = exports.FunctionController = exports.Controller = exports.ColorController = exports.BooleanController = void 0;
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+/**
+ * lil-gui
+ * https://lil-gui.georgealways.com
+ * @version 0.17.0
+ * @author George Michael Brower
+ * @license MIT
+ */
+var t = /*#__PURE__*/function () {
+  function t(i, e, s, n, l = "div") {
+    _classCallCheck(this, t);
+    this.parent = i, this.object = e, this.property = s, this._disabled = !1, this._hidden = !1, this.initialValue = this.getValue(), this.domElement = document.createElement("div"), this.domElement.classList.add("controller"), this.domElement.classList.add(n), this.$name = document.createElement("div"), this.$name.classList.add("name"), t.nextNameID = t.nextNameID || 0, this.$name.id = "lil-gui-name-" + ++t.nextNameID, this.$widget = document.createElement(l), this.$widget.classList.add("widget"), this.$disable = this.$widget, this.domElement.appendChild(this.$name), this.domElement.appendChild(this.$widget), this.parent.children.push(this), this.parent.controllers.push(this), this.parent.$children.appendChild(this.domElement), this._listenCallback = this._listenCallback.bind(this), this.name(s);
+  }
+  _createClass(t, [{
+    key: "name",
+    value: function name(_t) {
+      return this._name = _t, this.$name.innerHTML = _t, this;
+    }
+  }, {
+    key: "onChange",
+    value: function onChange(_t2) {
+      return this._onChange = _t2, this;
+    }
+  }, {
+    key: "_callOnChange",
+    value: function _callOnChange() {
+      this.parent._callOnChange(this), void 0 !== this._onChange && this._onChange.call(this, this.getValue()), this._changed = !0;
+    }
+  }, {
+    key: "onFinishChange",
+    value: function onFinishChange(_t3) {
+      return this._onFinishChange = _t3, this;
+    }
+  }, {
+    key: "_callOnFinishChange",
+    value: function _callOnFinishChange() {
+      this._changed && (this.parent._callOnFinishChange(this), void 0 !== this._onFinishChange && this._onFinishChange.call(this, this.getValue())), this._changed = !1;
+    }
+  }, {
+    key: "reset",
+    value: function reset() {
+      return this.setValue(this.initialValue), this._callOnFinishChange(), this;
+    }
+  }, {
+    key: "enable",
+    value: function enable(_t4 = !0) {
+      return this.disable(!_t4);
+    }
+  }, {
+    key: "disable",
+    value: function disable(_t5 = !0) {
+      return _t5 === this._disabled || (this._disabled = _t5, this.domElement.classList.toggle("disabled", _t5), this.$disable.toggleAttribute("disabled", _t5)), this;
+    }
+  }, {
+    key: "show",
+    value: function show(_t6 = !0) {
+      return this._hidden = !_t6, this.domElement.style.display = this._hidden ? "none" : "", this;
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      return this.show(!1);
+    }
+  }, {
+    key: "options",
+    value: function options(_t7) {
+      var i = this.parent.add(this.object, this.property, _t7);
+      return i.name(this._name), this.destroy(), i;
+    }
+  }, {
+    key: "min",
+    value: function min(_t8) {
+      return this;
+    }
+  }, {
+    key: "max",
+    value: function max(_t9) {
+      return this;
+    }
+  }, {
+    key: "step",
+    value: function step(_t10) {
+      return this;
+    }
+  }, {
+    key: "decimals",
+    value: function decimals(_t11) {
+      return this;
+    }
+  }, {
+    key: "listen",
+    value: function listen(_t12 = !0) {
+      return this._listening = _t12, void 0 !== this._listenCallbackID && (cancelAnimationFrame(this._listenCallbackID), this._listenCallbackID = void 0), this._listening && this._listenCallback(), this;
+    }
+  }, {
+    key: "_listenCallback",
+    value: function _listenCallback() {
+      this._listenCallbackID = requestAnimationFrame(this._listenCallback);
+      var _t13 = this.save();
+      _t13 !== this._listenPrevValue && this.updateDisplay(), this._listenPrevValue = _t13;
+    }
+  }, {
+    key: "getValue",
+    value: function getValue() {
+      return this.object[this.property];
+    }
+  }, {
+    key: "setValue",
+    value: function setValue(_t14) {
+      return this.object[this.property] = _t14, this._callOnChange(), this.updateDisplay(), this;
+    }
+  }, {
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      return this;
+    }
+  }, {
+    key: "load",
+    value: function load(_t15) {
+      return this.setValue(_t15), this._callOnFinishChange(), this;
+    }
+  }, {
+    key: "save",
+    value: function save() {
+      return this.getValue();
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.listen(!1), this.parent.children.splice(this.parent.children.indexOf(this), 1), this.parent.controllers.splice(this.parent.controllers.indexOf(this), 1), this.parent.$children.removeChild(this.domElement);
+    }
+  }]);
+  return t;
+}();
+exports.Controller = t;
+var i = /*#__PURE__*/function (_t16) {
+  _inherits(i, _t16);
+  var _super = _createSuper(i);
+  function i(t, _i, e) {
+    var _this;
+    _classCallCheck(this, i);
+    _this = _super.call(this, t, _i, e, "boolean", "label"), _this.$input = document.createElement("input"), _this.$input.setAttribute("type", "checkbox"), _this.$input.setAttribute("aria-labelledby", _this.$name.id), _this.$widget.appendChild(_this.$input), _this.$input.addEventListener("change", function () {
+      _this.setValue(_this.$input.checked), _this._callOnFinishChange();
+    }), _this.$disable = _this.$input, _this.updateDisplay();
+    return _this;
+  }
+  _createClass(i, [{
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      return this.$input.checked = this.getValue(), this;
+    }
+  }]);
+  return i;
+}(t);
+exports.BooleanController = i;
+function e(t) {
+  var i, e;
+  return (i = t.match(/(#|0x)?([a-f0-9]{6})/i)) ? e = i[2] : (i = t.match(/rgb\(\s*(\d*)\s*,\s*(\d*)\s*,\s*(\d*)\s*\)/)) ? e = parseInt(i[1]).toString(16).padStart(2, 0) + parseInt(i[2]).toString(16).padStart(2, 0) + parseInt(i[3]).toString(16).padStart(2, 0) : (i = t.match(/^#?([a-f0-9])([a-f0-9])([a-f0-9])$/i)) && (e = i[1] + i[1] + i[2] + i[2] + i[3] + i[3]), !!e && "#" + e;
+}
+var s = {
+    isPrimitive: !0,
+    match: function match(t) {
+      return "string" == typeof t;
+    },
+    fromHexString: e,
+    toHexString: e
+  },
+  n = {
+    isPrimitive: !0,
+    match: function match(t) {
+      return "number" == typeof t;
+    },
+    fromHexString: function fromHexString(t) {
+      return parseInt(t.substring(1), 16);
+    },
+    toHexString: function toHexString(t) {
+      return "#" + t.toString(16).padStart(6, 0);
+    }
+  },
+  l = {
+    isPrimitive: !1,
+    match: Array.isArray,
+    fromHexString: function fromHexString(t, i, e = 1) {
+      var s = n.fromHexString(t);
+      i[0] = (s >> 16 & 255) / 255 * e, i[1] = (s >> 8 & 255) / 255 * e, i[2] = (255 & s) / 255 * e;
+    },
+    toHexString: function toHexString([t, i, e], s = 1) {
+      return n.toHexString(t * (s = 255 / s) << 16 ^ i * s << 8 ^ e * s << 0);
+    }
+  },
+  r = {
+    isPrimitive: !1,
+    match: function match(t) {
+      return Object(t) === t;
+    },
+    fromHexString: function fromHexString(t, i, e = 1) {
+      var s = n.fromHexString(t);
+      i.r = (s >> 16 & 255) / 255 * e, i.g = (s >> 8 & 255) / 255 * e, i.b = (255 & s) / 255 * e;
+    },
+    toHexString: function toHexString({
+      r: t,
+      g: i,
+      b: e
+    }, s = 1) {
+      return n.toHexString(t * (s = 255 / s) << 16 ^ i * s << 8 ^ e * s << 0);
+    }
+  },
+  o = [s, n, l, r];
+var a = /*#__PURE__*/function (_t17) {
+  _inherits(a, _t17);
+  var _super2 = _createSuper(a);
+  function a(t, i, s, n) {
+    var _this2;
+    _classCallCheck(this, a);
+    var l;
+    _this2 = _super2.call(this, t, i, s, "color"), _this2.$input = document.createElement("input"), _this2.$input.setAttribute("type", "color"), _this2.$input.setAttribute("tabindex", -1), _this2.$input.setAttribute("aria-labelledby", _this2.$name.id), _this2.$text = document.createElement("input"), _this2.$text.setAttribute("type", "text"), _this2.$text.setAttribute("spellcheck", "false"), _this2.$text.setAttribute("aria-labelledby", _this2.$name.id), _this2.$display = document.createElement("div"), _this2.$display.classList.add("display"), _this2.$display.appendChild(_this2.$input), _this2.$widget.appendChild(_this2.$display), _this2.$widget.appendChild(_this2.$text), _this2._format = (l = _this2.initialValue, o.find(function (t) {
+      return t.match(l);
+    })), _this2._rgbScale = n, _this2._initialValueHexString = _this2.save(), _this2._textFocused = !1, _this2.$input.addEventListener("input", function () {
+      _this2._setValueFromHexString(_this2.$input.value);
+    }), _this2.$input.addEventListener("blur", function () {
+      _this2._callOnFinishChange();
+    }), _this2.$text.addEventListener("input", function () {
+      var t = e(_this2.$text.value);
+      t && _this2._setValueFromHexString(t);
+    }), _this2.$text.addEventListener("focus", function () {
+      _this2._textFocused = !0, _this2.$text.select();
+    }), _this2.$text.addEventListener("blur", function () {
+      _this2._textFocused = !1, _this2.updateDisplay(), _this2._callOnFinishChange();
+    }), _this2.$disable = _this2.$text, _this2.updateDisplay();
+    return _this2;
+  }
+  _createClass(a, [{
+    key: "reset",
+    value: function reset() {
+      return this._setValueFromHexString(this._initialValueHexString), this;
+    }
+  }, {
+    key: "_setValueFromHexString",
+    value: function _setValueFromHexString(t) {
+      if (this._format.isPrimitive) {
+        var _i2 = this._format.fromHexString(t);
+        this.setValue(_i2);
+      } else this._format.fromHexString(t, this.getValue(), this._rgbScale), this._callOnChange(), this.updateDisplay();
+    }
+  }, {
+    key: "save",
+    value: function save() {
+      return this._format.toHexString(this.getValue(), this._rgbScale);
+    }
+  }, {
+    key: "load",
+    value: function load(t) {
+      return this._setValueFromHexString(t), this._callOnFinishChange(), this;
+    }
+  }, {
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      return this.$input.value = this._format.toHexString(this.getValue(), this._rgbScale), this._textFocused || (this.$text.value = this.$input.value.substring(1)), this.$display.style.backgroundColor = this.$input.value, this;
+    }
+  }]);
+  return a;
+}(t);
+exports.ColorController = a;
+var h = /*#__PURE__*/function (_t18) {
+  _inherits(h, _t18);
+  var _super3 = _createSuper(h);
+  function h(t, i, e) {
+    var _this3;
+    _classCallCheck(this, h);
+    _this3 = _super3.call(this, t, i, e, "function"), _this3.$button = document.createElement("button"), _this3.$button.appendChild(_this3.$name), _this3.$widget.appendChild(_this3.$button), _this3.$button.addEventListener("click", function (t) {
+      t.preventDefault(), _this3.getValue().call(_this3.object);
+    }), _this3.$button.addEventListener("touchstart", function () {}, {
+      passive: !0
+    }), _this3.$disable = _this3.$button;
+    return _this3;
+  }
+  return _createClass(h);
+}(t);
+exports.FunctionController = h;
+var d = /*#__PURE__*/function (_t19) {
+  _inherits(d, _t19);
+  var _super4 = _createSuper(d);
+  function d(t, i, e, s, n, l) {
+    var _this4;
+    _classCallCheck(this, d);
+    _this4 = _super4.call(this, t, i, e, "number"), _this4._initInput(), _this4.min(s), _this4.max(n);
+    var r = void 0 !== l;
+    _this4.step(r ? l : _this4._getImplicitStep(), r), _this4.updateDisplay();
+    return _this4;
+  }
+  _createClass(d, [{
+    key: "decimals",
+    value: function decimals(t) {
+      return this._decimals = t, this.updateDisplay(), this;
+    }
+  }, {
+    key: "min",
+    value: function min(t) {
+      return this._min = t, this._onUpdateMinMax(), this;
+    }
+  }, {
+    key: "max",
+    value: function max(t) {
+      return this._max = t, this._onUpdateMinMax(), this;
+    }
+  }, {
+    key: "step",
+    value: function step(t, i = !0) {
+      return this._step = t, this._stepExplicit = i, this;
+    }
+  }, {
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      var t = this.getValue();
+      if (this._hasSlider) {
+        var _i3 = (t - this._min) / (this._max - this._min);
+        _i3 = Math.max(0, Math.min(_i3, 1)), this.$fill.style.width = 100 * _i3 + "%";
+      }
+      return this._inputFocused || (this.$input.value = void 0 === this._decimals ? t : t.toFixed(this._decimals)), this;
+    }
+  }, {
+    key: "_initInput",
+    value: function _initInput() {
+      var _this5 = this;
+      this.$input = document.createElement("input"), this.$input.setAttribute("type", "number"), this.$input.setAttribute("step", "any"), this.$input.setAttribute("aria-labelledby", this.$name.id), this.$widget.appendChild(this.$input), this.$disable = this.$input;
+      var t = function t(_t20) {
+        var i = parseFloat(_this5.$input.value);
+        isNaN(i) || (_this5._snapClampSetValue(i + _t20), _this5.$input.value = _this5.getValue());
+      };
+      var i,
+        e,
+        s,
+        n,
+        l,
+        r = !1;
+      var o = function o(t) {
+          if (r) {
+            var _s = t.clientX - i,
+              _n = t.clientY - e;
+            Math.abs(_n) > 5 ? (t.preventDefault(), _this5.$input.blur(), r = !1, _this5._setDraggingStyle(!0, "vertical")) : Math.abs(_s) > 5 && a();
+          }
+          if (!r) {
+            var _i4 = t.clientY - s;
+            l -= _i4 * _this5._step * _this5._arrowKeyMultiplier(t), n + l > _this5._max ? l = _this5._max - n : n + l < _this5._min && (l = _this5._min - n), _this5._snapClampSetValue(n + l);
+          }
+          s = t.clientY;
+        },
+        a = function a() {
+          _this5._setDraggingStyle(!1, "vertical"), _this5._callOnFinishChange(), window.removeEventListener("mousemove", o), window.removeEventListener("mouseup", a);
+        };
+      this.$input.addEventListener("input", function () {
+        var t = parseFloat(_this5.$input.value);
+        isNaN(t) || (_this5._stepExplicit && (t = _this5._snap(t)), _this5.setValue(_this5._clamp(t)));
+      }), this.$input.addEventListener("keydown", function (i) {
+        "Enter" === i.code && _this5.$input.blur(), "ArrowUp" === i.code && (i.preventDefault(), t(_this5._step * _this5._arrowKeyMultiplier(i))), "ArrowDown" === i.code && (i.preventDefault(), t(_this5._step * _this5._arrowKeyMultiplier(i) * -1));
+      }), this.$input.addEventListener("wheel", function (i) {
+        _this5._inputFocused && (i.preventDefault(), t(_this5._step * _this5._normalizeMouseWheel(i)));
+      }, {
+        passive: !1
+      }), this.$input.addEventListener("mousedown", function (t) {
+        i = t.clientX, e = s = t.clientY, r = !0, n = _this5.getValue(), l = 0, window.addEventListener("mousemove", o), window.addEventListener("mouseup", a);
+      }), this.$input.addEventListener("focus", function () {
+        _this5._inputFocused = !0;
+      }), this.$input.addEventListener("blur", function () {
+        _this5._inputFocused = !1, _this5.updateDisplay(), _this5._callOnFinishChange();
+      });
+    }
+  }, {
+    key: "_initSlider",
+    value: function _initSlider() {
+      var _this6 = this;
+      this._hasSlider = !0, this.$slider = document.createElement("div"), this.$slider.classList.add("slider"), this.$fill = document.createElement("div"), this.$fill.classList.add("fill"), this.$slider.appendChild(this.$fill), this.$widget.insertBefore(this.$slider, this.$input), this.domElement.classList.add("hasSlider");
+      var t = function t(_t21) {
+          var i = _this6.$slider.getBoundingClientRect();
+          var e = (s = _t21, n = i.left, l = i.right, r = _this6._min, o = _this6._max, (s - n) / (l - n) * (o - r) + r);
+          var s, n, l, r, o;
+          _this6._snapClampSetValue(e);
+        },
+        i = function i(_i5) {
+          t(_i5.clientX);
+        },
+        e = function e() {
+          _this6._callOnFinishChange(), _this6._setDraggingStyle(!1), window.removeEventListener("mousemove", i), window.removeEventListener("mouseup", e);
+        };
+      var s,
+        n,
+        l = !1;
+      var r = function r(i) {
+          i.preventDefault(), _this6._setDraggingStyle(!0), t(i.touches[0].clientX), l = !1;
+        },
+        o = function o(i) {
+          if (l) {
+            var _t22 = i.touches[0].clientX - s,
+              _e = i.touches[0].clientY - n;
+            Math.abs(_t22) > Math.abs(_e) ? r(i) : (window.removeEventListener("touchmove", o), window.removeEventListener("touchend", a));
+          } else i.preventDefault(), t(i.touches[0].clientX);
+        },
+        a = function a() {
+          _this6._callOnFinishChange(), _this6._setDraggingStyle(!1), window.removeEventListener("touchmove", o), window.removeEventListener("touchend", a);
+        },
+        h = this._callOnFinishChange.bind(this);
+      var _d;
+      this.$slider.addEventListener("mousedown", function (s) {
+        _this6._setDraggingStyle(!0), t(s.clientX), window.addEventListener("mousemove", i), window.addEventListener("mouseup", e);
+      }), this.$slider.addEventListener("touchstart", function (t) {
+        t.touches.length > 1 || (_this6._hasScrollBar ? (s = t.touches[0].clientX, n = t.touches[0].clientY, l = !0) : r(t), window.addEventListener("touchmove", o, {
+          passive: !1
+        }), window.addEventListener("touchend", a));
+      }, {
+        passive: !1
+      }), this.$slider.addEventListener("wheel", function (t) {
+        if (Math.abs(t.deltaX) < Math.abs(t.deltaY) && _this6._hasScrollBar) return;
+        t.preventDefault();
+        var i = _this6._normalizeMouseWheel(t) * _this6._step;
+        _this6._snapClampSetValue(_this6.getValue() + i), _this6.$input.value = _this6.getValue(), clearTimeout(_d), _d = setTimeout(h, 400);
+      }, {
+        passive: !1
+      });
+    }
+  }, {
+    key: "_setDraggingStyle",
+    value: function _setDraggingStyle(t, i = "horizontal") {
+      this.$slider && this.$slider.classList.toggle("active", t), document.body.classList.toggle("lil-gui-dragging", t), document.body.classList.toggle("lil-gui-" + i, t);
+    }
+  }, {
+    key: "_getImplicitStep",
+    value: function _getImplicitStep() {
+      return this._hasMin && this._hasMax ? (this._max - this._min) / 1e3 : .1;
+    }
+  }, {
+    key: "_onUpdateMinMax",
+    value: function _onUpdateMinMax() {
+      !this._hasSlider && this._hasMin && this._hasMax && (this._stepExplicit || this.step(this._getImplicitStep(), !1), this._initSlider(), this.updateDisplay());
+    }
+  }, {
+    key: "_normalizeMouseWheel",
+    value: function _normalizeMouseWheel(t) {
+      var i = t.deltaX,
+        e = t.deltaY;
+      Math.floor(t.deltaY) !== t.deltaY && t.wheelDelta && (i = 0, e = -t.wheelDelta / 120, e *= this._stepExplicit ? 1 : 10);
+      return i + -e;
+    }
+  }, {
+    key: "_arrowKeyMultiplier",
+    value: function _arrowKeyMultiplier(t) {
+      var i = this._stepExplicit ? 1 : 10;
+      return t.shiftKey ? i *= 10 : t.altKey && (i /= 10), i;
+    }
+  }, {
+    key: "_snap",
+    value: function _snap(t) {
+      var i = Math.round(t / this._step) * this._step;
+      return parseFloat(i.toPrecision(15));
+    }
+  }, {
+    key: "_clamp",
+    value: function _clamp(t) {
+      return t < this._min && (t = this._min), t > this._max && (t = this._max), t;
+    }
+  }, {
+    key: "_snapClampSetValue",
+    value: function _snapClampSetValue(t) {
+      this.setValue(this._clamp(this._snap(t)));
+    }
+  }, {
+    key: "_hasScrollBar",
+    get: function get() {
+      var t = this.parent.root.$children;
+      return t.scrollHeight > t.clientHeight;
+    }
+  }, {
+    key: "_hasMin",
+    get: function get() {
+      return void 0 !== this._min;
+    }
+  }, {
+    key: "_hasMax",
+    get: function get() {
+      return void 0 !== this._max;
+    }
+  }]);
+  return d;
+}(t);
+exports.NumberController = d;
+var c = /*#__PURE__*/function (_t23) {
+  _inherits(c, _t23);
+  var _super5 = _createSuper(c);
+  function c(t, i, e, s) {
+    var _this7;
+    _classCallCheck(this, c);
+    _this7 = _super5.call(this, t, i, e, "option"), _this7.$select = document.createElement("select"), _this7.$select.setAttribute("aria-labelledby", _this7.$name.id), _this7.$display = document.createElement("div"), _this7.$display.classList.add("display"), _this7._values = Array.isArray(s) ? s : Object.values(s), _this7._names = Array.isArray(s) ? s : Object.keys(s), _this7._names.forEach(function (t) {
+      var i = document.createElement("option");
+      i.innerHTML = t, _this7.$select.appendChild(i);
+    }), _this7.$select.addEventListener("change", function () {
+      _this7.setValue(_this7._values[_this7.$select.selectedIndex]), _this7._callOnFinishChange();
+    }), _this7.$select.addEventListener("focus", function () {
+      _this7.$display.classList.add("focus");
+    }), _this7.$select.addEventListener("blur", function () {
+      _this7.$display.classList.remove("focus");
+    }), _this7.$widget.appendChild(_this7.$select), _this7.$widget.appendChild(_this7.$display), _this7.$disable = _this7.$select, _this7.updateDisplay();
+    return _this7;
+  }
+  _createClass(c, [{
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      var t = this.getValue(),
+        i = this._values.indexOf(t);
+      return this.$select.selectedIndex = i, this.$display.innerHTML = -1 === i ? t : this._names[i], this;
+    }
+  }]);
+  return c;
+}(t);
+exports.OptionController = c;
+var u = /*#__PURE__*/function (_t24) {
+  _inherits(u, _t24);
+  var _super6 = _createSuper(u);
+  function u(t, i, e) {
+    var _this8;
+    _classCallCheck(this, u);
+    _this8 = _super6.call(this, t, i, e, "string"), _this8.$input = document.createElement("input"), _this8.$input.setAttribute("type", "text"), _this8.$input.setAttribute("aria-labelledby", _this8.$name.id), _this8.$input.addEventListener("input", function () {
+      _this8.setValue(_this8.$input.value);
+    }), _this8.$input.addEventListener("keydown", function (t) {
+      "Enter" === t.code && _this8.$input.blur();
+    }), _this8.$input.addEventListener("blur", function () {
+      _this8._callOnFinishChange();
+    }), _this8.$widget.appendChild(_this8.$input), _this8.$disable = _this8.$input, _this8.updateDisplay();
+    return _this8;
+  }
+  _createClass(u, [{
+    key: "updateDisplay",
+    value: function updateDisplay() {
+      return this.$input.value = this.getValue(), this;
+    }
+  }]);
+  return u;
+}(t);
+exports.StringController = u;
+var p = !1;
+var g = /*#__PURE__*/function () {
+  function g({
+    parent: t,
+    autoPlace: i = void 0 === t,
+    container: e,
+    width: s,
+    title: n = "Controls",
+    injectStyles: l = !0,
+    touchStyles: r = !0
+  } = {}) {
+    var _this9 = this;
+    _classCallCheck(this, g);
+    if (this.parent = t, this.root = t ? t.root : this, this.children = [], this.controllers = [], this.folders = [], this._closed = !1, this._hidden = !1, this.domElement = document.createElement("div"), this.domElement.classList.add("lil-gui"), this.$title = document.createElement("div"), this.$title.classList.add("title"), this.$title.setAttribute("role", "button"), this.$title.setAttribute("aria-expanded", !0), this.$title.setAttribute("tabindex", 0), this.$title.addEventListener("click", function () {
+      return _this9.openAnimated(_this9._closed);
+    }), this.$title.addEventListener("keydown", function (t) {
+      "Enter" !== t.code && "Space" !== t.code || (t.preventDefault(), _this9.$title.click());
+    }), this.$title.addEventListener("touchstart", function () {}, {
+      passive: !0
+    }), this.$children = document.createElement("div"), this.$children.classList.add("children"), this.domElement.appendChild(this.$title), this.domElement.appendChild(this.$children), this.title(n), r && this.domElement.classList.add("allow-touch-styles"), this.parent) return this.parent.children.push(this), this.parent.folders.push(this), void this.parent.$children.appendChild(this.domElement);
+    this.domElement.classList.add("root"), !p && l && (!function (t) {
+      var i = document.createElement("style");
+      i.innerHTML = t;
+      var e = document.querySelector("head link[rel=stylesheet], head style");
+      e ? document.head.insertBefore(i, e) : document.head.appendChild(i);
+    }('.lil-gui{--background-color:#1f1f1f;--text-color:#ebebeb;--title-background-color:#111;--title-text-color:#ebebeb;--widget-color:#424242;--hover-color:#4f4f4f;--focus-color:#595959;--number-color:#2cc9ff;--string-color:#a2db3c;--font-size:11px;--input-font-size:11px;--font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;--font-family-mono:Menlo,Monaco,Consolas,"Droid Sans Mono",monospace;--padding:4px;--spacing:4px;--widget-height:20px;--name-width:45%;--slider-knob-width:2px;--slider-input-width:27%;--color-input-width:27%;--slider-input-min-width:45px;--color-input-min-width:45px;--folder-indent:7px;--widget-padding:0 0 0 3px;--widget-border-radius:2px;--checkbox-size:calc(var(--widget-height)*0.75);--scrollbar-width:5px;background-color:var(--background-color);color:var(--text-color);font-family:var(--font-family);font-size:var(--font-size);font-style:normal;font-weight:400;line-height:1;text-align:left;touch-action:manipulation;user-select:none;-webkit-user-select:none}.lil-gui,.lil-gui *{box-sizing:border-box;margin:0;padding:0}.lil-gui.root{display:flex;flex-direction:column;width:var(--width,245px)}.lil-gui.root>.title{background:var(--title-background-color);color:var(--title-text-color)}.lil-gui.root>.children{overflow-x:hidden;overflow-y:auto}.lil-gui.root>.children::-webkit-scrollbar{background:var(--background-color);height:var(--scrollbar-width);width:var(--scrollbar-width)}.lil-gui.root>.children::-webkit-scrollbar-thumb{background:var(--focus-color);border-radius:var(--scrollbar-width)}.lil-gui.force-touch-styles{--widget-height:28px;--padding:6px;--spacing:6px;--font-size:13px;--input-font-size:16px;--folder-indent:10px;--scrollbar-width:7px;--slider-input-min-width:50px;--color-input-min-width:65px}.lil-gui.autoPlace{max-height:100%;position:fixed;right:15px;top:0;z-index:1001}.lil-gui .controller{align-items:center;display:flex;margin:var(--spacing) 0;padding:0 var(--padding)}.lil-gui .controller.disabled{opacity:.5}.lil-gui .controller.disabled,.lil-gui .controller.disabled *{pointer-events:none!important}.lil-gui .controller>.name{flex-shrink:0;line-height:var(--widget-height);min-width:var(--name-width);padding-right:var(--spacing);white-space:pre}.lil-gui .controller .widget{align-items:center;display:flex;min-height:var(--widget-height);position:relative;width:100%}.lil-gui .controller.string input{color:var(--string-color)}.lil-gui .controller.boolean .widget{cursor:pointer}.lil-gui .controller.color .display{border-radius:var(--widget-border-radius);height:var(--widget-height);position:relative;width:100%}.lil-gui .controller.color input[type=color]{cursor:pointer;height:100%;opacity:0;width:100%}.lil-gui .controller.color input[type=text]{flex-shrink:0;font-family:var(--font-family-mono);margin-left:var(--spacing);min-width:var(--color-input-min-width);width:var(--color-input-width)}.lil-gui .controller.option select{max-width:100%;opacity:0;position:absolute;width:100%}.lil-gui .controller.option .display{background:var(--widget-color);border-radius:var(--widget-border-radius);height:var(--widget-height);line-height:var(--widget-height);max-width:100%;overflow:hidden;padding-left:.55em;padding-right:1.75em;pointer-events:none;position:relative;word-break:break-all}.lil-gui .controller.option .display.active{background:var(--focus-color)}.lil-gui .controller.option .display:after{bottom:0;content:"↕";font-family:lil-gui;padding-right:.375em;position:absolute;right:0;top:0}.lil-gui .controller.option .widget,.lil-gui .controller.option select{cursor:pointer}.lil-gui .controller.number input{color:var(--number-color)}.lil-gui .controller.number.hasSlider input{flex-shrink:0;margin-left:var(--spacing);min-width:var(--slider-input-min-width);width:var(--slider-input-width)}.lil-gui .controller.number .slider{background-color:var(--widget-color);border-radius:var(--widget-border-radius);cursor:ew-resize;height:var(--widget-height);overflow:hidden;padding-right:var(--slider-knob-width);touch-action:pan-y;width:100%}.lil-gui .controller.number .slider.active{background-color:var(--focus-color)}.lil-gui .controller.number .slider.active .fill{opacity:.95}.lil-gui .controller.number .fill{border-right:var(--slider-knob-width) solid var(--number-color);box-sizing:content-box;height:100%}.lil-gui-dragging .lil-gui{--hover-color:var(--widget-color)}.lil-gui-dragging *{cursor:ew-resize!important}.lil-gui-dragging.lil-gui-vertical *{cursor:ns-resize!important}.lil-gui .title{--title-height:calc(var(--widget-height) + var(--spacing)*1.25);-webkit-tap-highlight-color:transparent;text-decoration-skip:objects;cursor:pointer;font-weight:600;height:var(--title-height);line-height:calc(var(--title-height) - 4px);outline:none;padding:0 var(--padding)}.lil-gui .title:before{content:"▾";display:inline-block;font-family:lil-gui;padding-right:2px}.lil-gui .title:active{background:var(--title-background-color);opacity:.75}.lil-gui.root>.title:focus{text-decoration:none!important}.lil-gui.closed>.title:before{content:"▸"}.lil-gui.closed>.children{opacity:0;transform:translateY(-7px)}.lil-gui.closed:not(.transition)>.children{display:none}.lil-gui.transition>.children{overflow:hidden;pointer-events:none;transition-duration:.3s;transition-property:height,opacity,transform;transition-timing-function:cubic-bezier(.2,.6,.35,1)}.lil-gui .children:empty:before{content:"Empty";display:block;font-style:italic;height:var(--widget-height);line-height:var(--widget-height);margin:var(--spacing) 0;opacity:.5;padding:0 var(--padding)}.lil-gui.root>.children>.lil-gui>.title{border-width:0;border-bottom:1px solid var(--widget-color);border-left:0 solid var(--widget-color);border-right:0 solid var(--widget-color);border-top:1px solid var(--widget-color);transition:border-color .3s}.lil-gui.root>.children>.lil-gui.closed>.title{border-bottom-color:transparent}.lil-gui+.controller{border-top:1px solid var(--widget-color);margin-top:0;padding-top:var(--spacing)}.lil-gui .lil-gui .lil-gui>.title{border:none}.lil-gui .lil-gui .lil-gui>.children{border:none;border-left:2px solid var(--widget-color);margin-left:var(--folder-indent)}.lil-gui .lil-gui .controller{border:none}.lil-gui input{-webkit-tap-highlight-color:transparent;background:var(--widget-color);border:0;border-radius:var(--widget-border-radius);color:var(--text-color);font-family:var(--font-family);font-size:var(--input-font-size);height:var(--widget-height);outline:none;width:100%}.lil-gui input:disabled{opacity:1}.lil-gui input[type=number],.lil-gui input[type=text]{padding:var(--widget-padding)}.lil-gui input[type=number]:focus,.lil-gui input[type=text]:focus{background:var(--focus-color)}.lil-gui input::-webkit-inner-spin-button,.lil-gui input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.lil-gui input[type=number]{-moz-appearance:textfield}.lil-gui input[type=checkbox]{appearance:none;-webkit-appearance:none;border-radius:var(--widget-border-radius);cursor:pointer;height:var(--checkbox-size);text-align:center;width:var(--checkbox-size)}.lil-gui input[type=checkbox]:checked:before{content:"✓";font-family:lil-gui;font-size:var(--checkbox-size);line-height:var(--checkbox-size)}.lil-gui button{-webkit-tap-highlight-color:transparent;background:var(--widget-color);border:1px solid var(--widget-color);border-radius:var(--widget-border-radius);color:var(--text-color);cursor:pointer;font-family:var(--font-family);font-size:var(--font-size);height:var(--widget-height);line-height:calc(var(--widget-height) - 4px);outline:none;text-align:center;text-transform:none;width:100%}.lil-gui button:active{background:var(--focus-color)}@font-face{font-family:lil-gui;src:url("data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAUsAAsAAAAACJwAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAAH4AAADAImwmYE9TLzIAAAGIAAAAPwAAAGBKqH5SY21hcAAAAcgAAAD0AAACrukyyJBnbHlmAAACvAAAAF8AAACEIZpWH2hlYWQAAAMcAAAAJwAAADZfcj2zaGhlYQAAA0QAAAAYAAAAJAC5AHhobXR4AAADXAAAABAAAABMAZAAAGxvY2EAAANsAAAAFAAAACgCEgIybWF4cAAAA4AAAAAeAAAAIAEfABJuYW1lAAADoAAAASIAAAIK9SUU/XBvc3QAAATEAAAAZgAAAJCTcMc2eJxVjbEOgjAURU+hFRBK1dGRL+ALnAiToyMLEzFpnPz/eAshwSa97517c/MwwJmeB9kwPl+0cf5+uGPZXsqPu4nvZabcSZldZ6kfyWnomFY/eScKqZNWupKJO6kXN3K9uCVoL7iInPr1X5baXs3tjuMqCtzEuagm/AAlzQgPAAB4nGNgYRBlnMDAysDAYM/gBiT5oLQBAwuDJAMDEwMrMwNWEJDmmsJwgCFeXZghBcjlZMgFCzOiKOIFAB71Bb8AeJy1kjFuwkAQRZ+DwRAwBtNQRUGKQ8OdKCAWUhAgKLhIuAsVSpWz5Bbkj3dEgYiUIszqWdpZe+Z7/wB1oCYmIoboiwiLT2WjKl/jscrHfGg/pKdMkyklC5Zs2LEfHYpjcRoPzme9MWWmk3dWbK9ObkWkikOetJ554fWyoEsmdSlt+uR0pCJR34b6t/TVg1SY3sYvdf8vuiKrpyaDXDISiegp17p7579Gp3p++y7HPAiY9pmTibljrr85qSidtlg4+l25GLCaS8e6rRxNBmsnERunKbaOObRz7N72ju5vdAjYpBXHgJylOAVsMseDAPEP8LYoUHicY2BiAAEfhiAGJgZWBgZ7RnFRdnVJELCQlBSRlATJMoLV2DK4glSYs6ubq5vbKrJLSbGrgEmovDuDJVhe3VzcXFwNLCOILB/C4IuQ1xTn5FPilBTj5FPmBAB4WwoqAHicY2BkYGAA4sk1sR/j+W2+MnAzpDBgAyEMQUCSg4EJxAEAwUgFHgB4nGNgZGBgSGFggJMhDIwMqEAYAByHATJ4nGNgAIIUNEwmAABl3AGReJxjYAACIQYlBiMGJ3wQAEcQBEV4nGNgZGBgEGZgY2BiAAEQyQWEDAz/wXwGAAsPATIAAHicXdBNSsNAHAXwl35iA0UQXYnMShfS9GPZA7T7LgIu03SSpkwzYTIt1BN4Ak/gKTyAeCxfw39jZkjymzcvAwmAW/wgwHUEGDb36+jQQ3GXGot79L24jxCP4gHzF/EIr4jEIe7wxhOC3g2TMYy4Q7+Lu/SHuEd/ivt4wJd4wPxbPEKMX3GI5+DJFGaSn4qNzk8mcbKSR6xdXdhSzaOZJGtdapd4vVPbi6rP+cL7TGXOHtXKll4bY1Xl7EGnPtp7Xy2n00zyKLVHfkHBa4IcJ2oD3cgggWvt/V/FbDrUlEUJhTn/0azVWbNTNr0Ens8de1tceK9xZmfB1CPjOmPH4kitmvOubcNpmVTN3oFJyjzCvnmrwhJTzqzVj9jiSX911FjeAAB4nG3HMRKCMBBA0f0giiKi4DU8k0V2GWbIZDOh4PoWWvq6J5V8If9NVNQcaDhyouXMhY4rPTcG7jwYmXhKq8Wz+p762aNaeYXom2n3m2dLTVgsrCgFJ7OTmIkYbwIbC6vIB7WmFfAAAA==") format("woff")}@media (pointer:coarse){.lil-gui.allow-touch-styles{--widget-height:28px;--padding:6px;--spacing:6px;--font-size:13px;--input-font-size:16px;--folder-indent:10px;--scrollbar-width:7px;--slider-input-min-width:50px;--color-input-min-width:65px}}@media (hover:hover){.lil-gui .controller.color .display:hover:before{border:1px solid #fff9;border-radius:var(--widget-border-radius);bottom:0;content:" ";display:block;left:0;position:absolute;right:0;top:0}.lil-gui .controller.option .display.focus{background:var(--focus-color)}.lil-gui .controller.option .widget:hover .display{background:var(--hover-color)}.lil-gui .controller.number .slider:hover{background-color:var(--hover-color)}body:not(.lil-gui-dragging) .lil-gui .title:hover{background:var(--title-background-color);opacity:.85}.lil-gui .title:focus{text-decoration:underline var(--focus-color)}.lil-gui input:hover{background:var(--hover-color)}.lil-gui input:active{background:var(--focus-color)}.lil-gui input[type=checkbox]:focus{box-shadow:inset 0 0 0 1px var(--focus-color)}.lil-gui button:hover{background:var(--hover-color);border-color:var(--hover-color)}.lil-gui button:focus{border-color:var(--focus-color)}}'), p = !0), e ? e.appendChild(this.domElement) : i && (this.domElement.classList.add("autoPlace"), document.body.appendChild(this.domElement)), s && this.domElement.style.setProperty("--width", s + "px"), this.domElement.addEventListener("keydown", function (t) {
+      return t.stopPropagation();
+    }), this.domElement.addEventListener("keyup", function (t) {
+      return t.stopPropagation();
+    });
+  }
+  _createClass(g, [{
+    key: "add",
+    value: function add(t, e, s, n, l) {
+      if (Object(s) === s) return new c(this, t, e, s);
+      var r = t[e];
+      switch (_typeof(r)) {
+        case "number":
+          return new d(this, t, e, s, n, l);
+        case "boolean":
+          return new i(this, t, e);
+        case "string":
+          return new u(this, t, e);
+        case "function":
+          return new h(this, t, e);
+      }
+      console.error("gui.add failed\n\tproperty:", e, "\n\tobject:", t, "\n\tvalue:", r);
+    }
+  }, {
+    key: "addColor",
+    value: function addColor(t, i, e = 1) {
+      return new a(this, t, i, e);
+    }
+  }, {
+    key: "addFolder",
+    value: function addFolder(t) {
+      return new g({
+        parent: this,
+        title: t
+      });
+    }
+  }, {
+    key: "load",
+    value: function load(t, i = !0) {
+      return t.controllers && this.controllers.forEach(function (i) {
+        i instanceof h || i._name in t.controllers && i.load(t.controllers[i._name]);
+      }), i && t.folders && this.folders.forEach(function (i) {
+        i._title in t.folders && i.load(t.folders[i._title]);
+      }), this;
+    }
+  }, {
+    key: "save",
+    value: function save(t = !0) {
+      var i = {
+        controllers: {},
+        folders: {}
+      };
+      return this.controllers.forEach(function (t) {
+        if (!(t instanceof h)) {
+          if (t._name in i.controllers) throw new Error("Cannot save GUI with duplicate property \"".concat(t._name, "\""));
+          i.controllers[t._name] = t.save();
+        }
+      }), t && this.folders.forEach(function (t) {
+        if (t._title in i.folders) throw new Error("Cannot save GUI with duplicate folder \"".concat(t._title, "\""));
+        i.folders[t._title] = t.save();
+      }), i;
+    }
+  }, {
+    key: "open",
+    value: function open(t = !0) {
+      return this._closed = !t, this.$title.setAttribute("aria-expanded", !this._closed), this.domElement.classList.toggle("closed", this._closed), this;
+    }
+  }, {
+    key: "close",
+    value: function close() {
+      return this.open(!1);
+    }
+  }, {
+    key: "show",
+    value: function show(t = !0) {
+      return this._hidden = !t, this.domElement.style.display = this._hidden ? "none" : "", this;
+    }
+  }, {
+    key: "hide",
+    value: function hide() {
+      return this.show(!1);
+    }
+  }, {
+    key: "openAnimated",
+    value: function openAnimated(t = !0) {
+      var _this10 = this;
+      return this._closed = !t, this.$title.setAttribute("aria-expanded", !this._closed), requestAnimationFrame(function () {
+        var i = _this10.$children.clientHeight;
+        _this10.$children.style.height = i + "px", _this10.domElement.classList.add("transition");
+        var e = function e(t) {
+          t.target === _this10.$children && (_this10.$children.style.height = "", _this10.domElement.classList.remove("transition"), _this10.$children.removeEventListener("transitionend", e));
+        };
+        _this10.$children.addEventListener("transitionend", e);
+        var s = t ? _this10.$children.scrollHeight : 0;
+        _this10.domElement.classList.toggle("closed", !t), requestAnimationFrame(function () {
+          _this10.$children.style.height = s + "px";
+        });
+      }), this;
+    }
+  }, {
+    key: "title",
+    value: function title(t) {
+      return this._title = t, this.$title.innerHTML = t, this;
+    }
+  }, {
+    key: "reset",
+    value: function reset(t = !0) {
+      return (t ? this.controllersRecursive() : this.controllers).forEach(function (t) {
+        return t.reset();
+      }), this;
+    }
+  }, {
+    key: "onChange",
+    value: function onChange(t) {
+      return this._onChange = t, this;
+    }
+  }, {
+    key: "_callOnChange",
+    value: function _callOnChange(t) {
+      this.parent && this.parent._callOnChange(t), void 0 !== this._onChange && this._onChange.call(this, {
+        object: t.object,
+        property: t.property,
+        value: t.getValue(),
+        controller: t
+      });
+    }
+  }, {
+    key: "onFinishChange",
+    value: function onFinishChange(t) {
+      return this._onFinishChange = t, this;
+    }
+  }, {
+    key: "_callOnFinishChange",
+    value: function _callOnFinishChange(t) {
+      this.parent && this.parent._callOnFinishChange(t), void 0 !== this._onFinishChange && this._onFinishChange.call(this, {
+        object: t.object,
+        property: t.property,
+        value: t.getValue(),
+        controller: t
+      });
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.parent && (this.parent.children.splice(this.parent.children.indexOf(this), 1), this.parent.folders.splice(this.parent.folders.indexOf(this), 1)), this.domElement.parentElement && this.domElement.parentElement.removeChild(this.domElement), Array.from(this.children).forEach(function (t) {
+        return t.destroy();
+      });
+    }
+  }, {
+    key: "controllersRecursive",
+    value: function controllersRecursive() {
+      var t = Array.from(this.controllers);
+      return this.folders.forEach(function (i) {
+        t = t.concat(i.controllersRecursive());
+      }), t;
+    }
+  }, {
+    key: "foldersRecursive",
+    value: function foldersRecursive() {
+      var t = Array.from(this.folders);
+      return this.folders.forEach(function (i) {
+        t = t.concat(i.foldersRecursive());
+      }), t;
+    }
+  }]);
+  return g;
+}();
+exports.GUI = g;
+var _default = g;
+exports.default = _default;
+},{}],"node_modules/three/examples/jsm/postprocessing/Pass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Pass = exports.FullScreenQuad = void 0;
+var _three = require("three");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var Pass = /*#__PURE__*/function () {
+  function Pass() {
+    _classCallCheck(this, Pass);
+    this.isPass = true;
+
+    // if set to true, the pass is processed by the composer
+    this.enabled = true;
+
+    // if set to true, the pass indicates to swap read and write buffer after rendering
+    this.needsSwap = true;
+
+    // if set to true, the pass clears its buffer before rendering
+    this.clear = false;
+
+    // if set to true, the result of the pass is rendered to screen. This is set automatically by EffectComposer.
+    this.renderToScreen = false;
+  }
+  _createClass(Pass, [{
+    key: "setSize",
+    value: function setSize( /* width, height */) {}
+  }, {
+    key: "render",
+    value: function render( /* renderer, writeBuffer, readBuffer, deltaTime, maskActive */
+    ) {
+      console.error('THREE.Pass: .render() must be implemented in derived pass.');
+    }
+  }, {
+    key: "dispose",
+    value: function dispose() {}
+  }]);
+  return Pass;
+}(); // Helper for passes that need to fill the viewport with a single quad.
+exports.Pass = Pass;
+var _camera = new _three.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+
+// https://github.com/mrdoob/three.js/pull/21358
+
+var _geometry = new _three.BufferGeometry();
+_geometry.setAttribute('position', new _three.Float32BufferAttribute([-1, 3, 0, -1, -1, 0, 3, -1, 0], 3));
+_geometry.setAttribute('uv', new _three.Float32BufferAttribute([0, 2, 0, 0, 2, 0], 2));
+var FullScreenQuad = /*#__PURE__*/function () {
+  function FullScreenQuad(material) {
+    _classCallCheck(this, FullScreenQuad);
+    this._mesh = new _three.Mesh(_geometry, material);
+  }
+  _createClass(FullScreenQuad, [{
+    key: "dispose",
+    value: function dispose() {
+      this._mesh.geometry.dispose();
+    }
+  }, {
+    key: "render",
+    value: function render(renderer) {
+      renderer.render(this._mesh, _camera);
+    }
+  }, {
+    key: "material",
+    get: function get() {
+      return this._mesh.material;
+    },
+    set: function set(value) {
+      this._mesh.material = value;
+    }
+  }]);
+  return FullScreenQuad;
+}();
+exports.FullScreenQuad = FullScreenQuad;
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/SSRShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SSRShader = exports.SSRDepthShader = exports.SSRBlurShader = void 0;
+var _three = require("three");
+/**
+ * References:
+ * https://lettier.github.io/3d-game-shaders-for-beginners/screen-space-reflection.html
+ */
+
+var SSRShader = {
+  defines: {
+    MAX_STEP: 0,
+    PERSPECTIVE_CAMERA: true,
+    DISTANCE_ATTENUATION: true,
+    FRESNEL: true,
+    INFINITE_THICK: false,
+    SELECTIVE: false
+  },
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'tNormal': {
+      value: null
+    },
+    'tMetalness': {
+      value: null
+    },
+    'tDepth': {
+      value: null
+    },
+    'cameraNear': {
+      value: null
+    },
+    'cameraFar': {
+      value: null
+    },
+    'resolution': {
+      value: new _three.Vector2()
+    },
+    'cameraProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'cameraInverseProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'opacity': {
+      value: .5
+    },
+    'maxDistance': {
+      value: 180
+    },
+    'cameraRange': {
+      value: 0
+    },
+    'thickness': {
+      value: .018
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}\n\n\t",
+  fragmentShader: /* glsl */"\n\t\t// precision highp float;\n\t\tprecision highp sampler2D;\n\t\tvarying vec2 vUv;\n\t\tuniform sampler2D tDepth;\n\t\tuniform sampler2D tNormal;\n\t\tuniform sampler2D tMetalness;\n\t\tuniform sampler2D tDiffuse;\n\t\tuniform float cameraRange;\n\t\tuniform vec2 resolution;\n\t\tuniform float opacity;\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\t\tuniform float maxDistance;\n\t\tuniform float thickness;\n\t\tuniform mat4 cameraProjectionMatrix;\n\t\tuniform mat4 cameraInverseProjectionMatrix;\n\t\t#include <packing>\n\t\tfloat pointToLineDistance(vec3 x0, vec3 x1, vec3 x2) {\n\t\t\t//x0: point, x1: linePointA, x2: linePointB\n\t\t\t//https://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html\n\t\t\treturn length(cross(x0-x1,x0-x2))/length(x2-x1);\n\t\t}\n\t\tfloat pointPlaneDistance(vec3 point,vec3 planePoint,vec3 planeNormal){\n\t\t\t// https://mathworld.wolfram.com/Point-PlaneDistance.html\n\t\t\t//// https://en.wikipedia.org/wiki/Plane_(geometry)\n\t\t\t//// http://paulbourke.net/geometry/pointlineplane/\n\t\t\tfloat a=planeNormal.x,b=planeNormal.y,c=planeNormal.z;\n\t\t\tfloat x0=point.x,y0=point.y,z0=point.z;\n\t\t\tfloat x=planePoint.x,y=planePoint.y,z=planePoint.z;\n\t\t\tfloat d=-(a*x+b*y+c*z);\n\t\t\tfloat distance=(a*x0+b*y0+c*z0+d)/sqrt(a*a+b*b+c*c);\n\t\t\treturn distance;\n\t\t}\n\t\tfloat getDepth( const in vec2 uv ) {\n\t\t\treturn texture2D( tDepth, uv ).x;\n\t\t}\n\t\tfloat getViewZ( const in float depth ) {\n\t\t\t#ifdef PERSPECTIVE_CAMERA\n\t\t\t\treturn perspectiveDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#else\n\t\t\t\treturn orthographicDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#endif\n\t\t}\n\t\tvec3 getViewPosition( const in vec2 uv, const in float depth/*clip space*/, const in float clipW ) {\n\t\t\tvec4 clipPosition = vec4( ( vec3( uv, depth ) - 0.5 ) * 2.0, 1.0 );//ndc\n\t\t\tclipPosition *= clipW; //clip\n\t\t\treturn ( cameraInverseProjectionMatrix * clipPosition ).xyz;//view\n\t\t}\n\t\tvec3 getViewNormal( const in vec2 uv ) {\n\t\t\treturn unpackRGBToNormal( texture2D( tNormal, uv ).xyz );\n\t\t}\n\t\tvec2 viewPositionToXY(vec3 viewPosition){\n\t\t\tvec2 xy;\n\t\t\tvec4 clip=cameraProjectionMatrix*vec4(viewPosition,1);\n\t\t\txy=clip.xy;//clip\n\t\t\tfloat clipW=clip.w;\n\t\t\txy/=clipW;//NDC\n\t\t\txy=(xy+1.)/2.;//uv\n\t\t\txy*=resolution;//screen\n\t\t\treturn xy;\n\t\t}\n\t\tvoid main(){\n\t\t\t#ifdef SELECTIVE\n\t\t\t\tfloat metalness=texture2D(tMetalness,vUv).r;\n\t\t\t\tif(metalness==0.) return;\n\t\t\t#endif\n\n\t\t\tfloat depth = getDepth( vUv );\n\t\t\tfloat viewZ = getViewZ( depth );\n\t\t\tif(-viewZ>=cameraFar) return;\n\n\t\t\tfloat clipW = cameraProjectionMatrix[2][3] * viewZ+cameraProjectionMatrix[3][3];\n\t\t\tvec3 viewPosition=getViewPosition( vUv, depth, clipW );\n\n\t\t\tvec2 d0=gl_FragCoord.xy;\n\t\t\tvec2 d1;\n\n\t\t\tvec3 viewNormal=getViewNormal( vUv );\n\n\t\t\t#ifdef PERSPECTIVE_CAMERA\n\t\t\t\tvec3 viewIncidentDir=normalize(viewPosition);\n\t\t\t\tvec3 viewReflectDir=reflect(viewIncidentDir,viewNormal);\n\t\t\t#else\n\t\t\t\tvec3 viewIncidentDir=vec3(0,0,-1);\n\t\t\t\tvec3 viewReflectDir=reflect(viewIncidentDir,viewNormal);\n\t\t\t#endif\n\n\t\t\tfloat maxReflectRayLen=maxDistance/dot(-viewIncidentDir,viewNormal);\n\t\t\t// dot(a,b)==length(a)*length(b)*cos(theta) // https://www.mathsisfun.com/algebra/vectors-dot-product.html\n\t\t\t// if(a.isNormalized&&b.isNormalized) dot(a,b)==cos(theta)\n\t\t\t// maxDistance/maxReflectRayLen=cos(theta)\n\t\t\t// maxDistance/maxReflectRayLen==dot(a,b)\n\t\t\t// maxReflectRayLen==maxDistance/dot(a,b)\n\n\t\t\tvec3 d1viewPosition=viewPosition+viewReflectDir*maxReflectRayLen;\n\t\t\t#ifdef PERSPECTIVE_CAMERA\n\t\t\t\tif(d1viewPosition.z>-cameraNear){\n\t\t\t\t\t//https://tutorial.math.lamar.edu/Classes/CalcIII/EqnsOfLines.aspx\n\t\t\t\t\tfloat t=(-cameraNear-viewPosition.z)/viewReflectDir.z;\n\t\t\t\t\td1viewPosition=viewPosition+viewReflectDir*t;\n\t\t\t\t}\n\t\t\t#endif\n\t\t\td1=viewPositionToXY(d1viewPosition);\n\n\t\t\tfloat totalLen=length(d1-d0);\n\t\t\tfloat xLen=d1.x-d0.x;\n\t\t\tfloat yLen=d1.y-d0.y;\n\t\t\tfloat totalStep=max(abs(xLen),abs(yLen));\n\t\t\tfloat xSpan=xLen/totalStep;\n\t\t\tfloat ySpan=yLen/totalStep;\n\t\t\tfor(float i=0.;i<float(MAX_STEP);i++){\n\t\t\t\tif(i>=totalStep) break;\n\t\t\t\tvec2 xy=vec2(d0.x+i*xSpan,d0.y+i*ySpan);\n\t\t\t\tif(xy.x<0.||xy.x>resolution.x||xy.y<0.||xy.y>resolution.y) break;\n\t\t\t\tfloat s=length(xy-d0)/totalLen;\n\t\t\t\tvec2 uv=xy/resolution;\n\n\t\t\t\tfloat d = getDepth(uv);\n\t\t\t\tfloat vZ = getViewZ( d );\n\t\t\t\tif(-vZ>=cameraFar) continue;\n\t\t\t\tfloat cW = cameraProjectionMatrix[2][3] * vZ+cameraProjectionMatrix[3][3];\n\t\t\t\tvec3 vP=getViewPosition( uv, d, cW );\n\n\t\t\t\t#ifdef PERSPECTIVE_CAMERA\n\t\t\t\t\t// https://comp.nus.edu.sg/~lowkl/publications/lowk_persp_interp_techrep.pdf\n\t\t\t\t\tfloat recipVPZ=1./viewPosition.z;\n\t\t\t\t\tfloat viewReflectRayZ=1./(recipVPZ+s*(1./d1viewPosition.z-recipVPZ));\n\t\t\t\t#else\n\t\t\t\t\tfloat viewReflectRayZ=viewPosition.z+s*(d1viewPosition.z-viewPosition.z);\n\t\t\t\t#endif\n\n\t\t\t\t// if(viewReflectRayZ>vZ) continue; // will cause \"npm run make-screenshot webgl_postprocessing_ssr\" high probability hang.\n\t\t\t\t// https://github.com/mrdoob/three.js/pull/21539#issuecomment-821061164\n\t\t\t\tif(viewReflectRayZ<=vZ){\n\n\t\t\t\t\tbool hit;\n\t\t\t\t\t#ifdef INFINITE_THICK\n\t\t\t\t\t\thit=true;\n\t\t\t\t\t#else\n\t\t\t\t\t\tfloat away=pointToLineDistance(vP,viewPosition,d1viewPosition);\n\n\t\t\t\t\t\tfloat minThickness;\n\t\t\t\t\t\tvec2 xyNeighbor=xy;\n\t\t\t\t\t\txyNeighbor.x+=1.;\n\t\t\t\t\t\tvec2 uvNeighbor=xyNeighbor/resolution;\n\t\t\t\t\t\tvec3 vPNeighbor=getViewPosition(uvNeighbor,d,cW);\n\t\t\t\t\t\tminThickness=vPNeighbor.x-vP.x;\n\t\t\t\t\t\tminThickness*=3.;\n\t\t\t\t\t\tfloat tk=max(minThickness,thickness);\n\n\t\t\t\t\t\thit=away<=tk;\n\t\t\t\t\t#endif\n\n\t\t\t\t\tif(hit){\n\t\t\t\t\t\tvec3 vN=getViewNormal( uv );\n\t\t\t\t\t\tif(dot(viewReflectDir,vN)>=0.) continue;\n\t\t\t\t\t\tfloat distance=pointPlaneDistance(vP,viewPosition,viewNormal);\n\t\t\t\t\t\tif(distance>maxDistance) break;\n\t\t\t\t\t\tfloat op=opacity;\n\t\t\t\t\t\t#ifdef DISTANCE_ATTENUATION\n\t\t\t\t\t\t\tfloat ratio=1.-(distance/maxDistance);\n\t\t\t\t\t\t\tfloat attenuation=ratio*ratio;\n\t\t\t\t\t\t\top=opacity*attenuation;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\t#ifdef FRESNEL\n\t\t\t\t\t\t\tfloat fresnelCoe=(dot(viewIncidentDir,viewReflectDir)+1.)/2.;\n\t\t\t\t\t\t\top*=fresnelCoe;\n\t\t\t\t\t\t#endif\n\t\t\t\t\t\tvec4 reflectColor=texture2D(tDiffuse,uv);\n\t\t\t\t\t\tgl_FragColor.xyz=reflectColor.xyz;\n\t\t\t\t\t\tgl_FragColor.a=op;\n\t\t\t\t\t\tbreak;\n\t\t\t\t\t}\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\t"
+};
+exports.SSRShader = SSRShader;
+var SSRDepthShader = {
+  defines: {
+    'PERSPECTIVE_CAMERA': 1
+  },
+  uniforms: {
+    'tDepth': {
+      value: null
+    },
+    'cameraNear': {
+      value: null
+    },
+    'cameraFar': {
+      value: null
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}\n\n\t",
+  fragmentShader: /* glsl */"\n\n\t\tuniform sampler2D tDepth;\n\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\n\t\tvarying vec2 vUv;\n\n\t\t#include <packing>\n\n\t\tfloat getLinearDepth( const in vec2 uv ) {\n\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\n\t\t\t\tfloat fragCoordZ = texture2D( tDepth, uv ).x;\n\t\t\t\tfloat viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );\n\t\t\t\treturn viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );\n\n\t\t\t#else\n\n\t\t\t\treturn texture2D( tDepth, uv ).x;\n\n\t\t\t#endif\n\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tfloat depth = getLinearDepth( vUv );\n\t\t\tfloat d = 1.0 - depth;\n\t\t\t// d=(d-.999)*1000.;\n\t\t\tgl_FragColor = vec4( vec3( d ), 1.0 );\n\n\t\t}\n\n\t"
+};
+exports.SSRDepthShader = SSRDepthShader;
+var SSRBlurShader = {
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'resolution': {
+      value: new _three.Vector2()
+    },
+    'opacity': {
+      value: .5
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}\n\n\t",
+  fragmentShader: /* glsl */"\n\n\t\tuniform sampler2D tDiffuse;\n\t\tuniform vec2 resolution;\n\t\tvarying vec2 vUv;\n\t\tvoid main() {\n\t\t\t//reverse engineering from PhotoShop blur filter, then change coefficient\n\n\t\t\tvec2 texelSize = ( 1.0 / resolution );\n\n\t\t\tvec4 c=texture2D(tDiffuse,vUv);\n\n\t\t\tvec2 offset;\n\n\t\t\toffset=(vec2(-1,0))*texelSize;\n\t\t\tvec4 cl=texture2D(tDiffuse,vUv+offset);\n\n\t\t\toffset=(vec2(1,0))*texelSize;\n\t\t\tvec4 cr=texture2D(tDiffuse,vUv+offset);\n\n\t\t\toffset=(vec2(0,-1))*texelSize;\n\t\t\tvec4 cb=texture2D(tDiffuse,vUv+offset);\n\n\t\t\toffset=(vec2(0,1))*texelSize;\n\t\t\tvec4 ct=texture2D(tDiffuse,vUv+offset);\n\n\t\t\t// float coeCenter=.5;\n\t\t\t// float coeSide=.125;\n\t\t\tfloat coeCenter=.2;\n\t\t\tfloat coeSide=.2;\n\t\t\tfloat a=c.a*coeCenter+cl.a*coeSide+cr.a*coeSide+cb.a*coeSide+ct.a*coeSide;\n\t\t\tvec3 rgb=(c.rgb*c.a*coeCenter+cl.rgb*cl.a*coeSide+cr.rgb*cr.a*coeSide+cb.rgb*cb.a*coeSide+ct.rgb*ct.a*coeSide)/a;\n\t\t\tgl_FragColor=vec4(rgb,a);\n\n\t\t}\n\t"
+};
+exports.SSRBlurShader = SSRBlurShader;
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.CopyShader = void 0;
+/**
+ * Full-screen textured quad shader
+ */
+
+var CopyShader = {
+  name: 'CopyShader',
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'opacity': {
+      value: 1.0
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tuniform float opacity;\n\n\t\tuniform sampler2D tDiffuse;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = texture2D( tDiffuse, vUv );\n\t\t\tgl_FragColor.a *= opacity;\n\n\n\t\t}"
+};
+exports.CopyShader = CopyShader;
+},{}],"node_modules/three/examples/jsm/postprocessing/SSRPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SSRPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+var _SSRShader = require("../shaders/SSRShader.js");
+var _CopyShader = require("../shaders/CopyShader.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var SSRPass = /*#__PURE__*/function (_Pass) {
+  _inherits(SSRPass, _Pass);
+  var _super = _createSuper(SSRPass);
+  function SSRPass({
+    renderer: renderer,
+    scene: scene,
+    camera: camera,
+    width: width,
+    height: height,
+    selects: selects,
+    bouncing = false,
+    groundReflector: groundReflector
+  }) {
+    var _this;
+    _classCallCheck(this, SSRPass);
+    _this = _super.call(this);
+    _this.width = width !== undefined ? width : 512;
+    _this.height = height !== undefined ? height : 512;
+    _this.clear = true;
+    _this.renderer = renderer;
+    _this.scene = scene;
+    _this.camera = camera;
+    _this.groundReflector = groundReflector;
+    _this.opacity = _SSRShader.SSRShader.uniforms.opacity.value;
+    _this.output = 0;
+    _this.maxDistance = _SSRShader.SSRShader.uniforms.maxDistance.value;
+    _this.thickness = _SSRShader.SSRShader.uniforms.thickness.value;
+    _this.tempColor = new _three.Color();
+    _this._selects = selects;
+    _this.selective = Array.isArray(_this._selects);
+    Object.defineProperty(_assertThisInitialized(_this), 'selects', {
+      get: function get() {
+        return this._selects;
+      },
+      set: function set(val) {
+        if (this._selects === val) return;
+        this._selects = val;
+        if (Array.isArray(val)) {
+          this.selective = true;
+          this.ssrMaterial.defines.SELECTIVE = true;
+          this.ssrMaterial.needsUpdate = true;
+        } else {
+          this.selective = false;
+          this.ssrMaterial.defines.SELECTIVE = false;
+          this.ssrMaterial.needsUpdate = true;
+        }
+      }
+    });
+    _this._bouncing = bouncing;
+    Object.defineProperty(_assertThisInitialized(_this), 'bouncing', {
+      get: function get() {
+        return this._bouncing;
+      },
+      set: function set(val) {
+        if (this._bouncing === val) return;
+        this._bouncing = val;
+        if (val) {
+          this.ssrMaterial.uniforms['tDiffuse'].value = this.prevRenderTarget.texture;
+        } else {
+          this.ssrMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+        }
+      }
+    });
+    _this.blur = true;
+    _this._distanceAttenuation = _SSRShader.SSRShader.defines.DISTANCE_ATTENUATION;
+    Object.defineProperty(_assertThisInitialized(_this), 'distanceAttenuation', {
+      get: function get() {
+        return this._distanceAttenuation;
+      },
+      set: function set(val) {
+        if (this._distanceAttenuation === val) return;
+        this._distanceAttenuation = val;
+        this.ssrMaterial.defines.DISTANCE_ATTENUATION = val;
+        this.ssrMaterial.needsUpdate = true;
+      }
+    });
+    _this._fresnel = _SSRShader.SSRShader.defines.FRESNEL;
+    Object.defineProperty(_assertThisInitialized(_this), 'fresnel', {
+      get: function get() {
+        return this._fresnel;
+      },
+      set: function set(val) {
+        if (this._fresnel === val) return;
+        this._fresnel = val;
+        this.ssrMaterial.defines.FRESNEL = val;
+        this.ssrMaterial.needsUpdate = true;
+      }
+    });
+    _this._infiniteThick = _SSRShader.SSRShader.defines.INFINITE_THICK;
+    Object.defineProperty(_assertThisInitialized(_this), 'infiniteThick', {
+      get: function get() {
+        return this._infiniteThick;
+      },
+      set: function set(val) {
+        if (this._infiniteThick === val) return;
+        this._infiniteThick = val;
+        this.ssrMaterial.defines.INFINITE_THICK = val;
+        this.ssrMaterial.needsUpdate = true;
+      }
+    });
+
+    // beauty render target with depth buffer
+
+    var depthTexture = new _three.DepthTexture();
+    depthTexture.type = _three.UnsignedShortType;
+    depthTexture.minFilter = _three.NearestFilter;
+    depthTexture.magFilter = _three.NearestFilter;
+    _this.beautyRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType,
+      depthTexture: depthTexture,
+      depthBuffer: true
+    });
+
+    //for bouncing
+    _this.prevRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter
+    });
+
+    // normal render target
+
+    _this.normalRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType
+    });
+
+    // metalness render target
+
+    _this.metalnessRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType
+    });
+
+    // ssr render target
+
+    _this.ssrRenderTarget = new _three.WebGLRenderTarget(_this.width, _this.height, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter
+    });
+    _this.blurRenderTarget = _this.ssrRenderTarget.clone();
+    _this.blurRenderTarget2 = _this.ssrRenderTarget.clone();
+    // this.blurRenderTarget3 = this.ssrRenderTarget.clone();
+
+    // ssr material
+
+    _this.ssrMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSRShader.SSRShader.defines, {
+        MAX_STEP: Math.sqrt(_this.width * _this.width + _this.height * _this.height)
+      }),
+      uniforms: _three.UniformsUtils.clone(_SSRShader.SSRShader.uniforms),
+      vertexShader: _SSRShader.SSRShader.vertexShader,
+      fragmentShader: _SSRShader.SSRShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.ssrMaterial.uniforms['tDiffuse'].value = _this.beautyRenderTarget.texture;
+    _this.ssrMaterial.uniforms['tNormal'].value = _this.normalRenderTarget.texture;
+    _this.ssrMaterial.defines.SELECTIVE = _this.selective;
+    _this.ssrMaterial.needsUpdate = true;
+    _this.ssrMaterial.uniforms['tMetalness'].value = _this.metalnessRenderTarget.texture;
+    _this.ssrMaterial.uniforms['tDepth'].value = _this.beautyRenderTarget.depthTexture;
+    _this.ssrMaterial.uniforms['cameraNear'].value = _this.camera.near;
+    _this.ssrMaterial.uniforms['cameraFar'].value = _this.camera.far;
+    _this.ssrMaterial.uniforms['thickness'].value = _this.thickness;
+    _this.ssrMaterial.uniforms['resolution'].value.set(_this.width, _this.height);
+    _this.ssrMaterial.uniforms['cameraProjectionMatrix'].value.copy(_this.camera.projectionMatrix);
+    _this.ssrMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(_this.camera.projectionMatrixInverse);
+
+    // normal material
+
+    _this.normalMaterial = new _three.MeshNormalMaterial();
+    _this.normalMaterial.blending = _three.NoBlending;
+
+    // metalnessOn material
+
+    _this.metalnessOnMaterial = new _three.MeshBasicMaterial({
+      color: 'white'
+    });
+
+    // metalnessOff material
+
+    _this.metalnessOffMaterial = new _three.MeshBasicMaterial({
+      color: 'black'
+    });
+
+    // blur material
+
+    _this.blurMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSRShader.SSRBlurShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSRShader.SSRBlurShader.uniforms),
+      vertexShader: _SSRShader.SSRBlurShader.vertexShader,
+      fragmentShader: _SSRShader.SSRBlurShader.fragmentShader
+    });
+    _this.blurMaterial.uniforms['tDiffuse'].value = _this.ssrRenderTarget.texture;
+    _this.blurMaterial.uniforms['resolution'].value.set(_this.width, _this.height);
+
+    // blur material 2
+
+    _this.blurMaterial2 = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSRShader.SSRBlurShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSRShader.SSRBlurShader.uniforms),
+      vertexShader: _SSRShader.SSRBlurShader.vertexShader,
+      fragmentShader: _SSRShader.SSRBlurShader.fragmentShader
+    });
+    _this.blurMaterial2.uniforms['tDiffuse'].value = _this.blurRenderTarget.texture;
+    _this.blurMaterial2.uniforms['resolution'].value.set(_this.width, _this.height);
+
+    // // blur material 3
+
+    // this.blurMaterial3 = new ShaderMaterial({
+    //   defines: Object.assign({}, SSRBlurShader.defines),
+    //   uniforms: UniformsUtils.clone(SSRBlurShader.uniforms),
+    //   vertexShader: SSRBlurShader.vertexShader,
+    //   fragmentShader: SSRBlurShader.fragmentShader
+    // });
+    // this.blurMaterial3.uniforms['tDiffuse'].value = this.blurRenderTarget2.texture;
+    // this.blurMaterial3.uniforms['resolution'].value.set(this.width, this.height);
+
+    // material for rendering the depth
+
+    _this.depthRenderMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SSRShader.SSRDepthShader.defines),
+      uniforms: _three.UniformsUtils.clone(_SSRShader.SSRDepthShader.uniforms),
+      vertexShader: _SSRShader.SSRDepthShader.vertexShader,
+      fragmentShader: _SSRShader.SSRDepthShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.depthRenderMaterial.uniforms['tDepth'].value = _this.beautyRenderTarget.depthTexture;
+    _this.depthRenderMaterial.uniforms['cameraNear'].value = _this.camera.near;
+    _this.depthRenderMaterial.uniforms['cameraFar'].value = _this.camera.far;
+
+    // material for rendering the content of a render target
+
+    _this.copyMaterial = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_CopyShader.CopyShader.uniforms),
+      vertexShader: _CopyShader.CopyShader.vertexShader,
+      fragmentShader: _CopyShader.CopyShader.fragmentShader,
+      transparent: true,
+      depthTest: false,
+      depthWrite: false,
+      blendSrc: _three.SrcAlphaFactor,
+      blendDst: _three.OneMinusSrcAlphaFactor,
+      blendEquation: _three.AddEquation,
+      blendSrcAlpha: _three.SrcAlphaFactor,
+      blendDstAlpha: _three.OneMinusSrcAlphaFactor,
+      blendEquationAlpha: _three.AddEquation
+      // premultipliedAlpha:true,
+    });
+
+    _this.fsQuad = new _Pass2.FullScreenQuad(null);
+    _this.originalClearColor = new _three.Color();
+    return _this;
+  }
+  _createClass(SSRPass, [{
+    key: "dispose",
+    value: function dispose() {
+      // dispose render targets
+
+      this.beautyRenderTarget.dispose();
+      this.prevRenderTarget.dispose();
+      this.normalRenderTarget.dispose();
+      this.metalnessRenderTarget.dispose();
+      this.ssrRenderTarget.dispose();
+      this.blurRenderTarget.dispose();
+      this.blurRenderTarget2.dispose();
+      // this.blurRenderTarget3.dispose();
+
+      // dispose materials
+
+      this.normalMaterial.dispose();
+      this.metalnessOnMaterial.dispose();
+      this.metalnessOffMaterial.dispose();
+      this.blurMaterial.dispose();
+      this.blurMaterial2.dispose();
+      this.copyMaterial.dispose();
+      this.depthRenderMaterial.dispose();
+
+      // dipsose full screen quad
+
+      this.fsQuad.dispose();
+    }
+  }, {
+    key: "render",
+    value: function render(renderer, writeBuffer /*, readBuffer, deltaTime, maskActive */) {
+      // render beauty and depth
+
+      renderer.setRenderTarget(this.beautyRenderTarget);
+      renderer.clear();
+      if (this.groundReflector) {
+        this.groundReflector.visible = false;
+        this.groundReflector.doRender(this.renderer, this.scene, this.camera);
+        this.groundReflector.visible = true;
+      }
+      renderer.render(this.scene, this.camera);
+      if (this.groundReflector) this.groundReflector.visible = false;
+
+      // render normals
+
+      this.renderOverride(renderer, this.normalMaterial, this.normalRenderTarget, 0, 0);
+
+      // render metalnesses
+
+      if (this.selective) {
+        this.renderMetalness(renderer, this.metalnessOnMaterial, this.metalnessRenderTarget, 0, 0);
+      }
+
+      // render SSR
+
+      this.ssrMaterial.uniforms['opacity'].value = this.opacity;
+      this.ssrMaterial.uniforms['maxDistance'].value = this.maxDistance;
+      this.ssrMaterial.uniforms['thickness'].value = this.thickness;
+      this.renderPass(renderer, this.ssrMaterial, this.ssrRenderTarget);
+
+      // render blur
+
+      if (this.blur) {
+        this.renderPass(renderer, this.blurMaterial, this.blurRenderTarget);
+        this.renderPass(renderer, this.blurMaterial2, this.blurRenderTarget2);
+        // this.renderPass(renderer, this.blurMaterial3, this.blurRenderTarget3);
+      }
+
+      // output result to screen
+
+      switch (this.output) {
+        case SSRPass.OUTPUT.Default:
+          if (this.bouncing) {
+            this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+            this.copyMaterial.blending = _three.NoBlending;
+            this.renderPass(renderer, this.copyMaterial, this.prevRenderTarget);
+            if (this.blur) this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget2.texture;else this.copyMaterial.uniforms['tDiffuse'].value = this.ssrRenderTarget.texture;
+            this.copyMaterial.blending = _three.NormalBlending;
+            this.renderPass(renderer, this.copyMaterial, this.prevRenderTarget);
+            this.copyMaterial.uniforms['tDiffuse'].value = this.prevRenderTarget.texture;
+            this.copyMaterial.blending = _three.NoBlending;
+            this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          } else {
+            this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+            this.copyMaterial.blending = _three.NoBlending;
+            this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+            if (this.blur) this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget2.texture;else this.copyMaterial.uniforms['tDiffuse'].value = this.ssrRenderTarget.texture;
+            this.copyMaterial.blending = _three.NormalBlending;
+            this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          }
+          break;
+        case SSRPass.OUTPUT.SSR:
+          if (this.blur) this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget2.texture;else this.copyMaterial.uniforms['tDiffuse'].value = this.ssrRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          if (this.bouncing) {
+            if (this.blur) this.copyMaterial.uniforms['tDiffuse'].value = this.blurRenderTarget2.texture;else this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+            this.copyMaterial.blending = _three.NoBlending;
+            this.renderPass(renderer, this.copyMaterial, this.prevRenderTarget);
+            this.copyMaterial.uniforms['tDiffuse'].value = this.ssrRenderTarget.texture;
+            this.copyMaterial.blending = _three.NormalBlending;
+            this.renderPass(renderer, this.copyMaterial, this.prevRenderTarget);
+          }
+          break;
+        case SSRPass.OUTPUT.Beauty:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.beautyRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSRPass.OUTPUT.Depth:
+          this.renderPass(renderer, this.depthRenderMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSRPass.OUTPUT.Normal:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.normalRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        case SSRPass.OUTPUT.Metalness:
+          this.copyMaterial.uniforms['tDiffuse'].value = this.metalnessRenderTarget.texture;
+          this.copyMaterial.blending = _three.NoBlending;
+          this.renderPass(renderer, this.copyMaterial, this.renderToScreen ? null : writeBuffer);
+          break;
+        default:
+          console.warn('THREE.SSRPass: Unknown output type.');
+      }
+    }
+  }, {
+    key: "renderPass",
+    value: function renderPass(renderer, passMaterial, renderTarget, clearColor, clearAlpha) {
+      // save original state
+      this.originalClearColor.copy(renderer.getClearColor(this.tempColor));
+      var originalClearAlpha = renderer.getClearAlpha(this.tempColor);
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+
+      // setup pass state
+      renderer.autoClear = false;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.fsQuad.material = passMaterial;
+      this.fsQuad.render(renderer);
+
+      // restore original state
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "renderOverride",
+    value: function renderOverride(renderer, overrideMaterial, renderTarget, clearColor, clearAlpha) {
+      this.originalClearColor.copy(renderer.getClearColor(this.tempColor));
+      var originalClearAlpha = renderer.getClearAlpha(this.tempColor);
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+      renderer.autoClear = false;
+      clearColor = overrideMaterial.clearColor || clearColor;
+      clearAlpha = overrideMaterial.clearAlpha || clearAlpha;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.scene.overrideMaterial = overrideMaterial;
+      renderer.render(this.scene, this.camera);
+      this.scene.overrideMaterial = null;
+
+      // restore original state
+
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "renderMetalness",
+    value: function renderMetalness(renderer, overrideMaterial, renderTarget, clearColor, clearAlpha) {
+      var _this2 = this;
+      this.originalClearColor.copy(renderer.getClearColor(this.tempColor));
+      var originalClearAlpha = renderer.getClearAlpha(this.tempColor);
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+      renderer.autoClear = false;
+      clearColor = overrideMaterial.clearColor || clearColor;
+      clearAlpha = overrideMaterial.clearAlpha || clearAlpha;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.scene.traverseVisible(function (child) {
+        child._SSRPassBackupMaterial = child.material;
+        if (_this2._selects.includes(child)) {
+          child.material = _this2.metalnessOnMaterial;
+        } else {
+          child.material = _this2.metalnessOffMaterial;
+        }
+      });
+      renderer.render(this.scene, this.camera);
+      this.scene.traverseVisible(function (child) {
+        child.material = child._SSRPassBackupMaterial;
+      });
+
+      // restore original state
+
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(width, height) {
+      this.width = width;
+      this.height = height;
+      this.ssrMaterial.defines.MAX_STEP = Math.sqrt(width * width + height * height);
+      this.ssrMaterial.needsUpdate = true;
+      this.beautyRenderTarget.setSize(width, height);
+      this.prevRenderTarget.setSize(width, height);
+      this.ssrRenderTarget.setSize(width, height);
+      this.normalRenderTarget.setSize(width, height);
+      this.metalnessRenderTarget.setSize(width, height);
+      this.blurRenderTarget.setSize(width, height);
+      this.blurRenderTarget2.setSize(width, height);
+      // this.blurRenderTarget3.setSize(width, height);
+
+      this.ssrMaterial.uniforms['resolution'].value.set(width, height);
+      this.ssrMaterial.uniforms['cameraProjectionMatrix'].value.copy(this.camera.projectionMatrix);
+      this.ssrMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(this.camera.projectionMatrixInverse);
+      this.blurMaterial.uniforms['resolution'].value.set(width, height);
+      this.blurMaterial2.uniforms['resolution'].value.set(width, height);
+    }
+  }]);
+  return SSRPass;
+}(_Pass2.Pass);
+exports.SSRPass = SSRPass;
+SSRPass.OUTPUT = {
+  'Default': 0,
+  'SSR': 1,
+  'Beauty': 3,
+  'Depth': 4,
+  'Normal': 5,
+  'Metalness': 7
+};
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/SSRShader.js":"node_modules/three/examples/jsm/shaders/SSRShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/shaders/SAOShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SAOShader = void 0;
+var _three = require("three");
+/**
+ * TODO
+ */
+
+var SAOShader = {
+  defines: {
+    'NUM_SAMPLES': 7,
+    'NUM_RINGS': 4,
+    'NORMAL_TEXTURE': 0,
+    'DIFFUSE_TEXTURE': 0,
+    'DEPTH_PACKING': 1,
+    'PERSPECTIVE_CAMERA': 1
+  },
+  uniforms: {
+    'tDepth': {
+      value: null
+    },
+    'tDiffuse': {
+      value: null
+    },
+    'tNormal': {
+      value: null
+    },
+    'size': {
+      value: new _three.Vector2(512, 512)
+    },
+    'cameraNear': {
+      value: 1
+    },
+    'cameraFar': {
+      value: 100
+    },
+    'cameraProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'cameraInverseProjectionMatrix': {
+      value: new _three.Matrix4()
+    },
+    'scale': {
+      value: 1.0
+    },
+    'intensity': {
+      value: 0.1
+    },
+    'bias': {
+      value: 0.5
+    },
+    'minResolution': {
+      value: 0.0
+    },
+    'kernelRadius': {
+      value: 100.0
+    },
+    'randomSeed': {
+      value: 0.0
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\t#include <common>\n\n\t\tvarying vec2 vUv;\n\n\t\t#if DIFFUSE_TEXTURE == 1\n\t\tuniform sampler2D tDiffuse;\n\t\t#endif\n\n\t\tuniform sampler2D tDepth;\n\n\t\t#if NORMAL_TEXTURE == 1\n\t\tuniform sampler2D tNormal;\n\t\t#endif\n\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\t\tuniform mat4 cameraProjectionMatrix;\n\t\tuniform mat4 cameraInverseProjectionMatrix;\n\n\t\tuniform float scale;\n\t\tuniform float intensity;\n\t\tuniform float bias;\n\t\tuniform float kernelRadius;\n\t\tuniform float minResolution;\n\t\tuniform vec2 size;\n\t\tuniform float randomSeed;\n\n\t\t// RGBA depth\n\n\t\t#include <packing>\n\n\t\tvec4 getDefaultColor( const in vec2 screenPosition ) {\n\t\t\t#if DIFFUSE_TEXTURE == 1\n\t\t\treturn texture2D( tDiffuse, vUv );\n\t\t\t#else\n\t\t\treturn vec4( 1.0 );\n\t\t\t#endif\n\t\t}\n\n\t\tfloat getDepth( const in vec2 screenPosition ) {\n\t\t\t#if DEPTH_PACKING == 1\n\t\t\treturn unpackRGBAToDepth( texture2D( tDepth, screenPosition ) );\n\t\t\t#else\n\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\t\t\t#endif\n\t\t}\n\n\t\tfloat getViewZ( const in float depth ) {\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\t\t\treturn perspectiveDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#else\n\t\t\treturn orthographicDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#endif\n\t\t}\n\n\t\tvec3 getViewPosition( const in vec2 screenPosition, const in float depth, const in float viewZ ) {\n\t\t\tfloat clipW = cameraProjectionMatrix[2][3] * viewZ + cameraProjectionMatrix[3][3];\n\t\t\tvec4 clipPosition = vec4( ( vec3( screenPosition, depth ) - 0.5 ) * 2.0, 1.0 );\n\t\t\tclipPosition *= clipW; // unprojection.\n\n\t\t\treturn ( cameraInverseProjectionMatrix * clipPosition ).xyz;\n\t\t}\n\n\t\tvec3 getViewNormal( const in vec3 viewPosition, const in vec2 screenPosition ) {\n\t\t\t#if NORMAL_TEXTURE == 1\n\t\t\treturn unpackRGBToNormal( texture2D( tNormal, screenPosition ).xyz );\n\t\t\t#else\n\t\t\treturn normalize( cross( dFdx( viewPosition ), dFdy( viewPosition ) ) );\n\t\t\t#endif\n\t\t}\n\n\t\tfloat scaleDividedByCameraFar;\n\t\tfloat minResolutionMultipliedByCameraFar;\n\n\t\tfloat getOcclusion( const in vec3 centerViewPosition, const in vec3 centerViewNormal, const in vec3 sampleViewPosition ) {\n\t\t\tvec3 viewDelta = sampleViewPosition - centerViewPosition;\n\t\t\tfloat viewDistance = length( viewDelta );\n\t\t\tfloat scaledScreenDistance = scaleDividedByCameraFar * viewDistance;\n\n\t\t\treturn max(0.0, (dot(centerViewNormal, viewDelta) - minResolutionMultipliedByCameraFar) / scaledScreenDistance - bias) / (1.0 + pow2( scaledScreenDistance ) );\n\t\t}\n\n\t\t// moving costly divides into consts\n\t\tconst float ANGLE_STEP = PI2 * float( NUM_RINGS ) / float( NUM_SAMPLES );\n\t\tconst float INV_NUM_SAMPLES = 1.0 / float( NUM_SAMPLES );\n\n\t\tfloat getAmbientOcclusion( const in vec3 centerViewPosition ) {\n\t\t\t// precompute some variables require in getOcclusion.\n\t\t\tscaleDividedByCameraFar = scale / cameraFar;\n\t\t\tminResolutionMultipliedByCameraFar = minResolution * cameraFar;\n\t\t\tvec3 centerViewNormal = getViewNormal( centerViewPosition, vUv );\n\n\t\t\t// jsfiddle that shows sample pattern: https://jsfiddle.net/a16ff1p7/\n\t\t\tfloat angle = rand( vUv + randomSeed ) * PI2;\n\t\t\tvec2 radius = vec2( kernelRadius * INV_NUM_SAMPLES ) / size;\n\t\t\tvec2 radiusStep = radius;\n\n\t\t\tfloat occlusionSum = 0.0;\n\t\t\tfloat weightSum = 0.0;\n\n\t\t\tfor( int i = 0; i < NUM_SAMPLES; i ++ ) {\n\t\t\t\tvec2 sampleUv = vUv + vec2( cos( angle ), sin( angle ) ) * radius;\n\t\t\t\tradius += radiusStep;\n\t\t\t\tangle += ANGLE_STEP;\n\n\t\t\t\tfloat sampleDepth = getDepth( sampleUv );\n\t\t\t\tif( sampleDepth >= ( 1.0 - EPSILON ) ) {\n\t\t\t\t\tcontinue;\n\t\t\t\t}\n\n\t\t\t\tfloat sampleViewZ = getViewZ( sampleDepth );\n\t\t\t\tvec3 sampleViewPosition = getViewPosition( sampleUv, sampleDepth, sampleViewZ );\n\t\t\t\tocclusionSum += getOcclusion( centerViewPosition, centerViewNormal, sampleViewPosition );\n\t\t\t\tweightSum += 1.0;\n\t\t\t}\n\n\t\t\tif( weightSum == 0.0 ) discard;\n\n\t\t\treturn occlusionSum * ( intensity / weightSum );\n\t\t}\n\n\t\tvoid main() {\n\t\t\tfloat centerDepth = getDepth( vUv );\n\t\t\tif( centerDepth >= ( 1.0 - EPSILON ) ) {\n\t\t\t\tdiscard;\n\t\t\t}\n\n\t\t\tfloat centerViewZ = getViewZ( centerDepth );\n\t\t\tvec3 viewPosition = getViewPosition( vUv, centerDepth, centerViewZ );\n\n\t\t\tfloat ambientOcclusion = getAmbientOcclusion( viewPosition );\n\n\t\t\tgl_FragColor = getDefaultColor( vUv );\n\t\t\tgl_FragColor.xyz *=  1.0 - ambientOcclusion;\n\t\t}"
+};
+exports.SAOShader = SAOShader;
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/DepthLimitedBlurShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.DepthLimitedBlurShader = exports.BlurShaderUtils = void 0;
+var _three = require("three");
+/**
+ * TODO
+ */
+
+var DepthLimitedBlurShader = {
+  defines: {
+    'KERNEL_RADIUS': 4,
+    'DEPTH_PACKING': 1,
+    'PERSPECTIVE_CAMERA': 1
+  },
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'size': {
+      value: new _three.Vector2(512, 512)
+    },
+    'sampleUvOffsets': {
+      value: [new _three.Vector2(0, 0)]
+    },
+    'sampleWeights': {
+      value: [1.0]
+    },
+    'tDepth': {
+      value: null
+    },
+    'cameraNear': {
+      value: 10
+    },
+    'cameraFar': {
+      value: 1000
+    },
+    'depthCutoff': {
+      value: 10
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\t#include <common>\n\n\t\tuniform vec2 size;\n\n\t\tvarying vec2 vUv;\n\t\tvarying vec2 vInvSize;\n\n\t\tvoid main() {\n\t\t\tvUv = uv;\n\t\t\tvInvSize = 1.0 / size;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\t#include <common>\n\t\t#include <packing>\n\n\t\tuniform sampler2D tDiffuse;\n\t\tuniform sampler2D tDepth;\n\n\t\tuniform float cameraNear;\n\t\tuniform float cameraFar;\n\t\tuniform float depthCutoff;\n\n\t\tuniform vec2 sampleUvOffsets[ KERNEL_RADIUS + 1 ];\n\t\tuniform float sampleWeights[ KERNEL_RADIUS + 1 ];\n\n\t\tvarying vec2 vUv;\n\t\tvarying vec2 vInvSize;\n\n\t\tfloat getDepth( const in vec2 screenPosition ) {\n\t\t\t#if DEPTH_PACKING == 1\n\t\t\treturn unpackRGBAToDepth( texture2D( tDepth, screenPosition ) );\n\t\t\t#else\n\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\t\t\t#endif\n\t\t}\n\n\t\tfloat getViewZ( const in float depth ) {\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\t\t\treturn perspectiveDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#else\n\t\t\treturn orthographicDepthToViewZ( depth, cameraNear, cameraFar );\n\t\t\t#endif\n\t\t}\n\n\t\tvoid main() {\n\t\t\tfloat depth = getDepth( vUv );\n\t\t\tif( depth >= ( 1.0 - EPSILON ) ) {\n\t\t\t\tdiscard;\n\t\t\t}\n\n\t\t\tfloat centerViewZ = -getViewZ( depth );\n\t\t\tbool rBreak = false, lBreak = false;\n\n\t\t\tfloat weightSum = sampleWeights[0];\n\t\t\tvec4 diffuseSum = texture2D( tDiffuse, vUv ) * weightSum;\n\n\t\t\tfor( int i = 1; i <= KERNEL_RADIUS; i ++ ) {\n\n\t\t\t\tfloat sampleWeight = sampleWeights[i];\n\t\t\t\tvec2 sampleUvOffset = sampleUvOffsets[i] * vInvSize;\n\n\t\t\t\tvec2 sampleUv = vUv + sampleUvOffset;\n\t\t\t\tfloat viewZ = -getViewZ( getDepth( sampleUv ) );\n\n\t\t\t\tif( abs( viewZ - centerViewZ ) > depthCutoff ) rBreak = true;\n\n\t\t\t\tif( ! rBreak ) {\n\t\t\t\t\tdiffuseSum += texture2D( tDiffuse, sampleUv ) * sampleWeight;\n\t\t\t\t\tweightSum += sampleWeight;\n\t\t\t\t}\n\n\t\t\t\tsampleUv = vUv - sampleUvOffset;\n\t\t\t\tviewZ = -getViewZ( getDepth( sampleUv ) );\n\n\t\t\t\tif( abs( viewZ - centerViewZ ) > depthCutoff ) lBreak = true;\n\n\t\t\t\tif( ! lBreak ) {\n\t\t\t\t\tdiffuseSum += texture2D( tDiffuse, sampleUv ) * sampleWeight;\n\t\t\t\t\tweightSum += sampleWeight;\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tgl_FragColor = diffuseSum / weightSum;\n\t\t}"
+};
+exports.DepthLimitedBlurShader = DepthLimitedBlurShader;
+var BlurShaderUtils = {
+  createSampleWeights: function createSampleWeights(kernelRadius, stdDev) {
+    var weights = [];
+    for (var i = 0; i <= kernelRadius; i++) {
+      weights.push(gaussian(i, stdDev));
+    }
+    return weights;
+  },
+  createSampleOffsets: function createSampleOffsets(kernelRadius, uvIncrement) {
+    var offsets = [];
+    for (var i = 0; i <= kernelRadius; i++) {
+      offsets.push(uvIncrement.clone().multiplyScalar(i));
+    }
+    return offsets;
+  },
+  configure: function configure(material, kernelRadius, stdDev, uvIncrement) {
+    material.defines['KERNEL_RADIUS'] = kernelRadius;
+    material.uniforms['sampleUvOffsets'].value = BlurShaderUtils.createSampleOffsets(kernelRadius, uvIncrement);
+    material.uniforms['sampleWeights'].value = BlurShaderUtils.createSampleWeights(kernelRadius, stdDev);
+    material.needsUpdate = true;
+  }
+};
+exports.BlurShaderUtils = BlurShaderUtils;
+function gaussian(x, stdDev) {
+  return Math.exp(-(x * x) / (2.0 * (stdDev * stdDev))) / (Math.sqrt(2.0 * Math.PI) * stdDev);
+}
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/UnpackDepthRGBAShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UnpackDepthRGBAShader = void 0;
+/**
+ * Unpack RGBA depth shader
+ * - show RGBA encoded depth as monochrome color
+ */
+
+var UnpackDepthRGBAShader = {
+  uniforms: {
+    'tDiffuse': {
+      value: null
+    },
+    'opacity': {
+      value: 1.0
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tuniform float opacity;\n\n\t\tuniform sampler2D tDiffuse;\n\n\t\tvarying vec2 vUv;\n\n\t\t#include <packing>\n\n\t\tvoid main() {\n\n\t\t\tfloat depth = 1.0 - unpackRGBAToDepth( texture2D( tDiffuse, vUv ) );\n\t\t\tgl_FragColor = vec4( vec3( depth ), opacity );\n\n\t\t}"
+};
+exports.UnpackDepthRGBAShader = UnpackDepthRGBAShader;
+},{}],"node_modules/three/examples/jsm/postprocessing/SAOPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SAOPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+var _SAOShader = require("../shaders/SAOShader.js");
+var _DepthLimitedBlurShader = require("../shaders/DepthLimitedBlurShader.js");
+var _CopyShader = require("../shaders/CopyShader.js");
+var _UnpackDepthRGBAShader = require("../shaders/UnpackDepthRGBAShader.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+/**
+ * SAO implementation inspired from bhouston previous SAO work
+ */
+var SAOPass = /*#__PURE__*/function (_Pass) {
+  _inherits(SAOPass, _Pass);
+  var _super = _createSuper(SAOPass);
+  function SAOPass(scene, camera, useDepthTexture = false, useNormals = false, resolution = new _three.Vector2(256, 256)) {
+    var _this;
+    _classCallCheck(this, SAOPass);
+    _this = _super.call(this);
+    _this.scene = scene;
+    _this.camera = camera;
+    _this.clear = true;
+    _this.needsSwap = false;
+    _this.supportsDepthTextureExtension = useDepthTexture;
+    _this.supportsNormalTexture = useNormals;
+    _this.originalClearColor = new _three.Color();
+    _this._oldClearColor = new _three.Color();
+    _this.oldClearAlpha = 1;
+    _this.params = {
+      output: 0,
+      saoBias: 0.5,
+      saoIntensity: 0.18,
+      saoScale: 1,
+      saoKernelRadius: 100,
+      saoMinResolution: 0,
+      saoBlur: true,
+      saoBlurRadius: 8,
+      saoBlurStdDev: 4,
+      saoBlurDepthCutoff: 0.01
+    };
+    _this.resolution = new _three.Vector2(resolution.x, resolution.y);
+    _this.saoRenderTarget = new _three.WebGLRenderTarget(_this.resolution.x, _this.resolution.y, {
+      type: _three.HalfFloatType
+    });
+    _this.blurIntermediateRenderTarget = _this.saoRenderTarget.clone();
+    _this.beautyRenderTarget = _this.saoRenderTarget.clone();
+    _this.normalRenderTarget = new _three.WebGLRenderTarget(_this.resolution.x, _this.resolution.y, {
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType
+    });
+    _this.depthRenderTarget = _this.normalRenderTarget.clone();
+    var depthTexture;
+    if (_this.supportsDepthTextureExtension) {
+      depthTexture = new _three.DepthTexture();
+      depthTexture.type = _three.UnsignedShortType;
+      _this.beautyRenderTarget.depthTexture = depthTexture;
+      _this.beautyRenderTarget.depthBuffer = true;
+    }
+    _this.depthMaterial = new _three.MeshDepthMaterial();
+    _this.depthMaterial.depthPacking = _three.RGBADepthPacking;
+    _this.depthMaterial.blending = _three.NoBlending;
+    _this.normalMaterial = new _three.MeshNormalMaterial();
+    _this.normalMaterial.blending = _three.NoBlending;
+    _this.saoMaterial = new _three.ShaderMaterial({
+      defines: Object.assign({}, _SAOShader.SAOShader.defines),
+      fragmentShader: _SAOShader.SAOShader.fragmentShader,
+      vertexShader: _SAOShader.SAOShader.vertexShader,
+      uniforms: _three.UniformsUtils.clone(_SAOShader.SAOShader.uniforms)
+    });
+    _this.saoMaterial.extensions.derivatives = true;
+    _this.saoMaterial.defines['DEPTH_PACKING'] = _this.supportsDepthTextureExtension ? 0 : 1;
+    _this.saoMaterial.defines['NORMAL_TEXTURE'] = _this.supportsNormalTexture ? 1 : 0;
+    _this.saoMaterial.defines['PERSPECTIVE_CAMERA'] = _this.camera.isPerspectiveCamera ? 1 : 0;
+    _this.saoMaterial.uniforms['tDepth'].value = _this.supportsDepthTextureExtension ? depthTexture : _this.depthRenderTarget.texture;
+    _this.saoMaterial.uniforms['tNormal'].value = _this.normalRenderTarget.texture;
+    _this.saoMaterial.uniforms['size'].value.set(_this.resolution.x, _this.resolution.y);
+    _this.saoMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(_this.camera.projectionMatrixInverse);
+    _this.saoMaterial.uniforms['cameraProjectionMatrix'].value = _this.camera.projectionMatrix;
+    _this.saoMaterial.blending = _three.NoBlending;
+    _this.vBlurMaterial = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_DepthLimitedBlurShader.DepthLimitedBlurShader.uniforms),
+      defines: Object.assign({}, _DepthLimitedBlurShader.DepthLimitedBlurShader.defines),
+      vertexShader: _DepthLimitedBlurShader.DepthLimitedBlurShader.vertexShader,
+      fragmentShader: _DepthLimitedBlurShader.DepthLimitedBlurShader.fragmentShader
+    });
+    _this.vBlurMaterial.defines['DEPTH_PACKING'] = _this.supportsDepthTextureExtension ? 0 : 1;
+    _this.vBlurMaterial.defines['PERSPECTIVE_CAMERA'] = _this.camera.isPerspectiveCamera ? 1 : 0;
+    _this.vBlurMaterial.uniforms['tDiffuse'].value = _this.saoRenderTarget.texture;
+    _this.vBlurMaterial.uniforms['tDepth'].value = _this.supportsDepthTextureExtension ? depthTexture : _this.depthRenderTarget.texture;
+    _this.vBlurMaterial.uniforms['size'].value.set(_this.resolution.x, _this.resolution.y);
+    _this.vBlurMaterial.blending = _three.NoBlending;
+    _this.hBlurMaterial = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_DepthLimitedBlurShader.DepthLimitedBlurShader.uniforms),
+      defines: Object.assign({}, _DepthLimitedBlurShader.DepthLimitedBlurShader.defines),
+      vertexShader: _DepthLimitedBlurShader.DepthLimitedBlurShader.vertexShader,
+      fragmentShader: _DepthLimitedBlurShader.DepthLimitedBlurShader.fragmentShader
+    });
+    _this.hBlurMaterial.defines['DEPTH_PACKING'] = _this.supportsDepthTextureExtension ? 0 : 1;
+    _this.hBlurMaterial.defines['PERSPECTIVE_CAMERA'] = _this.camera.isPerspectiveCamera ? 1 : 0;
+    _this.hBlurMaterial.uniforms['tDiffuse'].value = _this.blurIntermediateRenderTarget.texture;
+    _this.hBlurMaterial.uniforms['tDepth'].value = _this.supportsDepthTextureExtension ? depthTexture : _this.depthRenderTarget.texture;
+    _this.hBlurMaterial.uniforms['size'].value.set(_this.resolution.x, _this.resolution.y);
+    _this.hBlurMaterial.blending = _three.NoBlending;
+    _this.materialCopy = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_CopyShader.CopyShader.uniforms),
+      vertexShader: _CopyShader.CopyShader.vertexShader,
+      fragmentShader: _CopyShader.CopyShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.materialCopy.transparent = true;
+    _this.materialCopy.depthTest = false;
+    _this.materialCopy.depthWrite = false;
+    _this.materialCopy.blending = _three.CustomBlending;
+    _this.materialCopy.blendSrc = _three.DstColorFactor;
+    _this.materialCopy.blendDst = _three.ZeroFactor;
+    _this.materialCopy.blendEquation = _three.AddEquation;
+    _this.materialCopy.blendSrcAlpha = _three.DstAlphaFactor;
+    _this.materialCopy.blendDstAlpha = _three.ZeroFactor;
+    _this.materialCopy.blendEquationAlpha = _three.AddEquation;
+    _this.depthCopy = new _three.ShaderMaterial({
+      uniforms: _three.UniformsUtils.clone(_UnpackDepthRGBAShader.UnpackDepthRGBAShader.uniforms),
+      vertexShader: _UnpackDepthRGBAShader.UnpackDepthRGBAShader.vertexShader,
+      fragmentShader: _UnpackDepthRGBAShader.UnpackDepthRGBAShader.fragmentShader,
+      blending: _three.NoBlending
+    });
+    _this.fsQuad = new _Pass2.FullScreenQuad(null);
+    return _this;
+  }
+  _createClass(SAOPass, [{
+    key: "render",
+    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive*/) {
+      // Rendering readBuffer first when rendering to screen
+      if (this.renderToScreen) {
+        this.materialCopy.blending = _three.NoBlending;
+        this.materialCopy.uniforms['tDiffuse'].value = readBuffer.texture;
+        this.materialCopy.needsUpdate = true;
+        this.renderPass(renderer, this.materialCopy, null);
+      }
+      if (this.params.output === 1) {
+        return;
+      }
+      renderer.getClearColor(this._oldClearColor);
+      this.oldClearAlpha = renderer.getClearAlpha();
+      var oldAutoClear = renderer.autoClear;
+      renderer.autoClear = false;
+      renderer.setRenderTarget(this.depthRenderTarget);
+      renderer.clear();
+      this.saoMaterial.uniforms['bias'].value = this.params.saoBias;
+      this.saoMaterial.uniforms['intensity'].value = this.params.saoIntensity;
+      this.saoMaterial.uniforms['scale'].value = this.params.saoScale;
+      this.saoMaterial.uniforms['kernelRadius'].value = this.params.saoKernelRadius;
+      this.saoMaterial.uniforms['minResolution'].value = this.params.saoMinResolution;
+      this.saoMaterial.uniforms['cameraNear'].value = this.camera.near;
+      this.saoMaterial.uniforms['cameraFar'].value = this.camera.far;
+      // this.saoMaterial.uniforms['randomSeed'].value = Math.random();
+
+      var depthCutoff = this.params.saoBlurDepthCutoff * (this.camera.far - this.camera.near);
+      this.vBlurMaterial.uniforms['depthCutoff'].value = depthCutoff;
+      this.hBlurMaterial.uniforms['depthCutoff'].value = depthCutoff;
+      this.vBlurMaterial.uniforms['cameraNear'].value = this.camera.near;
+      this.vBlurMaterial.uniforms['cameraFar'].value = this.camera.far;
+      this.hBlurMaterial.uniforms['cameraNear'].value = this.camera.near;
+      this.hBlurMaterial.uniforms['cameraFar'].value = this.camera.far;
+      this.params.saoBlurRadius = Math.floor(this.params.saoBlurRadius);
+      if (this.prevStdDev !== this.params.saoBlurStdDev || this.prevNumSamples !== this.params.saoBlurRadius) {
+        _DepthLimitedBlurShader.BlurShaderUtils.configure(this.vBlurMaterial, this.params.saoBlurRadius, this.params.saoBlurStdDev, new _three.Vector2(0, 1));
+        _DepthLimitedBlurShader.BlurShaderUtils.configure(this.hBlurMaterial, this.params.saoBlurRadius, this.params.saoBlurStdDev, new _three.Vector2(1, 0));
+        this.prevStdDev = this.params.saoBlurStdDev;
+        this.prevNumSamples = this.params.saoBlurRadius;
+      }
+
+      // Rendering scene to depth texture
+      renderer.setClearColor(0x000000);
+      renderer.setRenderTarget(this.beautyRenderTarget);
+      renderer.clear();
+      renderer.render(this.scene, this.camera);
+
+      // Re-render scene if depth texture extension is not supported
+      if (!this.supportsDepthTextureExtension) {
+        // Clear rule : far clipping plane in both RGBA and Basic encoding
+        this.renderOverride(renderer, this.depthMaterial, this.depthRenderTarget, 0x000000, 1.0);
+      }
+      if (this.supportsNormalTexture) {
+        // Clear rule : default normal is facing the camera
+        this.renderOverride(renderer, this.normalMaterial, this.normalRenderTarget, 0x7777ff, 1.0);
+      }
+
+      // Rendering SAO texture
+      this.renderPass(renderer, this.saoMaterial, this.saoRenderTarget, 0xffffff, 1.0);
+
+      // Blurring SAO texture
+      if (this.params.saoBlur) {
+        this.renderPass(renderer, this.vBlurMaterial, this.blurIntermediateRenderTarget, 0xffffff, 1.0);
+        this.renderPass(renderer, this.hBlurMaterial, this.saoRenderTarget, 0xffffff, 1.0);
+      }
+      var outputMaterial = this.materialCopy;
+      // Setting up SAO rendering
+      if (this.params.output === 3) {
+        if (this.supportsDepthTextureExtension) {
+          this.materialCopy.uniforms['tDiffuse'].value = this.beautyRenderTarget.depthTexture;
+          this.materialCopy.needsUpdate = true;
+        } else {
+          this.depthCopy.uniforms['tDiffuse'].value = this.depthRenderTarget.texture;
+          this.depthCopy.needsUpdate = true;
+          outputMaterial = this.depthCopy;
+        }
+      } else if (this.params.output === 4) {
+        this.materialCopy.uniforms['tDiffuse'].value = this.normalRenderTarget.texture;
+        this.materialCopy.needsUpdate = true;
+      } else {
+        this.materialCopy.uniforms['tDiffuse'].value = this.saoRenderTarget.texture;
+        this.materialCopy.needsUpdate = true;
+      }
+
+      // Blending depends on output, only want a CustomBlending when showing SAO
+      if (this.params.output === 0) {
+        outputMaterial.blending = _three.CustomBlending;
+      } else {
+        outputMaterial.blending = _three.NoBlending;
+      }
+
+      // Rendering SAOPass result on top of previous pass
+      this.renderPass(renderer, outputMaterial, this.renderToScreen ? null : readBuffer);
+      renderer.setClearColor(this._oldClearColor, this.oldClearAlpha);
+      renderer.autoClear = oldAutoClear;
+    }
+  }, {
+    key: "renderPass",
+    value: function renderPass(renderer, passMaterial, renderTarget, clearColor, clearAlpha) {
+      // save original state
+      renderer.getClearColor(this.originalClearColor);
+      var originalClearAlpha = renderer.getClearAlpha();
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+
+      // setup pass state
+      renderer.autoClear = false;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.fsQuad.material = passMaterial;
+      this.fsQuad.render(renderer);
+
+      // restore original state
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "renderOverride",
+    value: function renderOverride(renderer, overrideMaterial, renderTarget, clearColor, clearAlpha) {
+      renderer.getClearColor(this.originalClearColor);
+      var originalClearAlpha = renderer.getClearAlpha();
+      var originalAutoClear = renderer.autoClear;
+      renderer.setRenderTarget(renderTarget);
+      renderer.autoClear = false;
+      clearColor = overrideMaterial.clearColor || clearColor;
+      clearAlpha = overrideMaterial.clearAlpha || clearAlpha;
+      if (clearColor !== undefined && clearColor !== null) {
+        renderer.setClearColor(clearColor);
+        renderer.setClearAlpha(clearAlpha || 0.0);
+        renderer.clear();
+      }
+      this.scene.overrideMaterial = overrideMaterial;
+      renderer.render(this.scene, this.camera);
+      this.scene.overrideMaterial = null;
+
+      // restore original state
+      renderer.autoClear = originalAutoClear;
+      renderer.setClearColor(this.originalClearColor);
+      renderer.setClearAlpha(originalClearAlpha);
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(width, height) {
+      this.beautyRenderTarget.setSize(width, height);
+      this.saoRenderTarget.setSize(width, height);
+      this.blurIntermediateRenderTarget.setSize(width, height);
+      this.normalRenderTarget.setSize(width, height);
+      this.depthRenderTarget.setSize(width, height);
+      this.saoMaterial.uniforms['size'].value.set(width, height);
+      this.saoMaterial.uniforms['cameraInverseProjectionMatrix'].value.copy(this.camera.projectionMatrixInverse);
+      this.saoMaterial.uniforms['cameraProjectionMatrix'].value = this.camera.projectionMatrix;
+      this.saoMaterial.needsUpdate = true;
+      this.vBlurMaterial.uniforms['size'].value.set(width, height);
+      this.vBlurMaterial.needsUpdate = true;
+      this.hBlurMaterial.uniforms['size'].value.set(width, height);
+      this.hBlurMaterial.needsUpdate = true;
+    }
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      this.saoRenderTarget.dispose();
+      this.blurIntermediateRenderTarget.dispose();
+      this.beautyRenderTarget.dispose();
+      this.normalRenderTarget.dispose();
+      this.depthRenderTarget.dispose();
+      this.depthMaterial.dispose();
+      this.normalMaterial.dispose();
+      this.saoMaterial.dispose();
+      this.vBlurMaterial.dispose();
+      this.hBlurMaterial.dispose();
+      this.materialCopy.dispose();
+      this.depthCopy.dispose();
+      this.fsQuad.dispose();
+    }
+  }]);
+  return SAOPass;
+}(_Pass2.Pass);
+exports.SAOPass = SAOPass;
+SAOPass.OUTPUT = {
+  'Beauty': 1,
+  'Default': 0,
+  'SAO': 2,
+  'Depth': 3,
+  'Normal': 4
+};
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/SAOShader.js":"node_modules/three/examples/jsm/shaders/SAOShader.js","../shaders/DepthLimitedBlurShader.js":"node_modules/three/examples/jsm/shaders/DepthLimitedBlurShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js","../shaders/UnpackDepthRGBAShader.js":"node_modules/three/examples/jsm/shaders/UnpackDepthRGBAShader.js"}],"src/LoadingProgressive/UI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UI = void 0;
+var _lilGuiModuleMin = require("three/examples/jsm/libs/lil-gui.module.min.js");
+var THREE = _interopRequireWildcard(require("three"));
+var _SSRPass = require("three/examples/jsm/postprocessing/SSRPass.js");
+var _SAOPass = require("three/examples/jsm/postprocessing/SAOPass.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //dat.gui.module.js';
+var UI = /*#__PURE__*/function () {
+  function UI(main) {
+    _classCallCheck(this, UI);
+    this.gui = new _lilGuiModuleMin.GUI();
+    window.gui = this.gui;
+    window.panelDiv = this.gui.domElement;
+    this.params = {
+      exposure: 1,
+      bloomStrength: 1.5,
+      bloomThreshold: 0,
+      bloomRadius: 0
+    };
+    this.init(main);
+  }
+  _createClass(UI, [{
+    key: "init",
+    value: function init(main) {
+      this.gui.domElement.addEventListener('mouseover', function (event) {
+        window.inPanel = true;
+      }, false);
+      this.gui.domElement.addEventListener('mouseout', function (event) {
+        window.inPanel = false;
+      }, false);
+      this.control_camera(main.camera, main.playerControl);
+      this.control_envMap(main.scene);
+      // this.control_renderer(main.renderer)
+      this.control_directionalLight(main.lightProducer.directionalLight);
+      this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass);
+      this.control_godrays(main.postprocessing.godrays, main.postprocessing);
+      this.control_ssr(main.postprocessing.unrealBloom.ssrPass);
+      this.control_bokeh(main.postprocessing.unrealBloom.bokehPass);
+      this.control_lut(main.postprocessing.unrealBloom.lutPass);
+      //this.control_sao(main.postprocessing.unrealBloom.saoPass)
+    }
+  }, {
+    key: "control_camera",
+    value: function control_camera(camera, playerControl) {
+      var viewpointState = {
+        viewpoint: "默认视点",
+        mode: 'viewpoint'
+      };
+      var list_viewpoint = ["默认视点", "视点1", "视点2", "视点3", "视点4", "视点5", "视点6", "视点7"];
+      var camera_pos = [new THREE.Vector3(-43.486343682038736, 2.127206120237504, -8.698678933445201), new THREE.Vector3(48.55640273290092, 1.9142025592268763, -7.314690567468844), new THREE.Vector3(47.298827892375, 1.7232932395224025, -7.348360792773678), new THREE.Vector3(-58.92759054201366, 39.57529059951184, -130.21318894586796), new THREE.Vector3(-1.0911605157232827, 0.7075214699744158, -99.90313103529786), new THREE.Vector3(-64.39189399430883, 8.99856114154391, -74.3016535116766), new THREE.Vector3(-1.5994877198648538, 1.4997407676957795, -77.1512219063800), new THREE.Vector3(-54.63874349381954, 18.532468360185952, 46.071540822)];
+      var camera_tar = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(0, 0, 0), new THREE.Vector3(-0.9868855788301696, 0.7075214699744165, -99.03513139079297), new THREE.Vector3(-65.34712509322323, 9.472649100434154, -69.41033714095124), new THREE.Vector3(-1.9992580266994615, 1.6314769709077197, -59.25814512545), new THREE.Vector3(-66.03747192556759, 9.679838586814231, 41.845030134054)];
+      var gui = this.gui;
+      var folder = gui.addFolder("camera");
+      folder.add(viewpointState, 'viewpoint').options(list_viewpoint).onChange(function () {
+        var id = 0;
+        for (var i = 0; i < 7; i++) {
+          if (viewpointState.viewpoint == list_viewpoint[i]) id = i;
+        }
+        camera.position.copy(camera_pos[id]);
+        camera.lookAt(camera_tar[id]);
+      });
+      var opt2 = ["viewpoint", "model"];
+      folder.add(viewpointState, 'mode').options(opt2).onChange(function () {
+        var id = 0;
+        for (var i = 0; i < 7; i++) {
+          if (viewpointState.mode == opt2[i]) id = i;
+        }
+        playerControl.mode.set(viewpointState.mode);
+      });
+    }
+  }, {
+    key: "control_envMap",
+    value: function control_envMap(scene) {
+      var gui = this.gui;
+      var params = this.params;
+      params.metalness = 0.95; //0.5
+      params.roughness = 0.5;
+      params.envMapIntensity = 1; //0.5
+      // params.emissiveIntensity=0.5
+      var folder = gui.addFolder("材质");
+      folder.add(params, 'metalness', 0.0, 3.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.metalness = material.metalness0 + value;
+          }
+        });
+      });
+      folder.add(params, 'roughness', -2.0, 3.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.roughness = material.roughness0 + value;
+          }
+        });
+      });
+      folder.add(params, 'envMapIntensity', -1.0, 4.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.envMapIntensity = material.envMapIntensity0 + value;
+          }
+        });
+      });
+    }
+  }, {
+    key: "control_directionalLight",
+    value: function control_directionalLight(directionalLight) {
+      var gui = this.gui;
+      var params = this.params;
+      var directionFolder = gui.addFolder('平行光');
+      /*color*/
+      params['平行光颜色'] = directionalLight.color;
+      directionFolder.addColor(params, '平行光颜色').onChange(function (e) {
+        directionalLight.color = new THREE.Color(e);
+      });
+      /*power*/
+      params['平行光强度'] = directionalLight.intensity;
+      directionFolder.add(params, '平行光强度', 0.0, 10.0).step(0.1).onChange(function (e) {
+        directionalLight.intensity = e;
+      });
+      /*direction*/
+      params['平行光方向X'] = directionalLight.target.position.x - directionalLight.position.x;
+      directionFolder.add(params, '平行光方向X', -1.0, 1.0).step(0.01).onChange(function (e) {
+        directionalLight.target.position.x = directionalLight.position.x + e;
+      });
+      params['平行光方向Y'] = directionalLight.target.position.y - directionalLight.position.y;
+      directionFolder.add(params, '平行光方向Y', -1.0, -0.6).step(0.01).onChange(function (e) {
+        directionalLight.target.position.y = directionalLight.position.y + e;
+      });
+      params['平行光方向Z'] = directionalLight.target.position.z - directionalLight.position.z;
+      directionFolder.add(params, '平行光方向Z', -1.0, 1.0).step(0.01).onChange(function (e) {
+        directionalLight.target.position.z = directionalLight.position.z + e;
+      });
+      /*shadow*/
+      params['平行光阴影'] = directionalLight.castShadow;
+      directionFolder.add(params, '平行光阴影').onChange(function (e) {
+        directionalLight.castShadow = e;
+      });
+      /*visible*/
+      params['平行光启用'] = directionalLight.visible;
+      directionFolder.add(params, '平行光启用').onChange(function (e) {
+        directionalLight.visible = e;
+      });
+    }
+  }, {
+    key: "control_renderer",
+    value: function control_renderer(renderer) {
+      var gui = this.gui;
+      var params = this.params;
+      params.exposure = Math.pow(renderer.toneMappingExposure, 1 / 4);
+      var folder = gui.addFolder("tone mapping");
+      folder.add(params, 'exposure', 0.1, 2).onChange(function (value) {
+        renderer.toneMappingExposure = Math.pow(value, 4.0);
+      });
+    }
+  }, {
+    key: "control_bloomPass",
+    value: function control_bloomPass(bloomPass) {
+      var gui = this.gui;
+      var params = this.params;
+      params.bloomThreshold = bloomPass.threshold;
+      params.bloomStrength = bloomPass.strength;
+      params.bloomRadius = bloomPass.radius;
+      var folder = gui.addFolder("辉光");
+      folder.add(params, 'bloomStrength', 0.0, 1.5).step(0.05).onChange(function (value) {
+        bloomPass.strength = Number(value);
+      });
+      folder.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
+        bloomPass.threshold = Number(value);
+      });
+      folder.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
+        bloomPass.radius = Number(value);
+      });
+    }
+  }, {
+    key: "control_godrays",
+    value: function control_godrays(godrays, postprocessing) {
+      var gui = this.gui;
+      var params = this.params;
+      params.filterLen = godrays.filterLen;
+      params.TAPS_PER_PASS = godrays.TAPS_PER_PASS;
+      params.godrays_stength = postprocessing.godrays_stength.value;
+      var folder = gui.addFolder("隙间光");
+      folder.add(params, 'godrays_stength', 0.0, 1.5).step(0.05).onChange(function (value) {
+        postprocessing.godrays_stength.value = value;
+      });
+      folder.add(params, 'filterLen', 0.5, 2.0).step(0.01).onChange(function (value) {
+        godrays.filterLen = Number(value);
+      });
+      folder.add(params, 'TAPS_PER_PASS', 1.0, 10.0).step(0.1).onChange(function (value) {
+        godrays.TAPS_PER_PASS = Number(value);
+      });
+    }
+  }, {
+    key: "control_ssr",
+    value: function control_ssr(ssrPass) {
+      var gui = this.gui;
+      var params = this.params;
+      params.ssr_thickness = ssrPass.thickness;
+      params.ssr_maxDistance = ssrPass.maxDistance;
+      params.ssr_opacity = ssrPass.opacity;
+      var folder = gui.addFolder("屏幕空间反射");
+      folder.add(params, 'ssr_maxDistance', 0.0, 200.).step(0.5).onChange(function (value) {
+        ssrPass.maxDistance = Number(value);
+      });
+      //opacity
+      folder.add(params, 'ssr_opacity', 0.0, 2.).step(0.05).onChange(function (value) {
+        ssrPass.opacity = value;
+      });
+      folder.add(ssrPass, 'infiniteThick');
+      folder.add(ssrPass, 'fresnel');
+      folder.add(ssrPass, 'distanceAttenuation');
+      folder.add(ssrPass, 'bouncing');
+      folder.add(ssrPass, 'output', {
+        'Default': _SSRPass.SSRPass.OUTPUT.Default,
+        'SSR Only': _SSRPass.SSRPass.OUTPUT.SSR,
+        'Beauty': _SSRPass.SSRPass.OUTPUT.Beauty,
+        'Depth': _SSRPass.SSRPass.OUTPUT.Depth,
+        'Normal': _SSRPass.SSRPass.OUTPUT.Normal,
+        'Metalness': _SSRPass.SSRPass.OUTPUT.Metalness
+      }).onChange(function (value) {
+        ssrPass.output = parseInt(value);
+      });
+      folder.add(ssrPass, 'blur');
+
+      //maxDistance
+      // folder.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
+    }
+  }, {
+    key: "control_sao",
+    value: function control_sao(saoPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("可缩放环境光遮挡");
+      var params = this.params;
+      folder.add(saoPass.params, 'output', {
+        'Beauty': _SAOPass.SAOPass.OUTPUT.Beauty,
+        'Beauty+SAO': _SAOPass.SAOPass.OUTPUT.Default,
+        'SAO': _SAOPass.SAOPass.OUTPUT.SAO,
+        'Depth': _SAOPass.SAOPass.OUTPUT.Depth,
+        'Normal': _SAOPass.SAOPass.OUTPUT.Normal
+      }).onChange(function (value) {
+        saoPass.params.output = parseInt(value);
+      });
+      folder.add(saoPass.params, 'saoBias', -1, 1);
+      folder.add(saoPass.params, 'saoIntensity', 0, 1);
+      folder.add(saoPass.params, 'saoScale', 0, 10);
+      folder.add(saoPass.params, 'saoKernelRadius', 1, 100);
+      folder.add(saoPass.params, 'saoMinResolution', 0, 1);
+      folder.add(saoPass.params, 'saoBlur');
+      folder.add(saoPass.params, 'saoBlurRadius', 0, 200);
+      folder.add(saoPass.params, 'saoBlurStdDev', 0.5, 150);
+      folder.add(saoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1);
+    }
+  }, {
+    key: "control_bokeh",
+    value: function control_bokeh(bokehPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("散焦景深");
+      var params = this.params;
+      params.bokehPass_aperture = bokehPass.uniforms.aperture.value;
+      folder.add(params, 'bokehPass_aperture', 0.0, 1.).step(0.001).onChange(function (value) {
+        bokehPass.uniforms.aperture.value = value;
+      });
+      params.bokehPass_maxblur = bokehPass.uniforms.maxblur.value;
+      folder.add(params, 'bokehPass_maxblur', 0, 0.1).step(0.0001).onChange(function (value) {
+        bokehPass.uniforms.maxblur.value = value;
+      });
+
+      // params.bokehPass_focus=bokehPass.uniforms.focus.value
+      // folder.add( params, 'bokehPass_focus', 0, 5 ).step( 0.01 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.focus.value=value
+      // } );
+
+      // params.bokehPass_farClip=bokehPass.uniforms.farClip.value
+      // folder.add( params, 'bokehPass_farClip', 50000, 5000000 ).step( 1000 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.farClip.value=value
+      // } );
+
+      // params.bokehPass_nearClip=bokehPass.uniforms.nearClip.value
+      // folder.add( params, 'bokehPass_nearClip', 0, 50 ).step( 0.1 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.nearClip.value=value
+      // } );
+    }
+  }, {
+    key: "control_lut",
+    value: function control_lut(lutPass) {
+      console.log(lutPass);
+      var gui = this.gui;
+      var folder = gui.addFolder("LookupTable");
+      var params = this.params;
+      console.log(lutPass.uniforms.intensity.value, lutPass.uniforms.intensity, "lutPass.uniforms.intensity.value");
+      params.lutPass_intensity = lutPass.uniforms.intensity.value;
+      folder.add(params, 'lutPass_intensity', 0.0, 0.8).step(0.005).onChange(function (value) {
+        lutPass.uniforms.intensity.value = value;
+      });
+    }
+  }]);
+  return UI;
+}();
+exports.UI = UI;
+},{"three/examples/jsm/libs/lil-gui.module.min.js":"node_modules/three/examples/jsm/libs/lil-gui.module.min.js","three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -57526,6 +59840,8 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Godrays = /*#__PURE__*/function () {
   function Godrays(camera, scene) {
     _classCallCheck(this, Godrays);
+    this.filterLen = 1;
+    this.TAPS_PER_PASS = 6;
     this.camera = camera;
     this.scene = scene;
     this.clipPosition = new THREE.Vector4();
@@ -57748,9 +60064,9 @@ var Godrays = /*#__PURE__*/function () {
 
       // -- Render god-rays --
       // Maximum length of god-rays (in texture space [0,1]X[0,1])
-      var filterLen = 1.0; //1.0;
+      var filterLen = this.filterLen; // 1.0//1.0;
       // Samples taken by filter
-      var TAPS_PER_PASS = 6; //6.0; //filterLen * Math.pow( tapsPerPass, - pass );
+      var TAPS_PER_PASS = this.TAPS_PER_PASS; // 6//6.0; //filterLen * Math.pow( tapsPerPass, - pass );
       filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
       filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
       filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
@@ -57788,88 +60104,7 @@ var Godrays = /*#__PURE__*/function () {
   return Godrays;
 }();
 exports.Godrays = Godrays;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/shaders/GodRaysShader.js":"node_modules/three/examples/jsm/shaders/GodRaysShader.js"}],"node_modules/three/examples/jsm/postprocessing/Pass.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Pass = exports.FullScreenQuad = void 0;
-var _three = require("three");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var Pass = /*#__PURE__*/function () {
-  function Pass() {
-    _classCallCheck(this, Pass);
-    this.isPass = true;
-
-    // if set to true, the pass is processed by the composer
-    this.enabled = true;
-
-    // if set to true, the pass indicates to swap read and write buffer after rendering
-    this.needsSwap = true;
-
-    // if set to true, the pass clears its buffer before rendering
-    this.clear = false;
-
-    // if set to true, the result of the pass is rendered to screen. This is set automatically by EffectComposer.
-    this.renderToScreen = false;
-  }
-  _createClass(Pass, [{
-    key: "setSize",
-    value: function setSize( /* width, height */) {}
-  }, {
-    key: "render",
-    value: function render( /* renderer, writeBuffer, readBuffer, deltaTime, maskActive */
-    ) {
-      console.error('THREE.Pass: .render() must be implemented in derived pass.');
-    }
-  }, {
-    key: "dispose",
-    value: function dispose() {}
-  }]);
-  return Pass;
-}(); // Helper for passes that need to fill the viewport with a single quad.
-exports.Pass = Pass;
-var _camera = new _three.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-
-// https://github.com/mrdoob/three.js/pull/21358
-
-var _geometry = new _three.BufferGeometry();
-_geometry.setAttribute('position', new _three.Float32BufferAttribute([-1, 3, 0, -1, -1, 0, 3, -1, 0], 3));
-_geometry.setAttribute('uv', new _three.Float32BufferAttribute([0, 2, 0, 0, 2, 0], 2));
-var FullScreenQuad = /*#__PURE__*/function () {
-  function FullScreenQuad(material) {
-    _classCallCheck(this, FullScreenQuad);
-    this._mesh = new _three.Mesh(_geometry, material);
-  }
-  _createClass(FullScreenQuad, [{
-    key: "dispose",
-    value: function dispose() {
-      this._mesh.geometry.dispose();
-    }
-  }, {
-    key: "render",
-    value: function render(renderer) {
-      renderer.render(this._mesh, _camera);
-    }
-  }, {
-    key: "material",
-    get: function get() {
-      return this._mesh.material;
-    },
-    set: function set(value) {
-      this._mesh.material = value;
-    }
-  }]);
-  return FullScreenQuad;
-}();
-exports.FullScreenQuad = FullScreenQuad;
-},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/postprocessing/RenderPass.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/shaders/GodRaysShader.js":"node_modules/three/examples/jsm/shaders/GodRaysShader.js"}],"node_modules/three/examples/jsm/postprocessing/RenderPass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58509,32 +60744,7 @@ var SSAOBlurShader = {
   fragmentShader: "uniform sampler2D tDiffuse;\n\n\t\tuniform vec2 resolution;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvec2 texelSize = ( 1.0 / resolution );\n\t\t\tfloat result = 0.0;\n\n\t\t\tfor ( int i = - 2; i <= 2; i ++ ) {\n\n\t\t\t\tfor ( int j = - 2; j <= 2; j ++ ) {\n\n\t\t\t\t\tvec2 offset = ( vec2( float( i ), float( j ) ) ) * texelSize;\n\t\t\t\t\tresult += texture2D( tDiffuse, vUv + offset ).r;\n\n\t\t\t\t}\n\n\t\t\t}\n\n\t\t\tgl_FragColor = vec4( vec3( result / ( 5.0 * 5.0 ) ), 1.0 );\n\n\t\t}"
 };
 exports.SSAOBlurShader = SSAOBlurShader;
-},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/shaders/CopyShader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.CopyShader = void 0;
-/**
- * Full-screen textured quad shader
- */
-
-var CopyShader = {
-  name: 'CopyShader',
-  uniforms: {
-    'tDiffuse': {
-      value: null
-    },
-    'opacity': {
-      value: 1.0
-    }
-  },
-  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
-  fragmentShader: /* glsl */"\n\n\t\tuniform float opacity;\n\n\t\tuniform sampler2D tDiffuse;\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = texture2D( tDiffuse, vUv );\n\t\t\tgl_FragColor.a *= opacity;\n\n\n\t\t}"
-};
-exports.CopyShader = CopyShader;
-},{}],"node_modules/three/examples/jsm/postprocessing/SSAOPass.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/postprocessing/SSAOPass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -58898,7 +61108,277 @@ SSAOPass.OUTPUT = {
   'Depth': 4,
   'Normal': 5
 };
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../math/SimplexNoise.js":"node_modules/three/examples/jsm/math/SimplexNoise.js","../shaders/SSAOShader.js":"node_modules/three/examples/jsm/shaders/SSAOShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/postprocessing/MaskPass.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../math/SimplexNoise.js":"node_modules/three/examples/jsm/math/SimplexNoise.js","../shaders/SSAOShader.js":"node_modules/three/examples/jsm/shaders/SSAOShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/shaders/BokehShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.BokehShader = void 0;
+/**
+ * Depth-of-field shader with bokeh
+ * ported from GLSL shader by Martins Upitis
+ * http://artmartinsh.blogspot.com/2010/02/glsl-lens-blur-filter-with-bokeh.html
+ */
+
+var BokehShader = {
+  defines: {
+    'DEPTH_PACKING': 1,
+    'PERSPECTIVE_CAMERA': 1
+  },
+  uniforms: {
+    'tColor': {
+      value: null
+    },
+    'tDepth': {
+      value: null
+    },
+    'focus': {
+      value: 1.0
+    },
+    'aspect': {
+      value: 1.0
+    },
+    'aperture': {
+      value: 0.025
+    },
+    'maxblur': {
+      value: 0.01
+    },
+    'nearClip': {
+      value: 1.0
+    },
+    'farClip': {
+      value: 1000.0
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\t#include <common>\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tColor;\n\t\tuniform sampler2D tDepth;\n\n\t\tuniform float maxblur; // max blur amount\n\t\tuniform float aperture; // aperture - bigger values for shallower depth of field\n\n\t\tuniform float nearClip;\n\t\tuniform float farClip;\n\n\t\tuniform float focus;\n\t\tuniform float aspect;\n\n\t\t#include <packing>\n\n\t\tfloat getDepth( const in vec2 screenPosition ) {\n\t\t\t#if DEPTH_PACKING == 1\n\t\t\treturn unpackRGBAToDepth( texture2D( tDepth, screenPosition ) );\n\t\t\t#else\n\t\t\treturn texture2D( tDepth, screenPosition ).x;\n\t\t\t#endif\n\t\t}\n\n\t\tfloat getViewZ( const in float depth ) {\n\t\t\t#if PERSPECTIVE_CAMERA == 1\n\t\t\treturn perspectiveDepthToViewZ( depth, nearClip, farClip );\n\t\t\t#else\n\t\t\treturn orthographicDepthToViewZ( depth, nearClip, farClip );\n\t\t\t#endif\n\t\t}\n\n\n\t\tvoid main() {\n\n\t\t\tvec2 aspectcorrect = vec2( 1.0, aspect );\n\n\t\t\tfloat viewZ = getViewZ( getDepth( vUv ) );\n\n\t\t\tfloat factor = ( focus + viewZ ); // viewZ is <= 0, so this is a difference equation\n\n\t\t\tvec2 dofblur = vec2 ( clamp( factor * aperture, -maxblur, maxblur ) );\n\n\t\t\tvec2 dofblur9 = dofblur * 0.9;\n\t\t\tvec2 dofblur7 = dofblur * 0.7;\n\t\t\tvec2 dofblur4 = dofblur * 0.4;\n\n\t\t\tvec4 col = vec4( 0.0 );\n\n\t\t\tcol += texture2D( tColor, vUv.xy );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.15,  0.37 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.37,  0.15 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.40,  0.0  ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.37, -0.15 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.15, -0.37 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.15,  0.37 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.37,  0.15 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.37, -0.15 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.15, -0.37 ) * aspectcorrect ) * dofblur );\n\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.15,  0.37 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.37,  0.15 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.37, -0.15 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.15, -0.37 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.15,  0.37 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.37,  0.15 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.37, -0.15 ) * aspectcorrect ) * dofblur9 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.15, -0.37 ) * aspectcorrect ) * dofblur9 );\n\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.40,  0.0  ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur7 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur7 );\n\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29,  0.29 ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.4,   0.0  ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.29, -0.29 ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,  -0.4  ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29,  0.29 ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.4,   0.0  ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2( -0.29, -0.29 ) * aspectcorrect ) * dofblur4 );\n\t\t\tcol += texture2D( tColor, vUv.xy + ( vec2(  0.0,   0.4  ) * aspectcorrect ) * dofblur4 );\n\n\t\t\tgl_FragColor = col / 41.0;\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
+};
+exports.BokehShader = BokehShader;
+},{}],"node_modules/three/examples/jsm/postprocessing/BokehPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.BokehPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+var _BokehShader = require("../shaders/BokehShader.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+/**
+ * Depth-of-field post-process with bokeh shader
+ */
+var BokehPass = /*#__PURE__*/function (_Pass) {
+  _inherits(BokehPass, _Pass);
+  var _super = _createSuper(BokehPass);
+  function BokehPass(scene, camera, params) {
+    var _this;
+    _classCallCheck(this, BokehPass);
+    _this = _super.call(this);
+    _this.scene = scene;
+    _this.camera = camera;
+    var focus = params.focus !== undefined ? params.focus : 1.0;
+    var aspect = params.aspect !== undefined ? params.aspect : camera.aspect;
+    var aperture = params.aperture !== undefined ? params.aperture : 0.025;
+    var maxblur = params.maxblur !== undefined ? params.maxblur : 1.0;
+
+    // render targets
+
+    _this.renderTargetDepth = new _three.WebGLRenderTarget(1, 1, {
+      // will be resized later
+      minFilter: _three.NearestFilter,
+      magFilter: _three.NearestFilter,
+      type: _three.HalfFloatType
+    });
+    _this.renderTargetDepth.texture.name = 'BokehPass.depth';
+
+    // depth material
+
+    _this.materialDepth = new _three.MeshDepthMaterial();
+    _this.materialDepth.depthPacking = _three.RGBADepthPacking;
+    _this.materialDepth.blending = _three.NoBlending;
+
+    // bokeh material
+
+    var bokehShader = _BokehShader.BokehShader;
+    var bokehUniforms = _three.UniformsUtils.clone(bokehShader.uniforms);
+    bokehUniforms['tDepth'].value = _this.renderTargetDepth.texture;
+    bokehUniforms['focus'].value = focus;
+    bokehUniforms['aspect'].value = aspect;
+    bokehUniforms['aperture'].value = aperture;
+    bokehUniforms['maxblur'].value = maxblur;
+    bokehUniforms['nearClip'].value = camera.near;
+    bokehUniforms['farClip'].value = camera.far;
+    _this.materialBokeh = new _three.ShaderMaterial({
+      defines: Object.assign({}, bokehShader.defines),
+      uniforms: bokehUniforms,
+      vertexShader: bokehShader.vertexShader,
+      fragmentShader: bokehShader.fragmentShader
+    });
+    _this.uniforms = bokehUniforms;
+    _this.fsQuad = new _Pass2.FullScreenQuad(_this.materialBokeh);
+    _this._oldClearColor = new _three.Color();
+    return _this;
+  }
+  _createClass(BokehPass, [{
+    key: "render",
+    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive*/) {
+      // Render depth into texture
+
+      this.scene.overrideMaterial = this.materialDepth;
+      renderer.getClearColor(this._oldClearColor);
+      var oldClearAlpha = renderer.getClearAlpha();
+      var oldAutoClear = renderer.autoClear;
+      renderer.autoClear = false;
+      renderer.setClearColor(0xffffff);
+      renderer.setClearAlpha(1.0);
+      renderer.setRenderTarget(this.renderTargetDepth);
+      renderer.clear();
+      renderer.render(this.scene, this.camera);
+
+      // Render bokeh composite
+
+      this.uniforms['tColor'].value = readBuffer.texture;
+      this.uniforms['nearClip'].value = this.camera.near;
+      this.uniforms['farClip'].value = this.camera.far;
+      if (this.renderToScreen) {
+        renderer.setRenderTarget(null);
+        this.fsQuad.render(renderer);
+      } else {
+        renderer.setRenderTarget(writeBuffer);
+        renderer.clear();
+        this.fsQuad.render(renderer);
+      }
+      this.scene.overrideMaterial = null;
+      renderer.setClearColor(this._oldClearColor);
+      renderer.setClearAlpha(oldClearAlpha);
+      renderer.autoClear = oldAutoClear;
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(width, height) {
+      this.renderTargetDepth.setSize(width, height);
+    }
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      this.renderTargetDepth.dispose();
+      this.materialDepth.dispose();
+      this.materialBokeh.dispose();
+      this.fsQuad.dispose();
+    }
+  }]);
+  return BokehPass;
+}(_Pass2.Pass);
+exports.BokehPass = BokehPass;
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/BokehShader.js":"node_modules/three/examples/jsm/shaders/BokehShader.js"}],"node_modules/three/examples/jsm/postprocessing/LUTPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.LUTPass = void 0;
+var _ShaderPass2 = require("./ShaderPass.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var LUTShader = {
+  defines: {
+    USE_3DTEXTURE: 1
+  },
+  uniforms: {
+    lut3d: {
+      value: null
+    },
+    lut: {
+      value: null
+    },
+    lutSize: {
+      value: 0
+    },
+    tDiffuse: {
+      value: null
+    },
+    intensity: {
+      value: 1.0
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}\n\n\t",
+  fragmentShader: /* glsl */"\n\n\t\tuniform float lutSize;\n\t\t#if USE_3DTEXTURE\n\t\tprecision highp sampler3D;\n\t\tuniform sampler3D lut3d;\n\t\t#else\n\t\tuniform sampler2D lut;\n\n\t\tvec3 lutLookup( sampler2D tex, float size, vec3 rgb ) {\n\n\t\t\tfloat sliceHeight = 1.0 / size;\n\t\t\tfloat yPixelHeight = 1.0 / ( size * size );\n\n\t\t\t// Get the slices on either side of the sample\n\t\t\tfloat slice = rgb.b * size;\n\t\t\tfloat interp = fract( slice );\n\t\t\tfloat slice0 = slice - interp;\n\t\t\tfloat centeredInterp = interp - 0.5;\n\n\t\t\tfloat slice1 = slice0 + sign( centeredInterp );\n\n\t\t\t// Pull y sample in by half a pixel in each direction to avoid color\n\t\t\t// bleeding from adjacent slices.\n\t\t\tfloat greenOffset = clamp( rgb.g * sliceHeight, yPixelHeight * 0.5, sliceHeight - yPixelHeight * 0.5 );\n\n\t\t\tvec2 uv0 = vec2(\n\t\t\t\trgb.r,\n\t\t\t\tslice0 * sliceHeight + greenOffset\n\t\t\t);\n\t\t\tvec2 uv1 = vec2(\n\t\t\t\trgb.r,\n\t\t\t\tslice1 * sliceHeight + greenOffset\n\t\t\t);\n\n\t\t\tvec3 sample0 = texture2D( tex, uv0 ).rgb;\n\t\t\tvec3 sample1 = texture2D( tex, uv1 ).rgb;\n\n\t\t\treturn mix( sample0, sample1, abs( centeredInterp ) );\n\n\t\t}\n\t\t#endif\n\n\t\tvarying vec2 vUv;\n\t\tuniform float intensity;\n\t\tuniform sampler2D tDiffuse;\n\t\tvoid main() {\n\n\t\t\tvec4 val = texture2D( tDiffuse, vUv );\n\t\t\tvec4 lutVal;\n\n\t\t\t// pull the sample in by half a pixel so the sample begins\n\t\t\t// at the center of the edge pixels.\n\t\t\tfloat pixelWidth = 1.0 / lutSize;\n\t\t\tfloat halfPixelWidth = 0.5 / lutSize;\n\t\t\tvec3 uvw = vec3( halfPixelWidth ) + val.rgb * ( 1.0 - pixelWidth );\n\n\t\t\t#if USE_3DTEXTURE\n\n\t\t\tlutVal = vec4( texture( lut3d, uvw ).rgb, val.a );\n\n\t\t\t#else\n\n\t\t\tlutVal = vec4( lutLookup( lut, lutSize, uvw ), val.a );\n\n\t\t\t#endif\n\n\t\t\tgl_FragColor = vec4( mix( val, lutVal, intensity ) );\n\n\t\t}\n\n\t"
+};
+var LUTPass = /*#__PURE__*/function (_ShaderPass) {
+  _inherits(LUTPass, _ShaderPass);
+  var _super = _createSuper(LUTPass);
+  function LUTPass(options = {}) {
+    var _this;
+    _classCallCheck(this, LUTPass);
+    _this = _super.call(this, LUTShader);
+    _this.lut = options.lut || null;
+    _this.intensity = 'intensity' in options ? options.intensity : 1;
+    return _this;
+  }
+  _createClass(LUTPass, [{
+    key: "lut",
+    get: function get() {
+      return this.material.uniforms.lut.value || this.material.uniforms.lut3d.value;
+    },
+    set: function set(v) {
+      var material = this.material;
+      if (v !== this.lut) {
+        material.uniforms.lut3d.value = null;
+        material.uniforms.lut.value = null;
+        if (v) {
+          var is3dTextureDefine = v.isData3DTexture ? 1 : 0;
+          if (is3dTextureDefine !== material.defines.USE_3DTEXTURE) {
+            material.defines.USE_3DTEXTURE = is3dTextureDefine;
+            material.needsUpdate = true;
+          }
+          material.uniforms.lutSize.value = v.image.width;
+          if (v.isData3DTexture) {
+            material.uniforms.lut3d.value = v;
+          } else {
+            material.uniforms.lut.value = v;
+          }
+        }
+      }
+    }
+  }, {
+    key: "intensity",
+    get: function get() {
+      return this.material.uniforms.intensity.value;
+    },
+    set: function set(v) {
+      this.material.uniforms.intensity.value = v;
+    }
+  }]);
+  return LUTPass;
+}(_ShaderPass2.ShaderPass);
+exports.LUTPass = LUTPass;
+},{"./ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js"}],"node_modules/three/examples/jsm/postprocessing/MaskPass.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -59939,6 +62419,10 @@ var THREE = _interopRequireWildcard(require("three"));
 var _RenderPass = require("three/examples/jsm/postprocessing/RenderPass.js");
 var _ShaderPass = require("three/examples/jsm/postprocessing/ShaderPass.js");
 var _SSAOPass = require("three/examples/jsm/postprocessing/SSAOPass.js");
+var _SAOPass = require("three/examples/jsm/postprocessing/SAOPass.js");
+var _SSRPass = require("three/examples/jsm/postprocessing/SSRPass.js");
+var _BokehPass = require("three/examples/jsm/postprocessing/BokehPass.js");
+var _LUTPass = require("three/examples/jsm/postprocessing/LUTPass.js");
 var _MyEffectComposer = require("./src/MyEffectComposer.js");
 var _MyUnrealBloomPass = require("./src/MyUnrealBloomPass.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -59963,10 +62447,8 @@ var UnrealBloom = /*#__PURE__*/function () {
     value: function initComposer(renderer) {
       //设置光晕
       console.log(renderer);
-      var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
-      composer.addPass(new _RenderPass.RenderPass(scene, camera));
-      composer.addPass(this.getSSAO());
-      composer.addPass(new _MyUnrealBloomPass.MyUnrealBloomPass(
+      this.renderPass = new _RenderPass.RenderPass(scene, camera);
+      this.bloomPass = new _MyUnrealBloomPass.MyUnrealBloomPass(
       //创建通道
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       //参数一：泛光覆盖场景大小，二维向量类型
@@ -59975,8 +62457,22 @@ var UnrealBloom = /*#__PURE__*/function () {
       2,
       //0.3,//参数三：bloomRadius 泛光散发半径
       0 //0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
-      ));
+      );
 
+      this.ssrPass = this.getSSR();
+      this.saoPass = this.getSAO();
+      this.bokehPass = this.getDOF();
+      this.lutPass = this.getLUT();
+      var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
+      composer.addPass(this.renderPass);
+      // composer.addPass(
+      //     this.saoPass
+      // );
+
+      composer.addPass(this.ssrPass);
+      composer.addPass(this.lutPass);
+      composer.addPass(this.bokehPass);
+      composer.addPass(this.bloomPass);
       return composer;
     }
   }, {
@@ -59993,6 +62489,70 @@ var UnrealBloom = /*#__PURE__*/function () {
       // saoPass.params.saoMinResolution = 0;
       // saoPass.params.saoBlur = true;
       return saoPass;
+    }
+  }, {
+    key: "getSAO",
+    value: function getSAO() {
+      var saoPass = new _SAOPass.SAOPass(this.scene, this.camera, false, true);
+      //(scene: Scene, camera: Camera, depthTexture?: boolean, useNormals?: boolean, resolution?: Vector2);
+      saoPass.saoBias = 0.5;
+      saoPass.saoIntensity = 0.18;
+      saoPass.saoScale = 1;
+      saoPass.saoKernelRadius = 100;
+      saoPass.saoMinResolution = 0;
+      saoPass.saoBlur = true;
+      saoPass.saoBlurRadius = 8;
+      saoPass.saoBlurStdDev = 4;
+      saoPass.saoBlurDepthCutoff = 0.001;
+      return saoPass;
+    }
+  }, {
+    key: "getSSR",
+    value: function getSSR() {
+      var ssrPass = new _SSRPass.SSRPass({
+        renderer: this.renderer,
+        scene: this.scene,
+        camera: this.camera,
+        width: window.innerWidth,
+        height: window.innerHeight,
+        groundReflector: null,
+        //params.groundReflector ? groundReflector : null,
+        selects: null //params.groundReflector ? selects : null
+      });
+
+      ssrPass.opacity = 0.1;
+      ssrPass.distanceAttenuation = true;
+      ssrPass.maxDistance = 100; //.1;
+      return ssrPass;
+    }
+  }, {
+    key: "getDOF",
+    value: function getDOF() {
+      //depth of field with bokeh 散焦景深
+      var bokehPass = new _BokehPass.BokehPass(scene, camera, {
+        focus: 0.5,
+        //1.0,
+        aperture: 0,
+        //0.025,
+        maxblur: 0.01,
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+      return bokehPass;
+    }
+  }, {
+    key: "getLUT",
+    value: function getLUT() {
+      //
+      var lutPass = new _LUTPass.LUTPass();
+      lutPass.uniforms.intensity.value = 0; //0.1
+      // lutPass.uniforms.intensity=1
+      // lutPass.uniforms.lut=1
+      // lutPass.uniforms.lut3d=1
+      // lutPass.uniforms.lutSize=1
+      // lutPass.uniforms.tDiffuse=1
+      // console.log(lutPass,"lutPass")
+      return lutPass;
     }
   }, {
     key: "initComposer2",
@@ -60059,7 +62619,7 @@ var UnrealBloom = /*#__PURE__*/function () {
   return UnrealBloom;
 }();
 exports.UnrealBloom = UnrealBloom;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/BokehPass.js":"node_modules/three/examples/jsm/postprocessing/BokehPass.js","three/examples/jsm/postprocessing/LUTPass.js":"node_modules/three/examples/jsm/postprocessing/LUTPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -60081,6 +62641,9 @@ function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input ==
 var Postprocessing = /*#__PURE__*/function () {
   function Postprocessing(camera, scene, renderer) {
     _classCallCheck(this, Postprocessing);
+    this.godrays_stength = {
+      value: 0.3
+    };
     this.unrealBloom = new _UnrealBloom.UnrealBloom(camera, scene, renderer);
     this.godrays = new _Godrays.Godrays(camera, scene);
     this.init();
@@ -60128,10 +62691,11 @@ var Postprocessing = /*#__PURE__*/function () {
             },
             textureGodrays: {
               value: null
-            }
+            },
+            godrays_stength: this.godrays_stength
           },
           vertexShader: /* glsl */"\n                    varying vec2 vUv;\n                    void main() {\n                        vUv = uv;\n                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n                    }",
-          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D textureBloom;\n                    uniform sampler2D textureGodrays;\n                    void main() {\n                        vec4 bloom=texture2D( textureBloom, vUv );\n                        // bloom=1.-bloom;\n                        // if(bloom.r>0.3)bloom=vec4(0.3);\n                        gl_FragColor = 0.3*bloom +texture2D( textureGodrays, vUv );\n                        gl_FragColor.a = 1.0;\n                        // gl_FragColor.r = 1.0;\n                    }"
+          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D textureBloom;\n                    uniform sampler2D textureGodrays;\n                    uniform float godrays_stength;\n                    void main() {\n                        vec4 bloom=texture2D( textureBloom, vUv );\n                        // bloom=1.-bloom;\n                        // if(bloom.r>0.3)bloom=vec4(0.3);\n                        gl_FragColor = godrays_stength*bloom +texture2D( textureGodrays, vUv );\n                        gl_FragColor.a = 1.0;\n                        // gl_FragColor.r = 1.0;\n                    }"
         });
       }
       this.materialTest.uniforms['textureBloom'].value = textureBloom; //renderTarget.texture
@@ -60160,10 +62724,10 @@ var _PlayerControl = require("../../lib/playerControl/PlayerControl.js");
 var _Building = require("./Building.js");
 var _LightProducer = require("./LightProducer.js");
 var _Panel = require("./Panel.js");
+var _UI = require("./UI.js");
 var _MoveManager = require("../../lib/playerControl/MoveManager.js");
 var _SkyController = require("../../lib/threejs/SkyController");
 var _Postprocessing = require("./postprocessing/Postprocessing.js");
-var _UnrealBloom = require("./postprocessing/UnrealBloom.js");
 var _RGBELoader = require("three/examples/jsm/loaders/RGBELoader.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
@@ -60179,6 +62743,7 @@ function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _ty
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 // import {AvatarManager } from './AvatarManager.js'
+// import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 var Main = /*#__PURE__*/function () {
   function Main(body) {
@@ -60189,8 +62754,8 @@ var Main = /*#__PURE__*/function () {
     this.canvas = document.getElementById('myCanvas');
     window.addEventListener('resize', this.resize.bind(this), false);
     this.initScene();
-    this.Postprocessing = new _Postprocessing.Postprocessing(this.camera, this.scene, this.renderer);
-    // this.unrealBloom=new UnrealBloom(this.camera,this.scene)
+    this.postprocessing = new _Postprocessing.Postprocessing(this.camera, this.scene, this.renderer);
+    // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
     this.animate = this.animate.bind(this);
     requestAnimationFrame(this.animate);
@@ -60198,9 +62763,10 @@ var Main = /*#__PURE__*/function () {
     // this.initSky()
     this.initWander();
     this.panel = new _Panel.Panel(this);
-    new _LightProducer.LightProducer(this.scene, this.camera);
+    this.lightProducer = new _LightProducer.LightProducer(this.scene, this.camera);
     this.building = new _Building.Building(this.scene, this.camera);
     if (typeof AvatarManager !== "undefined") new AvatarManager(this.scene, this.camera);
+    this.ui = new _UI.UI(this);
   }
   _createClass(Main, [{
     key: "initScene",
@@ -60238,6 +62804,7 @@ var Main = /*#__PURE__*/function () {
               this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
               this.renderer.shadowMap.autoUpdate = true;
               this.renderer.tonemapping = THREE.NoToneMapping;
+              //this.renderer.toneMapping = THREE.ReinhardToneMapping;this.renderer.toneMappingExposure=2.14
               this.renderer.setScissorTest = true;
               this.renderer.outputEncoding = THREE.sRGBEncoding;
               this.body.appendChild(this.renderer.domElement);
@@ -60343,7 +62910,7 @@ var Main = /*#__PURE__*/function () {
         } else {
           // renderer.render(this.scene,this.camera)
           // this.unrealBloom.render()
-          this.Postprocessing.render();
+          this.postprocessing.render();
           //this.godrays.render()
         }
       }
@@ -60397,40 +62964,39 @@ var Main = /*#__PURE__*/function () {
     }
   }]);
   return Main;
-}();
+}(); // document.addEventListener('DOMContentLoaded', () => {
 exports.Main = Main;
-document.addEventListener('DOMContentLoaded', function () {
-  var getParam = function getParam(id) {
-    id = id + "=";
-    return window.location.search.split(id).length > 1 ? window.location.search.split(id)[1].split("&")[0] : null;
+var getParam = function getParam(id) {
+  id = id + "=";
+  return window.location.search.split(id).length > 1 ? window.location.search.split(id)[1].split("&")[0] : null;
+};
+var config = getParam('scene') == "haiNing0" ? _configOP.default : getParam('scene') == "haiNing" ? _configOP2.default : _configOP3.default;
+config.src.main.speed = getParam('speed') ? getParam('speed') : config.src.main.speed;
+config.src.main.autoMove = getParam('autoMove');
+config.src.main.render = getParam('render');
+config.src.Detection.backURL = getParam('backURL');
+if (getParam('list2Len')) config.src.Visibility.list2Len = parseFloat(getParam('list2Len'));
+if (getParam('testTime')) config.src.Detection.testTime = parseFloat(getParam('testTime'));
+if (getParam('maxBackDelay')) config.src.Detection.maxBackDelay = parseFloat(getParam('maxBackDelay'));
+if (getParam('backURL') !== null) {
+  //backURL需要将autoMove参数传回
+  var backURL = getParam('backURL');
+  var add = function add(tag) {
+    var value = getParam(tag);
+    if (value !== null) {
+      if (backURL.split('?').length > 1) backURL += "&";else backURL += "?";
+      backURL = backURL + tag + "=" + value;
+    }
   };
-  var config = getParam('scene') == "haiNing0" ? _configOP.default : getParam('scene') == "haiNing" ? _configOP2.default : _configOP3.default;
-  config.src.main.speed = getParam('speed') ? getParam('speed') : config.src.main.speed;
-  config.src.main.autoMove = getParam('autoMove');
-  config.src.main.render = getParam('render');
-  config.src.Detection.backURL = getParam('backURL');
-  if (getParam('list2Len')) config.src.Visibility.list2Len = parseFloat(getParam('list2Len'));
-  if (getParam('testTime')) config.src.Detection.testTime = parseFloat(getParam('testTime'));
-  if (getParam('maxBackDelay')) config.src.Detection.maxBackDelay = parseFloat(getParam('maxBackDelay'));
-  if (getParam('backURL') !== null) {
-    //backURL需要将autoMove参数传回
-    var backURL = getParam('backURL');
-    var add = function add(tag) {
-      var value = getParam(tag);
-      if (value !== null) {
-        if (backURL.split('?').length > 1) backURL += "&";else backURL += "?";
-        backURL = backURL + tag + "=" + value;
-      }
-    };
-    add('autoMove');
-    add('userId');
-    config.src.Detection.backURL = backURL;
-  }
-  config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial;
-  window.configALL = config;
-  new Main(document.body);
-});
-},{"../../config/LoadingProgressive/configOP6.json":"config/LoadingProgressive/configOP6.json","../../config/LoadingProgressive/configOP7.json":"config/LoadingProgressive/configOP7.json","../../config/LoadingProgressive/configOP8.json":"config/LoadingProgressive/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js","./postprocessing/Postprocessing.js":"src/LoadingProgressive/postprocessing/Postprocessing.js","./postprocessing/UnrealBloom.js":"src/LoadingProgressive/postprocessing/UnrealBloom.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+  add('autoMove');
+  add('userId');
+  config.src.Detection.backURL = backURL;
+}
+config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial;
+window.configALL = config;
+new Main(document.body);
+// })
+},{"../../config/LoadingProgressive/configOP6.json":"config/LoadingProgressive/configOP6.json","../../config/LoadingProgressive/configOP7.json":"config/LoadingProgressive/configOP7.json","../../config/LoadingProgressive/configOP8.json":"config/LoadingProgressive/configOP8.json","three":"node_modules/three/build/three.module.js","three/examples/jsm/libs/stats.module.js":"node_modules/three/examples/jsm/libs/stats.module.js","../../lib/playerControl/PlayerControl.js":"lib/playerControl/PlayerControl.js","./Building.js":"src/LoadingProgressive/Building.js","./LightProducer.js":"src/LoadingProgressive/LightProducer.js","./Panel.js":"src/LoadingProgressive/Panel.js","./UI.js":"src/LoadingProgressive/UI.js","../../lib/playerControl/MoveManager.js":"lib/playerControl/MoveManager.js","../../lib/threejs/SkyController":"lib/threejs/SkyController.js","./postprocessing/Postprocessing.js":"src/LoadingProgressive/postprocessing/Postprocessing.js","three/examples/jsm/loaders/RGBELoader.js":"node_modules/three/examples/jsm/loaders/RGBELoader.js"}],"node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -60455,7 +63021,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61427" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52520" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

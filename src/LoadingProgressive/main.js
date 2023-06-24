@@ -9,12 +9,13 @@ import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
+import {UI } from './UI.js'
 // import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
 import{Postprocessing}from"./postprocessing/Postprocessing.js"
-import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+// import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
@@ -28,9 +29,8 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        
-        this.Postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene)
+        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
@@ -39,10 +39,12 @@ export class Main{
         // this.initSky()
         this.initWander()
         this.panel=new Panel(this)
-        new LightProducer(this.scene,this.camera)
+        this.lightProducer=new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
         if(typeof AvatarManager!=="undefined")
             new AvatarManager(this.scene,this.camera)
+
+        this.ui=new UI(this)
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -73,8 +75,10 @@ export class Main{
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
 		this.renderer.shadowMap.autoUpdate = true;
 		this.renderer.tonemapping = THREE.NoToneMapping;
+        //this.renderer.toneMapping = THREE.ReinhardToneMapping;this.renderer.toneMappingExposure=2.14
 		this.renderer.setScissorTest = true;
 		this.renderer.outputEncoding = THREE.sRGBEncoding;
+        
         this.body.appendChild(this.renderer.domElement)
         window.renderer=this.renderer
         //////////////////
@@ -201,7 +205,7 @@ export class Main{
                 }else{
                     // renderer.render(this.scene,this.camera)
                     // this.unrealBloom.render()
-                    this.Postprocessing.render()
+                    this.postprocessing.render()
                     //this.godrays.render()
                 }                  
         }
@@ -251,7 +255,7 @@ export class Main{
         
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -289,4 +293,4 @@ document.addEventListener('DOMContentLoaded', () => {
     config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
     window.configALL=config
     new Main(document.body)
-})
+// })

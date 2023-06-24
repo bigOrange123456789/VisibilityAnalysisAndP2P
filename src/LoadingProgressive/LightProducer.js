@@ -91,11 +91,12 @@ class LightProducer{
         this.objectMove.add( directionalLight )
         // directionalLight.target = new THREE.Object3D();
         // directionalLight.target.origin=new THREE.Object3D(10,10,10)
-        directionalLight.target.position.set(10,-5,10)
+        directionalLight.target.position.set(1,-0.5,1)
         
         window.target=directionalLight.target
         this.targetList.push(directionalLight.target)
         this.objectMove.add( directionalLight.target )
+        this.directionalLight=directionalLight
         
 
 

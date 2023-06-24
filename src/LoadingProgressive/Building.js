@@ -210,6 +210,7 @@ export class Building{
             bumpScale: 1,
             displacementBias:0,
             displacementScale: 1,
+
             emissiveIntensity: 1,
             envMapIntensity:1,
             metalness: 0.95,
@@ -223,6 +224,10 @@ export class Building{
             mesh.material.roughness=0
             mesh.material.envMapIntensity=0
         }
+        mesh.material.metalness0=mesh.material.metalness//-0.5
+        mesh.material.roughness0=mesh.material.roughness//-0.5
+        mesh.material.envMapIntensity0=mesh.material.envMapIntensity//-0.5
+        mesh.material.emissiveIntensity0=mesh.material.emissiveIntensity//-0.5
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
         
         // mesh.material.shininess = 10;

@@ -9,6 +9,7 @@ import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
+        this.godrays_stength={ value: 0.3 }
         this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays=new Godrays(camera,scene)
         this.init()
@@ -51,7 +52,8 @@ export class Postprocessing{
             this.materialTest = new THREE.ShaderMaterial( {//假太阳？
                 uniforms: {
                     textureBloom: {value: null},
-                    textureGodrays:{value: null}
+                    textureGodrays:{value: null},
+                    godrays_stength: this.godrays_stength,
                 },
                 vertexShader: /* glsl */`
                     varying vec2 vUv;
@@ -63,11 +65,12 @@ export class Postprocessing{
                     varying vec2 vUv;
                     uniform sampler2D textureBloom;
                     uniform sampler2D textureGodrays;
+                    uniform float godrays_stength;
                     void main() {
                         vec4 bloom=texture2D( textureBloom, vUv );
                         // bloom=1.-bloom;
                         // if(bloom.r>0.3)bloom=vec4(0.3);
-                        gl_FragColor = 0.3*bloom +texture2D( textureGodrays, vUv );
+                        gl_FragColor = godrays_stength*bloom +texture2D( textureGodrays, vUv );
                         gl_FragColor.a = 1.0;
                         // gl_FragColor.r = 1.0;
                     }`

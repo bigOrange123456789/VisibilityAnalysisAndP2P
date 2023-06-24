@@ -4,6 +4,8 @@ import {
 } from 'three/examples/jsm/shaders/GodRaysShader.js';
 export class Godrays{
     constructor(camera,scene){
+        this.filterLen=1
+        this.TAPS_PER_PASS=6
         this.camera=camera
         this.scene=scene
         this.clipPosition = new THREE.Vector4();
@@ -219,9 +221,9 @@ export class Godrays{
         
         // -- Render god-rays --
         // Maximum length of god-rays (in texture space [0,1]X[0,1])
-        const filterLen = 1.0//1.0;
+        const filterLen =this.filterLen// 1.0//1.0;
         // Samples taken by filter
-        const TAPS_PER_PASS = 6//6.0; //filterLen * Math.pow( tapsPerPass, - pass );
+        const TAPS_PER_PASS =this.TAPS_PER_PASS// 6//6.0; //filterLen * Math.pow( tapsPerPass, - pass );
         filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize( filterLen, TAPS_PER_PASS, 1.0 ) );
         filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize( filterLen, TAPS_PER_PASS, 2.0 ) );
         filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize( filterLen, TAPS_PER_PASS, 3.0 ) );
