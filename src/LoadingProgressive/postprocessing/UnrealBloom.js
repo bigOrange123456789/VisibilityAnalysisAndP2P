@@ -30,30 +30,34 @@ export class UnrealBloom{
             )
         this.ssrPass=this.getSSR()
         this.saoPass=this.getSAO()
+        this.ssaoPass=this.getSSAO()
+        console.log("this.ssaoPass",this.ssaoPass)
         this.bokehPass=this.getDOF()
         this.lutPass=this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
+        
         composer.addPass(
-            this.renderPass
+            this.ssaoPass
         );
+
         // composer.addPass(
-        //     this.saoPass
+        //     this.renderPass
         // );
         
 
-        composer.addPass(
-            this.ssrPass
-        );
-        composer.addPass(
-            this.lutPass
-        );
+        // composer.addPass(
+        //     this.ssrPass
+        // );
+        // composer.addPass(
+        //     this.lutPass
+        // );
         
-        composer.addPass(
-            this.bokehPass
-        );
-        composer.addPass(
-            this.bloomPass
-        );
+        // composer.addPass(
+        //     this.bokehPass
+        // );
+        // composer.addPass(
+        //     this.bloomPass
+        // );
         
         return composer
     }

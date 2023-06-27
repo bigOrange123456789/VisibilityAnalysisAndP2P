@@ -2,6 +2,7 @@ import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'//dat.gui.mod
 import * as THREE from "three";
 import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
+import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
 export class UI{
     constructor(main) {
         this.gui = new GUI();
@@ -29,10 +30,11 @@ export class UI{
         this.control_directionalLight(main.lightProducer.directionalLight)
         this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
         this.control_godrays(main.postprocessing.godrays,main.postprocessing)
-        this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
-        this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
-        this.control_lut(main.postprocessing.unrealBloom.lutPass)
+        // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+        // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
+        // this.control_lut(main.postprocessing.unrealBloom.lutPass)
         //this.control_sao(main.postprocessing.unrealBloom.saoPass)
+        this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
     }
     control_camera(camera,playerControl) {
         var viewpointState = {
@@ -305,15 +307,35 @@ export class UI{
         // } );
     }
     control_lut(lutPass){
-        console.log(lutPass)
         const gui=this.gui
         const folder = gui.addFolder("LookupTable")
         const params=this.params
-        console.log(lutPass.uniforms.intensity.value,lutPass.uniforms.intensity,"lutPass.uniforms.intensity.value")
         params.lutPass_intensity=lutPass.uniforms.intensity.value
         folder.add( params, 'lutPass_intensity', 0.0, 0.8 ).step( 0.005 ).onChange( function ( value ) {
             lutPass.uniforms.intensity.value=value
         } );
+    }
+    control_ssao(ssaoPass){
+        const gui=this.gui
+        const folder = gui.addFolder("屏幕空间环境光遮蔽")
+
+
+        folder.add( ssaoPass, 'output', {
+            'Default': SSAOPass.OUTPUT.Default,
+            'SSAO Only': SSAOPass.OUTPUT.SSAO,
+            'SSAO Only + Blur': SSAOPass.OUTPUT.Blur,
+            'Beauty': SSAOPass.OUTPUT.Beauty,
+            'Depth': SSAOPass.OUTPUT.Depth,
+            'Normal': SSAOPass.OUTPUT.Normal
+        } ).onChange( function ( value ) {
+
+            ssaoPass.output = parseInt( value );
+
+        } );
+        folder.add( ssaoPass, 'kernelRadius' ).min( 0 ).max( 32 );
+        folder.add( ssaoPass, 'minDistance' ).min( 0.001 ).max( 0.02 );
+        folder.add( ssaoPass, 'maxDistance' ).min( 0.01 ).max( 0.3 );
+        
     }
 
 

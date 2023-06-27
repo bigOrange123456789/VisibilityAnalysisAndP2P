@@ -59034,1225 +59034,7 @@ SAOPass.OUTPUT = {
   'Depth': 3,
   'Normal': 4
 };
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/SAOShader.js":"node_modules/three/examples/jsm/shaders/SAOShader.js","../shaders/DepthLimitedBlurShader.js":"node_modules/three/examples/jsm/shaders/DepthLimitedBlurShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js","../shaders/UnpackDepthRGBAShader.js":"node_modules/three/examples/jsm/shaders/UnpackDepthRGBAShader.js"}],"src/LoadingProgressive/UI.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.UI = void 0;
-var _lilGuiModuleMin = require("three/examples/jsm/libs/lil-gui.module.min.js");
-var THREE = _interopRequireWildcard(require("three"));
-var _SSRPass = require("three/examples/jsm/postprocessing/SSRPass.js");
-var _SAOPass = require("three/examples/jsm/postprocessing/SAOPass.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //dat.gui.module.js';
-var UI = /*#__PURE__*/function () {
-  function UI(main) {
-    _classCallCheck(this, UI);
-    this.gui = new _lilGuiModuleMin.GUI();
-    window.gui = this.gui;
-    window.panelDiv = this.gui.domElement;
-    this.params = {
-      exposure: 1,
-      bloomStrength: 1.5,
-      bloomThreshold: 0,
-      bloomRadius: 0
-    };
-    this.init(main);
-  }
-  _createClass(UI, [{
-    key: "init",
-    value: function init(main) {
-      this.gui.domElement.addEventListener('mouseover', function (event) {
-        window.inPanel = true;
-      }, false);
-      this.gui.domElement.addEventListener('mouseout', function (event) {
-        window.inPanel = false;
-      }, false);
-      this.control_camera(main.camera, main.playerControl);
-      this.control_envMap(main.scene);
-      // this.control_renderer(main.renderer)
-      this.control_directionalLight(main.lightProducer.directionalLight);
-      this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass);
-      this.control_godrays(main.postprocessing.godrays, main.postprocessing);
-      this.control_ssr(main.postprocessing.unrealBloom.ssrPass);
-      this.control_bokeh(main.postprocessing.unrealBloom.bokehPass);
-      this.control_lut(main.postprocessing.unrealBloom.lutPass);
-      //this.control_sao(main.postprocessing.unrealBloom.saoPass)
-    }
-  }, {
-    key: "control_camera",
-    value: function control_camera(camera, playerControl) {
-      var viewpointState = {
-        viewpoint: "默认视点",
-        mode: 'viewpoint'
-      };
-      var list_viewpoint = ["默认视点", "视点1", "视点2", "视点3", "视点4", "视点5", "视点6", "视点7"];
-      var camera_pos = [new THREE.Vector3(-43.486343682038736, 2.127206120237504, -8.698678933445201), new THREE.Vector3(48.55640273290092, 1.9142025592268763, -7.314690567468844), new THREE.Vector3(47.298827892375, 1.7232932395224025, -7.348360792773678), new THREE.Vector3(-58.92759054201366, 39.57529059951184, -130.21318894586796), new THREE.Vector3(-1.0911605157232827, 0.7075214699744158, -99.90313103529786), new THREE.Vector3(-64.39189399430883, 8.99856114154391, -74.3016535116766), new THREE.Vector3(-1.5994877198648538, 1.4997407676957795, -77.1512219063800), new THREE.Vector3(-54.63874349381954, 18.532468360185952, 46.071540822)];
-      var camera_tar = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(0, 0, 0), new THREE.Vector3(-0.9868855788301696, 0.7075214699744165, -99.03513139079297), new THREE.Vector3(-65.34712509322323, 9.472649100434154, -69.41033714095124), new THREE.Vector3(-1.9992580266994615, 1.6314769709077197, -59.25814512545), new THREE.Vector3(-66.03747192556759, 9.679838586814231, 41.845030134054)];
-      var gui = this.gui;
-      var folder = gui.addFolder("camera");
-      folder.add(viewpointState, 'viewpoint').options(list_viewpoint).onChange(function () {
-        var id = 0;
-        for (var i = 0; i < 7; i++) {
-          if (viewpointState.viewpoint == list_viewpoint[i]) id = i;
-        }
-        camera.position.copy(camera_pos[id]);
-        camera.lookAt(camera_tar[id]);
-      });
-      var opt2 = ["viewpoint", "model"];
-      folder.add(viewpointState, 'mode').options(opt2).onChange(function () {
-        var id = 0;
-        for (var i = 0; i < 7; i++) {
-          if (viewpointState.mode == opt2[i]) id = i;
-        }
-        playerControl.mode.set(viewpointState.mode);
-      });
-    }
-  }, {
-    key: "control_envMap",
-    value: function control_envMap(scene) {
-      var gui = this.gui;
-      var params = this.params;
-      params.metalness = 0.95; //0.5
-      params.roughness = 0.5;
-      params.envMapIntensity = 1; //0.5
-      // params.emissiveIntensity=0.5
-      var folder = gui.addFolder("材质");
-      folder.add(params, 'metalness', 0.0, 3.).step(0.005).onChange(function (value) {
-        scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
-            var material = node.material;
-            material.metalness = material.metalness0 + value;
-          }
-        });
-      });
-      folder.add(params, 'roughness', -2.0, 3.).step(0.005).onChange(function (value) {
-        scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
-            var material = node.material;
-            material.roughness = material.roughness0 + value;
-          }
-        });
-      });
-      folder.add(params, 'envMapIntensity', -1.0, 4.).step(0.005).onChange(function (value) {
-        scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
-            var material = node.material;
-            material.envMapIntensity = material.envMapIntensity0 + value;
-          }
-        });
-      });
-    }
-  }, {
-    key: "control_directionalLight",
-    value: function control_directionalLight(directionalLight) {
-      var gui = this.gui;
-      var params = this.params;
-      var directionFolder = gui.addFolder('平行光');
-      /*color*/
-      params['平行光颜色'] = directionalLight.color;
-      directionFolder.addColor(params, '平行光颜色').onChange(function (e) {
-        directionalLight.color = new THREE.Color(e);
-      });
-      /*power*/
-      params['平行光强度'] = directionalLight.intensity;
-      directionFolder.add(params, '平行光强度', 0.0, 10.0).step(0.1).onChange(function (e) {
-        directionalLight.intensity = e;
-      });
-      /*direction*/
-      params['平行光方向X'] = directionalLight.target.position.x - directionalLight.position.x;
-      directionFolder.add(params, '平行光方向X', -1.0, 1.0).step(0.01).onChange(function (e) {
-        directionalLight.target.position.x = directionalLight.position.x + e;
-      });
-      params['平行光方向Y'] = directionalLight.target.position.y - directionalLight.position.y;
-      directionFolder.add(params, '平行光方向Y', -1.0, -0.6).step(0.01).onChange(function (e) {
-        directionalLight.target.position.y = directionalLight.position.y + e;
-      });
-      params['平行光方向Z'] = directionalLight.target.position.z - directionalLight.position.z;
-      directionFolder.add(params, '平行光方向Z', -1.0, 1.0).step(0.01).onChange(function (e) {
-        directionalLight.target.position.z = directionalLight.position.z + e;
-      });
-      /*shadow*/
-      params['平行光阴影'] = directionalLight.castShadow;
-      directionFolder.add(params, '平行光阴影').onChange(function (e) {
-        directionalLight.castShadow = e;
-      });
-      /*visible*/
-      params['平行光启用'] = directionalLight.visible;
-      directionFolder.add(params, '平行光启用').onChange(function (e) {
-        directionalLight.visible = e;
-      });
-    }
-  }, {
-    key: "control_renderer",
-    value: function control_renderer(renderer) {
-      var gui = this.gui;
-      var params = this.params;
-      params.exposure = Math.pow(renderer.toneMappingExposure, 1 / 4);
-      var folder = gui.addFolder("tone mapping");
-      folder.add(params, 'exposure', 0.1, 2).onChange(function (value) {
-        renderer.toneMappingExposure = Math.pow(value, 4.0);
-      });
-    }
-  }, {
-    key: "control_bloomPass",
-    value: function control_bloomPass(bloomPass) {
-      var gui = this.gui;
-      var params = this.params;
-      params.bloomThreshold = bloomPass.threshold;
-      params.bloomStrength = bloomPass.strength;
-      params.bloomRadius = bloomPass.radius;
-      var folder = gui.addFolder("辉光");
-      folder.add(params, 'bloomStrength', 0.0, 1.5).step(0.05).onChange(function (value) {
-        bloomPass.strength = Number(value);
-      });
-      folder.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
-        bloomPass.threshold = Number(value);
-      });
-      folder.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
-        bloomPass.radius = Number(value);
-      });
-    }
-  }, {
-    key: "control_godrays",
-    value: function control_godrays(godrays, postprocessing) {
-      var gui = this.gui;
-      var params = this.params;
-      params.filterLen = godrays.filterLen;
-      params.TAPS_PER_PASS = godrays.TAPS_PER_PASS;
-      params.godrays_stength = postprocessing.godrays_stength.value;
-      var folder = gui.addFolder("隙间光");
-      folder.add(params, 'godrays_stength', 0.0, 1.5).step(0.05).onChange(function (value) {
-        postprocessing.godrays_stength.value = value;
-      });
-      folder.add(params, 'filterLen', 0.5, 2.0).step(0.01).onChange(function (value) {
-        godrays.filterLen = Number(value);
-      });
-      folder.add(params, 'TAPS_PER_PASS', 1.0, 10.0).step(0.1).onChange(function (value) {
-        godrays.TAPS_PER_PASS = Number(value);
-      });
-    }
-  }, {
-    key: "control_ssr",
-    value: function control_ssr(ssrPass) {
-      var gui = this.gui;
-      var params = this.params;
-      params.ssr_thickness = ssrPass.thickness;
-      params.ssr_maxDistance = ssrPass.maxDistance;
-      params.ssr_opacity = ssrPass.opacity;
-      var folder = gui.addFolder("屏幕空间反射");
-      folder.add(params, 'ssr_maxDistance', 0.0, 200.).step(0.5).onChange(function (value) {
-        ssrPass.maxDistance = Number(value);
-      });
-      //opacity
-      folder.add(params, 'ssr_opacity', 0.0, 2.).step(0.05).onChange(function (value) {
-        ssrPass.opacity = value;
-      });
-      folder.add(ssrPass, 'infiniteThick');
-      folder.add(ssrPass, 'fresnel');
-      folder.add(ssrPass, 'distanceAttenuation');
-      folder.add(ssrPass, 'bouncing');
-      folder.add(ssrPass, 'output', {
-        'Default': _SSRPass.SSRPass.OUTPUT.Default,
-        'SSR Only': _SSRPass.SSRPass.OUTPUT.SSR,
-        'Beauty': _SSRPass.SSRPass.OUTPUT.Beauty,
-        'Depth': _SSRPass.SSRPass.OUTPUT.Depth,
-        'Normal': _SSRPass.SSRPass.OUTPUT.Normal,
-        'Metalness': _SSRPass.SSRPass.OUTPUT.Metalness
-      }).onChange(function (value) {
-        ssrPass.output = parseInt(value);
-      });
-      folder.add(ssrPass, 'blur');
-
-      //maxDistance
-      // folder.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
-    }
-  }, {
-    key: "control_sao",
-    value: function control_sao(saoPass) {
-      var gui = this.gui;
-      var folder = gui.addFolder("可缩放环境光遮挡");
-      var params = this.params;
-      folder.add(saoPass.params, 'output', {
-        'Beauty': _SAOPass.SAOPass.OUTPUT.Beauty,
-        'Beauty+SAO': _SAOPass.SAOPass.OUTPUT.Default,
-        'SAO': _SAOPass.SAOPass.OUTPUT.SAO,
-        'Depth': _SAOPass.SAOPass.OUTPUT.Depth,
-        'Normal': _SAOPass.SAOPass.OUTPUT.Normal
-      }).onChange(function (value) {
-        saoPass.params.output = parseInt(value);
-      });
-      folder.add(saoPass.params, 'saoBias', -1, 1);
-      folder.add(saoPass.params, 'saoIntensity', 0, 1);
-      folder.add(saoPass.params, 'saoScale', 0, 10);
-      folder.add(saoPass.params, 'saoKernelRadius', 1, 100);
-      folder.add(saoPass.params, 'saoMinResolution', 0, 1);
-      folder.add(saoPass.params, 'saoBlur');
-      folder.add(saoPass.params, 'saoBlurRadius', 0, 200);
-      folder.add(saoPass.params, 'saoBlurStdDev', 0.5, 150);
-      folder.add(saoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1);
-    }
-  }, {
-    key: "control_bokeh",
-    value: function control_bokeh(bokehPass) {
-      var gui = this.gui;
-      var folder = gui.addFolder("散焦景深");
-      var params = this.params;
-      params.bokehPass_aperture = bokehPass.uniforms.aperture.value;
-      folder.add(params, 'bokehPass_aperture', 0.0, 1.).step(0.001).onChange(function (value) {
-        bokehPass.uniforms.aperture.value = value;
-      });
-      params.bokehPass_maxblur = bokehPass.uniforms.maxblur.value;
-      folder.add(params, 'bokehPass_maxblur', 0, 0.1).step(0.0001).onChange(function (value) {
-        bokehPass.uniforms.maxblur.value = value;
-      });
-
-      // params.bokehPass_focus=bokehPass.uniforms.focus.value
-      // folder.add( params, 'bokehPass_focus', 0, 5 ).step( 0.01 ).onChange( function ( value ) {
-      //     bokehPass.uniforms.focus.value=value
-      // } );
-
-      // params.bokehPass_farClip=bokehPass.uniforms.farClip.value
-      // folder.add( params, 'bokehPass_farClip', 50000, 5000000 ).step( 1000 ).onChange( function ( value ) {
-      //     bokehPass.uniforms.farClip.value=value
-      // } );
-
-      // params.bokehPass_nearClip=bokehPass.uniforms.nearClip.value
-      // folder.add( params, 'bokehPass_nearClip', 0, 50 ).step( 0.1 ).onChange( function ( value ) {
-      //     bokehPass.uniforms.nearClip.value=value
-      // } );
-    }
-  }, {
-    key: "control_lut",
-    value: function control_lut(lutPass) {
-      console.log(lutPass);
-      var gui = this.gui;
-      var folder = gui.addFolder("LookupTable");
-      var params = this.params;
-      console.log(lutPass.uniforms.intensity.value, lutPass.uniforms.intensity, "lutPass.uniforms.intensity.value");
-      params.lutPass_intensity = lutPass.uniforms.intensity.value;
-      folder.add(params, 'lutPass_intensity', 0.0, 0.8).step(0.005).onChange(function (value) {
-        lutPass.uniforms.intensity.value = value;
-      });
-    }
-  }]);
-  return UI;
-}();
-exports.UI = UI;
-},{"three/examples/jsm/libs/lil-gui.module.min.js":"node_modules/three/examples/jsm/libs/lil-gui.module.min.js","three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.MoveManager = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
-function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
-function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
-function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
-function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
-var _autoRoam = /*#__PURE__*/new WeakMap();
-var MoveManager = /*#__PURE__*/function () {
-  function MoveManager(avatar, roamPath) {
-    _classCallCheck(this, MoveManager);
-    _defineProperty(this, "avatar", void 0);
-    _defineProperty(this, "roamPath", void 0);
-    _defineProperty(this, "myPreviewflag", void 0);
-    //确定目标节点
-    _defineProperty(this, "stopFlag", void 0);
-    //控制是否开始移动
-    _defineProperty(this, "isLoop", void 0);
-    //如果不进行循环漫游的话，第一行的初始状态就没用了
-    _defineProperty(this, "finishCb", function () {});
-    _defineProperty(this, "myMakeOneRoamStep", new MakeOneRoamStep());
-    _classPrivateFieldInitSpec(this, _autoRoam, {
-      writable: true,
-      value: function value() {
-        var scope = this;
-        autoRoam0();
-        function autoRoam0() {
-          if (!scope.stopFlag)
-            //是否停止自动漫游
-            if (scope.myMakeOneRoamStep.preview(scope.myPreviewflag, scope.avatar, scope.roamPath)) {
-              scope.myPreviewflag++;
-              if (scope.myPreviewflag === scope.roamPath.length) {
-                scope.myPreviewflag = 1;
-                if (!scope.isLoop) scope.stopFlag = true;
-                scope.finishCb();
-              }
-            }
-          requestAnimationFrame(autoRoam0);
-        }
-      }
-    });
-    var _scope = this;
-    _scope.avatar = avatar;
-    _scope.roamPath = roamPath;
-    _scope.myPreviewflag = 1; //确定目标节点
-    _scope.stopFlag = true;
-    _scope.isLoop = true; //false;//如果不进行循环漫游的话，第一行的初始状态就没用了
-
-    _scope.myMakeOneRoamStep = new MakeOneRoamStep();
-    _classPrivateFieldGet(this, _autoRoam).call(this); //创建后自动执行
-  }
-  _createClass(MoveManager, [{
-    key: "getStartPos",
-    value: function getStartPos() {
-      var mystate = this.myPreviewflag - 1;
-      if (mystate >= this.roamPath.length) 0, _readOnlyError("mystate");
-      if (mystate < 0) this.roamPath.length - 1, _readOnlyError("mystate");
-      return this.roamPath[mystate];
-    }
-  }, {
-    key: "joinPath",
-    value: function joinPath() {
-      //切换路径
-      var self = this;
-      self.stopFlag = true;
-      var endpos = this.getStartPos();
-      var camera = this.avatar;
-      var move0 = new MoveManager(camera, [[camera.position.x, camera.position.y, camera.position.z, camera.rotation.x, camera.rotation.y, camera.rotation.z, 10], [endpos[0], endpos[1], endpos[2], endpos[3], endpos[4], endpos[5], 10]]);
-      move0.isLoop = false;
-      move0.finishCb = function () {
-        self.stopFlag = false;
-      };
-      move0.stopFlag = false;
-    }
-  }]);
-  return MoveManager;
-}();
-exports.MoveManager = MoveManager;
-_defineProperty(MoveManager, "getArray", function (arr1) {
-  //通过平面位置获取输入数据
-  //arr1:  x,z
-  //arr2:  x,y,z,  a,b,c, time
-  var arr2 = [];
-  var time = 400;
-  arr2.push([arr1[0][0], 0, arr1[0][1], 0, 0, 0, time]);
-  for (var i = 1; i < arr1.length; i++) {
-    arr2.push([arr1[i][0], 0, arr1[i][1], 0, Math.atan2(arr1[i][0] - arr1[i - 1][0], arr1[i][1] - arr1[i - 1][1]), 0, time]);
-  }
-  return arr2;
-});
-var _updateParam = /*#__PURE__*/new WeakMap();
-var _initParam = /*#__PURE__*/new WeakMap();
-var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
-  _classCallCheck(this, MakeOneRoamStep);
-  _defineProperty(this, "pattern", void 0);
-  _defineProperty(this, "rectify", void 0);
-  //记录这是第几步//第一步更新参数，最后一步纠正状态
-  _defineProperty(this, "stepIndex_max", void 0);
-  _defineProperty(this, "targetStatus", void 0);
-  //目标状态
-  _defineProperty(this, "dx", void 0);
-  _defineProperty(this, "dy", void 0);
-  _defineProperty(this, "dz", void 0);
-  //一步的位移
-  _defineProperty(this, "q1", void 0);
-  _defineProperty(this, "q2", void 0);
-  _defineProperty(this, "qt", void 0);
-  _classPrivateFieldInitSpec(this, _updateParam, {
-    writable: true,
-    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
-      time = time;
-      var scope = this;
-      scope.dx = (x2 - x1) / time;
-      scope.dy = (y2 - y1) / time;
-      scope.dz = (z2 - z1) / time;
-      scope.q1 = euler2quaternion(a1, b1, c1);
-      scope.q2 = euler2quaternion(a2, b2, c2);
-      scope.qt = scope.stepIndex / scope.stepIndex_max;
-      function euler2quaternion(x, y, z) {
-        var euler = new THREE.Euler(x, y, z, 'XYZ');
-        var quaternion = new THREE.Quaternion();
-        quaternion.setFromEuler(euler);
-        return quaternion;
-      }
-      scope.targetStatus = [x2, y2, z2, a2, b2, c2];
-    }
-  });
-  _classPrivateFieldInitSpec(this, _initParam, {
-    writable: true,
-    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
-      var scope = this;
-      scope.stepIndex_max = time;
-      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
-    }
-  });
-  _defineProperty(this, "preview", function (mystate, avatar, mydata) {
-    //thisObj,time,myavatar,k//thisObj,x1,y1,z1,x2,y2,z2,time,myavatar,k
-    var scope = this;
-    var x1, y1, z1, x2, y2, z2,
-      //位置
-      a1, b1, c1, a2, b2, c2; //角度//a=c
-
-    if (mystate >= mydata.length) return;
-    var time = mydata[mystate][6];
-    //当前状态
-    x1 = avatar.position.x;
-    y1 = avatar.position.y;
-    z1 = avatar.position.z;
-    a1 = avatar.rotation.x;
-    b1 = avatar.rotation.y;
-    c1 = avatar.rotation.z;
-    //目标状态
-    x2 = mydata[mystate][0];
-    y2 = mydata[mystate][1];
-    z2 = mydata[mystate][2];
-    a2 = mydata[mystate][3];
-    b2 = mydata[mystate][4];
-    c2 = mydata[mystate][5];
-    if (scope.stepIndex === 1) {
-      //新的阶段
-      _classPrivateFieldGet(scope, _initParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
-    } else if (scope.rectify) {
-      //如果有路径纠正功能
-      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time - scope.stepIndex + 1);
-    }
-    return movetoPos(avatar, scope);
-    function movetoPos(avatar, scope) {
-      //移动
-      if (scope.stepIndex < scope.stepIndex_max) {
-        avatar.position.x += scope.dx;
-        avatar.position.y += scope.dy;
-        avatar.position.z += scope.dz;
-        avatar.quaternion.x = scope.q1.x;
-        avatar.quaternion.y = scope.q1.y;
-        avatar.quaternion.z = scope.q1.z;
-        avatar.quaternion.w = scope.q1.w;
-        avatar.quaternion.slerp(scope.q2, scope.qt);
-        scope.stepIndex++;
-        return false;
-      } else {
-        avatar.position.set(scope.targetStatus[0], scope.targetStatus[1], scope.targetStatus[2]);
-        avatar.rotation.set(scope.targetStatus[3], scope.targetStatus[4], scope.targetStatus[5]);
-        scope.stepIndex = 1;
-        return true;
-      }
-    }
-  });
-  var _scope2 = this;
-  _scope2.rectify = true; //
-  _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
-});
-},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/objects/Sky.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Sky = void 0;
-var _three = require("three");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-/**
- * Based on "A Practical Analytic Model for Daylight"
- * aka The Preetham Model, the de facto standard analytic skydome model
- * https://www.researchgate.net/publication/220720443_A_Practical_Analytic_Model_for_Daylight
- *
- * First implemented by Simon Wallner
- * http://simonwallner.at/project/atmospheric-scattering/
- *
- * Improved by Martin Upitis
- * http://blenderartists.org/forum/showthread.php?245954-preethams-sky-impementation-HDR
- *
- * Three.js integration by zz85 http://twitter.com/blurspline
-*/
-var Sky = /*#__PURE__*/function (_Mesh) {
-  _inherits(Sky, _Mesh);
-  var _super = _createSuper(Sky);
-  function Sky() {
-    var _this;
-    _classCallCheck(this, Sky);
-    var shader = Sky.SkyShader;
-    var material = new _three.ShaderMaterial({
-      name: 'SkyShader',
-      fragmentShader: shader.fragmentShader,
-      vertexShader: shader.vertexShader,
-      uniforms: _three.UniformsUtils.clone(shader.uniforms),
-      side: _three.BackSide,
-      depthWrite: false
-    });
-    _this = _super.call(this, new _three.BoxGeometry(1, 1, 1), material);
-    _this.isSky = true;
-    return _this;
-  }
-  return _createClass(Sky);
-}(_three.Mesh);
-exports.Sky = Sky;
-Sky.SkyShader = {
-  uniforms: {
-    'turbidity': {
-      value: 2
-    },
-    'rayleigh': {
-      value: 1
-    },
-    'mieCoefficient': {
-      value: 0.005
-    },
-    'mieDirectionalG': {
-      value: 0.8
-    },
-    'sunPosition': {
-      value: new _three.Vector3()
-    },
-    'up': {
-      value: new _three.Vector3(0, 1, 0)
-    }
-  },
-  vertexShader: /* glsl */"\n\t\tuniform vec3 sunPosition;\n\t\tuniform float rayleigh;\n\t\tuniform float turbidity;\n\t\tuniform float mieCoefficient;\n\t\tuniform vec3 up;\n\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\t// constants for atmospheric scattering\n\t\tconst float e = 2.71828182845904523536028747135266249775724709369995957;\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\t// wavelength of used primaries, according to preetham\n\t\tconst vec3 lambda = vec3( 680E-9, 550E-9, 450E-9 );\n\t\t// this pre-calcuation replaces older TotalRayleigh(vec3 lambda) function:\n\t\t// (8.0 * pow(pi, 3.0) * pow(pow(n, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * N * pow(lambda, vec3(4.0)) * (6.0 - 7.0 * pn))\n\t\tconst vec3 totalRayleigh = vec3( 5.804542996261093E-6, 1.3562911419845635E-5, 3.0265902468824876E-5 );\n\n\t\t// mie stuff\n\t\t// K coefficient for the primaries\n\t\tconst float v = 4.0;\n\t\tconst vec3 K = vec3( 0.686, 0.678, 0.666 );\n\t\t// MieConst = pi * pow( ( 2.0 * pi ) / lambda, vec3( v - 2.0 ) ) * K\n\t\tconst vec3 MieConst = vec3( 1.8399918514433978E14, 2.7798023919660528E14, 4.0790479543861094E14 );\n\n\t\t// earth shadow hack\n\t\t// cutoffAngle = pi / 1.95;\n\t\tconst float cutoffAngle = 1.6110731556870734;\n\t\tconst float steepness = 1.5;\n\t\tconst float EE = 1000.0;\n\n\t\tfloat sunIntensity( float zenithAngleCos ) {\n\t\t\tzenithAngleCos = clamp( zenithAngleCos, -1.0, 1.0 );\n\t\t\treturn EE * max( 0.0, 1.0 - pow( e, -( ( cutoffAngle - acos( zenithAngleCos ) ) / steepness ) ) );\n\t\t}\n\n\t\tvec3 totalMie( float T ) {\n\t\t\tfloat c = ( 0.2 * T ) * 10E-18;\n\t\t\treturn 0.434 * c * MieConst;\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n\t\t\tvWorldPosition = worldPosition.xyz;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\t\t\tgl_Position.z = gl_Position.w; // set z to camera.far\n\n\t\t\tvSunDirection = normalize( sunPosition );\n\n\t\t\tvSunE = sunIntensity( dot( vSunDirection, up ) );\n\n\t\t\tvSunfade = 1.0 - clamp( 1.0 - exp( ( sunPosition.y / 450000.0 ) ), 0.0, 1.0 );\n\n\t\t\tfloat rayleighCoefficient = rayleigh - ( 1.0 * ( 1.0 - vSunfade ) );\n\n\t\t\t// extinction (absorbtion + out scattering)\n\t\t\t// rayleigh coefficients\n\t\t\tvBetaR = totalRayleigh * rayleighCoefficient;\n\n\t\t\t// mie coefficients\n\t\t\tvBetaM = totalMie( turbidity ) * mieCoefficient;\n\n\t\t}",
-  fragmentShader: /* glsl */"\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\tuniform float mieDirectionalG;\n\t\tuniform vec3 up;\n\n\t\tconst vec3 cameraPos = vec3( 0.0, 0.0, 0.0 );\n\n\t\t// constants for atmospheric scattering\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\tconst float n = 1.0003; // refractive index of air\n\t\tconst float N = 2.545E25; // number of molecules per unit volume for air at 288.15K and 1013mb (sea level -45 celsius)\n\n\t\t// optical length at zenith for molecules\n\t\tconst float rayleighZenithLength = 8.4E3;\n\t\tconst float mieZenithLength = 1.25E3;\n\t\t// 66 arc seconds -> degrees, and the cosine of that\n\t\tconst float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324;\n\n\t\t// 3.0 / ( 16.0 * pi )\n\t\tconst float THREE_OVER_SIXTEENPI = 0.05968310365946075;\n\t\t// 1.0 / ( 4.0 * pi )\n\t\tconst float ONE_OVER_FOURPI = 0.07957747154594767;\n\n\t\tfloat rayleighPhase( float cosTheta ) {\n\t\t\treturn THREE_OVER_SIXTEENPI * ( 1.0 + pow( cosTheta, 2.0 ) );\n\t\t}\n\n\t\tfloat hgPhase( float cosTheta, float g ) {\n\t\t\tfloat g2 = pow( g, 2.0 );\n\t\t\tfloat inverse = 1.0 / pow( 1.0 - 2.0 * g * cosTheta + g2, 1.5 );\n\t\t\treturn ONE_OVER_FOURPI * ( ( 1.0 - g2 ) * inverse );\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec3 direction = normalize( vWorldPosition - cameraPos );\n\n\t\t\t// optical length\n\t\t\t// cutoff angle at 90 to avoid singularity in next formula.\n\t\t\tfloat zenithAngle = acos( max( 0.0, dot( up, direction ) ) );\n\t\t\tfloat inverse = 1.0 / ( cos( zenithAngle ) + 0.15 * pow( 93.885 - ( ( zenithAngle * 180.0 ) / pi ), -1.253 ) );\n\t\t\tfloat sR = rayleighZenithLength * inverse;\n\t\t\tfloat sM = mieZenithLength * inverse;\n\n\t\t\t// combined extinction factor\n\t\t\tvec3 Fex = exp( -( vBetaR * sR + vBetaM * sM ) );\n\n\t\t\t// in scattering\n\t\t\tfloat cosTheta = dot( direction, vSunDirection );\n\n\t\t\tfloat rPhase = rayleighPhase( cosTheta * 0.5 + 0.5 );\n\t\t\tvec3 betaRTheta = vBetaR * rPhase;\n\n\t\t\tfloat mPhase = hgPhase( cosTheta, mieDirectionalG );\n\t\t\tvec3 betaMTheta = vBetaM * mPhase;\n\n\t\t\tvec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );\n\t\t\tLin *= mix( vec3( 1.0 ), pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * Fex, vec3( 1.0 / 2.0 ) ), clamp( pow( 1.0 - dot( up, vSunDirection ), 5.0 ), 0.0, 1.0 ) );\n\n\t\t\t// nightsky\n\t\t\tfloat theta = acos( direction.y ); // elevation --> y-axis, [-pi/2, pi/2]\n\t\t\tfloat phi = atan( direction.z, direction.x ); // azimuth --> x-axis [-pi/2, pi/2]\n\t\t\tvec2 uv = vec2( phi, theta ) / vec2( 2.0 * pi, pi ) + vec2( 0.5, 0.0 );\n\t\t\tvec3 L0 = vec3( 0.1 ) * Fex;\n\n\t\t\t// composition + solar disc\n\t\t\tfloat sundisk = smoothstep( sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta );\n\t\t\tL0 += ( vSunE * 19000.0 * Fex ) * sundisk;\n\n\t\t\tvec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );\n\n\t\t\tvec3 retColor = pow( texColor, vec3( 1.0 / ( 1.2 + ( 1.2 * vSunfade ) ) ) );\n\n\t\t\tgl_FragColor = vec4( retColor, 1.0 );\n\n\t\t\t#include <tonemapping_fragment>\n\t\t\t#include <encodings_fragment>\n\n\t\t}"
-};
-},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/SkyController.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.SkyController = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _Sky = require("three/examples/jsm/objects/Sky");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var SkyController = /*#__PURE__*/function () {
-  function SkyController(scene, camera, renderer) {
-    _classCallCheck(this, SkyController);
-    this.scene = scene;
-    this.camera = camera;
-    this.renderer = renderer;
-    this.sun = new THREE.Vector3();
-    window.sun = this.sum;
-    this.sky = this.initSky();
-    this.render();
-  }
-  _createClass(SkyController, [{
-    key: "initSky",
-    value: function initSky() {
-      var sky = new _Sky.Sky();
-      sky.scale.setScalar(450000);
-      // sky.rotation.set( 0, 0, Math.PI*1.5 )
-      this.scene.add(sky);
-      this.sky = sky;
-      this.effectController = {
-        turbidity: 0,
-        //10,//1,//10,//光晕强度
-        rayleigh: 0.1,
-        //1,//3,//太阳光强度
-        mieCoefficient: 0,
-        //0.005,//0.0001,//0.005,//光晕强度
-        mieDirectionalG: 0,
-        // 0.01,//0.7,//光晕强度
-        elevation: 5,
-        //20,//5,//2,  //俯仰角
-        azimuth: 180 - 20 //偏航角
-        // exposure: this.renderer.toneMappingExposure/100 //this.renderer.toneMappingExposure
-      };
-
-      return sky;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      var effectController = this.effectController;
-      // console.log()
-      var uniforms = this.sky.material.uniforms;
-      uniforms['turbidity'].value = effectController.turbidity;
-      uniforms['rayleigh'].value = effectController.rayleigh;
-      uniforms['mieCoefficient'].value = effectController.mieCoefficient;
-      uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
-      var phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
-      var theta = THREE.MathUtils.degToRad(effectController.azimuth);
-      this.sun.setFromSphericalCoords(1, phi, theta);
-      uniforms['sunPosition'].value.copy(this.sun);
-      this.renderer.toneMappingExposure = effectController.exposure;
-      this.renderer.render(this.scene, this.camera);
-    }
-  }]);
-  return SkyController;
-}();
-exports.SkyController = SkyController;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/objects/Sky":"node_modules/three/examples/jsm/objects/Sky.js"}],"node_modules/three/examples/jsm/shaders/GodRaysShader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.GodRaysGenerateShader = exports.GodRaysFakeSunShader = exports.GodRaysDepthMaskShader = exports.GodRaysCombineShader = void 0;
-var _three = require("three");
-/**
- * God-rays (crepuscular rays)
- *
- * Similar implementation to the one used by Crytek for CryEngine 2 [Sousa2008].
- * Blurs a mask generated from the depth map along radial lines emanating from the light
- * source. The blur repeatedly applies a blur filter of increasing support but constant
- * sample count to produce a blur filter with large support.
- *
- * My implementation performs 3 passes, similar to the implementation from Sousa. I found
- * just 6 samples per pass produced acceptible results. The blur is applied three times,
- * with decreasing filter support. The result is equivalent to a single pass with
- * 6*6*6 = 216 samples.
- *
- * References:
- *
- * Sousa2008 - Crysis Next Gen Effects, GDC2008, http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt
- */
-
-var GodRaysDepthMaskShader = {
-  uniforms: {
-    tInput: {
-      value: null
-    }
-  },
-  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
-  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = vec4( 1.0 ) - texture2D( tInput, vUv );\n\n\t\t}"
-};
-
-/**
- * The god-ray generation shader.
- *
- * First pass:
- *
- * The depth map is blurred along radial lines towards the "sun". The
- * output is written to a temporary render target (I used a 1/4 sized
- * target).
- *
- * Pass two & three:
- *
- * The results of the previous pass are re-blurred, each time with a
- * decreased distance between samples.
- */
-exports.GodRaysDepthMaskShader = GodRaysDepthMaskShader;
-var GodRaysGenerateShader = {
-  uniforms: {
-    tInput: {
-      value: null
-    },
-    fStepSize: {
-      value: 1.0
-    },
-    vSunPositionScreenSpace: {
-      value: new _three.Vector3()
-    }
-  },
-  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
-  fragmentShader: /* glsl */"\n\n\t\t#define TAPS_PER_PASS 6.0\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fStepSize; // filter step size\n\n\t\tvoid main() {\n\n\t\t// delta from current pixel to \"sun\" position\n\n\t\t\tvec2 delta = vSunPositionScreenSpace.xy - vUv;\n\t\t\tfloat dist = length( delta );\n\n\t\t// Step vector (uv space)\n\n\t\t\tvec2 stepv = fStepSize * delta / dist;\n\n\t\t// Number of iterations between pixel and sun\n\n\t\t\tfloat iters = dist/fStepSize;\n\n\t\t\tvec2 uv = vUv.xy;\n\t\t\tfloat col = 0.0;\n\n\t\t// This breaks ANGLE in Chrome 22\n\t\t//\t- see http://code.google.com/p/chromium/issues/detail?id=153105\n\n\t\t/*\n\t\t// Unrolling didnt do much on my hardware (ATI Mobility Radeon 3450),\n\t\t// so i've just left the loop\n\n\t\t\"for ( float i = 0.0; i < TAPS_PER_PASS; i += 1.0 ) {\",\n\n\t\t// Accumulate samples, making sure we dont walk past the light source.\n\n\t\t// The check for uv.y < 1 would not be necessary with \"border\" UV wrap\n\t\t// mode, with a black border color. I don't think this is currently\n\t\t// exposed by three.js. As a result there might be artifacts when the\n\t\t// sun is to the left, right or bottom of screen as these cases are\n\t\t// not specifically handled.\n\n\t\t\"\tcol += ( i <= iters && uv.y < 1.0 ? texture2D( tInput, uv ).r : 0.0 );\",\n\t\t\"\tuv += stepv;\",\n\n\t\t\"}\",\n\t\t*/\n\n\t\t// Unrolling loop manually makes it work in ANGLE\n\n\t\t\tfloat f = min( 1.0, max( vSunPositionScreenSpace.z / 1000.0, 0.0 ) ); // used to fade out godrays\n\n\t\t\tif ( 0.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 1.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 2.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 3.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 4.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 5.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t// Should technically be dividing by 'iters but 'TAPS_PER_PASS' smooths out\n\t\t// objectionable artifacts, in particular near the sun position. The side\n\t\t// effect is that the result is darker than it should be around the sun, as\n\t\t// TAPS_PER_PASS is greater than the number of samples actually accumulated.\n\t\t// When the result is inverted (in the shader 'godrays_combine this produces\n\t\t// a slight bright spot at the position of the sun, even when it is occluded.\n\n\t\t\tgl_FragColor = vec4( col/TAPS_PER_PASS );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
-};
-
-/**
- * Additively applies god rays from texture tGodRays to a background (tColors).
- * fGodRayIntensity attenuates the god rays.
- */
-exports.GodRaysGenerateShader = GodRaysGenerateShader;
-var GodRaysCombineShader = {
-  uniforms: {
-    tColors: {
-      value: null
-    },
-    tGodRays: {
-      value: null
-    },
-    fGodRayIntensity: {
-      value: 0.69
-    }
-  },
-  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
-  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tColors;\n\t\tuniform sampler2D tGodRays;\n\n\t\tuniform float fGodRayIntensity;\n\n\t\tvoid main() {\n\n\t\t// Since THREE.MeshDepthMaterial renders foreground objects white and background\n\t\t// objects black, the god-rays will be white streaks. Therefore value is inverted\n\t\t// before being combined with tColors\n\n\t\t\tgl_FragColor = texture2D( tColors, vUv ) + fGodRayIntensity * vec4( 1.0 - texture2D( tGodRays, vUv ).r );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
-};
-
-/**
- * A dodgy sun/sky shader. Makes a bright spot at the sun location. Would be
- * cheaper/faster/simpler to implement this as a simple sun sprite.
- */
-exports.GodRaysCombineShader = GodRaysCombineShader;
-var GodRaysFakeSunShader = {
-  uniforms: {
-    vSunPositionScreenSpace: {
-      value: new _three.Vector3()
-    },
-    fAspect: {
-      value: 1.0
-    },
-    sunColor: {
-      value: new _three.Color(0xffee00)
-    },
-    bgColor: {
-      value: new _three.Color(0x000000)
-    }
-  },
-  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
-  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fAspect;\n\n\t\tuniform vec3 sunColor;\n\t\tuniform vec3 bgColor;\n\n\t\tvoid main() {\n\n\t\t\tvec2 diff = vUv - vSunPositionScreenSpace.xy;\n\n\t\t// Correct for aspect ratio\n\n\t\t\tdiff.x *= fAspect;\n\n\t\t\tfloat prop = clamp( length( diff ) / 0.5, 0.0, 1.0 );\n\t\t\tprop = 0.35 * pow( 1.0 - prop, 3.0 );\n\n\t\t\tgl_FragColor.xyz = ( vSunPositionScreenSpace.z > 0.0 ) ? mix( sunColor, bgColor, 1.0 - prop ) : bgColor;\n\t\t\tgl_FragColor.w = 1.0;\n\n\t\t}"
-};
-exports.GodRaysFakeSunShader = GodRaysFakeSunShader;
-},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/postprocessing/Godrays.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.Godrays = void 0;
-var THREE = _interopRequireWildcard(require("three"));
-var _GodRaysShader = require("three/examples/jsm/shaders/GodRaysShader.js");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-var Godrays = /*#__PURE__*/function () {
-  function Godrays(camera, scene) {
-    _classCallCheck(this, Godrays);
-    this.filterLen = 1;
-    this.TAPS_PER_PASS = 6;
-    this.camera = camera;
-    this.scene = scene;
-    this.clipPosition = new THREE.Vector4();
-    this.screenSpacePosition = new THREE.Vector3();
-    this.materialDepth = new THREE.MeshDepthMaterial();
-    this.postprocessing = this.initPostprocessing();
-  }
-  _createClass(Godrays, [{
-    key: "initPostprocessing",
-    value: function initPostprocessing() {
-      var renderTargetWidth = window.innerWidth;
-      var renderTargetHeight = window.innerHeight;
-      var godrayRenderTargetResolutionMultiplier = 1.0 / 4.0;
-      var adjustedWidth = renderTargetWidth * godrayRenderTargetResolutionMultiplier;
-      var adjustedHeight = renderTargetHeight * godrayRenderTargetResolutionMultiplier;
-      var scene = new THREE.Scene();
-      var camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
-      camera.position.z = 100;
-      scene.add(camera);
-      var postprocessing = {
-        enabled: true,
-        scene: scene,
-        camera: camera,
-        rtTextureColors: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
-        //基本渲染结果
-        rtTextureDepth: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
-        //深度信息
-        rtTextureDepthMask: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
-        //有些位置没有深度?
-
-        rtTextureGodRays1: new THREE.WebGLRenderTarget(adjustedWidth, adjustedHeight),
-        rtTextureGodRays2: new THREE.WebGLRenderTarget(adjustedWidth, adjustedHeight),
-        //云隙光
-        godrayMaskUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysDepthMaskShader.uniforms),
-        godrayGenUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysGenerateShader.uniforms),
-        godrayCombineUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysCombineShader.uniforms),
-        godraysFakeSunUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysFakeSunShader.uniforms)
-      };
-
-      // god-ray shaders
-      postprocessing.materialGodraysDepthMask = new THREE.ShaderMaterial({
-        //深度？
-        uniforms: postprocessing.godrayMaskUniforms,
-        vertexShader: _GodRaysShader.GodRaysDepthMaskShader.vertexShader,
-        fragmentShader: _GodRaysShader.GodRaysDepthMaskShader.fragmentShader
-      });
-      postprocessing.materialGodraysGenerate = new THREE.ShaderMaterial({
-        //生成
-        uniforms: postprocessing.godrayGenUniforms,
-        vertexShader: _GodRaysShader.GodRaysGenerateShader.vertexShader,
-        fragmentShader: _GodRaysShader.GodRaysGenerateShader.fragmentShader
-      });
-      postprocessing.materialGodraysFakeSun = new THREE.ShaderMaterial({
-        //假太阳？
-        uniforms: postprocessing.godraysFakeSunUniforms,
-        vertexShader: _GodRaysShader.GodRaysFakeSunShader.vertexShader,
-        fragmentShader: _GodRaysShader.GodRaysFakeSunShader.fragmentShader
-      });
-      postprocessing.materialGodraysCombine = new THREE.ShaderMaterial({
-        //合并
-        uniforms: postprocessing.godrayCombineUniforms,
-        vertexShader: _GodRaysShader.GodRaysCombineShader.vertexShader,
-        fragmentShader: _GodRaysShader.GodRaysCombineShader.fragmentShader
-      });
-      postprocessing.godraysFakeSunUniforms.bgColor.value.setHex(0x000511); //背景颜色
-      postprocessing.godraysFakeSunUniforms.sunColor.value.setHex(0xffee00); //太阳颜色
-      postprocessing.godrayCombineUniforms.fGodRayIntensity.value = 0.2; //0.75;//云隙光强度
-
-      postprocessing.quad = new THREE.Mesh(
-      //？
-      new THREE.PlaneGeometry(1.0, 1.0), postprocessing.materialGodraysGenerate //生成
-      );
-
-      postprocessing.quad.position.z = -9900;
-      postprocessing.scene.add(postprocessing.quad);
-      this.postprocessing = postprocessing;
-      return postprocessing;
-    }
-  }, {
-    key: "getSunPos",
-    value: function getSunPos() {
-      var clipPosition = this.clipPosition;
-      //开始计算太阳在屏幕上的位置
-      clipPosition.x = 0; //sunPosition.x;
-      clipPosition.y = 1000; //sunPosition.y;
-      clipPosition.z = -1000; //sunPosition.z;
-      var sunPosition = new THREE.Vector3(0, 1000 * 100, -1000 * 100);
-      clipPosition.x = sunPosition.x;
-      clipPosition.y = sunPosition.y;
-      clipPosition.z = sunPosition.z;
-      clipPosition.w = 1;
-      clipPosition.applyMatrix4(camera.matrixWorldInverse).applyMatrix4(camera.projectionMatrix);
-      clipPosition.x /= clipPosition.w;
-      clipPosition.y /= clipPosition.w;
-      var screenSpacePosition = this.screenSpacePosition;
-      screenSpacePosition.x = (clipPosition.x + 1) / 2; // transform from [-1,1] to [0,1]
-      screenSpacePosition.y = (clipPosition.y + 1) / 2; // transform from [-1,1] to [0,1]
-      screenSpacePosition.z = clipPosition.z; // needs to stay in clip space for visibilty checks
-      return screenSpacePosition;
-    }
-  }, {
-    key: "render",
-    value: function render() {
-      if (!this.postprocessing.enabled) return;
-      var postprocessing = this.postprocessing;
-      var camera = this.camera;
-      var scene = this.scene;
-      var screenSpacePosition = this.getSunPos();
-      // Give it to the god-ray and sun shaders
-      postprocessing.godrayGenUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
-      postprocessing.godraysFakeSunUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
-      function filterGodRays(inputTex, renderTarget, stepSize) {
-        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysGenerate;
-        postprocessing.godrayGenUniforms['fStepSize'].value = stepSize;
-        postprocessing.godrayGenUniforms['tInput'].value = inputTex;
-        renderer.setRenderTarget(renderTarget);
-        renderer.render(postprocessing.scene, postprocessing.camera);
-        postprocessing.scene.overrideMaterial = null;
-      }
-      function getStepSize(filterLen, tapsPerPass, pass) {
-        return filterLen * Math.pow(tapsPerPass, -pass);
-      }
-
-      // -- Draw sky and sun --
-      // Clear colors and depths, will clear to sky color
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.clear(true, true, false); //color , depth , stencil模具//清除缓冲区。默认为true
-
-      postprocessing.godraysFakeSunUniforms['fAspect'].value = window.innerWidth / window.innerHeight;
-      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysFakeSun;
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // -- Draw scene objects --
-      // Colors
-      scene.overrideMaterial = null;
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.render(scene, camera);
-
-      // this.test(postprocessing.rtTextureColors)
-      // return
-
-      // Depth
-      renderer.setRenderTarget(postprocessing.rtTextureDepth);
-      renderer.render(scene, camera);
-      //
-      postprocessing.godrayMaskUniforms['tInput'].value = postprocessing.rtTextureDepth.texture;
-      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysDepthMask;
-      renderer.setRenderTarget(postprocessing.rtTextureDepthMask);
-      renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // -- Render god-rays --
-      // Maximum length of god-rays (in texture space [0,1]X[0,1])
-      var filterLen = 1.0;
-      // Samples taken by filter
-      var TAPS_PER_PASS = 6.0;
-      filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
-      // pass 2 - render into second ping-pong target
-      filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
-      // pass 3 - 1st RT
-      filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
-
-      // final pass - composite god-rays onto colors
-      postprocessing.godrayCombineUniforms['tColors'].value = postprocessing.rtTextureColors.texture;
-      postprocessing.godrayCombineUniforms['tGodRays'].value = postprocessing.rtTextureGodRays2.texture;
-      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysCombine;
-      renderer.setRenderTarget(null);
-      renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // this.test(postprocessing.rtTextureColors)
-      // this.test(postprocessing.rtTextureGodRays2)
-    }
-  }, {
-    key: "getTexture",
-    value: function getTexture() {
-      if (!this.postprocessing.enabled) return;
-      var postprocessing = this.postprocessing;
-      var camera = this.camera;
-      var scene = this.scene;
-      var screenSpacePosition = this.getSunPos();
-      // Give it to the god-ray and sun shaders
-      postprocessing.godrayGenUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
-      postprocessing.godraysFakeSunUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
-      function filterGodRays(inputTex, renderTarget, stepSize) {
-        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysGenerate;
-        postprocessing.godrayGenUniforms['fStepSize'].value = stepSize;
-        postprocessing.godrayGenUniforms['tInput'].value = inputTex;
-        renderer.setRenderTarget(renderTarget);
-        renderer.render(postprocessing.scene, postprocessing.camera);
-        postprocessing.scene.overrideMaterial = null;
-      }
-      function getStepSize(filterLen, tapsPerPass, pass) {
-        return filterLen * Math.pow(tapsPerPass, -pass);
-      }
-
-      // -- Draw sky and sun --
-      // Clear colors and depths, will clear to sky color
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.clear(true, true, false); //color , depth , stencil模具//清除缓冲区。默认为true
-
-      postprocessing.godraysFakeSunUniforms['fAspect'].value = window.innerWidth / window.innerHeight;
-      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysFakeSun;
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // -- Draw scene objects --
-      // Colors
-      scene.overrideMaterial = null;
-      renderer.setRenderTarget(postprocessing.rtTextureColors);
-      renderer.render(scene, camera);
-
-      // Depth
-      renderer.setRenderTarget(postprocessing.rtTextureDepth);
-      renderer.render(scene, camera);
-      //
-      postprocessing.godrayMaskUniforms['tInput'].value = postprocessing.rtTextureDepth.texture;
-      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysDepthMask;
-      renderer.setRenderTarget(postprocessing.rtTextureDepthMask);
-      renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // -- Render god-rays --
-      // Maximum length of god-rays (in texture space [0,1]X[0,1])
-      var filterLen = this.filterLen; // 1.0//1.0;
-      // Samples taken by filter
-      var TAPS_PER_PASS = this.TAPS_PER_PASS; // 6//6.0; //filterLen * Math.pow( tapsPerPass, - pass );
-      filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
-      filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
-      filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
-
-      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-      // filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, 0.02 );
-      // filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, 0.16 );
-
-      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-
-      // final pass - composite god-rays onto colors
-      return postprocessing.rtTextureGodRays2.texture;
-    }
-  }, {
-    key: "test",
-    value: function test(renderTarget) {
-      if (!this.materialTest) {
-        this.materialTest = new THREE.ShaderMaterial({
-          //假太阳？
-          uniforms: {
-            tColors: {
-              value: null
-            }
-          },
-          vertexShader: /* glsl */"\n                    varying vec2 vUv;\n                    void main() {\n                        vUv = uv;\n                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n                    }",
-          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D tColors;\n                    void main() {\n                        gl_FragColor = texture2D( tColors, vUv );\n                        gl_FragColor.a = 1.0;\n                    }"
-        });
-      }
-      this.materialTest.uniforms['tColors'].value = renderTarget.texture;
-      this.postprocessing.scene.overrideMaterial = this.materialTest;
-      renderer.setRenderTarget(null);
-      renderer.render(this.postprocessing.scene, this.postprocessing.camera);
-    }
-  }]);
-  return Godrays;
-}();
-exports.Godrays = Godrays;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/shaders/GodRaysShader.js":"node_modules/three/examples/jsm/shaders/GodRaysShader.js"}],"node_modules/three/examples/jsm/postprocessing/RenderPass.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.RenderPass = void 0;
-var _three = require("three");
-var _Pass2 = require("./Pass.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var RenderPass = /*#__PURE__*/function (_Pass) {
-  _inherits(RenderPass, _Pass);
-  var _super = _createSuper(RenderPass);
-  function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
-    var _this;
-    _classCallCheck(this, RenderPass);
-    _this = _super.call(this);
-    _this.scene = scene;
-    _this.camera = camera;
-    _this.overrideMaterial = overrideMaterial;
-    _this.clearColor = clearColor;
-    _this.clearAlpha = clearAlpha !== undefined ? clearAlpha : 0;
-    _this.clear = true;
-    _this.clearDepth = false;
-    _this.needsSwap = false;
-    _this._oldClearColor = new _three.Color();
-    return _this;
-  }
-  _createClass(RenderPass, [{
-    key: "render",
-    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
-      var oldAutoClear = renderer.autoClear;
-      renderer.autoClear = false;
-      var oldClearAlpha, oldOverrideMaterial;
-      if (this.overrideMaterial !== undefined) {
-        oldOverrideMaterial = this.scene.overrideMaterial;
-        this.scene.overrideMaterial = this.overrideMaterial;
-      }
-      if (this.clearColor) {
-        renderer.getClearColor(this._oldClearColor);
-        oldClearAlpha = renderer.getClearAlpha();
-        renderer.setClearColor(this.clearColor, this.clearAlpha);
-      }
-      if (this.clearDepth) {
-        renderer.clearDepth();
-      }
-      renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
-
-      // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
-      if (this.clear) renderer.clear(renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil);
-      renderer.render(this.scene, this.camera);
-      if (this.clearColor) {
-        renderer.setClearColor(this._oldClearColor, oldClearAlpha);
-      }
-      if (this.overrideMaterial !== undefined) {
-        this.scene.overrideMaterial = oldOverrideMaterial;
-      }
-      renderer.autoClear = oldAutoClear;
-    }
-  }]);
-  return RenderPass;
-}(_Pass2.Pass);
-exports.RenderPass = RenderPass;
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/postprocessing/ShaderPass.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.ShaderPass = void 0;
-var _three = require("three");
-var _Pass2 = require("./Pass.js");
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
-function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
-function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-var ShaderPass = /*#__PURE__*/function (_Pass) {
-  _inherits(ShaderPass, _Pass);
-  var _super = _createSuper(ShaderPass);
-  function ShaderPass(shader, textureID) {
-    var _this;
-    _classCallCheck(this, ShaderPass);
-    _this = _super.call(this);
-    _this.textureID = textureID !== undefined ? textureID : 'tDiffuse';
-    if (shader instanceof _three.ShaderMaterial) {
-      _this.uniforms = shader.uniforms;
-      _this.material = shader;
-    } else if (shader) {
-      _this.uniforms = _three.UniformsUtils.clone(shader.uniforms);
-      _this.material = new _three.ShaderMaterial({
-        name: shader.name !== undefined ? shader.name : 'unspecified',
-        defines: Object.assign({}, shader.defines),
-        uniforms: _this.uniforms,
-        vertexShader: shader.vertexShader,
-        fragmentShader: shader.fragmentShader
-      });
-    }
-    _this.fsQuad = new _Pass2.FullScreenQuad(_this.material);
-    return _this;
-  }
-  _createClass(ShaderPass, [{
-    key: "render",
-    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
-      if (this.uniforms[this.textureID]) {
-        this.uniforms[this.textureID].value = readBuffer.texture;
-      }
-      this.fsQuad.material = this.material;
-      if (this.renderToScreen) {
-        renderer.setRenderTarget(null);
-        this.fsQuad.render(renderer);
-      } else {
-        renderer.setRenderTarget(writeBuffer);
-        // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
-        if (this.clear) renderer.clear(renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil);
-        this.fsQuad.render(renderer);
-      }
-    }
-  }, {
-    key: "dispose",
-    value: function dispose() {
-      this.material.dispose();
-      this.fsQuad.dispose();
-    }
-  }]);
-  return ShaderPass;
-}(_Pass2.Pass);
-exports.ShaderPass = ShaderPass;
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/math/SimplexNoise.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../shaders/SAOShader.js":"node_modules/three/examples/jsm/shaders/SAOShader.js","../shaders/DepthLimitedBlurShader.js":"node_modules/three/examples/jsm/shaders/DepthLimitedBlurShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js","../shaders/UnpackDepthRGBAShader.js":"node_modules/three/examples/jsm/shaders/UnpackDepthRGBAShader.js"}],"node_modules/three/examples/jsm/math/SimplexNoise.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -61108,7 +59890,1353 @@ SSAOPass.OUTPUT = {
   'Depth': 4,
   'Normal': 5
 };
-},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../math/SimplexNoise.js":"node_modules/three/examples/jsm/math/SimplexNoise.js","../shaders/SSAOShader.js":"node_modules/three/examples/jsm/shaders/SSAOShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/shaders/BokehShader.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","../math/SimplexNoise.js":"node_modules/three/examples/jsm/math/SimplexNoise.js","../shaders/SSAOShader.js":"node_modules/three/examples/jsm/shaders/SSAOShader.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"src/LoadingProgressive/UI.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.UI = void 0;
+var _lilGuiModuleMin = require("three/examples/jsm/libs/lil-gui.module.min.js");
+var THREE = _interopRequireWildcard(require("three"));
+var _SSRPass = require("three/examples/jsm/postprocessing/SSRPass.js");
+var _SAOPass = require("three/examples/jsm/postprocessing/SAOPass.js");
+var _SSAOPass = require("three/examples/jsm/postprocessing/SSAOPass.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); } //dat.gui.module.js';
+var UI = /*#__PURE__*/function () {
+  function UI(main) {
+    _classCallCheck(this, UI);
+    this.gui = new _lilGuiModuleMin.GUI();
+    window.gui = this.gui;
+    window.panelDiv = this.gui.domElement;
+    this.params = {
+      exposure: 1,
+      bloomStrength: 1.5,
+      bloomThreshold: 0,
+      bloomRadius: 0
+    };
+    this.init(main);
+  }
+  _createClass(UI, [{
+    key: "init",
+    value: function init(main) {
+      this.gui.domElement.addEventListener('mouseover', function (event) {
+        window.inPanel = true;
+      }, false);
+      this.gui.domElement.addEventListener('mouseout', function (event) {
+        window.inPanel = false;
+      }, false);
+      this.control_camera(main.camera, main.playerControl);
+      this.control_envMap(main.scene);
+      // this.control_renderer(main.renderer)
+      this.control_directionalLight(main.lightProducer.directionalLight);
+      this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass);
+      this.control_godrays(main.postprocessing.godrays, main.postprocessing);
+      // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+      // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
+      // this.control_lut(main.postprocessing.unrealBloom.lutPass)
+      //this.control_sao(main.postprocessing.unrealBloom.saoPass)
+      this.control_ssao(main.postprocessing.unrealBloom.ssaoPass);
+    }
+  }, {
+    key: "control_camera",
+    value: function control_camera(camera, playerControl) {
+      var viewpointState = {
+        viewpoint: "默认视点",
+        mode: 'viewpoint'
+      };
+      var list_viewpoint = ["默认视点", "视点1", "视点2", "视点3", "视点4", "视点5", "视点6", "视点7"];
+      var camera_pos = [new THREE.Vector3(-43.486343682038736, 2.127206120237504, -8.698678933445201), new THREE.Vector3(48.55640273290092, 1.9142025592268763, -7.314690567468844), new THREE.Vector3(47.298827892375, 1.7232932395224025, -7.348360792773678), new THREE.Vector3(-58.92759054201366, 39.57529059951184, -130.21318894586796), new THREE.Vector3(-1.0911605157232827, 0.7075214699744158, -99.90313103529786), new THREE.Vector3(-64.39189399430883, 8.99856114154391, -74.3016535116766), new THREE.Vector3(-1.5994877198648538, 1.4997407676957795, -77.1512219063800), new THREE.Vector3(-54.63874349381954, 18.532468360185952, 46.071540822)];
+      var camera_tar = [new THREE.Vector3(0, 0, 0), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(51.03516532171532, 2.290497364346837, -7.248324342451475), new THREE.Vector3(0, 0, 0), new THREE.Vector3(-0.9868855788301696, 0.7075214699744165, -99.03513139079297), new THREE.Vector3(-65.34712509322323, 9.472649100434154, -69.41033714095124), new THREE.Vector3(-1.9992580266994615, 1.6314769709077197, -59.25814512545), new THREE.Vector3(-66.03747192556759, 9.679838586814231, 41.845030134054)];
+      var gui = this.gui;
+      var folder = gui.addFolder("camera");
+      folder.add(viewpointState, 'viewpoint').options(list_viewpoint).onChange(function () {
+        var id = 0;
+        for (var i = 0; i < 7; i++) {
+          if (viewpointState.viewpoint == list_viewpoint[i]) id = i;
+        }
+        camera.position.copy(camera_pos[id]);
+        camera.lookAt(camera_tar[id]);
+      });
+      var opt2 = ["viewpoint", "model"];
+      folder.add(viewpointState, 'mode').options(opt2).onChange(function () {
+        var id = 0;
+        for (var i = 0; i < 7; i++) {
+          if (viewpointState.mode == opt2[i]) id = i;
+        }
+        playerControl.mode.set(viewpointState.mode);
+      });
+    }
+  }, {
+    key: "control_envMap",
+    value: function control_envMap(scene) {
+      var gui = this.gui;
+      var params = this.params;
+      params.metalness = 0.95; //0.5
+      params.roughness = 0.5;
+      params.envMapIntensity = 1; //0.5
+      // params.emissiveIntensity=0.5
+      var folder = gui.addFolder("材质");
+      folder.add(params, 'metalness', 0.0, 3.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.metalness = material.metalness0 + value;
+          }
+        });
+      });
+      folder.add(params, 'roughness', -2.0, 3.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.roughness = material.roughness0 + value;
+          }
+        });
+      });
+      folder.add(params, 'envMapIntensity', -1.0, 4.).step(0.005).onChange(function (value) {
+        scene.traverse(function (node) {
+          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+            var material = node.material;
+            material.envMapIntensity = material.envMapIntensity0 + value;
+          }
+        });
+      });
+    }
+  }, {
+    key: "control_directionalLight",
+    value: function control_directionalLight(directionalLight) {
+      var gui = this.gui;
+      var params = this.params;
+      var directionFolder = gui.addFolder('平行光');
+      /*color*/
+      params['平行光颜色'] = directionalLight.color;
+      directionFolder.addColor(params, '平行光颜色').onChange(function (e) {
+        directionalLight.color = new THREE.Color(e);
+      });
+      /*power*/
+      params['平行光强度'] = directionalLight.intensity;
+      directionFolder.add(params, '平行光强度', 0.0, 10.0).step(0.1).onChange(function (e) {
+        directionalLight.intensity = e;
+      });
+      /*direction*/
+      params['平行光方向X'] = directionalLight.target.position.x - directionalLight.position.x;
+      directionFolder.add(params, '平行光方向X', -1.0, 1.0).step(0.01).onChange(function (e) {
+        directionalLight.target.position.x = directionalLight.position.x + e;
+      });
+      params['平行光方向Y'] = directionalLight.target.position.y - directionalLight.position.y;
+      directionFolder.add(params, '平行光方向Y', -1.0, -0.6).step(0.01).onChange(function (e) {
+        directionalLight.target.position.y = directionalLight.position.y + e;
+      });
+      params['平行光方向Z'] = directionalLight.target.position.z - directionalLight.position.z;
+      directionFolder.add(params, '平行光方向Z', -1.0, 1.0).step(0.01).onChange(function (e) {
+        directionalLight.target.position.z = directionalLight.position.z + e;
+      });
+      /*shadow*/
+      params['平行光阴影'] = directionalLight.castShadow;
+      directionFolder.add(params, '平行光阴影').onChange(function (e) {
+        directionalLight.castShadow = e;
+      });
+      /*visible*/
+      params['平行光启用'] = directionalLight.visible;
+      directionFolder.add(params, '平行光启用').onChange(function (e) {
+        directionalLight.visible = e;
+      });
+    }
+  }, {
+    key: "control_renderer",
+    value: function control_renderer(renderer) {
+      var gui = this.gui;
+      var params = this.params;
+      params.exposure = Math.pow(renderer.toneMappingExposure, 1 / 4);
+      var folder = gui.addFolder("tone mapping");
+      folder.add(params, 'exposure', 0.1, 2).onChange(function (value) {
+        renderer.toneMappingExposure = Math.pow(value, 4.0);
+      });
+    }
+  }, {
+    key: "control_bloomPass",
+    value: function control_bloomPass(bloomPass) {
+      var gui = this.gui;
+      var params = this.params;
+      params.bloomThreshold = bloomPass.threshold;
+      params.bloomStrength = bloomPass.strength;
+      params.bloomRadius = bloomPass.radius;
+      var folder = gui.addFolder("辉光");
+      folder.add(params, 'bloomStrength', 0.0, 1.5).step(0.05).onChange(function (value) {
+        bloomPass.strength = Number(value);
+      });
+      folder.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
+        bloomPass.threshold = Number(value);
+      });
+      folder.add(params, 'bloomRadius', 0.0, 1.0).step(0.01).onChange(function (value) {
+        bloomPass.radius = Number(value);
+      });
+    }
+  }, {
+    key: "control_godrays",
+    value: function control_godrays(godrays, postprocessing) {
+      var gui = this.gui;
+      var params = this.params;
+      params.filterLen = godrays.filterLen;
+      params.TAPS_PER_PASS = godrays.TAPS_PER_PASS;
+      params.godrays_stength = postprocessing.godrays_stength.value;
+      var folder = gui.addFolder("隙间光");
+      folder.add(params, 'godrays_stength', 0.0, 1.5).step(0.05).onChange(function (value) {
+        postprocessing.godrays_stength.value = value;
+      });
+      folder.add(params, 'filterLen', 0.5, 2.0).step(0.01).onChange(function (value) {
+        godrays.filterLen = Number(value);
+      });
+      folder.add(params, 'TAPS_PER_PASS', 1.0, 10.0).step(0.1).onChange(function (value) {
+        godrays.TAPS_PER_PASS = Number(value);
+      });
+    }
+  }, {
+    key: "control_ssr",
+    value: function control_ssr(ssrPass) {
+      var gui = this.gui;
+      var params = this.params;
+      params.ssr_thickness = ssrPass.thickness;
+      params.ssr_maxDistance = ssrPass.maxDistance;
+      params.ssr_opacity = ssrPass.opacity;
+      var folder = gui.addFolder("屏幕空间反射");
+      folder.add(params, 'ssr_maxDistance', 0.0, 200.).step(0.5).onChange(function (value) {
+        ssrPass.maxDistance = Number(value);
+      });
+      //opacity
+      folder.add(params, 'ssr_opacity', 0.0, 2.).step(0.05).onChange(function (value) {
+        ssrPass.opacity = value;
+      });
+      folder.add(ssrPass, 'infiniteThick');
+      folder.add(ssrPass, 'fresnel');
+      folder.add(ssrPass, 'distanceAttenuation');
+      folder.add(ssrPass, 'bouncing');
+      folder.add(ssrPass, 'output', {
+        'Default': _SSRPass.SSRPass.OUTPUT.Default,
+        'SSR Only': _SSRPass.SSRPass.OUTPUT.SSR,
+        'Beauty': _SSRPass.SSRPass.OUTPUT.Beauty,
+        'Depth': _SSRPass.SSRPass.OUTPUT.Depth,
+        'Normal': _SSRPass.SSRPass.OUTPUT.Normal,
+        'Metalness': _SSRPass.SSRPass.OUTPUT.Metalness
+      }).onChange(function (value) {
+        ssrPass.output = parseInt(value);
+      });
+      folder.add(ssrPass, 'blur');
+
+      //maxDistance
+      // folder.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
+    }
+  }, {
+    key: "control_sao",
+    value: function control_sao(saoPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("可缩放环境光遮挡");
+      var params = this.params;
+      folder.add(saoPass.params, 'output', {
+        'Beauty': _SAOPass.SAOPass.OUTPUT.Beauty,
+        'Beauty+SAO': _SAOPass.SAOPass.OUTPUT.Default,
+        'SAO': _SAOPass.SAOPass.OUTPUT.SAO,
+        'Depth': _SAOPass.SAOPass.OUTPUT.Depth,
+        'Normal': _SAOPass.SAOPass.OUTPUT.Normal
+      }).onChange(function (value) {
+        saoPass.params.output = parseInt(value);
+      });
+      folder.add(saoPass.params, 'saoBias', -1, 1);
+      folder.add(saoPass.params, 'saoIntensity', 0, 1);
+      folder.add(saoPass.params, 'saoScale', 0, 10);
+      folder.add(saoPass.params, 'saoKernelRadius', 1, 100);
+      folder.add(saoPass.params, 'saoMinResolution', 0, 1);
+      folder.add(saoPass.params, 'saoBlur');
+      folder.add(saoPass.params, 'saoBlurRadius', 0, 200);
+      folder.add(saoPass.params, 'saoBlurStdDev', 0.5, 150);
+      folder.add(saoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1);
+    }
+  }, {
+    key: "control_bokeh",
+    value: function control_bokeh(bokehPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("散焦景深");
+      var params = this.params;
+      params.bokehPass_aperture = bokehPass.uniforms.aperture.value;
+      folder.add(params, 'bokehPass_aperture', 0.0, 1.).step(0.001).onChange(function (value) {
+        bokehPass.uniforms.aperture.value = value;
+      });
+      params.bokehPass_maxblur = bokehPass.uniforms.maxblur.value;
+      folder.add(params, 'bokehPass_maxblur', 0, 0.1).step(0.0001).onChange(function (value) {
+        bokehPass.uniforms.maxblur.value = value;
+      });
+
+      // params.bokehPass_focus=bokehPass.uniforms.focus.value
+      // folder.add( params, 'bokehPass_focus', 0, 5 ).step( 0.01 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.focus.value=value
+      // } );
+
+      // params.bokehPass_farClip=bokehPass.uniforms.farClip.value
+      // folder.add( params, 'bokehPass_farClip', 50000, 5000000 ).step( 1000 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.farClip.value=value
+      // } );
+
+      // params.bokehPass_nearClip=bokehPass.uniforms.nearClip.value
+      // folder.add( params, 'bokehPass_nearClip', 0, 50 ).step( 0.1 ).onChange( function ( value ) {
+      //     bokehPass.uniforms.nearClip.value=value
+      // } );
+    }
+  }, {
+    key: "control_lut",
+    value: function control_lut(lutPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("LookupTable");
+      var params = this.params;
+      params.lutPass_intensity = lutPass.uniforms.intensity.value;
+      folder.add(params, 'lutPass_intensity', 0.0, 0.8).step(0.005).onChange(function (value) {
+        lutPass.uniforms.intensity.value = value;
+      });
+    }
+  }, {
+    key: "control_ssao",
+    value: function control_ssao(ssaoPass) {
+      var gui = this.gui;
+      var folder = gui.addFolder("屏幕空间环境光遮蔽");
+      folder.add(ssaoPass, 'output', {
+        'Default': _SSAOPass.SSAOPass.OUTPUT.Default,
+        'SSAO Only': _SSAOPass.SSAOPass.OUTPUT.SSAO,
+        'SSAO Only + Blur': _SSAOPass.SSAOPass.OUTPUT.Blur,
+        'Beauty': _SSAOPass.SSAOPass.OUTPUT.Beauty,
+        'Depth': _SSAOPass.SSAOPass.OUTPUT.Depth,
+        'Normal': _SSAOPass.SSAOPass.OUTPUT.Normal
+      }).onChange(function (value) {
+        ssaoPass.output = parseInt(value);
+      });
+      folder.add(ssaoPass, 'kernelRadius').min(0).max(32);
+      folder.add(ssaoPass, 'minDistance').min(0.001).max(0.02);
+      folder.add(ssaoPass, 'maxDistance').min(0.01).max(0.3);
+    }
+  }]);
+  return UI;
+}();
+exports.UI = UI;
+},{"three/examples/jsm/libs/lil-gui.module.min.js":"node_modules/three/examples/jsm/libs/lil-gui.module.min.js","three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js"}],"lib/playerControl/MoveManager.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.MoveManager = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _readOnlyError(name) { throw new TypeError("\"" + name + "\" is read-only"); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _classPrivateFieldInitSpec(obj, privateMap, value) { _checkPrivateRedeclaration(obj, privateMap); privateMap.set(obj, value); }
+function _checkPrivateRedeclaration(obj, privateCollection) { if (privateCollection.has(obj)) { throw new TypeError("Cannot initialize the same private elements twice on an object"); } }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classPrivateFieldGet(receiver, privateMap) { var descriptor = _classExtractFieldDescriptor(receiver, privateMap, "get"); return _classApplyDescriptorGet(receiver, descriptor); }
+function _classExtractFieldDescriptor(receiver, privateMap, action) { if (!privateMap.has(receiver)) { throw new TypeError("attempted to " + action + " private field on non-instance"); } return privateMap.get(receiver); }
+function _classApplyDescriptorGet(receiver, descriptor) { if (descriptor.get) { return descriptor.get.call(receiver); } return descriptor.value; }
+var _autoRoam = /*#__PURE__*/new WeakMap();
+var MoveManager = /*#__PURE__*/function () {
+  function MoveManager(avatar, roamPath) {
+    _classCallCheck(this, MoveManager);
+    _defineProperty(this, "avatar", void 0);
+    _defineProperty(this, "roamPath", void 0);
+    _defineProperty(this, "myPreviewflag", void 0);
+    //确定目标节点
+    _defineProperty(this, "stopFlag", void 0);
+    //控制是否开始移动
+    _defineProperty(this, "isLoop", void 0);
+    //如果不进行循环漫游的话，第一行的初始状态就没用了
+    _defineProperty(this, "finishCb", function () {});
+    _defineProperty(this, "myMakeOneRoamStep", new MakeOneRoamStep());
+    _classPrivateFieldInitSpec(this, _autoRoam, {
+      writable: true,
+      value: function value() {
+        var scope = this;
+        autoRoam0();
+        function autoRoam0() {
+          if (!scope.stopFlag)
+            //是否停止自动漫游
+            if (scope.myMakeOneRoamStep.preview(scope.myPreviewflag, scope.avatar, scope.roamPath)) {
+              scope.myPreviewflag++;
+              if (scope.myPreviewflag === scope.roamPath.length) {
+                scope.myPreviewflag = 1;
+                if (!scope.isLoop) scope.stopFlag = true;
+                scope.finishCb();
+              }
+            }
+          requestAnimationFrame(autoRoam0);
+        }
+      }
+    });
+    var _scope = this;
+    _scope.avatar = avatar;
+    _scope.roamPath = roamPath;
+    _scope.myPreviewflag = 1; //确定目标节点
+    _scope.stopFlag = true;
+    _scope.isLoop = true; //false;//如果不进行循环漫游的话，第一行的初始状态就没用了
+
+    _scope.myMakeOneRoamStep = new MakeOneRoamStep();
+    _classPrivateFieldGet(this, _autoRoam).call(this); //创建后自动执行
+  }
+  _createClass(MoveManager, [{
+    key: "getStartPos",
+    value: function getStartPos() {
+      var mystate = this.myPreviewflag - 1;
+      if (mystate >= this.roamPath.length) 0, _readOnlyError("mystate");
+      if (mystate < 0) this.roamPath.length - 1, _readOnlyError("mystate");
+      return this.roamPath[mystate];
+    }
+  }, {
+    key: "joinPath",
+    value: function joinPath() {
+      //切换路径
+      var self = this;
+      self.stopFlag = true;
+      var endpos = this.getStartPos();
+      var camera = this.avatar;
+      var move0 = new MoveManager(camera, [[camera.position.x, camera.position.y, camera.position.z, camera.rotation.x, camera.rotation.y, camera.rotation.z, 10], [endpos[0], endpos[1], endpos[2], endpos[3], endpos[4], endpos[5], 10]]);
+      move0.isLoop = false;
+      move0.finishCb = function () {
+        self.stopFlag = false;
+      };
+      move0.stopFlag = false;
+    }
+  }]);
+  return MoveManager;
+}();
+exports.MoveManager = MoveManager;
+_defineProperty(MoveManager, "getArray", function (arr1) {
+  //通过平面位置获取输入数据
+  //arr1:  x,z
+  //arr2:  x,y,z,  a,b,c, time
+  var arr2 = [];
+  var time = 400;
+  arr2.push([arr1[0][0], 0, arr1[0][1], 0, 0, 0, time]);
+  for (var i = 1; i < arr1.length; i++) {
+    arr2.push([arr1[i][0], 0, arr1[i][1], 0, Math.atan2(arr1[i][0] - arr1[i - 1][0], arr1[i][1] - arr1[i - 1][1]), 0, time]);
+  }
+  return arr2;
+});
+var _updateParam = /*#__PURE__*/new WeakMap();
+var _initParam = /*#__PURE__*/new WeakMap();
+var MakeOneRoamStep = /*#__PURE__*/_createClass(function MakeOneRoamStep() {
+  _classCallCheck(this, MakeOneRoamStep);
+  _defineProperty(this, "pattern", void 0);
+  _defineProperty(this, "rectify", void 0);
+  //记录这是第几步//第一步更新参数，最后一步纠正状态
+  _defineProperty(this, "stepIndex_max", void 0);
+  _defineProperty(this, "targetStatus", void 0);
+  //目标状态
+  _defineProperty(this, "dx", void 0);
+  _defineProperty(this, "dy", void 0);
+  _defineProperty(this, "dz", void 0);
+  //一步的位移
+  _defineProperty(this, "q1", void 0);
+  _defineProperty(this, "q2", void 0);
+  _defineProperty(this, "qt", void 0);
+  _classPrivateFieldInitSpec(this, _updateParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      time = time;
+      var scope = this;
+      scope.dx = (x2 - x1) / time;
+      scope.dy = (y2 - y1) / time;
+      scope.dz = (z2 - z1) / time;
+      scope.q1 = euler2quaternion(a1, b1, c1);
+      scope.q2 = euler2quaternion(a2, b2, c2);
+      scope.qt = scope.stepIndex / scope.stepIndex_max;
+      function euler2quaternion(x, y, z) {
+        var euler = new THREE.Euler(x, y, z, 'XYZ');
+        var quaternion = new THREE.Quaternion();
+        quaternion.setFromEuler(euler);
+        return quaternion;
+      }
+      scope.targetStatus = [x2, y2, z2, a2, b2, c2];
+    }
+  });
+  _classPrivateFieldInitSpec(this, _initParam, {
+    writable: true,
+    value: function value(x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time) {
+      var scope = this;
+      scope.stepIndex_max = time;
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    }
+  });
+  _defineProperty(this, "preview", function (mystate, avatar, mydata) {
+    //thisObj,time,myavatar,k//thisObj,x1,y1,z1,x2,y2,z2,time,myavatar,k
+    var scope = this;
+    var x1, y1, z1, x2, y2, z2,
+      //位置
+      a1, b1, c1, a2, b2, c2; //角度//a=c
+
+    if (mystate >= mydata.length) return;
+    var time = mydata[mystate][6];
+    //当前状态
+    x1 = avatar.position.x;
+    y1 = avatar.position.y;
+    z1 = avatar.position.z;
+    a1 = avatar.rotation.x;
+    b1 = avatar.rotation.y;
+    c1 = avatar.rotation.z;
+    //目标状态
+    x2 = mydata[mystate][0];
+    y2 = mydata[mystate][1];
+    z2 = mydata[mystate][2];
+    a2 = mydata[mystate][3];
+    b2 = mydata[mystate][4];
+    c2 = mydata[mystate][5];
+    if (scope.stepIndex === 1) {
+      //新的阶段
+      _classPrivateFieldGet(scope, _initParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time);
+    } else if (scope.rectify) {
+      //如果有路径纠正功能
+      _classPrivateFieldGet(scope, _updateParam).call(scope, x1, y1, z1, x2, y2, z2, a1, b1, c1, a2, b2, c2, time - scope.stepIndex + 1);
+    }
+    return movetoPos(avatar, scope);
+    function movetoPos(avatar, scope) {
+      //移动
+      if (scope.stepIndex < scope.stepIndex_max) {
+        avatar.position.x += scope.dx;
+        avatar.position.y += scope.dy;
+        avatar.position.z += scope.dz;
+        avatar.quaternion.x = scope.q1.x;
+        avatar.quaternion.y = scope.q1.y;
+        avatar.quaternion.z = scope.q1.z;
+        avatar.quaternion.w = scope.q1.w;
+        avatar.quaternion.slerp(scope.q2, scope.qt);
+        scope.stepIndex++;
+        return false;
+      } else {
+        avatar.position.set(scope.targetStatus[0], scope.targetStatus[1], scope.targetStatus[2]);
+        avatar.rotation.set(scope.targetStatus[3], scope.targetStatus[4], scope.targetStatus[5]);
+        scope.stepIndex = 1;
+        return true;
+      }
+    }
+  });
+  var _scope2 = this;
+  _scope2.rectify = true; //
+  _scope2.stepIndex = 1; //记录这是第几步//第一步更新参数，最后一步纠正状态
+});
+},{"three":"node_modules/three/build/three.module.js"}],"node_modules/three/examples/jsm/objects/Sky.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Sky = void 0;
+var _three = require("three");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+/**
+ * Based on "A Practical Analytic Model for Daylight"
+ * aka The Preetham Model, the de facto standard analytic skydome model
+ * https://www.researchgate.net/publication/220720443_A_Practical_Analytic_Model_for_Daylight
+ *
+ * First implemented by Simon Wallner
+ * http://simonwallner.at/project/atmospheric-scattering/
+ *
+ * Improved by Martin Upitis
+ * http://blenderartists.org/forum/showthread.php?245954-preethams-sky-impementation-HDR
+ *
+ * Three.js integration by zz85 http://twitter.com/blurspline
+*/
+var Sky = /*#__PURE__*/function (_Mesh) {
+  _inherits(Sky, _Mesh);
+  var _super = _createSuper(Sky);
+  function Sky() {
+    var _this;
+    _classCallCheck(this, Sky);
+    var shader = Sky.SkyShader;
+    var material = new _three.ShaderMaterial({
+      name: 'SkyShader',
+      fragmentShader: shader.fragmentShader,
+      vertexShader: shader.vertexShader,
+      uniforms: _three.UniformsUtils.clone(shader.uniforms),
+      side: _three.BackSide,
+      depthWrite: false
+    });
+    _this = _super.call(this, new _three.BoxGeometry(1, 1, 1), material);
+    _this.isSky = true;
+    return _this;
+  }
+  return _createClass(Sky);
+}(_three.Mesh);
+exports.Sky = Sky;
+Sky.SkyShader = {
+  uniforms: {
+    'turbidity': {
+      value: 2
+    },
+    'rayleigh': {
+      value: 1
+    },
+    'mieCoefficient': {
+      value: 0.005
+    },
+    'mieDirectionalG': {
+      value: 0.8
+    },
+    'sunPosition': {
+      value: new _three.Vector3()
+    },
+    'up': {
+      value: new _three.Vector3(0, 1, 0)
+    }
+  },
+  vertexShader: /* glsl */"\n\t\tuniform vec3 sunPosition;\n\t\tuniform float rayleigh;\n\t\tuniform float turbidity;\n\t\tuniform float mieCoefficient;\n\t\tuniform vec3 up;\n\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\t// constants for atmospheric scattering\n\t\tconst float e = 2.71828182845904523536028747135266249775724709369995957;\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\t// wavelength of used primaries, according to preetham\n\t\tconst vec3 lambda = vec3( 680E-9, 550E-9, 450E-9 );\n\t\t// this pre-calcuation replaces older TotalRayleigh(vec3 lambda) function:\n\t\t// (8.0 * pow(pi, 3.0) * pow(pow(n, 2.0) - 1.0, 2.0) * (6.0 + 3.0 * pn)) / (3.0 * N * pow(lambda, vec3(4.0)) * (6.0 - 7.0 * pn))\n\t\tconst vec3 totalRayleigh = vec3( 5.804542996261093E-6, 1.3562911419845635E-5, 3.0265902468824876E-5 );\n\n\t\t// mie stuff\n\t\t// K coefficient for the primaries\n\t\tconst float v = 4.0;\n\t\tconst vec3 K = vec3( 0.686, 0.678, 0.666 );\n\t\t// MieConst = pi * pow( ( 2.0 * pi ) / lambda, vec3( v - 2.0 ) ) * K\n\t\tconst vec3 MieConst = vec3( 1.8399918514433978E14, 2.7798023919660528E14, 4.0790479543861094E14 );\n\n\t\t// earth shadow hack\n\t\t// cutoffAngle = pi / 1.95;\n\t\tconst float cutoffAngle = 1.6110731556870734;\n\t\tconst float steepness = 1.5;\n\t\tconst float EE = 1000.0;\n\n\t\tfloat sunIntensity( float zenithAngleCos ) {\n\t\t\tzenithAngleCos = clamp( zenithAngleCos, -1.0, 1.0 );\n\t\t\treturn EE * max( 0.0, 1.0 - pow( e, -( ( cutoffAngle - acos( zenithAngleCos ) ) / steepness ) ) );\n\t\t}\n\n\t\tvec3 totalMie( float T ) {\n\t\t\tfloat c = ( 0.2 * T ) * 10E-18;\n\t\t\treturn 0.434 * c * MieConst;\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec4 worldPosition = modelMatrix * vec4( position, 1.0 );\n\t\t\tvWorldPosition = worldPosition.xyz;\n\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\t\t\tgl_Position.z = gl_Position.w; // set z to camera.far\n\n\t\t\tvSunDirection = normalize( sunPosition );\n\n\t\t\tvSunE = sunIntensity( dot( vSunDirection, up ) );\n\n\t\t\tvSunfade = 1.0 - clamp( 1.0 - exp( ( sunPosition.y / 450000.0 ) ), 0.0, 1.0 );\n\n\t\t\tfloat rayleighCoefficient = rayleigh - ( 1.0 * ( 1.0 - vSunfade ) );\n\n\t\t\t// extinction (absorbtion + out scattering)\n\t\t\t// rayleigh coefficients\n\t\t\tvBetaR = totalRayleigh * rayleighCoefficient;\n\n\t\t\t// mie coefficients\n\t\t\tvBetaM = totalMie( turbidity ) * mieCoefficient;\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\t\tvarying vec3 vWorldPosition;\n\t\tvarying vec3 vSunDirection;\n\t\tvarying float vSunfade;\n\t\tvarying vec3 vBetaR;\n\t\tvarying vec3 vBetaM;\n\t\tvarying float vSunE;\n\n\t\tuniform float mieDirectionalG;\n\t\tuniform vec3 up;\n\n\t\tconst vec3 cameraPos = vec3( 0.0, 0.0, 0.0 );\n\n\t\t// constants for atmospheric scattering\n\t\tconst float pi = 3.141592653589793238462643383279502884197169;\n\n\t\tconst float n = 1.0003; // refractive index of air\n\t\tconst float N = 2.545E25; // number of molecules per unit volume for air at 288.15K and 1013mb (sea level -45 celsius)\n\n\t\t// optical length at zenith for molecules\n\t\tconst float rayleighZenithLength = 8.4E3;\n\t\tconst float mieZenithLength = 1.25E3;\n\t\t// 66 arc seconds -> degrees, and the cosine of that\n\t\tconst float sunAngularDiameterCos = 0.999956676946448443553574619906976478926848692873900859324;\n\n\t\t// 3.0 / ( 16.0 * pi )\n\t\tconst float THREE_OVER_SIXTEENPI = 0.05968310365946075;\n\t\t// 1.0 / ( 4.0 * pi )\n\t\tconst float ONE_OVER_FOURPI = 0.07957747154594767;\n\n\t\tfloat rayleighPhase( float cosTheta ) {\n\t\t\treturn THREE_OVER_SIXTEENPI * ( 1.0 + pow( cosTheta, 2.0 ) );\n\t\t}\n\n\t\tfloat hgPhase( float cosTheta, float g ) {\n\t\t\tfloat g2 = pow( g, 2.0 );\n\t\t\tfloat inverse = 1.0 / pow( 1.0 - 2.0 * g * cosTheta + g2, 1.5 );\n\t\t\treturn ONE_OVER_FOURPI * ( ( 1.0 - g2 ) * inverse );\n\t\t}\n\n\t\tvoid main() {\n\n\t\t\tvec3 direction = normalize( vWorldPosition - cameraPos );\n\n\t\t\t// optical length\n\t\t\t// cutoff angle at 90 to avoid singularity in next formula.\n\t\t\tfloat zenithAngle = acos( max( 0.0, dot( up, direction ) ) );\n\t\t\tfloat inverse = 1.0 / ( cos( zenithAngle ) + 0.15 * pow( 93.885 - ( ( zenithAngle * 180.0 ) / pi ), -1.253 ) );\n\t\t\tfloat sR = rayleighZenithLength * inverse;\n\t\t\tfloat sM = mieZenithLength * inverse;\n\n\t\t\t// combined extinction factor\n\t\t\tvec3 Fex = exp( -( vBetaR * sR + vBetaM * sM ) );\n\n\t\t\t// in scattering\n\t\t\tfloat cosTheta = dot( direction, vSunDirection );\n\n\t\t\tfloat rPhase = rayleighPhase( cosTheta * 0.5 + 0.5 );\n\t\t\tvec3 betaRTheta = vBetaR * rPhase;\n\n\t\t\tfloat mPhase = hgPhase( cosTheta, mieDirectionalG );\n\t\t\tvec3 betaMTheta = vBetaM * mPhase;\n\n\t\t\tvec3 Lin = pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * ( 1.0 - Fex ), vec3( 1.5 ) );\n\t\t\tLin *= mix( vec3( 1.0 ), pow( vSunE * ( ( betaRTheta + betaMTheta ) / ( vBetaR + vBetaM ) ) * Fex, vec3( 1.0 / 2.0 ) ), clamp( pow( 1.0 - dot( up, vSunDirection ), 5.0 ), 0.0, 1.0 ) );\n\n\t\t\t// nightsky\n\t\t\tfloat theta = acos( direction.y ); // elevation --> y-axis, [-pi/2, pi/2]\n\t\t\tfloat phi = atan( direction.z, direction.x ); // azimuth --> x-axis [-pi/2, pi/2]\n\t\t\tvec2 uv = vec2( phi, theta ) / vec2( 2.0 * pi, pi ) + vec2( 0.5, 0.0 );\n\t\t\tvec3 L0 = vec3( 0.1 ) * Fex;\n\n\t\t\t// composition + solar disc\n\t\t\tfloat sundisk = smoothstep( sunAngularDiameterCos, sunAngularDiameterCos + 0.00002, cosTheta );\n\t\t\tL0 += ( vSunE * 19000.0 * Fex ) * sundisk;\n\n\t\t\tvec3 texColor = ( Lin + L0 ) * 0.04 + vec3( 0.0, 0.0003, 0.00075 );\n\n\t\t\tvec3 retColor = pow( texColor, vec3( 1.0 / ( 1.2 + ( 1.2 * vSunfade ) ) ) );\n\n\t\t\tgl_FragColor = vec4( retColor, 1.0 );\n\n\t\t\t#include <tonemapping_fragment>\n\t\t\t#include <encodings_fragment>\n\n\t\t}"
+};
+},{"three":"node_modules/three/build/three.module.js"}],"lib/threejs/SkyController.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.SkyController = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+var _Sky = require("three/examples/jsm/objects/Sky");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var SkyController = /*#__PURE__*/function () {
+  function SkyController(scene, camera, renderer) {
+    _classCallCheck(this, SkyController);
+    this.scene = scene;
+    this.camera = camera;
+    this.renderer = renderer;
+    this.sun = new THREE.Vector3();
+    window.sun = this.sum;
+    this.sky = this.initSky();
+    this.render();
+  }
+  _createClass(SkyController, [{
+    key: "initSky",
+    value: function initSky() {
+      var sky = new _Sky.Sky();
+      sky.scale.setScalar(450000);
+      // sky.rotation.set( 0, 0, Math.PI*1.5 )
+      this.scene.add(sky);
+      this.sky = sky;
+      this.effectController = {
+        turbidity: 0,
+        //10,//1,//10,//光晕强度
+        rayleigh: 0.1,
+        //1,//3,//太阳光强度
+        mieCoefficient: 0,
+        //0.005,//0.0001,//0.005,//光晕强度
+        mieDirectionalG: 0,
+        // 0.01,//0.7,//光晕强度
+        elevation: 5,
+        //20,//5,//2,  //俯仰角
+        azimuth: 180 - 20 //偏航角
+        // exposure: this.renderer.toneMappingExposure/100 //this.renderer.toneMappingExposure
+      };
+
+      return sky;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var effectController = this.effectController;
+      // console.log()
+      var uniforms = this.sky.material.uniforms;
+      uniforms['turbidity'].value = effectController.turbidity;
+      uniforms['rayleigh'].value = effectController.rayleigh;
+      uniforms['mieCoefficient'].value = effectController.mieCoefficient;
+      uniforms['mieDirectionalG'].value = effectController.mieDirectionalG;
+      var phi = THREE.MathUtils.degToRad(90 - effectController.elevation);
+      var theta = THREE.MathUtils.degToRad(effectController.azimuth);
+      this.sun.setFromSphericalCoords(1, phi, theta);
+      uniforms['sunPosition'].value.copy(this.sun);
+      this.renderer.toneMappingExposure = effectController.exposure;
+      this.renderer.render(this.scene, this.camera);
+    }
+  }]);
+  return SkyController;
+}();
+exports.SkyController = SkyController;
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/objects/Sky":"node_modules/three/examples/jsm/objects/Sky.js"}],"node_modules/three/examples/jsm/shaders/GodRaysShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GodRaysGenerateShader = exports.GodRaysFakeSunShader = exports.GodRaysDepthMaskShader = exports.GodRaysCombineShader = void 0;
+var _three = require("three");
+/**
+ * God-rays (crepuscular rays)
+ *
+ * Similar implementation to the one used by Crytek for CryEngine 2 [Sousa2008].
+ * Blurs a mask generated from the depth map along radial lines emanating from the light
+ * source. The blur repeatedly applies a blur filter of increasing support but constant
+ * sample count to produce a blur filter with large support.
+ *
+ * My implementation performs 3 passes, similar to the implementation from Sousa. I found
+ * just 6 samples per pass produced acceptible results. The blur is applied three times,
+ * with decreasing filter support. The result is equivalent to a single pass with
+ * 6*6*6 = 216 samples.
+ *
+ * References:
+ *
+ * Sousa2008 - Crysis Next Gen Effects, GDC2008, http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt
+ */
+
+var GodRaysDepthMaskShader = {
+  uniforms: {
+    tInput: {
+      value: null
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = vec4( 1.0 ) - texture2D( tInput, vUv );\n\n\t\t}"
+};
+
+/**
+ * The god-ray generation shader.
+ *
+ * First pass:
+ *
+ * The depth map is blurred along radial lines towards the "sun". The
+ * output is written to a temporary render target (I used a 1/4 sized
+ * target).
+ *
+ * Pass two & three:
+ *
+ * The results of the previous pass are re-blurred, each time with a
+ * decreased distance between samples.
+ */
+exports.GodRaysDepthMaskShader = GodRaysDepthMaskShader;
+var GodRaysGenerateShader = {
+  uniforms: {
+    tInput: {
+      value: null
+    },
+    fStepSize: {
+      value: 1.0
+    },
+    vSunPositionScreenSpace: {
+      value: new _three.Vector3()
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
+  fragmentShader: /* glsl */"\n\n\t\t#define TAPS_PER_PASS 6.0\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fStepSize; // filter step size\n\n\t\tvoid main() {\n\n\t\t// delta from current pixel to \"sun\" position\n\n\t\t\tvec2 delta = vSunPositionScreenSpace.xy - vUv;\n\t\t\tfloat dist = length( delta );\n\n\t\t// Step vector (uv space)\n\n\t\t\tvec2 stepv = fStepSize * delta / dist;\n\n\t\t// Number of iterations between pixel and sun\n\n\t\t\tfloat iters = dist/fStepSize;\n\n\t\t\tvec2 uv = vUv.xy;\n\t\t\tfloat col = 0.0;\n\n\t\t// This breaks ANGLE in Chrome 22\n\t\t//\t- see http://code.google.com/p/chromium/issues/detail?id=153105\n\n\t\t/*\n\t\t// Unrolling didnt do much on my hardware (ATI Mobility Radeon 3450),\n\t\t// so i've just left the loop\n\n\t\t\"for ( float i = 0.0; i < TAPS_PER_PASS; i += 1.0 ) {\",\n\n\t\t// Accumulate samples, making sure we dont walk past the light source.\n\n\t\t// The check for uv.y < 1 would not be necessary with \"border\" UV wrap\n\t\t// mode, with a black border color. I don't think this is currently\n\t\t// exposed by three.js. As a result there might be artifacts when the\n\t\t// sun is to the left, right or bottom of screen as these cases are\n\t\t// not specifically handled.\n\n\t\t\"\tcol += ( i <= iters && uv.y < 1.0 ? texture2D( tInput, uv ).r : 0.0 );\",\n\t\t\"\tuv += stepv;\",\n\n\t\t\"}\",\n\t\t*/\n\n\t\t// Unrolling loop manually makes it work in ANGLE\n\n\t\t\tfloat f = min( 1.0, max( vSunPositionScreenSpace.z / 1000.0, 0.0 ) ); // used to fade out godrays\n\n\t\t\tif ( 0.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 1.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 2.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 3.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 4.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 5.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t// Should technically be dividing by 'iters but 'TAPS_PER_PASS' smooths out\n\t\t// objectionable artifacts, in particular near the sun position. The side\n\t\t// effect is that the result is darker than it should be around the sun, as\n\t\t// TAPS_PER_PASS is greater than the number of samples actually accumulated.\n\t\t// When the result is inverted (in the shader 'godrays_combine this produces\n\t\t// a slight bright spot at the position of the sun, even when it is occluded.\n\n\t\t\tgl_FragColor = vec4( col/TAPS_PER_PASS );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
+};
+
+/**
+ * Additively applies god rays from texture tGodRays to a background (tColors).
+ * fGodRayIntensity attenuates the god rays.
+ */
+exports.GodRaysGenerateShader = GodRaysGenerateShader;
+var GodRaysCombineShader = {
+  uniforms: {
+    tColors: {
+      value: null
+    },
+    tGodRays: {
+      value: null
+    },
+    fGodRayIntensity: {
+      value: 0.69
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tColors;\n\t\tuniform sampler2D tGodRays;\n\n\t\tuniform float fGodRayIntensity;\n\n\t\tvoid main() {\n\n\t\t// Since THREE.MeshDepthMaterial renders foreground objects white and background\n\t\t// objects black, the god-rays will be white streaks. Therefore value is inverted\n\t\t// before being combined with tColors\n\n\t\t\tgl_FragColor = texture2D( tColors, vUv ) + fGodRayIntensity * vec4( 1.0 - texture2D( tGodRays, vUv ).r );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
+};
+
+/**
+ * A dodgy sun/sky shader. Makes a bright spot at the sun location. Would be
+ * cheaper/faster/simpler to implement this as a simple sun sprite.
+ */
+exports.GodRaysCombineShader = GodRaysCombineShader;
+var GodRaysFakeSunShader = {
+  uniforms: {
+    vSunPositionScreenSpace: {
+      value: new _three.Vector3()
+    },
+    fAspect: {
+      value: 1.0
+    },
+    sunColor: {
+      value: new _three.Color(0xffee00)
+    },
+    bgColor: {
+      value: new _three.Color(0x000000)
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fAspect;\n\n\t\tuniform vec3 sunColor;\n\t\tuniform vec3 bgColor;\n\n\t\tvoid main() {\n\n\t\t\tvec2 diff = vUv - vSunPositionScreenSpace.xy;\n\n\t\t// Correct for aspect ratio\n\n\t\t\tdiff.x *= fAspect;\n\n\t\t\tfloat prop = clamp( length( diff ) / 0.5, 0.0, 1.0 );\n\t\t\tprop = 0.35 * pow( 1.0 - prop, 3.0 );\n\n\t\t\tgl_FragColor.xyz = ( vSunPositionScreenSpace.z > 0.0 ) ? mix( sunColor, bgColor, 1.0 - prop ) : bgColor;\n\t\t\tgl_FragColor.w = 1.0;\n\n\t\t}"
+};
+exports.GodRaysFakeSunShader = GodRaysFakeSunShader;
+},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/postprocessing/src/GodRaysShader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.GodRaysGenerateShader = exports.GodRaysFakeSunShader = exports.GodRaysDepthMaskShader = exports.GodRaysCombineShader = void 0;
+var _three = require("three");
+/**
+ * God-rays (crepuscular rays)
+ *
+ * Similar implementation to the one used by Crytek for CryEngine 2 [Sousa2008].
+ * Blurs a mask generated from the depth map along radial lines emanating from the light
+ * source. The blur repeatedly applies a blur filter of increasing support but constant
+ * sample count to produce a blur filter with large support.
+ *
+ * My implementation performs 3 passes, similar to the implementation from Sousa. I found
+ * just 6 samples per pass produced acceptible results. The blur is applied three times,
+ * with decreasing filter support. The result is equivalent to a single pass with
+ * 6*6*6 = 216 samples.
+ *
+ * References:
+ *
+ * Sousa2008 - Crysis Next Gen Effects, GDC2008, http://www.crytek.com/sites/default/files/GDC08_SousaT_CrysisEffects.ppt
+ */
+
+var GodRaysDepthMaskShader = {
+  uniforms: {
+    tInput: {
+      value: null
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tvoid main() {\n\n\t\t\tgl_FragColor = vec4( 1.0 ) - texture2D( tInput, vUv );\n\n\t\t}"
+};
+
+/**
+ * The god-ray generation shader.
+ *
+ * First pass:
+ *
+ * The depth map is blurred along radial lines towards the "sun". The
+ * output is written to a temporary render target (I used a 1/4 sized
+ * target).
+ *
+ * Pass two & three:
+ *
+ * The results of the previous pass are re-blurred, each time with a
+ * decreased distance between samples.
+ */
+exports.GodRaysDepthMaskShader = GodRaysDepthMaskShader;
+var GodRaysGenerateShader = {
+  uniforms: {
+    tInput: {
+      value: null
+    },
+    fStepSize: {
+      value: 1.0
+    },
+    vSunPositionScreenSpace: {
+      value: new _three.Vector3()
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t vUv = uv;\n\t\t gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t }",
+  fragmentShader: /* glsl */"\n\n\t\t#define TAPS_PER_PASS 6.0\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tInput;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fStepSize; // filter step size\n\n\t\tvoid main() {\n\n\t\t// delta from current pixel to \"sun\" position\n\n\t\t\tvec2 delta = vSunPositionScreenSpace.xy - vUv;\n\t\t\tfloat dist = length( delta );\n\n\t\t// Step vector (uv space)\n\n\t\t\tvec2 stepv = fStepSize * delta / dist;\n\n\t\t// Number of iterations between pixel and sun\n\n\t\t\tfloat iters = dist/fStepSize;\n\n\t\t\tvec2 uv = vUv.xy;\n\t\t\tfloat col = 0.0;\n\n\t\t// This breaks ANGLE in Chrome 22\n\t\t//\t- see http://code.google.com/p/chromium/issues/detail?id=153105\n\n\t\t/*\n\t\t// Unrolling didnt do much on my hardware (ATI Mobility Radeon 3450),\n\t\t// so i've just left the loop\n\n\t\t\"for ( float i = 0.0; i < TAPS_PER_PASS; i += 1.0 ) {\",\n\n\t\t// Accumulate samples, making sure we dont walk past the light source.\n\n\t\t// The check for uv.y < 1 would not be necessary with \"border\" UV wrap\n\t\t// mode, with a black border color. I don't think this is currently\n\t\t// exposed by three.js. As a result there might be artifacts when the\n\t\t// sun is to the left, right or bottom of screen as these cases are\n\t\t// not specifically handled.\n\n\t\t\"\tcol += ( i <= iters && uv.y < 1.0 ? texture2D( tInput, uv ).r : 0.0 );\",\n\t\t\"\tuv += stepv;\",\n\n\t\t\"}\",\n\t\t*/\n\n\t\t// Unrolling loop manually makes it work in ANGLE\n\n\t\t\tfloat f = min( 1.0, max( vSunPositionScreenSpace.z / 1000.0, 0.0 ) ); // used to fade out godrays\n\n\t\t\tif ( 0.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 1.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 2.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 3.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 4.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t\tif ( 5.0 <= iters && uv.y < 1.0 ) col += texture2D( tInput, uv ).r * f;\n\t\t\tuv += stepv;\n\n\t\t// Should technically be dividing by 'iters but 'TAPS_PER_PASS' smooths out\n\t\t// objectionable artifacts, in particular near the sun position. The side\n\t\t// effect is that the result is darker than it should be around the sun, as\n\t\t// TAPS_PER_PASS is greater than the number of samples actually accumulated.\n\t\t// When the result is inverted (in the shader 'godrays_combine this produces\n\t\t// a slight bright spot at the position of the sun, even when it is occluded.\n\n\t\t\tgl_FragColor = vec4( col/TAPS_PER_PASS );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
+};
+
+/**
+ * Additively applies god rays from texture tGodRays to a background (tColors).
+ * fGodRayIntensity attenuates the god rays.
+ */
+exports.GodRaysGenerateShader = GodRaysGenerateShader;
+var GodRaysCombineShader = {
+  uniforms: {
+    tColors: {
+      value: null
+    },
+    tGodRays: {
+      value: null
+    },
+    fGodRayIntensity: {
+      value: 0.69
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform sampler2D tColors;\n\t\tuniform sampler2D tGodRays;\n\n\t\tuniform float fGodRayIntensity;\n\n\t\tvoid main() {\n\n\t\t// Since THREE.MeshDepthMaterial renders foreground objects white and background\n\t\t// objects black, the god-rays will be white streaks. Therefore value is inverted\n\t\t// before being combined with tColors\n\n\t\t\tgl_FragColor = texture2D( tColors, vUv ) + fGodRayIntensity * vec4( 1.0 - texture2D( tGodRays, vUv ).r );\n\t\t\tgl_FragColor.a = 1.0;\n\n\t\t}"
+};
+
+/**
+ * A dodgy sun/sky shader. Makes a bright spot at the sun location. Would be
+ * cheaper/faster/simpler to implement this as a simple sun sprite.
+ */
+exports.GodRaysCombineShader = GodRaysCombineShader;
+var GodRaysFakeSunShader = {
+  uniforms: {
+    vSunPositionScreenSpace: {
+      value: new _three.Vector3()
+    },
+    fAspect: {
+      value: 1.0
+    },
+    sunColor: {
+      value: new _three.Color(0xffee00)
+    },
+    bgColor: {
+      value: new _three.Color(0x000000)
+    }
+  },
+  vertexShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tvoid main() {\n\n\t\t\tvUv = uv;\n\t\t\tgl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n\n\t\t}",
+  fragmentShader: /* glsl */"\n\n\t\tvarying vec2 vUv;\n\n\t\tuniform vec3 vSunPositionScreenSpace;\n\t\tuniform float fAspect;\n\n\t\tuniform vec3 sunColor;\n\t\tuniform vec3 bgColor;\n\n\t\tvoid main() {\n\n\t\t\tvec2 diff = vUv - vSunPositionScreenSpace.xy;\n\n\t\t// Correct for aspect ratio\n\n\t\t\tdiff.x *= fAspect;\n\n\t\t\tfloat prop = clamp( length( diff ) / 0.5, 0.0, 1.0 );\n\t\t\tprop = 0.35 * pow( 1.0 - prop, 3.0 );\n\n\t\t\tgl_FragColor.xyz = ( vSunPositionScreenSpace.z > 0.0 ) ? mix( sunColor, bgColor, 1.0 - prop ) : bgColor;\n\t\t\tgl_FragColor.w = 1.0;\n\n\t\t}"
+};
+exports.GodRaysFakeSunShader = GodRaysFakeSunShader;
+},{"three":"node_modules/three/build/three.module.js"}],"src/LoadingProgressive/postprocessing/Godrays.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Godrays = void 0;
+var THREE = _interopRequireWildcard(require("three"));
+var _GodRaysShader = require("./src/GodRaysShader.js");
+function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
+function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+//'three/examples/jsm/shaders/GodRaysShader.js';
+var Godrays = /*#__PURE__*/function () {
+  function Godrays(camera, scene) {
+    _classCallCheck(this, Godrays);
+    this.filterLen = 1;
+    this.TAPS_PER_PASS = 6;
+    this.camera = camera;
+    this.scene = scene;
+    this.clipPosition = new THREE.Vector4();
+    this.screenSpacePosition = new THREE.Vector3();
+    this.materialDepth = new THREE.MeshDepthMaterial();
+    this.postprocessing = this.initPostprocessing();
+  }
+  _createClass(Godrays, [{
+    key: "initPostprocessing",
+    value: function initPostprocessing() {
+      var renderTargetWidth = window.innerWidth;
+      var renderTargetHeight = window.innerHeight;
+      var godrayRenderTargetResolutionMultiplier = 1.0 / 4.0;
+      var adjustedWidth = renderTargetWidth * godrayRenderTargetResolutionMultiplier;
+      var adjustedHeight = renderTargetHeight * godrayRenderTargetResolutionMultiplier;
+      var scene = new THREE.Scene();
+      var camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, -10000, 10000);
+      camera.position.z = 100;
+      scene.add(camera);
+      var postprocessing = {
+        enabled: true,
+        scene: scene,
+        camera: camera,
+        rtTextureColors: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
+        //基本渲染结果
+        rtTextureDepth: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
+        //深度信息
+        rtTextureDepthMask: new THREE.WebGLRenderTarget(renderTargetWidth, renderTargetHeight),
+        //有些位置没有深度?
+
+        rtTextureGodRays1: new THREE.WebGLRenderTarget(adjustedWidth, adjustedHeight),
+        rtTextureGodRays2: new THREE.WebGLRenderTarget(adjustedWidth, adjustedHeight),
+        //云隙光
+        godrayMaskUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysDepthMaskShader.uniforms),
+        godrayGenUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysGenerateShader.uniforms),
+        godrayCombineUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysCombineShader.uniforms),
+        godraysFakeSunUniforms: THREE.UniformsUtils.clone(_GodRaysShader.GodRaysFakeSunShader.uniforms)
+      };
+
+      // god-ray shaders
+      postprocessing.materialGodraysDepthMask = new THREE.ShaderMaterial({
+        //深度？
+        uniforms: postprocessing.godrayMaskUniforms,
+        vertexShader: _GodRaysShader.GodRaysDepthMaskShader.vertexShader,
+        fragmentShader: _GodRaysShader.GodRaysDepthMaskShader.fragmentShader
+      });
+      postprocessing.materialGodraysGenerate = new THREE.ShaderMaterial({
+        //生成
+        uniforms: postprocessing.godrayGenUniforms,
+        vertexShader: _GodRaysShader.GodRaysGenerateShader.vertexShader,
+        fragmentShader: _GodRaysShader.GodRaysGenerateShader.fragmentShader
+      });
+      postprocessing.materialGodraysFakeSun = new THREE.ShaderMaterial({
+        //假太阳？
+        uniforms: postprocessing.godraysFakeSunUniforms,
+        vertexShader: _GodRaysShader.GodRaysFakeSunShader.vertexShader,
+        fragmentShader: _GodRaysShader.GodRaysFakeSunShader.fragmentShader
+      });
+      postprocessing.materialGodraysCombine = new THREE.ShaderMaterial({
+        //合并
+        uniforms: postprocessing.godrayCombineUniforms,
+        vertexShader: _GodRaysShader.GodRaysCombineShader.vertexShader,
+        fragmentShader: _GodRaysShader.GodRaysCombineShader.fragmentShader
+      });
+      postprocessing.godraysFakeSunUniforms.bgColor.value.setHex(0x000511); //背景颜色
+      postprocessing.godraysFakeSunUniforms.sunColor.value.setHex(0xffee00); //太阳颜色
+      postprocessing.godrayCombineUniforms.fGodRayIntensity.value = 0.2; //0.75;//云隙光强度
+
+      postprocessing.quad = new THREE.Mesh(
+      //？
+      new THREE.PlaneGeometry(1.0, 1.0), postprocessing.materialGodraysGenerate //生成
+      );
+
+      postprocessing.quad.position.z = -9900;
+      postprocessing.scene.add(postprocessing.quad);
+      this.postprocessing = postprocessing;
+      return postprocessing;
+    }
+  }, {
+    key: "getSunPos",
+    value: function getSunPos() {
+      var clipPosition = this.clipPosition;
+      //开始计算太阳在屏幕上的位置
+      clipPosition.x = 0; //sunPosition.x;
+      clipPosition.y = 1000; //sunPosition.y;
+      clipPosition.z = -1000; //sunPosition.z;
+      var sunPosition = new THREE.Vector3(0, 1000 * 100, -1000 * 100);
+      clipPosition.x = sunPosition.x;
+      clipPosition.y = sunPosition.y;
+      clipPosition.z = sunPosition.z;
+      clipPosition.w = 1;
+      clipPosition.applyMatrix4(camera.matrixWorldInverse).applyMatrix4(camera.projectionMatrix);
+      clipPosition.x /= clipPosition.w;
+      clipPosition.y /= clipPosition.w;
+      var screenSpacePosition = this.screenSpacePosition;
+      screenSpacePosition.x = (clipPosition.x + 1) / 2; // transform from [-1,1] to [0,1]
+      screenSpacePosition.y = (clipPosition.y + 1) / 2; // transform from [-1,1] to [0,1]
+      screenSpacePosition.z = clipPosition.z; // needs to stay in clip space for visibilty checks
+      if (screenSpacePosition.x < 0) screenSpacePosition.x = 0;
+      if (screenSpacePosition.x > 1) screenSpacePosition.x = 1;
+      if (screenSpacePosition.y < 0) screenSpacePosition.y = 0;
+      if (screenSpacePosition.y > 1) screenSpacePosition.y = 1;
+      if (screenSpacePosition.z < 0) screenSpacePosition.z = 0;
+      screenSpacePosition.z += 100;
+      screenSpacePosition.x = 0.5;
+      screenSpacePosition.y = 1.5;
+      screenSpacePosition.z = 1000;
+
+      // console.log(screenSpacePosition)
+      return screenSpacePosition;
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      if (!this.postprocessing.enabled) return;
+      var postprocessing = this.postprocessing;
+      var camera = this.camera;
+      var scene = this.scene;
+      var screenSpacePosition = this.getSunPos();
+      // Give it to the god-ray and sun shaders
+      postprocessing.godrayGenUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
+      postprocessing.godraysFakeSunUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
+      function filterGodRays(inputTex, renderTarget, stepSize) {
+        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysGenerate;
+        postprocessing.godrayGenUniforms['fStepSize'].value = stepSize;
+        postprocessing.godrayGenUniforms['tInput'].value = inputTex;
+        renderer.setRenderTarget(renderTarget);
+        renderer.render(postprocessing.scene, postprocessing.camera);
+        postprocessing.scene.overrideMaterial = null;
+      }
+      function getStepSize(filterLen, tapsPerPass, pass) {
+        return filterLen * Math.pow(tapsPerPass, -pass);
+      }
+
+      // -- Draw sky and sun --
+      // Clear colors and depths, will clear to sky color
+      renderer.setRenderTarget(postprocessing.rtTextureColors);
+      renderer.clear(true, true, false); //color , depth , stencil模具//清除缓冲区。默认为true
+
+      postprocessing.godraysFakeSunUniforms['fAspect'].value = window.innerWidth / window.innerHeight;
+      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysFakeSun;
+      renderer.setRenderTarget(postprocessing.rtTextureColors);
+      renderer.render(postprocessing.scene, postprocessing.camera);
+
+      // -- Draw scene objects --
+      // Colors
+      scene.overrideMaterial = null;
+      renderer.setRenderTarget(postprocessing.rtTextureColors);
+      renderer.render(scene, camera);
+
+      // this.test(postprocessing.rtTextureColors)
+      // return
+
+      // Depth
+      renderer.setRenderTarget(postprocessing.rtTextureDepth);
+      renderer.render(scene, camera);
+      //
+      postprocessing.godrayMaskUniforms['tInput'].value = postprocessing.rtTextureDepth.texture;
+      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysDepthMask;
+      renderer.setRenderTarget(postprocessing.rtTextureDepthMask);
+      renderer.render(postprocessing.scene, postprocessing.camera);
+
+      // -- Render god-rays --
+      // Maximum length of god-rays (in texture space [0,1]X[0,1])
+      var filterLen = 1.0;
+      // Samples taken by filter
+      var TAPS_PER_PASS = 6.0;
+      filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
+      // pass 2 - render into second ping-pong target
+      filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
+      // pass 3 - 1st RT
+      filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
+
+      // final pass - composite god-rays onto colors
+      postprocessing.godrayCombineUniforms['tColors'].value = postprocessing.rtTextureColors.texture;
+      postprocessing.godrayCombineUniforms['tGodRays'].value = postprocessing.rtTextureGodRays2.texture;
+      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysCombine;
+      renderer.setRenderTarget(null);
+      renderer.render(postprocessing.scene, postprocessing.camera);
+
+      // this.test(postprocessing.rtTextureColors)
+      // this.test(postprocessing.rtTextureGodRays2)
+    }
+  }, {
+    key: "getTexture",
+    value: function getTexture() {
+      if (!this.postprocessing.enabled) return;
+      var postprocessing = this.postprocessing;
+      var camera = this.camera;
+      var scene = this.scene;
+      var screenSpacePosition = this.getSunPos();
+      // Give it to the god-ray and sun shaders
+      postprocessing.godrayGenUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
+      postprocessing.godraysFakeSunUniforms['vSunPositionScreenSpace'].value.copy(screenSpacePosition);
+      function filterGodRays(inputTex, renderTarget, stepSize) {
+        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysGenerate;
+        postprocessing.godrayGenUniforms['fStepSize'].value = stepSize;
+        postprocessing.godrayGenUniforms['tInput'].value = inputTex;
+        renderer.setRenderTarget(renderTarget);
+        renderer.render(postprocessing.scene, postprocessing.camera);
+        postprocessing.scene.overrideMaterial = null;
+      }
+      function getStepSize(filterLen, tapsPerPass, pass) {
+        return filterLen * Math.pow(tapsPerPass, -pass);
+      }
+      renderer.clear(true, true, false); //color , depth , stencil模具//清除缓冲区。默认为true
+
+      // Depth
+      renderer.setRenderTarget(postprocessing.rtTextureDepth);
+      renderer.render(scene, camera);
+      //
+      postprocessing.godrayMaskUniforms['tInput'].value = postprocessing.rtTextureDepth.texture;
+      postprocessing.scene.overrideMaterial = postprocessing.materialGodraysDepthMask;
+      renderer.setRenderTarget(postprocessing.rtTextureDepthMask);
+      renderer.render(postprocessing.scene, postprocessing.camera);
+
+      // -- Render god-rays --
+      // Maximum length of god-rays (in texture space [0,1]X[0,1])
+      var filterLen = this.filterLen; // 1.0//1.0;
+      // Samples taken by filter
+      var TAPS_PER_PASS = this.TAPS_PER_PASS; // 6//6.0; //filterLen * Math.pow( tapsPerPass, - pass );
+      filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
+      filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
+      filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
+
+      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
+      // filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, 0.02 );
+      // filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, 0.16 );
+
+      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
+
+      // final pass - composite god-rays onto colors
+      return postprocessing.rtTextureGodRays2.texture;
+    }
+  }, {
+    key: "test",
+    value: function test(renderTarget) {
+      if (!this.materialTest) {
+        this.materialTest = new THREE.ShaderMaterial({
+          //假太阳？
+          uniforms: {
+            tColors: {
+              value: null
+            }
+          },
+          vertexShader: /* glsl */"\n                    varying vec2 vUv;\n                    void main() {\n                        vUv = uv;\n                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n                    }",
+          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D tColors;\n                    void main() {\n                        gl_FragColor = texture2D( tColors, vUv );\n                        gl_FragColor.a = 1.0;\n                    }"
+        });
+      }
+      this.materialTest.uniforms['tColors'].value = renderTarget.texture;
+      this.postprocessing.scene.overrideMaterial = this.materialTest;
+      renderer.setRenderTarget(null);
+      renderer.render(this.postprocessing.scene, this.postprocessing.camera);
+    }
+  }]);
+  return Godrays;
+}();
+exports.Godrays = Godrays;
+},{"three":"node_modules/three/build/three.module.js","./src/GodRaysShader.js":"src/LoadingProgressive/postprocessing/src/GodRaysShader.js"}],"node_modules/three/examples/jsm/postprocessing/RenderPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.RenderPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var RenderPass = /*#__PURE__*/function (_Pass) {
+  _inherits(RenderPass, _Pass);
+  var _super = _createSuper(RenderPass);
+  function RenderPass(scene, camera, overrideMaterial, clearColor, clearAlpha) {
+    var _this;
+    _classCallCheck(this, RenderPass);
+    _this = _super.call(this);
+    _this.scene = scene;
+    _this.camera = camera;
+    _this.overrideMaterial = overrideMaterial;
+    _this.clearColor = clearColor;
+    _this.clearAlpha = clearAlpha !== undefined ? clearAlpha : 0;
+    _this.clear = true;
+    _this.clearDepth = false;
+    _this.needsSwap = false;
+    _this._oldClearColor = new _three.Color();
+    return _this;
+  }
+  _createClass(RenderPass, [{
+    key: "render",
+    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
+      var oldAutoClear = renderer.autoClear;
+      renderer.autoClear = false;
+      var oldClearAlpha, oldOverrideMaterial;
+      if (this.overrideMaterial !== undefined) {
+        oldOverrideMaterial = this.scene.overrideMaterial;
+        this.scene.overrideMaterial = this.overrideMaterial;
+      }
+      if (this.clearColor) {
+        renderer.getClearColor(this._oldClearColor);
+        oldClearAlpha = renderer.getClearAlpha();
+        renderer.setClearColor(this.clearColor, this.clearAlpha);
+      }
+      if (this.clearDepth) {
+        renderer.clearDepth();
+      }
+      renderer.setRenderTarget(this.renderToScreen ? null : readBuffer);
+
+      // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
+      if (this.clear) renderer.clear(renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil);
+      renderer.render(this.scene, this.camera);
+      if (this.clearColor) {
+        renderer.setClearColor(this._oldClearColor, oldClearAlpha);
+      }
+      if (this.overrideMaterial !== undefined) {
+        this.scene.overrideMaterial = oldOverrideMaterial;
+      }
+      renderer.autoClear = oldAutoClear;
+    }
+  }]);
+  return RenderPass;
+}(_Pass2.Pass);
+exports.RenderPass = RenderPass;
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/postprocessing/ShaderPass.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.ShaderPass = void 0;
+var _three = require("three");
+var _Pass2 = require("./Pass.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); Object.defineProperty(subClass, "prototype", { writable: false }); if (superClass) _setPrototypeOf(subClass, superClass); }
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+function _possibleConstructorReturn(self, call) { if (call && (_typeof(call) === "object" || typeof call === "function")) { return call; } else if (call !== void 0) { throw new TypeError("Derived constructors may only return object or undefined"); } return _assertThisInitialized(self); }
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+var ShaderPass = /*#__PURE__*/function (_Pass) {
+  _inherits(ShaderPass, _Pass);
+  var _super = _createSuper(ShaderPass);
+  function ShaderPass(shader, textureID) {
+    var _this;
+    _classCallCheck(this, ShaderPass);
+    _this = _super.call(this);
+    _this.textureID = textureID !== undefined ? textureID : 'tDiffuse';
+    if (shader instanceof _three.ShaderMaterial) {
+      _this.uniforms = shader.uniforms;
+      _this.material = shader;
+    } else if (shader) {
+      _this.uniforms = _three.UniformsUtils.clone(shader.uniforms);
+      _this.material = new _three.ShaderMaterial({
+        name: shader.name !== undefined ? shader.name : 'unspecified',
+        defines: Object.assign({}, shader.defines),
+        uniforms: _this.uniforms,
+        vertexShader: shader.vertexShader,
+        fragmentShader: shader.fragmentShader
+      });
+    }
+    _this.fsQuad = new _Pass2.FullScreenQuad(_this.material);
+    return _this;
+  }
+  _createClass(ShaderPass, [{
+    key: "render",
+    value: function render(renderer, writeBuffer, readBuffer /*, deltaTime, maskActive */) {
+      if (this.uniforms[this.textureID]) {
+        this.uniforms[this.textureID].value = readBuffer.texture;
+      }
+      this.fsQuad.material = this.material;
+      if (this.renderToScreen) {
+        renderer.setRenderTarget(null);
+        this.fsQuad.render(renderer);
+      } else {
+        renderer.setRenderTarget(writeBuffer);
+        // TODO: Avoid using autoClear properties, see https://github.com/mrdoob/three.js/pull/15571#issuecomment-465669600
+        if (this.clear) renderer.clear(renderer.autoClearColor, renderer.autoClearDepth, renderer.autoClearStencil);
+        this.fsQuad.render(renderer);
+      }
+    }
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      this.material.dispose();
+      this.fsQuad.dispose();
+    }
+  }]);
+  return ShaderPass;
+}(_Pass2.Pass);
+exports.ShaderPass = ShaderPass;
+},{"three":"node_modules/three/build/three.module.js","./Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js"}],"node_modules/three/examples/jsm/shaders/BokehShader.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62461,18 +62589,32 @@ var UnrealBloom = /*#__PURE__*/function () {
 
       this.ssrPass = this.getSSR();
       this.saoPass = this.getSAO();
+      this.ssaoPass = this.getSSAO();
+      console.log("this.ssaoPass", this.ssaoPass);
       this.bokehPass = this.getDOF();
       this.lutPass = this.getLUT();
       var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
-      composer.addPass(this.renderPass);
+
+      composer.addPass(this.ssaoPass);
+
       // composer.addPass(
-      //     this.saoPass
+      //     this.renderPass
       // );
 
-      composer.addPass(this.ssrPass);
-      composer.addPass(this.lutPass);
-      composer.addPass(this.bokehPass);
-      composer.addPass(this.bloomPass);
+      // composer.addPass(
+      //     this.ssrPass
+      // );
+      // composer.addPass(
+      //     this.lutPass
+      // );
+
+      // composer.addPass(
+      //     this.bokehPass
+      // );
+      // composer.addPass(
+      //     this.bloomPass
+      // );
+
       return composer;
     }
   }, {
@@ -62642,7 +62784,7 @@ var Postprocessing = /*#__PURE__*/function () {
   function Postprocessing(camera, scene, renderer) {
     _classCallCheck(this, Postprocessing);
     this.godrays_stength = {
-      value: 0.3
+      value: 0.7
     };
     this.unrealBloom = new _UnrealBloom.UnrealBloom(camera, scene, renderer);
     this.godrays = new _Godrays.Godrays(camera, scene);
@@ -62695,7 +62837,7 @@ var Postprocessing = /*#__PURE__*/function () {
             godrays_stength: this.godrays_stength
           },
           vertexShader: /* glsl */"\n                    varying vec2 vUv;\n                    void main() {\n                        vUv = uv;\n                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n                    }",
-          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D textureBloom;\n                    uniform sampler2D textureGodrays;\n                    uniform float godrays_stength;\n                    void main() {\n                        vec4 bloom=texture2D( textureBloom, vUv );\n                        // bloom=1.-bloom;\n                        // if(bloom.r>0.3)bloom=vec4(0.3);\n                        gl_FragColor = godrays_stength*bloom +texture2D( textureGodrays, vUv );\n                        gl_FragColor.a = 1.0;\n                        // gl_FragColor.r = 1.0;\n                    }"
+          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D textureBloom;\n                    uniform sampler2D textureGodrays;\n                    uniform float godrays_stength;\n                    void main() {\n                        vec4 bloom=texture2D( textureBloom, vUv );\n                        bloom=1.-bloom;\n                        bloom=2.*bloom-0.6;\n                        if(bloom.x<0.)bloom=bloom*0.;\n                        if(bloom.x>1.)bloom=bloom*0.+1.;\n                        // if(bloom.r>0.3)bloom=vec4(0.3);\n                        gl_FragColor =godrays_stength*bloom +texture2D( textureGodrays, vUv );\n                        gl_FragColor.a = 1.0;\n                        // gl_FragColor.r = 1.0;\n                    }"
         });
       }
       this.materialTest.uniforms['textureBloom'].value = textureBloom; //renderTarget.texture
@@ -63021,7 +63163,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "52520" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57786" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

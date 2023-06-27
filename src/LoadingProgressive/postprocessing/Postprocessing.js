@@ -9,7 +9,7 @@ import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
-        this.godrays_stength={ value: 0.3 }
+        this.godrays_stength={ value: 0.7 }
         this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays=new Godrays(camera,scene)
         this.init()
@@ -68,9 +68,12 @@ export class Postprocessing{
                     uniform float godrays_stength;
                     void main() {
                         vec4 bloom=texture2D( textureBloom, vUv );
-                        // bloom=1.-bloom;
+                        bloom=1.-bloom;
+                        bloom=2.*bloom-0.6;
+                        if(bloom.x<0.)bloom=bloom*0.;
+                        if(bloom.x>1.)bloom=bloom*0.+1.;
                         // if(bloom.r>0.3)bloom=vec4(0.3);
-                        gl_FragColor = godrays_stength*bloom +texture2D( textureGodrays, vUv );
+                        gl_FragColor =godrays_stength*bloom +texture2D( textureGodrays, vUv );
                         gl_FragColor.a = 1.0;
                         // gl_FragColor.r = 1.0;
                     }`

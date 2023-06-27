@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { 
     GodRaysFakeSunShader, GodRaysDepthMaskShader, GodRaysCombineShader, GodRaysGenerateShader 
-} from 'three/examples/jsm/shaders/GodRaysShader.js';
+} from './src/GodRaysShader.js';//'three/examples/jsm/shaders/GodRaysShader.js';
 export class Godrays{
     constructor(camera,scene){
         this.filterLen=1
@@ -94,6 +94,20 @@ export class Godrays{
         screenSpacePosition.x = ( clipPosition.x + 1 ) / 2; // transform from [-1,1] to [0,1]
         screenSpacePosition.y = ( clipPosition.y + 1 ) / 2; // transform from [-1,1] to [0,1]
         screenSpacePosition.z = clipPosition.z; // needs to stay in clip space for visibilty checks
+        if(screenSpacePosition.x<0)screenSpacePosition.x=0
+        if(screenSpacePosition.x>1)screenSpacePosition.x=1
+
+        if(screenSpacePosition.y<0)screenSpacePosition.y=0
+        if(screenSpacePosition.y>1)screenSpacePosition.y=1
+
+        if(screenSpacePosition.z<0)screenSpacePosition.z=0
+        screenSpacePosition.z+=100
+
+        screenSpacePosition.x=0.5
+        screenSpacePosition.y=1.5
+        screenSpacePosition.z=1000
+
+        // console.log(screenSpacePosition)
         return screenSpacePosition
     }
     render(){
@@ -192,23 +206,8 @@ export class Godrays{
             return filterLen * Math.pow( tapsPerPass, - pass );
         }
         
-        // -- Draw sky and sun --
-        // Clear colors and depths, will clear to sky color
-        renderer.setRenderTarget( postprocessing.rtTextureColors );
-        renderer.clear( true, true, false );//color , depth , stencil模具//清除缓冲区。默认为true
-        
-        postprocessing.godraysFakeSunUniforms[ 'fAspect' ].value = window.innerWidth / window.innerHeight;
-        postprocessing.scene.overrideMaterial = postprocessing.materialGodraysFakeSun;
-        renderer.setRenderTarget( postprocessing.rtTextureColors );
-        renderer.render( postprocessing.scene, postprocessing.camera );
-        
-        
-        // -- Draw scene objects --
-        // Colors
-        scene.overrideMaterial = null;
-        renderer.setRenderTarget( postprocessing.rtTextureColors );
-        renderer.render( scene, camera );
 
+        renderer.clear( true, true, false );//color , depth , stencil模具//清除缓冲区。默认为true
         
         // Depth
         renderer.setRenderTarget( postprocessing.rtTextureDepth );
