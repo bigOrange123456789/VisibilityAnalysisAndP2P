@@ -37,7 +37,7 @@ export class UnrealBloom{
         var composer = new MyEffectComposer(renderer)//效果组合器
         
         composer.addPass(
-            this.ssaoPass
+            this.ssaoPass//屏幕空间环境光遮蔽
         );
 
         // composer.addPass(
@@ -46,7 +46,7 @@ export class UnrealBloom{
         
 
         // composer.addPass(
-        //     this.ssrPass
+        //     this.ssrPass//屏幕空间反射
         // );
         // composer.addPass(
         //     this.lutPass
@@ -56,7 +56,7 @@ export class UnrealBloom{
         //     this.bokehPass
         // );
         // composer.addPass(
-        //     this.bloomPass
+        //     this.bloomPass//辉光
         // );
         
         return composer

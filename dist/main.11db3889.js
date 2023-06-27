@@ -59939,7 +59939,7 @@ var UI = /*#__PURE__*/function () {
       this.control_directionalLight(main.lightProducer.directionalLight);
       this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass);
       this.control_godrays(main.postprocessing.godrays, main.postprocessing);
-      // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+      this.control_ssr(main.postprocessing.unrealBloom.ssrPass);
       // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
       // this.control_lut(main.postprocessing.unrealBloom.lutPass)
       //this.control_sao(main.postprocessing.unrealBloom.saoPass)
@@ -62595,14 +62595,15 @@ var UnrealBloom = /*#__PURE__*/function () {
       this.lutPass = this.getLUT();
       var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
 
-      composer.addPass(this.ssaoPass);
+      composer.addPass(this.ssaoPass //屏幕空间环境光遮蔽
+      );
 
       // composer.addPass(
       //     this.renderPass
       // );
 
       // composer.addPass(
-      //     this.ssrPass
+      //     this.ssrPass//屏幕空间反射
       // );
       // composer.addPass(
       //     this.lutPass
@@ -62612,7 +62613,7 @@ var UnrealBloom = /*#__PURE__*/function () {
       //     this.bokehPass
       // );
       // composer.addPass(
-      //     this.bloomPass
+      //     this.bloomPass//辉光
       // );
 
       return composer;
@@ -63163,7 +63164,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "57786" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54914" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

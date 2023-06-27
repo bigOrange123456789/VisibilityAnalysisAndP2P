@@ -30,7 +30,7 @@ export class UI{
         this.control_directionalLight(main.lightProducer.directionalLight)
         this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
         this.control_godrays(main.postprocessing.godrays,main.postprocessing)
-        // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+        this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
         // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
         // this.control_lut(main.postprocessing.unrealBloom.lutPass)
         //this.control_sao(main.postprocessing.unrealBloom.saoPass)
