@@ -25,16 +25,17 @@ export class UI{
         }, false);
         
         this.control_camera(main.camera,main.playerControl)
-        this.control_envMap(main.scene)
+        this.control_material(main.scene)
         // this.control_renderer(main.renderer)
-        this.control_directionalLight(main.lightProducer.directionalLight)
+        this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient)
+        this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)//this.control_ssao(main.unrealBloom.ssaoPass)//
         this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
         this.control_godrays(main.postprocessing.godrays,main.postprocessing)
-        this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+        // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
         // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
         // this.control_lut(main.postprocessing.unrealBloom.lutPass)
         //this.control_sao(main.postprocessing.unrealBloom.saoPass)
-        this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
+        
     }
     control_camera(camera,playerControl) {
         var viewpointState = {
@@ -83,43 +84,48 @@ export class UI{
             playerControl.mode.set(viewpointState.mode)
         })
     }
-    control_envMap(scene){
+    control_material(scene){
         const gui=this.gui
         const params=this.params
         params.metalness=0.95//0.5
         params.roughness=0.5
         params.envMapIntensity=1//0.5
+        params.backgroundIntensity=scene.backgroundIntensity
         // params.emissiveIntensity=0.5
         const folder = gui.addFolder("材质")
-        folder.add( params, 'metalness', 0.0, 3. ).step( 0.005 ).onChange( function ( value ) {
+        folder.add( params, 'metalness', 0.0, 3. ).step( 0.001 ).onChange( function ( value ) {
             scene.traverse(node=>{
-                if(node instanceof THREE.Mesh&&(node.id!==171||node.id!==174)){
+                if(node instanceof THREE.Mesh&& !node.underground){
                     const material=node.material
                     material.metalness=material.metalness0+value
                 }
             })
         } );
-        folder.add( params, 'roughness', -2.0, 3. ).step( 0.005 ).onChange( function ( value ) {
+        folder.add( params, 'roughness', -2.0, 3. ).step( 0.001 ).onChange( function ( value ) {
             scene.traverse(node=>{
-                if(node instanceof THREE.Mesh&&(node.id!==171||node.id!==174)){
+                if(node instanceof THREE.Mesh&& !node.underground){
                     const material=node.material
                     material.roughness=material.roughness0+value
                 }
             })
         } );
-        folder.add( params, 'envMapIntensity', -1.0, 4. ).step( 0.005 ).onChange( function ( value ) {
+        folder.add( params, 'envMapIntensity', -1.0, 4. ).step( 0.001 ).onChange( function ( value ) {
             scene.traverse(node=>{
-                if(node instanceof THREE.Mesh&&(node.id!==171||node.id!==174)){
+                if(node instanceof THREE.Mesh&& !node.underground){
                     const material=node.material
                     material.envMapIntensity=material.envMapIntensity0+value
                 }
             })
         } );
+        folder.add( params, 'backgroundIntensity', -0.5, 2. ).step( 0.001 ).onChange( function ( value ) {
+            scene.backgroundIntensity=value
+        } );
+        
     }
-    control_directionalLight(directionalLight){
+    control_light(directionalLight,ambient){
         const gui=this.gui
         const params=this.params
-        var directionFolder = gui.addFolder('平行光');
+        var directionFolder = gui.addFolder('光照');
         /*color*/
         params['平行光颜色']=directionalLight.color
         directionFolder
@@ -175,6 +181,16 @@ export class UI{
         .onChange(function(e) {
             directionalLight.visible = e
         });
+
+
+        /*power*/
+        params['环境光强度']=ambient.intensity
+        directionFolder
+        .add(params, '环境光强度', -0.5, 3.0)
+        .step(0.1)
+        .onChange(function(e) {
+            ambient.intensity = e
+        });
     }
     control_renderer(renderer){
         const gui=this.gui
@@ -192,7 +208,7 @@ export class UI{
         params.bloomStrength=bloomPass.strength;
         params.bloomRadius=bloomPass.radius;
         const folder = gui.addFolder("辉光")
-        folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.05 ).onChange( function ( value ) {
+        folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
             bloomPass.strength = Number( value );
         } );
         folder.add( params, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
@@ -332,9 +348,9 @@ export class UI{
             ssaoPass.output = parseInt( value );
 
         } );
-        folder.add( ssaoPass, 'kernelRadius' ).min( 0 ).max( 32 );
-        folder.add( ssaoPass, 'minDistance' ).min( 0.001 ).max( 0.02 );
-        folder.add( ssaoPass, 'maxDistance' ).min( 0.01 ).max( 0.3 );
+        folder.add( ssaoPass, 'kernelRadius' ).min( 0 ).max( 128 ).step( 1 )
+        folder.add( ssaoPass, 'minDistance' ).min( 0.001 ).max( 0.02 ).step( 0.0001 )
+        folder.add( ssaoPass, 'maxDistance' ).min( 0.01 ).max( 0.6 ).step( 0.001 )
         
     }
 

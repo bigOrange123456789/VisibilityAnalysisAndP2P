@@ -10,30 +10,34 @@ import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
 import { MyEffectComposer } from "./src/MyEffectComposer.js";
 import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
 
+
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 export class UnrealBloom{
     constructor(camera,scene,renderer){
         this.camera=camera
         this.scene=scene
-        this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
+        // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
         this.composer=this.initComposer(renderer)
         // this.composer2=this.initComposer2()
         
     }
     initComposer(renderer){//设置光晕
         console.log(renderer)
+        const scene=this.scene
+        const camera=this.camera
         this.renderPass=new RenderPass(scene, camera)
-        this.bloomPass=new MyUnrealBloomPass(//创建通道
+        this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
-                0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
+                0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
                 2,//0.3,//参数三：bloomRadius 泛光散发半径
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
-        this.ssrPass=this.getSSR()
-        this.saoPass=this.getSAO()
+        // this.ssrPass=this.getSSR()
+        // this.saoPass=this.getSAO()
         this.ssaoPass=this.getSSAO()
-        console.log("this.ssaoPass",this.ssaoPass)
-        this.bokehPass=this.getDOF()
-        this.lutPass=this.getLUT()
+        console.log("ssaoPass",this.ssaoPass)
+        // this.bokehPass=this.getDOF()
+        // this.lutPass=this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
         
         composer.addPass(
@@ -55,14 +59,20 @@ export class UnrealBloom{
         // composer.addPass(
         //     this.bokehPass
         // );
-        // composer.addPass(
-        //     this.bloomPass//辉光
-        // );
+        composer.addPass(
+            this.bloomPass//辉光
+        );
         
         return composer
     }
     getSSAO(){//https://juejin.cn/post/7224683165989732412
-        let saoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+        let ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+        ssaoPass.kernelRadius = 32
+        ssaoPass.minDistance = 0.001
+        ssaoPass.maxDistance = 0.3
+        console.log(
+            this.scene, this.camera, window.innerWidth, window.innerHeight
+        )
         // console.log(SSAOPass.OUTPUT)
         // saoPass.params.output = SSAOPass.OUTPUT.Default;
         // saoPass.params.saoBias = 0.5;
@@ -71,7 +81,7 @@ export class UnrealBloom{
         // saoPass.params.saoKernelRadius = 10;
         // saoPass.params.saoMinResolution = 0;
         // saoPass.params.saoBlur = true;
-        return saoPass
+        return ssaoPass
     }
     getSAO(){
         const saoPass = new SAOPass( this.scene, this.camera, false, true );

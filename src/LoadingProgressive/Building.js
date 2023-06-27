@@ -41,7 +41,7 @@ export class Building{
         this.loaderZip=new THREE.LoadingManager()
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
-                self.start()
+                self.start(camera)
             })
         })
     }
@@ -114,7 +114,8 @@ export class Building{
             })
         }else cb()
     }
-    start(){
+    start(camera){
+        console.log(camera)
         const self=this
         // this.load0()
         // IndirectMaterial.pre(()=>{
@@ -213,17 +214,21 @@ export class Building{
 
             emissiveIntensity: 1,
             envMapIntensity:1,
-            metalness: 0.95,
-            roughness: 0.1+0.4,
+            metalness: 0.5,
+            roughness: 0.5,
             // shininess:300,
         })
         // mesh.material.side=2
-        if(id==171||id==174){
+        const underground=this.InY2(mesh,15)
+        if(underground){//if(id==171||id==174){
+            // console.log(id)
             // mesh.material.color.r=1
-            mesh.material.metalness=0
+            mesh.material.metalness=0.5
             mesh.material.roughness=0
             mesh.material.envMapIntensity=0
+            mesh.material.color.r=mesh.material.color.g=mesh.material.color.b=0.8
         }
+        mesh.underground=underground
         mesh.material.metalness0=mesh.material.metalness//-0.5
         mesh.material.roughness0=mesh.material.roughness//-0.5
         mesh.material.envMapIntensity0=mesh.material.envMapIntensity//-0.5
@@ -244,6 +249,7 @@ export class Building{
                 mesh.material,
                 instance_info)
             mesh2.visible=false
+            mesh2.underground=underground
             mesh=this.getInstancedMesh(
                 geometry,
                 new THREE.MeshStandardMaterial({
@@ -262,6 +268,7 @@ export class Building{
                 instance_info)
             mesh.castShadow = true
             mesh.receiveShadow = true
+            mesh.underground=underground
             mesh2.castShadow = true
             mesh2.receiveShadow = true
             //////////
@@ -549,10 +556,9 @@ export class Building{
         link.download = name
         link.click()
     }
-    InY(mesh,ymin,ymax){
+    InY2(mesh,y0){
         var box = new THREE.Box3().setFromObject(mesh)
-        // return box.max.y<ymax && box.min.y>ymin
-        return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
+        return box.max.y<y0//return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
     }
     loadJson(path,cb){
         console.log(path)

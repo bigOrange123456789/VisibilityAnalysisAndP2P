@@ -55721,7 +55721,7 @@ var Building = /*#__PURE__*/function () {
     this.loaderZip = new THREE.LoadingManager();
     self.loadConfigInstance(function () {
       self.loadConfigIndirect(function () {
-        self.start();
+        self.start(camera);
       });
     });
   }
@@ -55800,7 +55800,8 @@ var Building = /*#__PURE__*/function () {
     }
   }, {
     key: "start",
-    value: function start() {
+    value: function start(camera) {
+      console.log(camera);
       var self = this;
       // this.load0()
       // IndirectMaterial.pre(()=>{
@@ -55886,17 +55887,22 @@ var Building = /*#__PURE__*/function () {
         displacementScale: 1,
         emissiveIntensity: 1,
         envMapIntensity: 1,
-        metalness: 0.95,
-        roughness: 0.1 + 0.4
+        metalness: 0.5,
+        roughness: 0.5
         // shininess:300,
       });
       // mesh.material.side=2
-      if (id == 171 || id == 174) {
+      var underground = this.InY2(mesh, 15);
+      if (underground) {
+        //if(id==171||id==174){
+        // console.log(id)
         // mesh.material.color.r=1
-        mesh.material.metalness = 0;
+        mesh.material.metalness = 0.5;
         mesh.material.roughness = 0;
         mesh.material.envMapIntensity = 0;
+        mesh.material.color.r = mesh.material.color.g = mesh.material.color.b = 0.8;
       }
+      mesh.underground = underground;
       mesh.material.metalness0 = mesh.material.metalness; //-0.5
       mesh.material.roughness0 = mesh.material.roughness; //-0.5
       mesh.material.envMapIntensity0 = mesh.material.envMapIntensity; //-0.5
@@ -55913,6 +55919,7 @@ var Building = /*#__PURE__*/function () {
         var geometry = mesh.geometry;
         var mesh2 = this.getInstancedMesh(geometry, mesh.material, instance_info);
         mesh2.visible = false;
+        mesh2.underground = underground;
         mesh = this.getInstancedMesh(geometry, new THREE.MeshStandardMaterial({
           color: this.colorList[id],
           map: null,
@@ -55927,6 +55934,7 @@ var Building = /*#__PURE__*/function () {
         }), instance_info);
         mesh.castShadow = true;
         mesh.receiveShadow = true;
+        mesh.underground = underground;
         mesh2.castShadow = true;
         mesh2.receiveShadow = true;
         //////////
@@ -56248,11 +56256,10 @@ var Building = /*#__PURE__*/function () {
       link.click();
     }
   }, {
-    key: "InY",
-    value: function InY(mesh, ymin, ymax) {
+    key: "InY2",
+    value: function InY2(mesh, y0) {
       var box = new THREE.Box3().setFromObject(mesh);
-      // return box.max.y<ymax && box.min.y>ymin
-      return box.min.y < ymax && box.max.y > ymin; //&&box.max.z>-7766
+      return box.max.y < y0; //return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
     }
   }, {
     key: "loadJson",
@@ -56544,7 +56551,7 @@ var LightProducer = /*#__PURE__*/function () {
     this.objectMove = new THREE.Object3D();
     this.object.add(this.objectMove);
     this.targetList = [];
-    this.init(); //this.test()
+    this.init(scene); //this.test()
     this.add_lensflares();
 
     // this.setPos(-319.59561744433125,  16,  323.70333357412926)
@@ -56605,10 +56612,11 @@ var LightProducer = /*#__PURE__*/function () {
     }
   }, {
     key: "init",
-    value: function init() {
+    value: function init(scene) {
       // Lights 
       var x = 3.; //0.5
       var ambient = new THREE.AmbientLight(0xffffff, 0.8); //new THREE.AmbientLight( 0xffffff ,.8);
+      this.ambient = ambient;
       scene.add(ambient);
       // ambient.name="ambient"
 
@@ -59934,16 +59942,16 @@ var UI = /*#__PURE__*/function () {
         window.inPanel = false;
       }, false);
       this.control_camera(main.camera, main.playerControl);
-      this.control_envMap(main.scene);
+      this.control_material(main.scene);
       // this.control_renderer(main.renderer)
-      this.control_directionalLight(main.lightProducer.directionalLight);
+      this.control_light(main.lightProducer.directionalLight, main.lightProducer.ambient);
+      this.control_ssao(main.postprocessing.unrealBloom.ssaoPass); //this.control_ssao(main.unrealBloom.ssaoPass)//
       this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass);
       this.control_godrays(main.postprocessing.godrays, main.postprocessing);
-      this.control_ssr(main.postprocessing.unrealBloom.ssrPass);
+      // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
       // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
       // this.control_lut(main.postprocessing.unrealBloom.lutPass)
       //this.control_sao(main.postprocessing.unrealBloom.saoPass)
-      this.control_ssao(main.postprocessing.unrealBloom.ssaoPass);
     }
   }, {
     key: "control_camera",
@@ -59975,46 +59983,50 @@ var UI = /*#__PURE__*/function () {
       });
     }
   }, {
-    key: "control_envMap",
-    value: function control_envMap(scene) {
+    key: "control_material",
+    value: function control_material(scene) {
       var gui = this.gui;
       var params = this.params;
       params.metalness = 0.95; //0.5
       params.roughness = 0.5;
       params.envMapIntensity = 1; //0.5
+      params.backgroundIntensity = scene.backgroundIntensity;
       // params.emissiveIntensity=0.5
       var folder = gui.addFolder("材质");
-      folder.add(params, 'metalness', 0.0, 3.).step(0.005).onChange(function (value) {
+      folder.add(params, 'metalness', 0.0, 3.).step(0.001).onChange(function (value) {
         scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+          if (node instanceof THREE.Mesh && !node.underground) {
             var material = node.material;
             material.metalness = material.metalness0 + value;
           }
         });
       });
-      folder.add(params, 'roughness', -2.0, 3.).step(0.005).onChange(function (value) {
+      folder.add(params, 'roughness', -2.0, 3.).step(0.001).onChange(function (value) {
         scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+          if (node instanceof THREE.Mesh && !node.underground) {
             var material = node.material;
             material.roughness = material.roughness0 + value;
           }
         });
       });
-      folder.add(params, 'envMapIntensity', -1.0, 4.).step(0.005).onChange(function (value) {
+      folder.add(params, 'envMapIntensity', -1.0, 4.).step(0.001).onChange(function (value) {
         scene.traverse(function (node) {
-          if (node instanceof THREE.Mesh && (node.id !== 171 || node.id !== 174)) {
+          if (node instanceof THREE.Mesh && !node.underground) {
             var material = node.material;
             material.envMapIntensity = material.envMapIntensity0 + value;
           }
         });
       });
+      folder.add(params, 'backgroundIntensity', -0.5, 2.).step(0.001).onChange(function (value) {
+        scene.backgroundIntensity = value;
+      });
     }
   }, {
-    key: "control_directionalLight",
-    value: function control_directionalLight(directionalLight) {
+    key: "control_light",
+    value: function control_light(directionalLight, ambient) {
       var gui = this.gui;
       var params = this.params;
-      var directionFolder = gui.addFolder('平行光');
+      var directionFolder = gui.addFolder('光照');
       /*color*/
       params['平行光颜色'] = directionalLight.color;
       directionFolder.addColor(params, '平行光颜色').onChange(function (e) {
@@ -60048,6 +60060,12 @@ var UI = /*#__PURE__*/function () {
       directionFolder.add(params, '平行光启用').onChange(function (e) {
         directionalLight.visible = e;
       });
+
+      /*power*/
+      params['环境光强度'] = ambient.intensity;
+      directionFolder.add(params, '环境光强度', -0.5, 3.0).step(0.1).onChange(function (e) {
+        ambient.intensity = e;
+      });
     }
   }, {
     key: "control_renderer",
@@ -60069,7 +60087,7 @@ var UI = /*#__PURE__*/function () {
       params.bloomStrength = bloomPass.strength;
       params.bloomRadius = bloomPass.radius;
       var folder = gui.addFolder("辉光");
-      folder.add(params, 'bloomStrength', 0.0, 1.5).step(0.05).onChange(function (value) {
+      folder.add(params, 'bloomStrength', 0.0, 1.5).step(0.005).onChange(function (value) {
         bloomPass.strength = Number(value);
       });
       folder.add(params, 'bloomThreshold', 0.0, 1.0).onChange(function (value) {
@@ -60214,9 +60232,9 @@ var UI = /*#__PURE__*/function () {
       }).onChange(function (value) {
         ssaoPass.output = parseInt(value);
       });
-      folder.add(ssaoPass, 'kernelRadius').min(0).max(32);
-      folder.add(ssaoPass, 'minDistance').min(0.001).max(0.02);
-      folder.add(ssaoPass, 'maxDistance').min(0.01).max(0.3);
+      folder.add(ssaoPass, 'kernelRadius').min(0).max(128).step(1);
+      folder.add(ssaoPass, 'minDistance').min(0.001).max(0.02).step(0.0001);
+      folder.add(ssaoPass, 'maxDistance').min(0.01).max(0.6).step(0.001);
     }
   }]);
   return UI;
@@ -61009,9 +61027,6 @@ var Godrays = /*#__PURE__*/function () {
       postprocessing.scene.overrideMaterial = postprocessing.materialGodraysCombine;
       renderer.setRenderTarget(null);
       renderer.render(postprocessing.scene, postprocessing.camera);
-
-      // this.test(postprocessing.rtTextureColors)
-      // this.test(postprocessing.rtTextureGodRays2)
     }
   }, {
     key: "getTexture",
@@ -61054,35 +61069,7 @@ var Godrays = /*#__PURE__*/function () {
       filterGodRays(postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 1.0));
       filterGodRays(postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize(filterLen, TAPS_PER_PASS, 2.0));
       filterGodRays(postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize(filterLen, TAPS_PER_PASS, 3.0));
-
-      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-      // filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, 0.02 );
-      // filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, 0.16 );
-
-      // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-
-      // final pass - composite god-rays onto colors
       return postprocessing.rtTextureGodRays2.texture;
-    }
-  }, {
-    key: "test",
-    value: function test(renderTarget) {
-      if (!this.materialTest) {
-        this.materialTest = new THREE.ShaderMaterial({
-          //假太阳？
-          uniforms: {
-            tColors: {
-              value: null
-            }
-          },
-          vertexShader: /* glsl */"\n                    varying vec2 vUv;\n                    void main() {\n                        vUv = uv;\n                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n                    }",
-          fragmentShader: /* glsl */"\n                    varying vec2 vUv;\n                    uniform sampler2D tColors;\n                    void main() {\n                        gl_FragColor = texture2D( tColors, vUv );\n                        gl_FragColor.a = 1.0;\n                    }"
-        });
-      }
-      this.materialTest.uniforms['tColors'].value = renderTarget.texture;
-      this.postprocessing.scene.overrideMaterial = this.materialTest;
-      renderer.setRenderTarget(null);
-      renderer.render(this.postprocessing.scene, this.postprocessing.camera);
     }
   }]);
   return Godrays;
@@ -62536,7 +62523,175 @@ var MyUnrealBloomPass = /*#__PURE__*/function (_Pass) {
 exports.MyUnrealBloomPass = MyUnrealBloomPass;
 MyUnrealBloomPass.BlurDirectionX = new _three.Vector2(1.0, 0.0);
 MyUnrealBloomPass.BlurDirectionY = new _three.Vector2(0.0, 1.0);
-},{"three/examples/jsm/postprocessing/UnrealBloomPass.js":"node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js","./MyLuminosityHighPassShader.js":"src/LoadingProgressive/postprocessing/src/MyLuminosityHighPassShader.js","three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","three/examples/jsm/shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"src/LoadingProgressive/postprocessing/UnrealBloom.js":[function(require,module,exports) {
+},{"three/examples/jsm/postprocessing/UnrealBloomPass.js":"node_modules/three/examples/jsm/postprocessing/UnrealBloomPass.js","./MyLuminosityHighPassShader.js":"src/LoadingProgressive/postprocessing/src/MyLuminosityHighPassShader.js","three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/Pass.js":"node_modules/three/examples/jsm/postprocessing/Pass.js","three/examples/jsm/shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js"}],"node_modules/three/examples/jsm/postprocessing/EffectComposer.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.EffectComposer = void 0;
+var _three = require("three");
+var _CopyShader = require("../shaders/CopyShader.js");
+var _ShaderPass = require("./ShaderPass.js");
+var _MaskPass = require("./MaskPass.js");
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, _toPropertyKey(descriptor.key), descriptor); } }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
+function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var EffectComposer = /*#__PURE__*/function () {
+  function EffectComposer(renderer, renderTarget) {
+    _classCallCheck(this, EffectComposer);
+    this.renderer = renderer;
+    this._pixelRatio = renderer.getPixelRatio();
+    if (renderTarget === undefined) {
+      var size = renderer.getSize(new _three.Vector2());
+      this._width = size.width;
+      this._height = size.height;
+      renderTarget = new _three.WebGLRenderTarget(this._width * this._pixelRatio, this._height * this._pixelRatio, {
+        type: _three.HalfFloatType
+      });
+      renderTarget.texture.name = 'EffectComposer.rt1';
+    } else {
+      this._width = renderTarget.width;
+      this._height = renderTarget.height;
+    }
+    this.renderTarget1 = renderTarget;
+    this.renderTarget2 = renderTarget.clone();
+    this.renderTarget2.texture.name = 'EffectComposer.rt2';
+    this.writeBuffer = this.renderTarget1;
+    this.readBuffer = this.renderTarget2;
+    this.renderToScreen = true;
+    this.passes = [];
+    this.copyPass = new _ShaderPass.ShaderPass(_CopyShader.CopyShader);
+    this.clock = new _three.Clock();
+  }
+  _createClass(EffectComposer, [{
+    key: "swapBuffers",
+    value: function swapBuffers() {
+      var tmp = this.readBuffer;
+      this.readBuffer = this.writeBuffer;
+      this.writeBuffer = tmp;
+    }
+  }, {
+    key: "addPass",
+    value: function addPass(pass) {
+      this.passes.push(pass);
+      pass.setSize(this._width * this._pixelRatio, this._height * this._pixelRatio);
+    }
+  }, {
+    key: "insertPass",
+    value: function insertPass(pass, index) {
+      this.passes.splice(index, 0, pass);
+      pass.setSize(this._width * this._pixelRatio, this._height * this._pixelRatio);
+    }
+  }, {
+    key: "removePass",
+    value: function removePass(pass) {
+      var index = this.passes.indexOf(pass);
+      if (index !== -1) {
+        this.passes.splice(index, 1);
+      }
+    }
+  }, {
+    key: "isLastEnabledPass",
+    value: function isLastEnabledPass(passIndex) {
+      for (var i = passIndex + 1; i < this.passes.length; i++) {
+        if (this.passes[i].enabled) {
+          return false;
+        }
+      }
+      return true;
+    }
+  }, {
+    key: "render",
+    value: function render(deltaTime) {
+      // deltaTime value is in seconds
+
+      if (deltaTime === undefined) {
+        deltaTime = this.clock.getDelta();
+      }
+      var currentRenderTarget = this.renderer.getRenderTarget();
+      var maskActive = false;
+      for (var i = 0, il = this.passes.length; i < il; i++) {
+        var pass = this.passes[i];
+        if (pass.enabled === false) continue;
+        pass.renderToScreen = this.renderToScreen && this.isLastEnabledPass(i);
+        pass.render(this.renderer, this.writeBuffer, this.readBuffer, deltaTime, maskActive);
+        if (pass.needsSwap) {
+          if (maskActive) {
+            var context = this.renderer.getContext();
+            var stencil = this.renderer.state.buffers.stencil;
+
+            //context.stencilFunc( context.NOTEQUAL, 1, 0xffffffff );
+            stencil.setFunc(context.NOTEQUAL, 1, 0xffffffff);
+            this.copyPass.render(this.renderer, this.writeBuffer, this.readBuffer, deltaTime);
+
+            //context.stencilFunc( context.EQUAL, 1, 0xffffffff );
+            stencil.setFunc(context.EQUAL, 1, 0xffffffff);
+          }
+          this.swapBuffers();
+        }
+        if (_MaskPass.MaskPass !== undefined) {
+          if (pass instanceof _MaskPass.MaskPass) {
+            maskActive = true;
+          } else if (pass instanceof _MaskPass.ClearMaskPass) {
+            maskActive = false;
+          }
+        }
+      }
+      this.renderer.setRenderTarget(currentRenderTarget);
+    }
+  }, {
+    key: "reset",
+    value: function reset(renderTarget) {
+      if (renderTarget === undefined) {
+        var size = this.renderer.getSize(new _three.Vector2());
+        this._pixelRatio = this.renderer.getPixelRatio();
+        this._width = size.width;
+        this._height = size.height;
+        renderTarget = this.renderTarget1.clone();
+        renderTarget.setSize(this._width * this._pixelRatio, this._height * this._pixelRatio);
+      }
+      this.renderTarget1.dispose();
+      this.renderTarget2.dispose();
+      this.renderTarget1 = renderTarget;
+      this.renderTarget2 = renderTarget.clone();
+      this.writeBuffer = this.renderTarget1;
+      this.readBuffer = this.renderTarget2;
+    }
+  }, {
+    key: "setSize",
+    value: function setSize(width, height) {
+      this._width = width;
+      this._height = height;
+      var effectiveWidth = this._width * this._pixelRatio;
+      var effectiveHeight = this._height * this._pixelRatio;
+      this.renderTarget1.setSize(effectiveWidth, effectiveHeight);
+      this.renderTarget2.setSize(effectiveWidth, effectiveHeight);
+      for (var i = 0; i < this.passes.length; i++) {
+        this.passes[i].setSize(effectiveWidth, effectiveHeight);
+      }
+    }
+  }, {
+    key: "setPixelRatio",
+    value: function setPixelRatio(pixelRatio) {
+      this._pixelRatio = pixelRatio;
+      this.setSize(this._width, this._height);
+    }
+  }, {
+    key: "dispose",
+    value: function dispose() {
+      this.renderTarget1.dispose();
+      this.renderTarget2.dispose();
+      this.copyPass.dispose();
+    }
+  }]);
+  return EffectComposer;
+}();
+exports.EffectComposer = EffectComposer;
+},{"three":"node_modules/three/build/three.module.js","../shaders/CopyShader.js":"node_modules/three/examples/jsm/shaders/CopyShader.js","./ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","./MaskPass.js":"node_modules/three/examples/jsm/postprocessing/MaskPass.js"}],"src/LoadingProgressive/postprocessing/UnrealBloom.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62553,6 +62708,7 @@ var _BokehPass = require("three/examples/jsm/postprocessing/BokehPass.js");
 var _LUTPass = require("three/examples/jsm/postprocessing/LUTPass.js");
 var _MyEffectComposer = require("./src/MyEffectComposer.js");
 var _MyUnrealBloomPass = require("./src/MyUnrealBloomPass.js");
+var _EffectComposer = require("three/examples/jsm/postprocessing/EffectComposer.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function (nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || typeof obj !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
@@ -62566,7 +62722,7 @@ var UnrealBloom = /*#__PURE__*/function () {
     _classCallCheck(this, UnrealBloom);
     this.camera = camera;
     this.scene = scene;
-    this.renderTarget = new THREE.WebGLRenderTarget(window.innerWidth, window.innerHeight);
+    // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
     this.composer = this.initComposer(renderer);
     // this.composer2=this.initComposer2()
   }
@@ -62575,24 +62731,25 @@ var UnrealBloom = /*#__PURE__*/function () {
     value: function initComposer(renderer) {
       //设置光晕
       console.log(renderer);
+      var scene = this.scene;
+      var camera = this.camera;
       this.renderPass = new _RenderPass.RenderPass(scene, camera);
       this.bloomPass = new _MyUnrealBloomPass.MyUnrealBloomPass(
-      //创建通道
+      //创建辉光通道
       new THREE.Vector2(window.innerWidth, window.innerHeight),
       //参数一：泛光覆盖场景大小，二维向量类型
-      0.4,
-      //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
+      0.65,
+      //0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
       2,
       //0.3,//参数三：bloomRadius 泛光散发半径
       0 //0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
       );
-
-      this.ssrPass = this.getSSR();
-      this.saoPass = this.getSAO();
+      // this.ssrPass=this.getSSR()
+      // this.saoPass=this.getSAO()
       this.ssaoPass = this.getSSAO();
-      console.log("this.ssaoPass", this.ssaoPass);
-      this.bokehPass = this.getDOF();
-      this.lutPass = this.getLUT();
+      console.log("ssaoPass", this.ssaoPass);
+      // this.bokehPass=this.getDOF()
+      // this.lutPass=this.getLUT()
       var composer = new _MyEffectComposer.MyEffectComposer(renderer); //效果组合器
 
       composer.addPass(this.ssaoPass //屏幕空间环境光遮蔽
@@ -62612,9 +62769,8 @@ var UnrealBloom = /*#__PURE__*/function () {
       // composer.addPass(
       //     this.bokehPass
       // );
-      // composer.addPass(
-      //     this.bloomPass//辉光
-      // );
+      composer.addPass(this.bloomPass //辉光
+      );
 
       return composer;
     }
@@ -62622,7 +62778,11 @@ var UnrealBloom = /*#__PURE__*/function () {
     key: "getSSAO",
     value: function getSSAO() {
       //https://juejin.cn/post/7224683165989732412
-      var saoPass = new _SSAOPass.SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+      var ssaoPass = new _SSAOPass.SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight);
+      ssaoPass.kernelRadius = 32;
+      ssaoPass.minDistance = 0.001;
+      ssaoPass.maxDistance = 0.3;
+      console.log(this.scene, this.camera, window.innerWidth, window.innerHeight);
       // console.log(SSAOPass.OUTPUT)
       // saoPass.params.output = SSAOPass.OUTPUT.Default;
       // saoPass.params.saoBias = 0.5;
@@ -62631,7 +62791,7 @@ var UnrealBloom = /*#__PURE__*/function () {
       // saoPass.params.saoKernelRadius = 10;
       // saoPass.params.saoMinResolution = 0;
       // saoPass.params.saoBlur = true;
-      return saoPass;
+      return ssaoPass;
     }
   }, {
     key: "getSAO",
@@ -62762,7 +62922,7 @@ var UnrealBloom = /*#__PURE__*/function () {
   return UnrealBloom;
 }();
 exports.UnrealBloom = UnrealBloom;
-},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/BokehPass.js":"node_modules/three/examples/jsm/postprocessing/BokehPass.js","three/examples/jsm/postprocessing/LUTPass.js":"node_modules/three/examples/jsm/postprocessing/LUTPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
+},{"three":"node_modules/three/build/three.module.js","three/examples/jsm/postprocessing/RenderPass.js":"node_modules/three/examples/jsm/postprocessing/RenderPass.js","three/examples/jsm/postprocessing/ShaderPass.js":"node_modules/three/examples/jsm/postprocessing/ShaderPass.js","three/examples/jsm/postprocessing/SSAOPass.js":"node_modules/three/examples/jsm/postprocessing/SSAOPass.js","three/examples/jsm/postprocessing/SAOPass.js":"node_modules/three/examples/jsm/postprocessing/SAOPass.js","three/examples/jsm/postprocessing/SSRPass.js":"node_modules/three/examples/jsm/postprocessing/SSRPass.js","three/examples/jsm/postprocessing/BokehPass.js":"node_modules/three/examples/jsm/postprocessing/BokehPass.js","three/examples/jsm/postprocessing/LUTPass.js":"node_modules/three/examples/jsm/postprocessing/LUTPass.js","./src/MyEffectComposer.js":"src/LoadingProgressive/postprocessing/src/MyEffectComposer.js","./src/MyUnrealBloomPass.js":"src/LoadingProgressive/postprocessing/src/MyUnrealBloomPass.js","three/examples/jsm/postprocessing/EffectComposer.js":"node_modules/three/examples/jsm/postprocessing/EffectComposer.js"}],"src/LoadingProgressive/postprocessing/Postprocessing.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -62785,7 +62945,7 @@ var Postprocessing = /*#__PURE__*/function () {
   function Postprocessing(camera, scene, renderer) {
     _classCallCheck(this, Postprocessing);
     this.godrays_stength = {
-      value: 0.7
+      value: 0.2
     };
     this.unrealBloom = new _UnrealBloom.UnrealBloom(camera, scene, renderer);
     this.godrays = new _Godrays.Godrays(camera, scene);
@@ -62971,6 +63131,8 @@ var Main = /*#__PURE__*/function () {
               statsContainer.appendChild(this.stats.domElement);
               this.body.appendChild(statsContainer);
               this.scene = new THREE.Scene();
+              console.log(this.config.camera.far, "this.config.camera.far");
+              this.config.camera.far = 1000;
               this.camera = new THREE.PerspectiveCamera((this.config["FlipY"] ? -1 : 1) * 30,
               //50,
               this.body.clientWidth / this.body.clientHeight, this.config.camera.near, this.config.camera.far);
@@ -62992,12 +63154,13 @@ var Main = /*#__PURE__*/function () {
               this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(function (_ref) {
                 var envMap = _ref.envMap;
                 self.scene.background = envMap;
+                self.scene.backgroundIntensity = 0.8;
               });
               this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(function (_ref2) {
                 var envMap = _ref2.envMap;
                 self.scene.environment = envMap;
               });
-            case 38:
+            case 40:
             case "end":
               return _context.stop();
           }
@@ -63164,7 +63327,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54914" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55594" + '/');
   ws.onmessage = function (event) {
     checkedAssets = {};
     assetsToAccept = [];

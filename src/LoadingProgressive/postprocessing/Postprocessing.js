@@ -9,7 +9,7 @@ import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
-        this.godrays_stength={ value: 0.7 }
+        this.godrays_stength={ value: 0.2 }
         this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays=new Godrays(camera,scene)
         this.init()

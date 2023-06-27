@@ -177,12 +177,8 @@ export class Godrays{
         postprocessing.godrayCombineUniforms[ 'tGodRays' ].value = postprocessing.rtTextureGodRays2.texture;
         postprocessing.scene.overrideMaterial = postprocessing.materialGodraysCombine;
         renderer.setRenderTarget( null );
-        renderer.render( postprocessing.scene, postprocessing.camera );
-        
-        // this.test(postprocessing.rtTextureColors)
-        // this.test(postprocessing.rtTextureGodRays2)
+        renderer.render( postprocessing.scene, postprocessing.camera )
 
-        
     }
     getTexture(){
         if ( !this.postprocessing.enabled )return
@@ -227,42 +223,7 @@ export class Godrays{
         filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, getStepSize( filterLen, TAPS_PER_PASS, 2.0 ) );
         filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, getStepSize( filterLen, TAPS_PER_PASS, 3.0 ) );
 
-        // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-        // filterGodRays( postprocessing.rtTextureGodRays2.texture, postprocessing.rtTextureGodRays1, 0.02 );
-        // filterGodRays( postprocessing.rtTextureGodRays1.texture, postprocessing.rtTextureGodRays2, 0.16 );
-
-        // filterGodRays( postprocessing.rtTextureDepthMask.texture, postprocessing.rtTextureGodRays2, 0.004 );
-        
-        // final pass - composite god-rays onto colors
         return postprocessing.rtTextureGodRays2.texture;
 
-    }
-    test(renderTarget){
-        if(!this.materialTest){
-            this.materialTest = new THREE.ShaderMaterial( {//假太阳？
-                uniforms: {
-                    tColors: {
-                        value: null
-                    }
-                },
-                vertexShader: /* glsl */`
-                    varying vec2 vUv;
-                    void main() {
-                        vUv = uv;
-                        gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-                    }`,
-                fragmentShader: /* glsl */`
-                    varying vec2 vUv;
-                    uniform sampler2D tColors;
-                    void main() {
-                        gl_FragColor = texture2D( tColors, vUv );
-                        gl_FragColor.a = 1.0;
-                    }`
-            } );
-        }
-        this.materialTest.uniforms[ 'tColors' ].value=renderTarget.texture
-        this.postprocessing.scene.overrideMaterial = this.materialTest;
-        renderer.setRenderTarget( null );
-        renderer.render( this.postprocessing.scene, this.postprocessing.camera );
     }
 }

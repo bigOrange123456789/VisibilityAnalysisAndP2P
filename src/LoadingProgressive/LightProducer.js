@@ -8,7 +8,7 @@ class LightProducer{
         this.objectMove=new THREE.Object3D()
         this.object.add(this.objectMove)
         this.targetList=[]
-        this.init()//this.test()
+        this.init(scene)//this.test()
         this.add_lensflares()
 
         // this.setPos(-319.59561744433125,  16,  323.70333357412926)
@@ -62,10 +62,11 @@ class LightProducer{
         //     )
         // }
     }
-    init(){
+    init(scene){
         // Lights 
         const x=3.//0.5
         const ambient = new THREE.AmbientLight( 0xffffff ,0.8);//new THREE.AmbientLight( 0xffffff ,.8);
+        this.ambient=ambient
         scene.add( ambient );
         // ambient.name="ambient"
 

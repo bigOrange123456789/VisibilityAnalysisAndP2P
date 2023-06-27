@@ -106,6 +106,8 @@ export class Main{
         this.body.appendChild(statsContainer)
 
         this.scene = new THREE.Scene()
+        console.log(this.config.camera.far,"this.config.camera.far")
+        this.config.camera.far=1000
 
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
@@ -147,6 +149,7 @@ export class Main{
         this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
             ({ envMap }) => {
               self.scene.background = envMap
+              self.scene.backgroundIntensity=0.8
             }
           )
         this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
