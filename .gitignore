@@ -6,6 +6,10 @@
 # 忽略/.cache/目录及其下的所有文件
 /.cache/
 
+/assets/space8Zip/
+/assets/textures/
+
+
 # 忽略 /dist/ 目录及其下的所有文件
 /dist/
 

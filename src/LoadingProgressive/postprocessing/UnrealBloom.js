@@ -12,16 +12,74 @@ import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
 
 
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
+
+import * as POSTPROCESSING from "./src2/postprocessing"
+import { VelocityDepthNormalPass } from "./src2/temporal-reproject/pass/VelocityDepthNormalPass"
+import { HBAOEffect } from "./src2/hbao/HBAOEffect"
+import { SSAOEffect } from "./src2/ssao/SSAOEffect"
+import { HBAOSSAOComparisonEffect } from "./src2/HBAOSSAOComparisonEffect"
 export class UnrealBloom{
     constructor(camera,scene,renderer){
         this.camera=camera
         this.scene=scene
         // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
-        this.composer=this.initComposer(renderer)
+        this.composer=this.initComposer0(renderer)
         // this.composer2=this.initComposer2()
         
     }
-    initComposer(renderer){//设置光晕
+    initComposer1(renderer){
+        const scene=this.scene
+        const camera=this.camera
+        const hbaoOptions = {
+            resolutionScale: 1,
+            spp: 16,
+            distance: 2.1399999999999997,
+            distancePower: 1,
+            power: 2,
+            bias: 39,
+            thickness: 0.1,
+            color: 0,
+            useNormalPass: false,
+            velocityDepthNormalPass: null,
+            normalTexture: null,
+            iterations: 1,
+            samples: 5
+        }
+        const ssaoOptions = {
+            resolutionScale: 1,
+            spp: 16,
+            distance: 1,
+            distancePower: 0.25,
+            power: 2,
+            bias: 250,
+            thickness: 0.075,
+            color: 0,
+            useNormalPass: false,
+            velocityDepthNormalPass: null,
+            normalTexture: null,
+            iterations: 1,
+            samples: 5
+        }
+        const composer = new POSTPROCESSING.EffectComposer(renderer)
+        const renderPass = new POSTPROCESSING.RenderPass(scene, camera)
+        composer.addPass(renderPass)
+    
+        const velocityDepthNormalPass = new VelocityDepthNormalPass(scene, camera)
+        composer.addPass(velocityDepthNormalPass)
+        
+        const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
+        const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
+        composer.addPass(hbaoPass)
+        
+        const ssaoEffect = new SSAOEffect(composer, camera, scene, ssaoOptions)
+        const ssaoPass = new POSTPROCESSING.EffectPass(camera, ssaoEffect)
+        composer.addPass(ssaoPass)
+    
+        const hbaoSsaoComparisonEffect = new HBAOSSAOComparisonEffect(hbaoEffect, ssaoEffect)
+        composer.addPass(new POSTPROCESSING.EffectPass(camera, hbaoSsaoComparisonEffect))
+        return composer
+    }
+    initComposer0(renderer){//设置光晕
         console.log(renderer)
         const scene=this.scene
         const camera=this.camera
@@ -39,6 +97,7 @@ export class UnrealBloom{
         // this.bokehPass=this.getDOF()
         // this.lutPass=this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
+        console.log("composer",composer)
         
         composer.addPass(
             this.ssaoPass//屏幕空间环境光遮蔽

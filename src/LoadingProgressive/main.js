@@ -15,10 +15,14 @@ import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
 import{Postprocessing}from"./postprocessing/Postprocessing.js"
-// import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+
+import * as POSTPROCESSING from "./postprocessing/src2/postprocessing"
+import { VelocityDepthNormalPass } from "./postprocessing/src2/temporal-reproject/pass/VelocityDepthNormalPass"
+import { HBAOEffect } from "./postprocessing/src2/hbao/HBAOEffect"
 
 export class Main{
     constructor(body){
@@ -30,10 +34,12 @@ export class Main{
 
         this.initScene()
         this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
+        const self=this
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
+        // this.test()
 
         
         // this.initSky()
@@ -41,10 +47,10 @@ export class Main{
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
-        if(typeof AvatarManager!=="undefined")
-            new AvatarManager(this.scene,this.camera)
+        // if(typeof AvatarManager!=="undefined")
+        //     new AvatarManager(this.scene,this.camera)
 
-        this.ui=new UI(this)
+        // this.ui=new UI(this)
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -157,8 +163,39 @@ export class Main{
               self.scene.environment = envMap
             }
         )
-        
 
+
+    }
+    test(){
+        const camera=this.camera
+        const renderer=this.renderer
+        const scene=this.scene
+        const hbaoOptions = {
+            resolutionScale: 1,
+            spp: 16,
+            distance: 2.1399999999999997,
+            distancePower: 1,
+            power: 2,
+            bias: 39,
+            thickness: 0.1,
+            color: 0,
+            useNormalPass: false,
+            velocityDepthNormalPass: null,
+            normalTexture: null,
+            iterations: 1,
+            samples: 5
+        }
+        let composer = new POSTPROCESSING.EffectComposer(renderer)
+        const renderPass = new POSTPROCESSING.RenderPass(scene, camera)
+        composer.addPass(renderPass)
+
+        const velocityDepthNormalPass = new VelocityDepthNormalPass(scene, camera)
+        composer.addPass(velocityDepthNormalPass)
+
+        const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
+        const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
+        composer.addPass(hbaoPass)
+        this.composer=composer 
     }
     getCubeMapTexture(path) {
         var scope = this
@@ -207,8 +244,8 @@ export class Main{
                     renderer.render(this.scene,this.camera)
                 }else{
                     // renderer.render(this.scene,this.camera)
-                    // this.unrealBloom.render()
-                    this.postprocessing.render()
+                    if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
+                    else this.postprocessing.render()
                     //this.godrays.render()
                 }                  
         }
@@ -219,7 +256,8 @@ export class Main{
         this.canvas.height = window.innerHeight;//this.body.clientHeight
         this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
         this.camera.updateProjectionMatrix()
-        this.renderer.setSize(this.canvas.width, this.canvas.height)
+        if(this.renderer)this.renderer.setSize(this.canvas.width, this.canvas.height)
+
     }
     initSky() {
         if(this.config.render=="false")return
