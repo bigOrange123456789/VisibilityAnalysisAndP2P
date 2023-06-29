@@ -4,6 +4,7 @@ class Pack:
     def __init__(self,config):
         self.id=config['id']
         self.size=config['size']
+        self.res=config['mapResolution']
         self.vd=config['vd']
         self.time0=-1#request
         self.time1=-1#receive
@@ -29,7 +30,7 @@ class Pack:
             exit(0)
         return d #如果d为-1表示没有初始化
 class PackList:
-    def __init__(self,packSize,vdList):
+    def __init__(self,packSize,vdList,mapSize):
         self.pack_num=len(packSize)
         self.list=[]
         for id in range( self.pack_num ):
@@ -37,9 +38,11 @@ class PackList:
                 Pack({
                     "size":packSize[id],
                     "vd":vdList[id],
+                    "mapResolution":mapSize[str(id)],
                     "id":id
                 })
             )
+        self.vdAll=self.sumVd()
     def traverse(self):
         return self.list#range(self.pack_num)
     def getPack(self,id):
@@ -63,3 +66,8 @@ class PackList:
         indices = sorted(arr2, key=lambda x: arr[temp[x]])
         arr.sort()
         return indices,arr#id,value
+    def sumVd(self):
+        s=0
+        for pack in self.traverse():
+            s=s+pack.vd
+        return s

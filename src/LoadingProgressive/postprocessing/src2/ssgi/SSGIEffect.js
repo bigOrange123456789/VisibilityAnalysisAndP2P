@@ -11,9 +11,10 @@ import { SVGF } from "../svgf/SVGF.js"
 import { CubeToEquirectEnvPass } from "./pass/CubeToEquirectEnvPass.js"
 import { SSGIPass } from "./pass/SSGIPass.js"
 /* eslint-disable camelcase */
-import ssgi_compose from "./shader/ssgi_compose.frag"
-import denoise_compose from "./shader/denoise_compose.frag"
-import denoise_compose_functions from "./shader/denoise_compose_functions.frag"
+import { Shader } from "../shader"
+const ssgi_compose=Shader.ssgi_compose()//import ssgi_compose from "./shader/ssgi_compose.frag"
+const denoise_compose=Shader.denoise_compose()//import denoise_compose from "./shader/denoise_compose.frag"
+const denoise_compose_functions=Shader.denoise_compose_functions()//import denoise_compose_functions from "./shader/denoise_compose_functions.frag"
 import { defaultSSGIOptions } from "./SSGIOptions"
 import {
 	createGlobalDisableIblIradianceUniform,

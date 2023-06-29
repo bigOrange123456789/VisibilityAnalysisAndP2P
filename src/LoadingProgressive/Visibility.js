@@ -17,7 +17,6 @@ export class Visibility{
         this.pvd=new Array(this.componentNum)
         this.visualList={}//用于视点的可见资源列表
         
-
         this.prePoint="";//视点变化就进行加载 (或者添加了新的模型) 
         this.prePoint2="";//视点变化就进行可见性剔除
         this.loading=loading

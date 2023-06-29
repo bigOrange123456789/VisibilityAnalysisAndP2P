@@ -2,7 +2,8 @@
 
 import { Effect } from "postprocessing"
 import { NoColorSpace, NearestFilter, RepeatWrapping, TextureLoader, Uniform, Vector2 } from "three"
-import motion_blur from "./shader/motion_blur.frag"
+import { Shader } from "../shader"
+const motion_blur=Shader.motion_blur()//import motion_blur from "./shader/motion_blur.frag"
 
 import blueNoiseImage from "./../utils/LDR_RGBA_0.png"
 

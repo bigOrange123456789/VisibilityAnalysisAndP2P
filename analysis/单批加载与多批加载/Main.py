@@ -23,7 +23,7 @@ class Main:
             x.append(arr_time[i])
             y.append(vd0)
             id=sorted_indices[i]
-            vd0+=self.packList.getPack(id).vd#vd0+=arr_vd[id]#
+            vd0=vd0+self.packList.getPack(id).vd/self.packList.vdAll#vd0+=arr_vd[id]#
             x.append(arr_time[i])
             y.append(vd0)
 
@@ -34,9 +34,34 @@ class Main:
         y2=[vd_ave,vd_ave]
         print("可见度的平均值为:",vd_ave)
         return x,y,x2,y2     
-    def draw(self):
+    def draw2(self):
+        plt.subplot(1, 2, 2)
+        self.draw03()
+        plt.title('3:Fill Degree')
+
+        plt.subplot(1, 2, 1)
+        self.draw02()
+        plt.title('2:Number of packets')
+        
+        plt.legend()# 添加图例
+        plt.show()# 显示图形
+    def draw1(self):
         plt.subplot(1, 3, 1)
-        list0,_=self.packList.sortList('parsed')#['id']
+        self.draw01()
+        plt.title('1:processing time of packet')  
+
+        plt.subplot(1, 3, 3)
+        self.draw03()
+        plt.title('3:Fill Degree')
+
+        plt.subplot(1, 3, 2)
+        self.draw02()
+        plt.title('2:Number of packets')
+        
+        plt.legend()# 添加图例
+        plt.show()# 显示图形
+    def draw01(self,sortName):#sortName= request loaded parsed 
+        list0,_=self.packList.sortList(sortName)#['id']
         x0_min=MAX
         x0_max=MIN
         for y0 in range(len(list0)):
@@ -46,38 +71,45 @@ class Main:
             if x[0]<x0_min:x0_min=x[0]
             if x[0]>x0_max:x0_max=x[0]
 
-            # print(pack.time0)
-            # print(np.array(pack.time0))
-            # print(np.max(np.array(pack.time0)))
-            # 
             y=[y0+1,y0+1,y0+1]
-            plt.plot(x, y, linewidth=0.1, marker='o', markersize=1)
+
+            temp=x
+            x=y
+            y=temp
+            # plt.plot(x, y, linewidth=0.1, marker='o', markersize=1)
+            
+            if y0==0:
+                plt.plot([x[0],x[1]], [y[0],y[1]], linewidth=0.1, markersize=1,color='black',label="loading")
+                plt.plot([x[1],x[2]], [y[1],y[2]], linewidth=0.1, markersize=1,color='r',label="parsing")
+                plt.plot(x[0], y[0], marker='o', linewidth=0,markersize=1,color='indigo',label="request")
+                plt.plot(x[1], y[1], marker='o', linewidth=0,markersize=1,color='g',label="loaded")
+                plt.plot(x[2], y[2], marker='o', linewidth=0,markersize=1,color='b',label="parsed")
+            else:
+                # plt.plot(x, y, linewidth=0.1, markersize=1,color='black')
+                plt.plot([x[0],x[1]], [y[0],y[1]], linewidth=0.1, markersize=1,color='black')
+                plt.plot([x[1],x[2]], [y[1],y[2]], linewidth=0.1, markersize=1,color='r')
+                plt.plot(x[0], y[0], marker='o', markersize=1,color='indigo')
+                plt.plot(x[1], y[1], marker='o', markersize=1,color='g')
+                plt.plot(x[2], y[2], marker='o', markersize=1,color='b')
+
+            
         print("x0_min:",x0_min,",x0_max:",x0_max)
         print( "time0:", (x0_max-x0_min)/(len(list0)-1))
-        plt.xlabel('time(ms)')
-        plt.ylabel('ID of packet')
-        plt.title('1:processing time of packet')  
-
-        plt.subplot(1, 3, 3)
+        plt.ylabel('time(ms)')
+    def draw03(self):
         for type in["vd"]:#["request","loaded","forwarded","parsed"]:
             x,y,x2,y2=self.getVDAndTime()
             plt.plot(x, y,label="FD")
             plt.plot(x2, y2, linestyle='dashed',label="ave FD")
         plt.xlabel('time(ms)')
         plt.ylabel('Fill Degree')
-        plt.title('3:Fill Degree')
-
-        plt.subplot(1, 3, 2)
+    def draw02(self):
         for type in["request","loaded","parsed"]:#["request","loaded","forwarded","parsed"]:
             _,x=self.packList.sortList(type)#['value']
             y=list(range(1, len(x)+1, 1))
             plt.plot(x, y,label=type)
         plt.xlabel('time(ms)')
         plt.ylabel('Number of packets')
-        plt.title('2:Number of packets')
-        
-        plt.legend()# 添加图例
-        plt.show()# 显示图形
     def initPackSize(self,path,PACK_NUM):
         self.packSize=[]
         for i in range(PACK_NUM):
@@ -93,12 +125,49 @@ class Main:
             pack.time0=result[id]['request']
             pack.time1=result[id]['loaded']
             pack.time2=result[id]["parsed"]
-      
+    def to_excel(self,name):
+        arr=[]
+        for pack in self.packList.traverse():
+            id=pack.id
+            vd=pack.vd
+            size=pack.size
+            time0=pack.time0
+            time1=pack.time1
+            time2=pack.time2
+            res=pack.res
+            # print(id,vd,size,time0,time1,time2,res)
+            if time0!=-1:
+                arr.append([id,vd,size,res,time0,time1,time2])
+        tag=["id",'可见度','file size','res','time0','time1','time2']
+        import pandas as pd
+        df = pd.DataFrame(arr, columns=tag)
+        df.to_excel('result.xlsx', name,index=False, encoding='utf-8')
+    def to_excel2(self):
+        arr=[]
+        for pack in self.packList.traverse():
+            id=pack.id
+            vd=pack.vd
+            size=pack.size
+            time0=pack.time0
+            time1=pack.time1
+            time2=pack.time2
+            res=pack.res
+            # print(id,vd,size,time0,time1,time2,res)
+            if time0!=-1:
+                arr.append([id,vd,size,res,time0,time1,time2])
+        tag=["id",'可见度(球面度)','文件大小(字节)','贴图分辨率(像素)','发出请求的时刻(毫秒)','收到数据包的时刻(毫秒)','完成解析的时刻(毫秒)']
+        import pandas as pd
+        df = pd.DataFrame(arr, columns=tag)
+        return df
+
     def __init__(self,param):
         vdList=json.load(open(param["path_vdList"]))#[2,1,0]
         packSize=self.initPackSize("../../dist/assets/space8Zip",param["pack_num"])#[2,3,4]
-        self.packList=PackList(packSize,vdList)
+        mapSize=json.load(open(param["path_mapSize"]))
+        self.packList=PackList(packSize,vdList,mapSize)
         if param["path_result"]=="":Simulate(self)
         else:                       self.initResult(param["path_result"])
         self.timeStart=self.packList.getTimeStart()
-        self.draw()
+        #self.test()
+        # return
+        # self.draw1()

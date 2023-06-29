@@ -3,6 +3,7 @@ export class Detection {//需要服务器
         this.config=window.configALL.src.Detection
         this.updateGroupList=[]
         this.meshes=meshes
+        window.meshes=meshes
         this.demandResponseDelay={}
 
         this.dectionURL=this.config.urlDetectionServer
@@ -30,7 +31,6 @@ export class Detection {//需要服务器
         this.pack_circumstances={}
         
         const scope=this
-
         this.testTime=this.config.testTime//90//60//window.param.testTime;//测试时间
         this.frameCount=0;//记录帧数量
         function testFrame(){
@@ -44,9 +44,23 @@ export class Detection {//需要服务器
         },scope.testTime*1000)
         window.getTimeList=()=>{
             const config=scope.getTimeList()
-            // window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
-            window.save(config,"result.json")
+            window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
+            // window.save(config,"result.json")
         }
+        window.getAllMapSize=()=>{scope.getAllMapSize()}
+    }
+    getAllMapSize(){
+        const getMapSize=mesh=>{
+            if(!mesh)return 0
+            const map=mesh.lod[1].material.map
+            if(!map)return 0
+            else return map.image.height*map.image.width
+        }
+        const list={}
+        for(let id in this.meshes){
+            list[id]=getMapSize(this.meshes[id])
+        }
+        this.saveJson(list,"mapSize.json")
     }
     recordPlumpness(){
         let s=document.getElementById("plumpness").innerHTML
@@ -72,7 +86,6 @@ export class Detection {//需要服务器
             new Date().getHours(),//
             new Date().getSeconds(),//1
             new Date().getMilliseconds(),
-
             new Date().getMinutes(),//新添加
         ]
     }
@@ -296,5 +309,13 @@ export class Detection {//需要服务器
         setTimeout(()=>{
             oReq.send(JSON.stringify(data));//返回实验结果
         },Math.random()*self.config.maxBackDelay*1000)
+    }
+    saveJson(data,name){
+        const jsonData = JSON.stringify(data)
+        const myBlob = new Blob([jsonData], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(myBlob)
+        link.download = name
+        link.click()
     }
 }

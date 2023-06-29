@@ -10,10 +10,11 @@ import {
 	Vector2,
 	WebGLRenderTarget
 } from "three"
-import blueNoiseImage from "../utils/LDR_RGBA_0.png"
-import vertexShader from "../utils/shader/basic.vert"
-import sampleBlueNoise from "../utils/shader/sampleBlueNoise.glsl"
-import fragmentShader from "./shader/poissionDenoise.frag"
+const blueNoiseImage="./assets/textures/blur/LDR_RGBA_0.png"//import blueNoiseImage from "../utils/LDR_RGBA_0.png"
+import { Shader } from "../shader"
+const vertexShader=Shader.basic()//import vertexShader from "../utils/shader/basic.vert"
+const sampleBlueNoise=Shader.sampleBlueNoise()//import sampleBlueNoise from "../utils/shader/sampleBlueNoise.glsl"
+const fragmentShader=Shader.poissionDenoise()//import fragmentShader from "./shader/poissionDenoise.frag"
 import { generateDenoiseSamples, generatePoissonDiskConstant } from "./utils/PoissonUtils"
 
 const finalFragmentShader = fragmentShader.replace("#include <sampleBlueNoise>", sampleBlueNoise)

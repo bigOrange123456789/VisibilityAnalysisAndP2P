@@ -3,7 +3,8 @@ import { Uniform } from "three"
 import { getVisibleChildren, isGroundProjectedEnv } from "../ssgi/utils/Utils"
 import { TemporalReprojectPass } from "../temporal-reproject/TemporalReprojectPass.js"
 // eslint-disable-next-line camelcase
-import traa_compose from "./shader/traa_compose.frag"
+import { Shader } from "../shader"
+const traa_compose  =Shader.traa_compose()//import traa_compose from "./shader/traa_compose.frag"
 
 const defaultTRAAOptions = {
 	blend: 0.8,

@@ -24,16 +24,110 @@ def test():
         plt.ylabel('initialization time(ms)')
         plt.legend()# 添加图例
         plt.show()# 显示图形
-if __name__ == "__main__":#开始执行代码
-    Main({
+def remove():
+    import os
+    os.remove("C:/Users/admin/Downloads/result.json")  
+def start():
+     Main({
         "pack_num":529,
-        "path_vdList":"data/vd0.json",
+        "path_vdList": "data/vd0.json",
+        "path_mapSize":"data/mapSize.json",
         "path_file":"../../dist/assets/space8Zip",
         "path_result":
             #"data/result.json"
-            'C:/Users/admin/Downloads/result.json'
+            #'C:/Users/admin/Downloads/result.json'
+            "data/远程+单批+渲染.json"
             #"data/result_n300t100.json",#路径为空就进行模拟
     })
-    import os
-    os.remove("C:/Users/admin/Downloads/result.json")
+def start2():
+    arr=[]
+    for s1 in ["远程","本地"]:
+        for s2 in ["单批","双批"]:
+            for s3 in ["渲染","不渲染"]:
+                name=s1+"+"+s2+"+"+s3
+                main=Main({
+                    "pack_num":529,
+                    "path_vdList": "data/vd0.json",
+                    "path_mapSize":"data/mapSize.json",
+                    "path_file":"../../dist/assets/space8Zip",
+                    "path_result":
+                        #"data/result.json"
+                        #'C:/Users/admin/Downloads/result.json'
+                        "data/"+name+".json"
+                        #"data/result_n300t100.json",#路径为空就进行模拟
+                })
+                main.name=name
+                arr.append(main)
+    import matplotlib.pyplot as plt
+    plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签SimHei
+    plt.rcParams['axes.unicode_minus'] = False # 用来正常显示负号
+
+    import pandas as pd
+    writer=pd.ExcelWriter("result.xlsx")
+    for i in range(8):
+        main=arr[i]
+        data=main.to_excel2()
+        data.to_excel(writer, main.name)
+    writer.save()
+
+    # for i in range(8):
+    #     plt.subplot(2, 4, i+1)
+    #     main=arr[i]
+    #     main.draw03()
+    #     plt.title(main.name)        
+    # plt.legend()# 添加图例
+    # plt.show()# 显示图形
+
+    # for i in range(8):
+    #     plt.subplot(2, 4, i+1)
+    #     main=arr[i]
+    #     main.draw02()
+    #     plt.title(main.name)        
+    # plt.legend()# 添加图例
+    # plt.show()# 显示图形
+
+    # for i in range(8):
+    #     main=arr[i]
+    #     plt.subplot(1, 3, 1)
+    #     main.draw01('request')#request loaded parsed 
+    #     plt.title('排序依据:发出请求时间') 
+    #     plt.subplot(1, 3, 2)
+    #     main.draw01('loaded')#request loaded parsed 
+    #     plt.title('排序依据:完成加载时间') 
+    #     plt.subplot(1, 3, 3)
+    #     main.draw01('parsed')#request loaded parsed 
+    #     plt.title('排序依据:完成解析时间') 
+    #     plt.suptitle(main.name)
+    #     plt.legend()# 添加图例
+    #     plt.show()# 显示图形
+    
+    # for i in range(8):
+    #     plt.subplot(2, 4, i+1)
+    #     main=arr[i]
+    #     main.draw01('request')
+    #     plt.title(main.name)        
+    # plt.suptitle('排序依据:发出请求时间')
+    # plt.legend()# 添加图例
+    # plt.show()# 显示图形
+
+    # for i in range(8):
+    #     plt.subplot(2, 4, i+1)
+    #     main=arr[i]
+    #     main.draw01('loaded')
+    #     plt.title(main.name)        
+    # plt.suptitle('排序依据:完成加载时间')
+    # plt.legend()# 添加图例
+    # plt.show()# 显示图形
+
+    # for i in range(8):
+    #     plt.subplot(2, 4, i+1)
+    #     main=arr[i]
+    #     main.draw01('parsed')
+    #     plt.title(main.name)        
+    # plt.suptitle('排序依据:完成解析时间')
+    # plt.legend()# 添加图例
+    # plt.show()# 显示图形    
+
+if __name__ == "__main__":#开始执行代码
+    start2()
     #test()

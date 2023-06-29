@@ -1,6 +1,7 @@
 ﻿import { Pass } from "postprocessing"
 import { GLSL3, NoBlending, ShaderMaterial, Uniform, WebGLMultipleRenderTargets } from "three"
-import basicVertexShader from "../../utils/shader/basic.vert"
+import { Shader } from "../../shader"
+const basicVertexShader=Shader.basic()//import basicVertexShader from "../../utils/shader/basic.vert"
 
 export class CopyPass extends Pass {
 	needsSwap = false

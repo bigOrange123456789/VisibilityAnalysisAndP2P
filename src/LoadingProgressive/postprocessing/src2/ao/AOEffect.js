@@ -2,7 +2,8 @@ import { Effect, NormalPass } from "postprocessing"
 import { Color, Uniform } from "three"
 import { PoissionDenoisePass } from "../poissionDenoise/PoissionDenoisePass"
 // eslint-disable-next-line camelcase
-import ao_compose from "./shader/ao_compose.frag"
+import { Shader } from "../shader"
+const ao_compose=Shader.ao_compose()//import ao_compose from "./shader/ao_compose.frag"
 import { TRAAEffect } from "../traa/TRAAEffect"
 
 const defaultAOOptions = {

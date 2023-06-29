@@ -6,6 +6,7 @@ import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
 export class UI{
     constructor(main) {
         this.gui = new GUI();
+        this.gui._closed=true
         window.gui=this.gui
         window.panelDiv=this.gui.domElement
         this.params = {
@@ -28,13 +29,26 @@ export class UI{
         this.control_material(main.scene)
         // this.control_renderer(main.renderer)
         this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient)
-        this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)//this.control_ssao(main.unrealBloom.ssaoPass)//
-        this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
-        this.control_godrays(main.postprocessing.godrays,main.postprocessing)
-        // this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
-        // this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
-        // this.control_lut(main.postprocessing.unrealBloom.lutPass)
-        //this.control_sao(main.postprocessing.unrealBloom.saoPass)
+
+        console.log(main.postprocessing,"main.postprocessing")
+        if(main.unrealBloom){
+            this.control_ssao(main.unrealBloom.ssaoPass)
+            this.control_lut(main.unrealBloom.lutPass)
+            this.control_bloomPass(main.unrealBloom.bloomPass)
+        }
+                    
+        if(main.postprocessing){
+            if(main.postprocessing.unrealBloom){
+                this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
+                this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
+                this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+                this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
+                this.control_lut(main.postprocessing.unrealBloom.lutPass)
+                this.control_sao(main.postprocessing.unrealBloom.saoPass)
+            }
+            this.control_godrays(main.postprocessing.godrays,main.postprocessing)
+        }
+        
         
     }
     control_camera(camera,playerControl) {
@@ -174,6 +188,11 @@ export class UI{
         .onChange(function(e) {
             directionalLight.castShadow = e
         });
+
+        // params['shadow_radius']=directionalLight.shadow.radius
+        // directionFolder.add( params, 'shadow_radius', 0, 20 ).step( 0.05 ).onChange( function ( value ) {
+        //     directionalLight.shadow.radius = value
+        // } );
         /*visible*/
         params['平行光启用']=directionalLight.visible
         directionFolder
@@ -202,6 +221,7 @@ export class UI{
         } );
     }
     control_bloomPass(bloomPass){
+        if(!bloomPass)return
         const gui=this.gui
         const params=this.params
         params.bloomThreshold=bloomPass.threshold;
@@ -219,6 +239,7 @@ export class UI{
         } );
     }
     control_godrays(godrays,postprocessing){
+        if(!godrays||!postprocessing)return
         const gui=this.gui
         const params=this.params
         params.filterLen=godrays.filterLen;
@@ -236,6 +257,7 @@ export class UI{
         } );
     }
     control_ssr(ssrPass){
+        if(!ssrPass)return
         const gui=this.gui
         const params=this.params
         params.ssr_thickness=ssrPass.thickness;
@@ -269,6 +291,7 @@ export class UI{
         // folder.add( ssrPass, 'thickness' ).min( 0 ).max( .1 ).step( .0001 );
     }
     control_sao(saoPass){
+        if(!saoPass)return
         const gui=this.gui
         const folder = gui.addFolder("可缩放环境光遮挡")
         const params=this.params
@@ -292,7 +315,7 @@ export class UI{
         folder.add( saoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1 );
     }
     control_bokeh(bokehPass){
-
+        if(!bokehPass)return
         const gui=this.gui
         const folder = gui.addFolder("散焦景深")
         const params=this.params
@@ -323,6 +346,7 @@ export class UI{
         // } );
     }
     control_lut(lutPass){
+        if(!lutPass)return
         const gui=this.gui
         const folder = gui.addFolder("LookupTable")
         const params=this.params
@@ -332,10 +356,9 @@ export class UI{
         } );
     }
     control_ssao(ssaoPass){
+        if(!ssaoPass)return
         const gui=this.gui
         const folder = gui.addFolder("屏幕空间环境光遮蔽")
-
-
         folder.add( ssaoPass, 'output', {
             'Default': SSAOPass.OUTPUT.Default,
             'SSAO Only': SSAOPass.OUTPUT.SSAO,
@@ -353,6 +376,4 @@ export class UI{
         folder.add( ssaoPass, 'maxDistance' ).min( 0.01 ).max( 0.6 ).step( 0.001 )
         
     }
-
-
 }

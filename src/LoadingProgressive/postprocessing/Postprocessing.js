@@ -15,10 +15,10 @@ export class Postprocessing{
         this.init()
     }
     init(){
-        this.scene = new THREE.Scene();
-		this.camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 );
-		this.camera.position.z = 100;
-		this.scene.add( camera );
+        this.scene = new THREE.Scene()
+		this.camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 )
+		this.camera.position.z = 100
+		this.scene.add( camera )
 
         this.uniforms=THREE.UniformsUtils.clone( GodRaysGenerateShader.uniforms )
 
@@ -30,8 +30,8 @@ export class Postprocessing{
                 fragmentShader: GodRaysGenerateShader.fragmentShader
             })
         );
-        this.quad.position.z = - 9900;
-        this.scene.add( this.quad );
+        this.quad.position.z = - 9900
+        this.scene.add( this.quad )
     }
     render(){
         // this.test(this.godrays.getTexture())   
@@ -40,7 +40,6 @@ export class Postprocessing{
         //     this.godrays.getTexture()
         // )  
         this.mix(
-            
             this.godrays.getTexture(),
             this.unrealBloom.getTexture(),
         )  
@@ -77,12 +76,12 @@ export class Postprocessing{
                         gl_FragColor.a = 1.0;
                         // gl_FragColor.r = 1.0;
                     }`
-            } );
+            } )
         }
         this.materialTest.uniforms[ 'textureBloom'   ].value=textureBloom//renderTarget.texture
         this.materialTest.uniforms[ 'textureGodrays' ].value=textureGodrays
-        this.scene.overrideMaterial = this.materialTest;
-        renderer.setRenderTarget( null );
-        renderer.render( this.scene, this.camera );
+        this.scene.overrideMaterial = this.materialTest
+        renderer.setRenderTarget( null )
+        renderer.render( this.scene, this.camera )
     }
 }

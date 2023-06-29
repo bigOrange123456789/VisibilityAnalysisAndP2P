@@ -17,13 +17,16 @@ import * as POSTPROCESSING from "./src2/postprocessing"
 import { VelocityDepthNormalPass } from "./src2/temporal-reproject/pass/VelocityDepthNormalPass"
 import { HBAOEffect } from "./src2/hbao/HBAOEffect"
 import { SSAOEffect } from "./src2/ssao/SSAOEffect"
+import { HBAODebugGUI } from "./src2/HBAODebugGUI"
+import { SSAODebugGUI } from "./src2/SSAODebugGUI"
 import { HBAOSSAOComparisonEffect } from "./src2/HBAOSSAOComparisonEffect"
+
 export class UnrealBloom{
     constructor(camera,scene,renderer){
         this.camera=camera
         this.scene=scene
         // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
-        this.composer=this.initComposer0(renderer)
+        this.composer=this.initComposer1(renderer)
         // this.composer2=this.initComposer2()
         
     }
@@ -70,13 +73,26 @@ export class UnrealBloom{
         const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
         const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
         composer.addPass(hbaoPass)
+        const gui3 = new HBAODebugGUI(hbaoEffect, hbaoOptions)
+        gui3.pane.containerElem_.style.right = "8px"
+        gui3.pane.containerElem_.style.top = "5px"
+
         
         const ssaoEffect = new SSAOEffect(composer, camera, scene, ssaoOptions)
         const ssaoPass = new POSTPROCESSING.EffectPass(camera, ssaoEffect)
         composer.addPass(ssaoPass)
+        const gui4 = new SSAODebugGUI(ssaoEffect, ssaoOptions)
+		gui4.pane.containerElem_.style.left  = "8px"
+		gui4.pane.containerElem_.style.top = "5px"
+
     
-        const hbaoSsaoComparisonEffect = new HBAOSSAOComparisonEffect(hbaoEffect, ssaoEffect)
-        composer.addPass(new POSTPROCESSING.EffectPass(camera, hbaoSsaoComparisonEffect))
+        // const hbaoSsaoComparisonEffect = new HBAOSSAOComparisonEffect(hbaoEffect, ssaoEffect)
+        // composer.addPass(new POSTPROCESSING.EffectPass(camera, hbaoSsaoComparisonEffect))
+
+        
+
+		
+
         return composer
     }
     initComposer0(renderer){//设置光晕
@@ -90,37 +106,36 @@ export class UnrealBloom{
                 2,//0.3,//参数三：bloomRadius 泛光散发半径
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
-        // this.ssrPass=this.getSSR()
-        // this.saoPass=this.getSAO()
+        this.ssrPass=this.getSSR()
+        this.saoPass=this.getSAO()
         this.ssaoPass=this.getSSAO()
-        console.log("ssaoPass",this.ssaoPass)
-        // this.bokehPass=this.getDOF()
-        // this.lutPass=this.getLUT()
+        this.bokehPass=this.getDOF()
+        this.lutPass=this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
-        console.log("composer",composer)
         
         composer.addPass(
             this.ssaoPass//屏幕空间环境光遮蔽
-        );
+        )
+
+        composer.addPass(
+            this.lutPass
+        )
 
         // composer.addPass(
         //     this.renderPass
-        // );
+        // )
         
-
         // composer.addPass(
         //     this.ssrPass//屏幕空间反射
-        // );
-        // composer.addPass(
-        //     this.lutPass
-        // );
+        // )
         
         // composer.addPass(
         //     this.bokehPass
-        // );
+        // )
+        
         composer.addPass(
             this.bloomPass//辉光
-        );
+        )
         
         return composer
     }

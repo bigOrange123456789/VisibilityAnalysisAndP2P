@@ -20,10 +20,6 @@ import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
-import * as POSTPROCESSING from "./postprocessing/src2/postprocessing"
-import { VelocityDepthNormalPass } from "./postprocessing/src2/temporal-reproject/pass/VelocityDepthNormalPass"
-import { HBAOEffect } from "./postprocessing/src2/hbao/HBAOEffect"
-
 export class Main{
     constructor(body){
         this.speed=1
@@ -33,14 +29,13 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        //this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
         // this.test()
-
         
         // this.initSky()
         this.initWander()
@@ -50,7 +45,7 @@ export class Main{
         // if(typeof AvatarManager!=="undefined")
         //     new AvatarManager(this.scene,this.camera)
 
-        // this.ui=new UI(this)
+        this.ui=new UI(this)
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -87,18 +82,17 @@ export class Main{
         
         this.body.appendChild(this.renderer.domElement)
         window.renderer=this.renderer
-        //////////////////
         //////////////////////////////////////
-		this.litRenderTarget = new THREE.WebGLRenderTarget(
-			window.innerWidth,
-			window.innerHeight,
-			{
-			minFilter: THREE.NearestFilter,
-			magFilter: THREE.NearestFilter,
-			format: THREE.RGBAFormat,
-			type: THREE.FloatType
-			}
-		)
+		// this.litRenderTarget = new THREE.WebGLRenderTarget(
+		// 	window.innerWidth,
+		// 	window.innerHeight,
+		// 	{
+		// 	minFilter: THREE.NearestFilter,
+		// 	magFilter: THREE.NearestFilter,
+		// 	format: THREE.RGBAFormat,
+		// 	type: THREE.FloatType
+		// 	}
+		// )
         //////////////////
 
 
@@ -112,8 +106,6 @@ export class Main{
         this.body.appendChild(statsContainer)
 
         this.scene = new THREE.Scene()
-        console.log(this.config.camera.far,"this.config.camera.far")
-        this.config.camera.far=1000
 
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
@@ -165,37 +157,6 @@ export class Main{
         )
 
 
-    }
-    test(){
-        const camera=this.camera
-        const renderer=this.renderer
-        const scene=this.scene
-        const hbaoOptions = {
-            resolutionScale: 1,
-            spp: 16,
-            distance: 2.1399999999999997,
-            distancePower: 1,
-            power: 2,
-            bias: 39,
-            thickness: 0.1,
-            color: 0,
-            useNormalPass: false,
-            velocityDepthNormalPass: null,
-            normalTexture: null,
-            iterations: 1,
-            samples: 5
-        }
-        let composer = new POSTPROCESSING.EffectComposer(renderer)
-        const renderPass = new POSTPROCESSING.RenderPass(scene, camera)
-        composer.addPass(renderPass)
-
-        const velocityDepthNormalPass = new VelocityDepthNormalPass(scene, camera)
-        composer.addPass(velocityDepthNormalPass)
-
-        const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
-        const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
-        composer.addPass(hbaoPass)
-        this.composer=composer 
     }
     getCubeMapTexture(path) {
         var scope = this
@@ -296,7 +257,7 @@ export class Main{
         
     }
 }
-// document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -332,6 +293,9 @@ export class Main{
         config.src.Detection.backURL=backURL    
     }
     config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
+    config.src.Building_new.NUMBER=getParam('NUMBER')
+    config.src.Building_new.TIME=getParam('TIME')
+
     window.configALL=config
     new Main(document.body)
-// })
+})

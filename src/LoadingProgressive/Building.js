@@ -4,7 +4,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
 import { Visibility } from './Visibility.js'
 import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
-import {ZipLoader } from '../../lib/zip/Ziploader'
+import { ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 import { WaterController  } from '../../lib/threejs/WaterController'
 
@@ -129,6 +129,19 @@ export class Building{
             this.meshes,
             this.detection
         )
+
+        // const l1=Array.from(Array(100)).map((v,i) => {return i } )
+        // const l2=Array.from(Array(100)).map((v,i) => {return i+100 } )
+        // const l3=Array.from(Array(100)).map((v,i) => {return i+200 } )
+        // const l4=Array.from(Array(100)).map((v,i) => {return i+300 } )
+        // const l5=Array.from(Array(100)).map((v,i) => {return i+400 } )
+        // const l6=Array.from(Array(29)).map((v,i) => {return i+500 } )
+        // setTimeout(()=>{self.loading(l1)},1000)
+        // setTimeout(()=>{self.loading(l2)},2000)
+        // setTimeout(()=>{self.loading(l3)},3000)
+        // setTimeout(()=>{self.loading(l4)},4000)
+        // setTimeout(()=>{self.loading(l5)},5000)
+        // setTimeout(()=>{self.loading(l6)},6000)
     }
     createFloor(){
         const geometry = new THREE.BoxGeometry( 1000000, 500, 50000 );
@@ -516,8 +529,8 @@ export class Building{
         // return
         const self=this;
         window.list=list
-        const NUMBER=30//50//350//50//50
-        const TIME=1200//100
+        const NUMBER=this.config.NUMBER?this.config.NUMBER:30//50//350//50//50
+        const TIME=this.config.TIME?this.config.TIME:1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
         

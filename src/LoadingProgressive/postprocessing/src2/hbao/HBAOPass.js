@@ -1,7 +1,8 @@
 import { AOPass } from "../ao/AOPass"
 // eslint-disable-next-line camelcase
-import hbao_utils from "./shader/hbao_utils.glsl"
-import fragmentShader from "./shader/hbao.frag"
+import { Shader } from "../shader"
+const hbao_utils=Shader.hbao_utils()//import hbao_utils from "./shader/hbao_utils.glsl"
+const fragmentShader=Shader.hbao()//import fragmentShader from "./shader/hbao.frag"
 
 const finalFragmentShader = fragmentShader.replace("#include <hbao_utils>", hbao_utils)
 

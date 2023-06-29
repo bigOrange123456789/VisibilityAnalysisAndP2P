@@ -7,7 +7,8 @@
 /.cache/
 
 /assets/space8Zip/
-/assets/textures/
+/node_modules0/
+/node_modules2/
 
 
 # 忽略 /dist/ 目录及其下的所有文件
