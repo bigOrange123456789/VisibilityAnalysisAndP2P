@@ -70,20 +70,22 @@ export class UnrealBloom{
         const velocityDepthNormalPass = new VelocityDepthNormalPass(scene, camera)
         composer.addPass(velocityDepthNormalPass)
         
-        const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
-        const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
-        composer.addPass(hbaoPass)
-        const gui3 = new HBAODebugGUI(hbaoEffect, hbaoOptions)
-        gui3.pane.containerElem_.style.right = "8px"
-        gui3.pane.containerElem_.style.top = "5px"
+        // const hbaoEffect = new HBAOEffect(composer, camera, scene, hbaoOptions)
+        // const hbaoPass = new POSTPROCESSING.EffectPass(camera, hbaoEffect)
+        // composer.addPass(hbaoPass)
+        // const gui3 = new HBAODebugGUI(hbaoEffect, hbaoOptions)
+        // gui3.pane.containerElem_.style.right = "8px"
+        // gui3.pane.containerElem_.style.top = "5px"
 
         
         const ssaoEffect = new SSAOEffect(composer, camera, scene, ssaoOptions)
+        console.log("ssaoEffect",ssaoEffect)
         const ssaoPass = new POSTPROCESSING.EffectPass(camera, ssaoEffect)
         composer.addPass(ssaoPass)
-        const gui4 = new SSAODebugGUI(ssaoEffect, ssaoOptions)
-		gui4.pane.containerElem_.style.left  = "8px"
-		gui4.pane.containerElem_.style.top = "5px"
+        this.ssaoPass2=ssaoEffect//SSAOEffect.DefaultOptions//ssaoPass
+        // const gui4 = new SSAODebugGUI(ssaoEffect, ssaoOptions)
+		// gui4.pane.containerElem_.style.left  = "8px"
+		// gui4.pane.containerElem_.style.top = "5px"
 
     
         // const hbaoSsaoComparisonEffect = new HBAOSSAOComparisonEffect(hbaoEffect, ssaoEffect)

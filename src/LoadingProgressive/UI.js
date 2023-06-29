@@ -31,13 +31,9 @@ export class UI{
         this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient)
 
         console.log(main.postprocessing,"main.postprocessing")
-        if(main.unrealBloom){
-            this.control_ssao(main.unrealBloom.ssaoPass)
-            this.control_lut(main.unrealBloom.lutPass)
-            this.control_bloomPass(main.unrealBloom.bloomPass)
-        }
-                    
-        if(main.postprocessing){
+        const postprocessing=main.postprocessing
+        const unrealBloom=  main.unrealBloom?main.unrealBloom:(main.postprocessing?main.postprocessing.unrealBloom:null)
+        if(postprocessing){
             if(main.postprocessing.unrealBloom){
                 this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
                 this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
@@ -46,7 +42,22 @@ export class UI{
                 this.control_lut(main.postprocessing.unrealBloom.lutPass)
                 this.control_sao(main.postprocessing.unrealBloom.saoPass)
             }
-            this.control_godrays(main.postprocessing.godrays,main.postprocessing)
+            this.control_godrays(postprocessing.godrays,main.postprocessing)
+        }
+        if(unrealBloom){
+            this.control_ssao(unrealBloom.ssaoPass)
+            this.control_bloomPass(unrealBloom.bloomPass)
+            this.control_ssr(unrealBloom.ssrPass)
+            this.control_bokeh(unrealBloom.bokehPass)
+            this.control_lut(unrealBloom.lutPass)
+            this.control_sao(unrealBloom.saoPass)
+
+            this.control_ssao(unrealBloom.ssaoPass)
+            this.control_lut(unrealBloom.lutPass)
+            this.control_bloomPass(unrealBloom.bloomPass)
+
+
+            this.control_ssao2(unrealBloom.ssaoPass2)
         }
         
         
@@ -313,6 +324,48 @@ export class UI{
         folder.add( saoPass.params, 'saoBlurRadius', 0, 200 );
         folder.add( saoPass.params, 'saoBlurStdDev', 0.5, 150 );
         folder.add( saoPass.params, 'saoBlurDepthCutoff', 0.0, 0.1 );
+    }
+    control_ssao2(ssaoOptions){
+        if(!ssaoOptions)return
+        const gui=this.gui
+        const folder = gui.addFolder("_屏幕空间环境光遮蔽_")
+        // {
+        //     resolutionScale: 1,
+        //     spp: 16,
+        //     distance: 1,
+        //     distancePower: 0.25,
+        //     power: 2,
+
+        //     bias: 250,
+        //     thickness: 0.075,
+        //     color: 0,
+        //     iterations: 1,
+        //     samples: 5,
+
+        //     useNormalPass: false,
+        //     velocityDepthNormalPass: null,
+        //     normalTexture: null,
+        // }
+
+        folder.add( ssaoOptions, 'power' ).min( 0 ).max( 5 ).step( 0.01 )
+        folder.add( ssaoOptions, 'resolutionScale' ).min( 0.25 ).max( 1 ).step( 0.25 )
+        folder.add( ssaoOptions, 'spp' ).min( 1 ).max( 64 ).step( 1 )
+        folder.add( ssaoOptions, 'distance' ).min( 0.1 ).max( 10 ).step( 0.1 )
+        folder.add( ssaoOptions, 'distancePower' ).min( 0 ).max( 2. ).step( 0.125 )        
+
+        // folder.add( ssaoOptions, 'bias' ).min( 0 ).max( 1000 ).step( 1 )
+        // folder.add( ssaoOptions, 'thickness' ).min( 0 ).max( 0.1 ).step( 0.00001 )
+        folder.addColor( ssaoOptions, 'color' )
+        // folder.add( ssaoOptions, 'useNormalPass')
+
+        const denoiseFolder = folder//gui.addFolder("Denoise")
+		denoiseFolder.add(ssaoOptions, "iterations").min( 0 ).max( 3 ).step( 1 )
+		denoiseFolder.add(ssaoOptions, "radius").min( 0 ).max( 32 ).step( 1 )
+		denoiseFolder.add(ssaoOptions, "rings").min( 0 ).max( 16 ).step( 0.125 )
+		denoiseFolder.add(ssaoOptions, "samples").min( 0 ).max( 32 ).step( 1 )
+		denoiseFolder.add(ssaoOptions, "lumaPhi").min( 0 ).max( 20 ).step( 0.001 )
+		denoiseFolder.add(ssaoOptions, "depthPhi").min( 0 ).max( 20 ).step( 0.001 )
+		denoiseFolder.add(ssaoOptions, "normalPhi").min( 0 ).max( 50 ).step( 0.001 )
     }
     control_bokeh(bokehPass){
         if(!bokehPass)return

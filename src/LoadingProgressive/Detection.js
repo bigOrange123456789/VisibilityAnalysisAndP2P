@@ -253,6 +253,7 @@ export class Detection {//需要服务器
         return webLog
     }
     finish(){
+        if(!this.config.Detection)return
         const self=this
         this.close=true
         var data={
