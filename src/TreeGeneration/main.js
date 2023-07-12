@@ -49,7 +49,6 @@ export class Main{
   initScene(body){
       this.body = body
       this.canvas = document.getElementById('myCanvas')
-      
       this.renderer = new THREE.WebGLRenderer({ 
           antialias: true,//抗锯齿
           alpha:true,
@@ -106,3 +105,4 @@ export class Main{
   }
 }
 new Main(document.body)
+document.getElementById("LoadProgress").innerHTML=""

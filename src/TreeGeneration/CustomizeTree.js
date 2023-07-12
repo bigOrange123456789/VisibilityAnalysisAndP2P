@@ -1,6 +1,7 @@
 import content from '../../config/TreeGeneration/all.json';
 import * as THREE from "three";
 import { TreeBuilder } from "./TreeBuilder";
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 class CustomizeTree {
   constructor(scene) {
     this.content = this.getContent()
@@ -13,8 +14,8 @@ class CustomizeTree {
   }
   getContent(){
     for(let i of content){
-      i.seed="随机种子"
-      i.showLeaves=true
+      if(!i.seed)i.seed="随机种子"
+      if(!i.showLeaves)i.showLeaves=false//true
     }
     return content
   }
@@ -74,15 +75,18 @@ class CustomizeTree {
     this.object.add(singleTree)
     this.updateLeaves()
   }
+  saveJson(data,name){
+    if(!data)data=this.param
+    if(!name)name="tree.json"
+    const jsonData = JSON.stringify(data)
+    const myBlob = new Blob([jsonData], { type: 'application/json' })
+    const link = document.createElement('a')
+    link.href = URL.createObjectURL(myBlob)
+    link.download = name
+    link.click()
+  } 
   test(){
-    const saveJson=(data,name)=>{
-      const jsonData = JSON.stringify(data)
-      const myBlob = new Blob([jsonData], { type: 'application/json' })
-      const link = document.createElement('a')
-      link.href = URL.createObjectURL(myBlob)
-      link.download = name
-      link.click()
-    } 
+    const saveJson=this.saveJson
     const self=this
     window.saveJson=()=>{
       saveJson(self.content,"all.json")
@@ -103,6 +107,17 @@ class CustomizeTree {
   getTreeBySpecies(name) {
     for(let i=0;i<this.content.length;i++)
       if(this.content[i].name==name)return this.content[i]
+  }
+  saveGLTF(){
+    const scene=new THREE.Scene()
+    scene.add(this.object)
+    new GLTFExporter().parse(scene,function(result){
+        var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+        let link = document.createElement('a')
+        link.href = URL.createObjectURL(myBlob)
+        link.download = "tree.gltf"
+        link.click()
+    })
   }
 }
 
