@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { GUI } from "three/examples/jsm/libs/lil-gui.module.min.js";
-import { TreeBuilder } from "./TreeBuilder";
 import { CustomizeTree } from "./CustomizeTree";
+import { UI } from "./UI";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 export class Main{
   constructor(body){
@@ -10,59 +9,10 @@ export class Main{
       this.initCameraControl()
       this.initLight()
       this.initPlane()
-      this.initTree()
+      this.customizeTree = new CustomizeTree(this.scene);
+      new UI(this)
       this.animate = this.animate.bind(this)
       requestAnimationFrame(this.animate)
-  }
-  initTree(){
-    const scene=this.scene
-    const builder = new TreeBuilder();
-    const customizeTree = new CustomizeTree();
-    let singleTree
-
-    function buildtree(species) {
-      if(singleTree)scene.remove(singleTree);
-      builder.clearMesh();
-      const treeObj = customizeTree.getTree(species);
-      builder.init(treeObj, true);
-      const skeleton = builder.buildSkeleton();
-      singleTree = builder.buildTree(skeleton);
-      singleTree.children.forEach((child) => {
-        child.castShadow = true;
-        child.receiveShadow = true;
-      });
-      scene.add(singleTree);
-      console.log(singleTree);
-    }
-
-    const guiobj = {
-      "Ordinary tree": function () {
-        buildtree("普通乔木");
-      },
-      "Chinese huai": function () {
-        buildtree("国槐");
-      },
-      "Gui flower": function () {
-        buildtree("桂花");
-      },
-      "Red maple": function () {
-        buildtree("红枫");
-      },
-      "Sweet zhang": function () {
-        buildtree("香樟");
-      },
-      "Mu Furong": function () {
-        buildtree("木芙蓉");
-      },
-    };
-    const gui = new GUI();
-    const tree_selector = gui.addFolder("tree");
-    tree_selector.add(guiobj, "Ordinary tree");
-    tree_selector.add(guiobj, "Chinese huai");
-    tree_selector.add(guiobj, "Gui flower");
-    tree_selector.add(guiobj, "Red maple");
-    tree_selector.add(guiobj, "Sweet zhang");
-    tree_selector.add(guiobj, "Mu Furong");
   }
   initPlane(){
     const planeSize = 20;
@@ -136,6 +86,8 @@ export class Main{
           window.innerWidth/window.innerHeight,
           near,
           far)
+      this.camera.position.set(13.612621920343758,  28.79704263474295,  -5.77663788110304)
+      window.camera=this.camera
       this.scene.add(this.camera)
 
       window.addEventListener('resize', this.resize.bind(this), false)
