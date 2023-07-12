@@ -26,7 +26,7 @@ export class UnrealBloom{
         this.camera=camera
         this.scene=scene
         // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
-        this.composer=this.initComposer1(renderer)
+        this.composer=this.initComposer0(renderer)
         // this.composer2=this.initComposer2()
         
     }

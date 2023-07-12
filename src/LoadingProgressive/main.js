@@ -29,8 +29,8 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        //this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)
