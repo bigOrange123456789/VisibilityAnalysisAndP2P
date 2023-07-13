@@ -2,7 +2,7 @@ export class Shader{
     constructor(){
         this.fragmentShader=
             this.shader_prefix()+
-            this.fsXXzX()+
+            this.DtyXDR()+
             this.shader_suffix()
 
     }
