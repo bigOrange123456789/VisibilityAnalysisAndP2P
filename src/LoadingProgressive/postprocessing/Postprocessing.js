@@ -45,7 +45,7 @@ export class Postprocessing{
         )  
         // this.unrealBloom.render()//getTexture()    
     }
-    mix(textureBloom,textureGodrays){
+    mix(textureGodrays,textureBloom){
         // console.log(texture)
         if(!this.materialTest){
             this.materialTest = new THREE.ShaderMaterial( {//假太阳？
@@ -66,13 +66,12 @@ export class Postprocessing{
                     uniform sampler2D textureGodrays;
                     uniform float godrays_stength;
                     void main() {
-                        vec4 bloom=texture2D( textureBloom, vUv );
-                        bloom=1.-bloom;
-                        bloom=2.*bloom-0.6;
-                        if(bloom.x<0.)bloom=bloom*0.;
-                        if(bloom.x>1.)bloom=bloom*0.+1.;
-                        // if(bloom.r>0.3)bloom=vec4(0.3);
-                        gl_FragColor =texture2D( textureGodrays, vUv );//godrays_stength*bloom +texture2D( textureGodrays, vUv );
+                        vec4 godrays=texture2D( textureGodrays, vUv );
+                        godrays=1.-godrays;
+                        godrays=2.*godrays-0.6;
+                        if(godrays.x<0.)godrays=godrays*0.;
+                        if(godrays.x>1.)godrays=godrays*0.+1.;
+                        gl_FragColor =godrays_stength*godrays +texture2D( textureBloom, vUv );
                         gl_FragColor.a = 1.0;
                         // gl_FragColor.r = 1.0;
                     }`
