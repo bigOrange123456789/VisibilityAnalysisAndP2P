@@ -297,13 +297,23 @@ export class Building{
             mesh.lod=[mesh,mesh2]
             // mesh.lod=[mesh,mesh]
             // mesh.visible=false
-            if(false)if(this.config.waterCidList){
+            if(true)if(this.config.waterCidList){
                 for(let i=0;i<this.config.waterCidList.length;i++)
                     if(id==this.config.waterCidList[i]){
                         var water = new WaterController(meshOld).water
                         mesh.visible=mesh2.visible=false
                         mesh.lod=[water,water]
                         if(true)this.parentGroup2.add(water)
+                        // const water=mesh
+                        // water.lod=[mesh,mesh]
+                        console.log(window.ssrPass._selects)
+                        window.ssrPass._selects.push(water)
+                        // water.material.color.r=0.5
+                        // water.material.color.g=0.5
+                        // water.material.color.b=0.5
+
+                        console.log(water,"water")
+                        // water.material.envMapIntensity=0//1
                     }
             }
             this.parentGroup2.add(mesh2)

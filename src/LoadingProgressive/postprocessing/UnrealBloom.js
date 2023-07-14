@@ -107,7 +107,7 @@ export class UnrealBloom{
         this.ssaoPass=this.getSSAO()
         this.lutPass=this.getLUT()
         // this.renderPass=new RenderPass(scene, camera)
-        // this.ssrPass=this.getSSR()
+        this.ssrPass=this.getSSR()
         this.bokehPass=this.getDOF()
         this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
@@ -193,11 +193,17 @@ export class UnrealBloom{
             width: window.innerWidth,
             height: window.innerHeight,
             groundReflector: null,//params.groundReflector ? groundReflector : null,
-            selects: null//params.groundReflector ? selects : null
+            selects: []//params.groundReflector ? selects : null
         } );
-        ssrPass.opacity = 0.1
+        // _selects
+        window.ssrPass=ssrPass
+        window.metalnessOnMaterial=ssrPass.metalnessOnMaterial
+        console.log(ssrPass.metalnessOnMaterial)
+        ssrPass.opacity = 1.35//0.15
         ssrPass.distanceAttenuation = true
         ssrPass.maxDistance = 100//.1;
+        console.log(ssrPass)
+        // ssrPass.
         return ssrPass
     }
     getDOF(){//depth of field with bokeh 散焦景深

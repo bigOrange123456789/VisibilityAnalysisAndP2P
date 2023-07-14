@@ -35,9 +35,9 @@ class LightProducer{
         const lensflare = new Lensflare();
         const s0=1
         lensflare.addElement( new LensflareElement( textureFlare3, 500*s0, 0, new THREE.Color(1,0,0) ) );
-		lensflare.addElement( new LensflareElement( textureFlare3, 60*s0, 0.6 ) );
-		lensflare.addElement( new LensflareElement( textureFlare3, 70*s0, 0.7 ) );
-		lensflare.addElement( new LensflareElement( textureFlare3, 120*s0, 0.9 ) );
+		// lensflare.addElement( new LensflareElement( textureFlare3, 60*s0, 0.6 ) );
+		// lensflare.addElement( new LensflareElement( textureFlare3, 70*s0, 0.7 ) );
+		// lensflare.addElement( new LensflareElement( textureFlare3, 120*s0, 0.9 ) );
         lensflare.position.set(61, 17, -169)
         window.lensflare=lensflare
         this.objectMove.add(lensflare)
