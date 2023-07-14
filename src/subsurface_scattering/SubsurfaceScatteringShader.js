@@ -21,7 +21,61 @@ function replaceAll( string, find, replace ) {
 
 const meshphong_frag_head = ShaderChunk[ 'meshphong_frag' ].slice( 0, ShaderChunk[ 'meshphong_frag' ].indexOf( 'void main() {' ) );
 const meshphong_frag_body = ShaderChunk[ 'meshphong_frag' ].slice( ShaderChunk[ 'meshphong_frag' ].indexOf( 'void main() {' ) );
-
+const frag=/* glsl */`
+	uniform sampler2D thicknessMap;
+	uniform float thicknessPower;
+	uniform float thicknessScale;
+	uniform float thicknessDistortion;
+	uniform float thicknessAmbient;
+	uniform float thicknessAttenuation;
+	uniform vec3 thicknessColor;
+	void RE_Direct_Scattering(const in IncidentLight directLight, const in vec2 uv, const in GeometricContext geometry, inout ReflectedLight reflectedLight) {
+		vec3 thickness = thicknessColor * texture2D(thicknessMap, uv).r;//透视出来的结果
+		// vec3 thickness =  thicknessColor *texture2D(thicknessMap, uv).rgb;
+		vec3 scatteringHalf = normalize(directLight.direction + geometry.normal * thicknessDistortion);//散射半程向量
+		float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;
+		vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * thickness;
+		reflectedLight.directDiffuse += scatteringIllu * thicknessAttenuation * directLight.color;
+		
+		//reflectedLight.directDiffuse=texture2D(thicknessMap, uv).rgb;
+	}
+`
+const frag2=/* glsl */`
+	uniform sampler2D thicknessMap;
+	uniform float thicknessPower;
+	uniform float thicknessScale;
+	uniform float thicknessDistortion;
+	uniform float thicknessAmbient;
+	uniform float thicknessAttenuation;
+	uniform vec3 thicknessColor;
+	void RE_Direct_Scattering(const in IncidentLight directLight, const in vec2 uv, const in GeometricContext geometry, inout ReflectedLight reflectedLight) {
+		vec3 thickness = thicknessColor ;//透视出来的结果
+		// vec3 thickness =  thicknessColor *texture2D(thicknessMap, uv).rgb;
+		vec3 scatteringHalf = normalize(directLight.direction* thicknessDistortion + geometry.normal );//散射半程向量
+		float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;
+		vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * thickness;
+		reflectedLight.directDiffuse += scatteringIllu * thicknessAttenuation * directLight.color;
+		
+		//reflectedLight.directDiffuse=texture2D(thicknessMap, uv).rgb;
+	}
+`
+const frag_old=/* glsl */`
+	uniform sampler2D thicknessMap;
+	uniform float thicknessPower;
+	uniform float thicknessScale;
+	uniform float thicknessDistortion;
+	uniform float thicknessAmbient;
+	uniform float thicknessAttenuation;
+	uniform vec3 thicknessColor;
+	void RE_Direct_Scattering(const in IncidentLight directLight, const in vec2 uv, const in GeometricContext geometry, inout ReflectedLight reflectedLight) {
+		// vec3 thickness = thicknessColor * texture2D(thicknessMap, uv).r;//透视出来的结果
+		vec3 thickness =  thicknessColor *texture2D(thicknessMap, uv).rgb;
+		vec3 scatteringHalf = normalize(directLight.direction + (geometry.normal * thicknessDistortion));//散射半程向量
+		float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;
+		vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * thickness;
+		reflectedLight.directDiffuse += scatteringIllu * thicknessAttenuation * directLight.color;
+	}
+`
 const SubsurfaceScatteringShader = {
 
 	uniforms: UniformsUtils.merge( [
@@ -47,22 +101,26 @@ const SubsurfaceScatteringShader = {
 		'#define USE_UV',
 		'#define SUBSURFACE',
 		meshphong_frag_head,
-		/* glsl */`
-			uniform sampler2D thicknessMap;
-			uniform float thicknessPower;
-			uniform float thicknessScale;
-			uniform float thicknessDistortion;
-			uniform float thicknessAmbient;
-			uniform float thicknessAttenuation;
-			uniform vec3 thicknessColor;
-			void RE_Direct_Scattering(const in IncidentLight directLight, const in vec2 uv, const in GeometricContext geometry, inout ReflectedLight reflectedLight) {
-				vec3 thickness = thicknessColor * texture2D(thicknessMap, uv).r;
-				vec3 scatteringHalf = normalize(directLight.direction + (geometry.normal * thicknessDistortion));
-				float scatteringDot = pow(saturate(dot(geometry.viewDir, -scatteringHalf)), thicknessPower) * thicknessScale;
-				vec3 scatteringIllu = (scatteringDot + thicknessAmbient) * thickness;
-				reflectedLight.directDiffuse += scatteringIllu * thicknessAttenuation * directLight.color;
-			}
-		`,
+		frag,
+		meshphong_frag_body.replace( '#include <lights_fragment_begin>',
+			replaceAll(
+				ShaderChunk[ 'lights_fragment_begin' ],
+				/* glsl */`RE_Direct( directLight, geometry, material, reflectedLight );`,
+				/* glsl */`
+					RE_Direct( directLight, geometry, material, reflectedLight );
+					#if defined( SUBSURFACE ) && defined( USE_UV )
+					 RE_Direct_Scattering(directLight, vUv, geometry, reflectedLight);
+					#endif
+				`
+			),
+		),
+	].join( '\n' ),
+
+	fragmentShader2: [
+		'#define USE_UV',
+		'#define SUBSURFACE',
+		meshphong_frag_head,
+		frag2,
 		meshphong_frag_body.replace( '#include <lights_fragment_begin>',
 			replaceAll(
 				ShaderChunk[ 'lights_fragment_begin' ],

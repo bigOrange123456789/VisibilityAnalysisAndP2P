@@ -72,7 +72,7 @@ export class Postprocessing{
                         if(bloom.x<0.)bloom=bloom*0.;
                         if(bloom.x>1.)bloom=bloom*0.+1.;
                         // if(bloom.r>0.3)bloom=vec4(0.3);
-                        gl_FragColor =godrays_stength*bloom +texture2D( textureGodrays, vUv );
+                        gl_FragColor =texture2D( textureGodrays, vUv );//godrays_stength*bloom +texture2D( textureGodrays, vUv );
                         gl_FragColor.a = 1.0;
                         // gl_FragColor.r = 1.0;
                     }`

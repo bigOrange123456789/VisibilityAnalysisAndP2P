@@ -184,6 +184,7 @@ export class Main{
         this.stats.update()
         // console.log(this.config)
         if(this.config.render!=="false"){
+            
                 if(this.config.useIndirectMaterial){
                     this.scene.traverse(node=>{
                         if(node instanceof THREE.Mesh)
@@ -203,12 +204,14 @@ export class Main{
                     })  
                     renderer.setRenderTarget(null)
                     renderer.render(this.scene,this.camera)
-                }else{
+                }else if(true){
                     // renderer.render(this.scene,this.camera)
                     if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
                     else this.postprocessing.render()
                     //this.godrays.render()
-                }                  
+                }else{
+                    renderer.render(this.scene,this.camera)
+                }               
         }
         requestAnimationFrame(this.animate)
     }

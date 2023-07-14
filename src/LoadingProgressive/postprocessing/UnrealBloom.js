@@ -98,7 +98,6 @@ export class UnrealBloom{
         return composer
     }
     initComposer0(renderer){//设置光晕
-        console.log(renderer)
         const scene=this.scene
         const camera=this.camera
         this.renderPass=new RenderPass(scene, camera)
@@ -146,9 +145,7 @@ export class UnrealBloom{
         ssaoPass.kernelRadius = 32
         ssaoPass.minDistance = 0.001
         ssaoPass.maxDistance = 0.3
-        console.log(
-            this.scene, this.camera, window.innerWidth, window.innerHeight
-        )
+
         // console.log(SSAOPass.OUTPUT)
         // saoPass.params.output = SSAOPass.OUTPUT.Default;
         // saoPass.params.saoBias = 0.5;

@@ -10,8 +10,8 @@ class LightProducer{
         scene.add( directionalLight );
 
         const pointLight1 = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x888888 } ) );
-        for(let i=0;i<7;i++)
-        pointLight1.add( new THREE.PointLight( 0x888888, 7.0, 300 ) );
+        // for(let i=0;i<7;i++)
+        pointLight1.add( new THREE.PointLight( 0x888888, 7*7.0, 300 ) );
         //pointLight1.add( new THREE.PointLight( 0x888888, 7.0, 300 ) );
         scene.add( pointLight1 );
         pointLight1.position.x = 0;
@@ -19,7 +19,8 @@ class LightProducer{
         pointLight1.position.z = 350;
 
         const pointLight2 = new THREE.Mesh( new THREE.SphereGeometry( 4, 8, 8 ), new THREE.MeshBasicMaterial( { color: 0x888800 } ) );
-        pointLight2.add( new THREE.PointLight( 0x888800, 1.0, 500 ) );
+        pointLight2.add( new THREE.PointLight( 0x888888, 1.0, 500 ) )
+        // pointLight2.add( new THREE.PointLight( 0x888800, 1.0, 500 ) );
         scene.add( pointLight2 );
         pointLight2.position.x = - 100;
         pointLight2.position.y = 20;
