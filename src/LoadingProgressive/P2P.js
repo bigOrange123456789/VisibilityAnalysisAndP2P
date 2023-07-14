@@ -4,7 +4,7 @@ export class P2P{
         this.pageId
         this.config={groupId:-1}
         this.detection=detection
-        this.useP2P=true
+        this.useP2P=false
         if(new URLSearchParams(window.location.search).has("useP2P"))
             this.useP2P=new URLSearchParams(window.location.search).get('useP2P')=="true"
         console.log("useP2P:",this.useP2P)

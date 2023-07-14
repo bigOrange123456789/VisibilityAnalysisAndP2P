@@ -30,7 +30,7 @@ export class Main{
 
         this.initScene()
         this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)

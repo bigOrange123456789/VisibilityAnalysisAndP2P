@@ -7,6 +7,8 @@ import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { BokehPass  } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
 
+import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
+
 import { MyEffectComposer } from "./src/MyEffectComposer.js";
 import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
 
@@ -100,41 +102,52 @@ export class UnrealBloom{
     initComposer0(renderer){//设置光晕
         const scene=this.scene
         const camera=this.camera
-        this.renderPass=new RenderPass(scene, camera)
+        
+        // this.saoPass=this.getSAO()
+        this.ssaoPass=this.getSSAO()
+        this.lutPass=this.getLUT()
+        // this.renderPass=new RenderPass(scene, camera)
+        // this.ssrPass=this.getSSR()
+        this.bokehPass=this.getDOF()
         this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
                 0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
                 2,//0.3,//参数三：bloomRadius 泛光散发半径
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
-        this.ssrPass=this.getSSR()
-        this.saoPass=this.getSAO()
-        this.ssaoPass=this.getSSAO()
-        this.bokehPass=this.getDOF()
-        this.lutPass=this.getLUT()
+
+        ///////////////
+        // var pixelRatio = renderer.getPixelRatio();
+        // var fxaaPass = new ShaderPass(FXAAShader);
+        // fxaaPass.material.uniforms['resolution'].value.x = 1 / (window.innerWidth * pixelRatio);
+        // fxaaPass.material.uniforms['resolution'].value.y = 1 / (window.innerHeight * pixelRatio);
+        // composer.addPass(fxaaPass);
+        ///////////////
+
+
         var composer = new MyEffectComposer(renderer)//效果组合器
         
-        composer.addPass(
+        if(this.ssaoPass)composer.addPass(
             this.ssaoPass//屏幕空间环境光遮蔽
         )
 
-        composer.addPass(
+        if(this.lutPass)composer.addPass(
             this.lutPass
         )
 
-        // composer.addPass(
-        //     this.renderPass
-        // )
+        if(this.renderPass)composer.addPass(
+            this.renderPass
+        )
         
-        // composer.addPass(
-        //     this.ssrPass//屏幕空间反射
-        // )
+        if(this.ssrPass)composer.addPass(
+            this.ssrPass//屏幕空间反射
+        )
         
-        // composer.addPass(
-        //     this.bokehPass
-        // )
+        if(this.bokehPass)composer.addPass(
+            this.bokehPass
+        )
         
-        composer.addPass(
+        if(this.bloomPass)composer.addPass(
             this.bloomPass//辉光
         )
         
