@@ -35,17 +35,35 @@ export class Postprocessing{
     }
     mix(){
         if(!this.materialTest){
-            const loader = new THREE.TextureLoader();
-            const texture = loader.load('./grass_texture.jpg');
-            texture.minFilter = THREE.NearestFilter;
-            texture.magFilter = THREE.NearestFilter;
-            texture.wrapS = THREE.RepeatWrapping;
-            texture.wrapT = THREE.RepeatWrapping;
+            // alert(111)
+            const load=(name,id)=>{
+                const loader = new THREE.TextureLoader()
+                const url='./shadertory/'+name
+                const texture = loader.load(url)
+                texture.minFilter = THREE.NearestFilter;
+                texture.magFilter = THREE.NearestFilter;
+                texture.wrapS = THREE.RepeatWrapping;
+                texture.wrapT = THREE.RepeatWrapping;
+                
+                // console.log(texture)
+                // texture.wrapS = THREE.RepeatWrapping;
+                // texture.wrapT = THREE.RepeatWrapping;
+                // texture.repeat.set(10, 10);
+                
+                return texture
+            }
+            
 
-            this.materialTest = new THREE.ShaderMaterial( {//假太阳？
+            this.materialTest = new THREE.ShaderMaterial( {
                 uniforms: {
-                    iTime: {value: 0},
-                    iChannel0: { value: texture },
+                    iTime: {value: 0},                    
+                    iResolution: {
+                        value: new THREE.Vector2(1, 1)//(1900, 1900)
+                    },
+                    iChannel0: { type: 't', value: load('img.png',0) },
+                    iChannel1: { type: 't', value: load('img1.jpg',1) },
+                    iChannel2: { type: 't', value: load('img2.jpg',2) },
+                    iChannel3: { type: 't', value: load('img3.jpg',3) },
                 },
                 vertexShader: /* glsl */`
                     varying vec2 vUv;

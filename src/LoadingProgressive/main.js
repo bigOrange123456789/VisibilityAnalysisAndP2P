@@ -125,6 +125,13 @@ export class Main{
             this.config.camera.rotation.z
         )
 
+        this.camera.position.set(
+            -554.5302472516439, 16,  161.9772128995289
+        )
+        this.camera.rotation.set(
+            -0.272276339435702,  -1.1540831676065246,  -0.24997636267457884
+        )
+
         window.camera=this.camera
         
         this.scene.add(this.camera)

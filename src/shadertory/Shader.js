@@ -1,8 +1,365 @@
+const fragmentShader = {
+      "test1":/* glsl */`
+          float random(float p){
+              return fract(sin(p) * 10000.0);
+          } 
+          
+          float noise(vec2 p){
+              float t = iTime / 2000.0;
+              if(t > 1.0) t -= floor(t);
+              return random(p.x * 14. + p.y * sin(t) * 0.5);
+          }
+  
+          vec2 sw(vec2 p){
+              return vec2(floor(p.x), floor(p.y));
+          }
+          
+          vec2 se(vec2 p){
+              return vec2(ceil(p.x), floor(p.y));
+          }
+          
+          vec2 nw(vec2 p){
+              return vec2(floor(p.x), ceil(p.y));
+          }
+          
+          vec2 ne(vec2 p){
+              return vec2(ceil(p.x), ceil(p.y));
+          }
+  
+          float smoothNoise(vec2 p){
+              vec2 inter = smoothstep(0.0, 1.0, fract(p));
+              float s = mix(noise(sw(p)), noise(se(p)), inter.x);
+              float n = mix(noise(nw(p)), noise(ne(p)), inter.x);
+              return mix(s, n, inter.y);
+          }
+  
+          mat2 rotate (in float theta){
+              float c = cos(theta);
+              float s = sin(theta);
+              return mat2(c, -s, s, c);
+          }
+  
+          float circ(vec2 p){
+              float r = length(p);
+              r = log(sqrt(r));
+              return abs(mod(4.0 * r, PI * 2.0) - PI) * 3.0 + 0.2;
+          }
+  
+          float fbm(in vec2 p){
+              float z = 2.0;
+              float rz = 0.0;
+              vec2 bp = p;
+              for(float i = 1.0; i < 6.0; i++){
+                  rz += abs((smoothNoise(p) - 0.5)* 2.0) / z;
+                  z *= 2.0;
+                  p *= 2.0;
+              }
+              return rz;
+          }
+          float distanceTo(vec2 src, vec2 dst) {
+        float dx = src.x - dst.x;
+        float dy = src.y - dst.y;
+        float dv = dx * dx + dy * dy;
+        return sqrt(dv);
+      }
+      void mainImage( out vec4 fragColor, in vec2 fragCoord )
+      {
+            float len = distanceTo(vec2(0.5, 0.5), vec2(fragCoord.x, fragCoord.y)) * 2.0; 
+  
+            vec2 p = fragCoord - 0.5;
+            p.x *= iResolution.x / iResolution.y;
+            p *= 8.0;
+            float rz = fbm(p);
+              
+            p /= exp(mod(iTime * 2.0, PI));
+            rz *= pow(abs(0.1 - circ(p)), 0.9);
+            vec3 col = vec3(0.2, 0.1, 0.643); 
+              
+            fragColor  = vec4(col / rz,  1.0 - pow(len, 3.0))  ;
+      }
+      `,
+      "test16":/* glsl */`
+      precision highp float;
+  
+          
+          vec3 rY(vec3 p, float a) {
+              vec3 q = p;
+              float c = cos(a);
+              float s = sin(a);
+              q.x = c * p.x + s * p.z;
+              q.z = -s * p.x + c * p.z;
+              
+              return q;
+          }
+          
+          // returns a pair of values for the distances along the ray at which there are sphere intersections, or 0 if none
+          vec2 sphereIntersectionDistances(vec3 rayOrigin, vec3 rayDirection, vec3 sphereOrigin, float sphereRadius) {
+              vec3 toCenter = sphereOrigin - rayOrigin;
+              float toCenterAlongRay = dot(toCenter, rayDirection);
+              
+              float perpendicularDistanceSquared = dot(toCenter, toCenter) - toCenterAlongRay * toCenterAlongRay;
+              float radiusSquared = sphereRadius * sphereRadius;
+              
+              if (perpendicularDistanceSquared > radiusSquared) { // ray doesn’t touch the sphere
+                  return vec2(0.);
+              }
+              
+              float insideSphereAlongRay = sqrt(radiusSquared - perpendicularDistanceSquared); // half the length of the portion of the ray inside the sphere
+              
+              float intersection1 = toCenterAlongRay - insideSphereAlongRay;
+              float intersection2 = toCenterAlongRay + insideSphereAlongRay;
+              if (intersection1 > intersection2) {
+                  float t = intersection1;
+                  intersection1 = intersection2;
+                  intersection2 = t;
+              }
+              
+              if (intersection1 < 0.) { // first intersection is before the start of the ray
+                  if (intersection2 < 0.) { // ditto second, though that… shouldn’t happen?
+                      return vec2(0.);
+                  } else {
+                      intersection1 = intersection2;
+                      intersection2 = 0.;
+                  }
+              }
+              
+              return vec2(intersection1, intersection2);
+          }
+          
+          // -----------------
+          
+          // 3d noise by iq, from https://www.shadertoy.com/view/Xsl3Dl
+          
+          // The MIT License
+          // Copyright © 2013 Inigo Quilez
+          // Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions: The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software. THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+          
+          
+          vec3 hash( vec3 p )
+          {
+            p = vec3( dot(p,vec3(127.1,311.7, 74.7)),
+                  dot(p,vec3(269.5,183.3,246.1)),
+                  dot(p,vec3(113.5,271.9,124.6)));
+          
+            return -1.0 + 2.0*fract(sin(p)*43758.5453123);
+          }
+          
+          float noise( in vec3 p )
+          {
+              vec3 i = floor( p );
+              vec3 f = fract( p );
+            
+            vec3 u = f*f*(3.0-2.0*f);
+          
+              return mix( mix( mix( dot( hash( i + vec3(0.0,0.0,0.0) ), f - vec3(0.0,0.0,0.0) ), 
+                                    dot( hash( i + vec3(1.0,0.0,0.0) ), f - vec3(1.0,0.0,0.0) ), u.x),
+                              mix( dot( hash( i + vec3(0.0,1.0,0.0) ), f - vec3(0.0,1.0,0.0) ), 
+                                    dot( hash( i + vec3(1.0,1.0,0.0) ), f - vec3(1.0,1.0,0.0) ), u.x), u.y),
+                          mix( mix( dot( hash( i + vec3(0.0,0.0,1.0) ), f - vec3(0.0,0.0,1.0) ), 
+                                    dot( hash( i + vec3(1.0,0.0,1.0) ), f - vec3(1.0,0.0,1.0) ), u.x),
+                              mix( dot( hash( i + vec3(0.0,1.0,1.0) ), f - vec3(0.0,1.0,1.0) ), 
+                                    dot( hash( i + vec3(1.0,1.0,1.0) ), f - vec3(1.0,1.0,1.0) ), u.x), u.y), u.z );
+          }
+          
+          
+          // hash functions by David Hoskins, from https://www.shadertoy.com/view/4djSRW
+          
+          // Creative Commons Attribution-ShareAlike 4.0 International Public License
+          
+          float hash11(float p)
+          {
+              p = fract(p * .1031);
+              p *= p + 33.33;
+              p *= p + p;
+              return fract(p);
+          }
+          
+          vec3 hash31(float p)
+          {
+            vec3 p3 = fract(vec3(p) * vec3(.1031, .1030, .0973));
+            p3 += dot(p3, p3.yzx + 33.33);
+            return fract((p3.xxy + p3.yzz) * p3.zyx); 
+          }
+          
+          
+          // -----------------
+          
+          float octavedNoise(vec3 position) {
+              vec3 samplePosition = position * 2.;
+              float noiseAmount = noise(samplePosition + iTime * vec3(0.0,0.2,0.0));
+              samplePosition *= 1.99;
+              noiseAmount += noise(samplePosition + iTime * vec3(0.05,-0.37,0.02)) * 0.51;
+              noiseAmount /= 1.51;
+              return noiseAmount;
+          }
+          
+          float density(vec3 position) {
+              float baseValue = 1.0 - pow(max(0.0, length(position)), 2.0);
+              float noiseAmount = octavedNoise(position);
+              
+              return max(0.,min(1.,baseValue - max(0.,noiseAmount * 1.5)));
+          }
+          
+          vec4 innerLightPositionAndIntensity() {
+              float scaledTime = iTime * 6.1;
+              float hashInput = floor(scaledTime) * 0.1;
+              
+              if (hash11(hashInput) < 0.8) return vec4(0.); // mask out most of the flashes
+                  
+              vec3 hash = hash31(hashInput);
+              float theta = hash.x * 6.283;
+              float z = hash.y * 2. - 1.;
+              float sinPhi = sin(acos(z));
+              vec3 position = vec3(sinPhi * cos(theta), sinPhi * sin(theta), z) * (0.6 + hash.z * 0.2);
+              
+              float intensity = sin(fract(scaledTime) * 3.142);
+              
+              return vec4(position, intensity);
+          }
+          
+          
+          // marching logic adapted from Ryan Brucks's article here: https://shaderbits.com/blog/creating-a-volumetric-ray-tracer
+          
+          vec4 march(vec3 origin, vec3 direction) {
+              
+              const int mainSteps = 30;
+              const int shadowSteps = 10;
+              const vec3 toLight = normalize(vec3(1.0,1.0,0.));
+              const float mainDensityScale = 4.;
+              
+              const float shadowingThreshold = 0.001;
+              const float shadowDensityScale = 3.;
+              
+              vec3 light = vec3(0.);
+              float transmittance = 1.;
+              
+              vec3 samplePosition = origin;
+            
+              const float mainStepLength = 2. / float(mainSteps); // why does lowering this below 2 change the appearance?
+              const float shadowStepLength = 1. / float(shadowSteps);
+              
+              const vec3 scaledShadowDensity = shadowDensityScale * shadowStepLength / vec3(0.8,0.7,1.0);
+              
+              const float shadowConstant = -log(shadowingThreshold) / scaledShadowDensity.z;
+              
+              const vec3 mainLightColor = vec3(0.6,0.8,1.);
+              const vec3 innerLightColor = vec3(0.7,0.4,1.) * 4.;
+              
+              vec3 mainStepAmount = direction * mainStepLength;
+              
+              vec3 shadowStepAmount = toLight * shadowStepLength;
+              
+              vec4 innerLight = innerLightPositionAndIntensity();
+              
+              for(int i = 0; i < mainSteps; i++) {
+                  float localDensity = min(1.0, density(samplePosition) * mainDensityScale);
+                  if (localDensity > 0.001) {
+                      
+                      // - main light (directional)
+                      
+                      vec3 shadowSamplePosition = samplePosition;
+                      float shadowAccumulation = 0.;
+                      for(int j = 0; j < shadowSteps; j++) {
+                          shadowSamplePosition += shadowStepAmount;
+                          
+                          shadowAccumulation += min(1.0, density(shadowSamplePosition) * shadowDensityScale);
+                          if (shadowAccumulation > shadowConstant || dot(shadowSamplePosition, shadowSamplePosition) > 1.) break;
+                      }
+                      
+                      vec3 shadowTerm = exp(-shadowAccumulation * scaledShadowDensity);
+                      float stepDensity = min(1.,localDensity * mainStepLength);
+                      vec3 absorbedLight = shadowTerm * stepDensity;
+                      
+                      // accumulate directional light
+                      light += absorbedLight * transmittance * mainLightColor;
+                      
+                      
+                      // - inner light (point)
+                      
+                      shadowSamplePosition = samplePosition;
+                      shadowAccumulation = 0.;
+                      vec3 toInnerLight = innerLight.xyz - samplePosition;
+                      vec3 innerLightShadowStepAmount = normalize(toInnerLight) * shadowStepLength;
+                      
+                      for(int j = 0; j < shadowSteps; j++) {
+                          shadowSamplePosition += innerLightShadowStepAmount;
+                          
+                          shadowAccumulation += min(1.0, density(shadowSamplePosition) * shadowDensityScale);
+                          
+                          // bail out if we’ve accumulated enough or if we’ve gone outside the bounding sphere (squared length of the sample position > 1)
+                          if (shadowAccumulation > shadowConstant || dot(shadowSamplePosition, shadowSamplePosition) > 1.) break;
+                      }
+                      
+                      shadowTerm = exp(-shadowAccumulation * scaledShadowDensity);
+                      stepDensity = min(1.,localDensity * mainStepLength);
+                      absorbedLight = shadowTerm * stepDensity;
+                      
+                      // inverse-squared fade of the inner point light
+                      float attenuation = min(1.0, 1.0 / (dot(toInnerLight, toInnerLight) * 2. + 0.0001)) * innerLight.w;
+                      
+                      // accumulate point light
+                      light += absorbedLight * (transmittance * attenuation) * innerLightColor;
+                      
+                      // -
+                      
+                      transmittance *= (1. - stepDensity);
+          
+                      if (transmittance < 0.01) {
+                          break;
+                      }
+                  }
+                  
+                  samplePosition += mainStepAmount;
+              }
+              
+              return vec4(vec3(light), transmittance);
+          }
+  
+  
+  
+          void mainImage( out vec4 fragColor, in vec2 fragCoord ){//void main(void) {
+              
+              vec2 uv = (fragCoord - 0.5) * 2.0;
+              uv.x *= iResolution.x / iResolution.y;
+              const vec3 cameraLookAt = vec3(0.0, 0.0, 0.0);
+              vec3 cameraPosition = rY(vec3(0.0, 0.1, 1.0) * 2.5, iTime * 0.2);
+              vec3 cameraForward = normalize(cameraLookAt - cameraPosition);
+              vec3 cameraRight = cross(cameraForward, vec3(0.0, 1.0, 0.0));
+              vec3 cameraUp = cross(cameraRight, cameraForward);
+              
+              vec3 rayDirection = normalize(uv.x * cameraRight + uv.y * cameraUp + 2.0 * cameraForward);
+                
+                // closest and farthest intersections, if any, with the bounding sphere
+                vec2 rayDistances = sphereIntersectionDistances(cameraPosition, rayDirection, vec3(0.), 1.);
+                
+                vec3 backgroundColor = vec3(0.1) - length(uv) * 0.04; // vignette
+                
+                if (rayDistances.x != 0. && rayDistances.y != 0.) {
+                    vec3 farIntersection = cameraPosition + rayDirection * rayDistances.y;
+                    
+                    vec4 value = march(farIntersection, -rayDirection);
+                    fragColor = vec4(mix(value.rgb, backgroundColor, value.w), 1.0);
+                    
+                    // containing ball
+                    /*
+                    vec3 nearIntersection = cameraPosition + rayDirection * rayDistances.x;
+                    gl_FragColor += pow(1.0 - abs(dot(rayDirection, nearIntersection)), 8.) * 0.3;
+                */
+                } else {
+                    fragColor = vec4(backgroundColor, 1.0);
+                } 
+          }
+      `,
+
+
+      "test0":/* glsl */`
+      `,
+}
 export class Shader{
     constructor(){
         this.fragmentShader=
             this.shader_prefix()+
-            this.DtyXDR()+
+            this.MushroomCloud4()+//fragmentShader.test16+//
             this.shader_suffix()
 
     }
@@ -11,14 +368,34 @@ export class Shader{
         varying vec2 vUv;
         uniform float iTime;
         uniform sampler2D iChannel0;
-        vec3 iResolution=vec3(1.);`
+        uniform sampler2D iChannel1;
+        uniform sampler2D iChannel2;
+        uniform sampler2D iChannel3;
+        uniform vec2 iMouse;
+
+        const float PI = 3.14159265359;
+        
+        uniform vec2 iResolution;//=vec2(1.);//vec2(1900., 1900.);
+        //vec3 iResolution=vec3(1.);
+        `
     }
     shader_suffix(){
         return /* glsl */`
         void main() {
-            mainImage( gl_FragColor, vUv );
+          mainImage( gl_FragColor, vUv );
+          gl_FragColor.a=1.;
         }`
     }
+    map(){
+      return /* glsl */`
+      void mainImage( out vec4 fragColor, in vec2 fragCoord )
+      {
+        fragColor=texture(iChannel0,fragCoord);
+        if(fragColor.b==0.)fragColor.b=1.;
+        fragColor.a=1.;
+        return;
+      }`
+  }
     new(){
         return /* glsl */`
         void mainImage( out vec4 fragColor, in vec2 fragCoord )
@@ -1899,4 +2276,520 @@ vec3 VaryNf (vec3 p, vec3 n, float f)
 
         `
     }
+    MushroomCloud(){
+      return /* glsl */`
+
+      float g_blastTime;
+      vec3 g_cloudCentre;
+      void InitBlastParams()
+      {
+          g_blastTime = fract(iTime/20.);
+          g_cloudCentre = vec3(0,g_blastTime*5.,0);
+      }
+      
+      vec3 Flow( vec3 pos )
+      {
+          // make a toroidal roll, like a mushroom cloud
+          vec3 p = pos - g_cloudCentre;
+          vec3 v;
+          v.xz = -normalize(p.xz)*p.y;
+          v.y = length(p.xz)-.8;
+          //v *= smoothstep(.0,.5,length(pos.xz)); bad: this squashes/stretches it
+          v *= .1;
+          
+          // reduce velocity with distance from cloud top edge
+          float g = length(vec2(p.y,length(p.xz)-.8))-1.; // this doesn't match the one in SDF, but it looks better with the mismatch
+          v *= exp2(-pow(g*3.,2.));
+          
+          return v;
+      }
+      
+      float SDF( vec3 pos )
+      {
+          // multi fractal
+          const float period = 1.6;
+          float tt = fract(iTime/period /*+ texture(iChannel0,pos/20.).x /*break up the pattern - screws up texture filtering and I'm too lazy to fix/hide it*/);
+          float t[2] = float[2]( tt*period, (tt-1.)*period );
+          vec3 uvw = (pos-g_cloudCentre)/30.;
+          float f[2] = float[2]( .0, .0 );
+      
+      // applying flow to the whole SDF causes a "pulsing" - because we're displacing in a straight line so convex curves shrink
+          for ( int i=0; i < 2; i++ )
+          {
+            vec3 offset = Flow(pos)*t[i];
+              vec3 u = uvw +offset*.2; 
+              offset *= .2; 
+          }
+          
+          float ff = mix( f[0], f[1], tt );// actually better with a longer fade imo smoothstep(.4,.6,tt) );
+          //this doesn't help: const float p = 1.; float ff = pow( mix( pow(f[0],p), pow(f[1],p), tt ), 1./p );
+      
+          ff *= .5; // strength of clouds vs bounding shapes
+      
+          vec3 p = pos - g_cloudCentre;
+          float bulge = 1.-exp2(-20.*g_blastTime);
+          float g = length(vec2(p.y,length(p.xz)-1.*bulge))-1.;
+          ff *= bulge; // smooth sphere to start
+          
+        
+          // vertical column
+          float h = length(pos.xz)-.7+.2*(g_cloudCentre.y-pos.y-1.2); // cylinder - slightly tapered to cone
+          h = max(h, pos.y-g_cloudCentre.y); // cut off at top (inside cloud)
+          h = max(h,(g_cloudCentre.y*1.25-4.-pos.y)*.3); // softer cut off at the bottom
+          
+          g = min(g,h);
+          ff += g*.6;
+          
+          
+          return ff;
+      }
+      
+      void mainImage( out vec4 o, in vec2 uv )
+      {
+          InitBlastParams();
+          
+          vec3 ray = vec3((uv-iResolution.xy*.5)/iResolution.y,.9);
+          vec3 pos = vec3(0,2,-5);
+          
+          float softness = .1+pow(g_blastTime,2.)*.5;
+          float density = 1.2/softness;
+          const float epsilon = .001; //极小量
+          float visibility = 1.;
+          vec3 sunDir = normalize(vec3(1));
+          for ( int i=0; i < 20; i++ ) // can get away with really low loop counds because of the soft edges!
+          {
+              float h = SDF(pos);
+              float vis = smoothstep(epsilon,softness,h); // really should do an integral thing using previous h
+              visibility = visibility * pow(vis,h*density);
+              pos += h*ray;
+          }
+          
+          // sky
+          o = visibility*vec4(1.);//mix( o, vec4(.2,.4,.8,1)+.003/g_blastTime, 0.5);
+      
+      }
+      `
+    } 
+    MushroomCloud2(){
+      return /* glsl */`
+
+      float g_blastTime;
+      vec3 g_cloudCentre;
+      void InitBlastParams()
+      {
+          g_blastTime = fract(iTime/20.);
+          g_cloudCentre = vec3(0,g_blastTime*5.,0);
+      }
+      
+      vec3 Flow( vec3 pos )
+      {
+          // make a toroidal roll, like a mushroom cloud
+          vec3 p = pos - g_cloudCentre;
+          vec3 v;
+          v.xz = -normalize(p.xz)*p.y;
+          v.y = length(p.xz)-.8;
+          //v *= smoothstep(.0,.5,length(pos.xz)); bad: this squashes/stretches it
+          v *= .1;
+          
+          // reduce velocity with distance from cloud top edge
+          float g = length(vec2(p.y,length(p.xz)-.8))-1.; // this doesn't match the one in SDF, but it looks better with the mismatch
+          v *= exp2(-pow(g*3.,2.));
+          
+          return v;
+      }
+      
+      float SDF( vec3 pos )
+      {
+          // multi fractal
+          const float period = 1.6;
+          float tt = fract(iTime/period /*+ texture(iChannel0,pos/20.).x /*break up the pattern - screws up texture filtering and I'm too lazy to fix/hide it*/);
+          float t[2] = float[2]( tt*period, (tt-1.)*period );
+          vec3 uvw = (pos-g_cloudCentre)/30.;
+          float f[2] = float[2]( .0, .0 );
+      
+          // applying flow to the whole SDF causes a "pulsing" - because we're displacing in a straight line so convex curves shrink
+          for ( int i=0; i < 2; i++ )
+          {
+            vec3 offset = Flow(pos)*t[i];
+            vec3 u = uvw+offset*.2; 
+            offset *= .2; // makes the loop more obvious but looks generally good  
+            for ( float j=2.; j <= 32.; j=j*2. ){
+                    f[i] += texture(iChannel2,(offset+u*j).xz*50. ).r/j;
+            }
+          }
+          
+          float ff = mix( f[0], f[1], tt );
+      
+          ff *= .8; // strength of clouds vs bounding shapes
+      
+          vec3 p = pos - g_cloudCentre;
+          float bulge = 1.-exp2(-20.*g_blastTime);
+          float g = length(vec2(p.y,length(p.xz)-1.*bulge))-1.;
+          ff *= bulge; // smooth sphere to start
+          
+          // vertical column
+          float h = length(pos.xz)-.7+.2*(g_cloudCentre.y-pos.y-1.2); // cylinder - slightly tapered to cone
+          h = max(h, pos.y-g_cloudCentre.y); // cut off at top (inside cloud)
+          h = max(h,(g_cloudCentre.y*1.25-4.-pos.y)*.3); // softer cut off at the bottom
+          
+          g = min(g,h);
+          ff += g*.6;
+          
+          return ff;
+      }
+      
+      void mainImage( out vec4 o, in vec2 uv )
+      {
+        // o=texture(iChannel0,vec2(uv.x,uv.y));
+        // // o.r=1.;
+        // // o.r=uv.x;
+        // // o.g=uv.y;
+        // // o.b=0.5;
+        // o.a=1.;
+        // return;
+
+        InitBlastParams();
+          
+          vec3 ray = vec3((uv-iResolution.xy*.5)/iResolution.y,.9);
+          ray = normalize(ray);
+          vec3 pos = vec3(0,2,-5);
+          
+          vec2 a = iMouse.xy/iResolution.xy - .5;
+          if ( iMouse.x == .0 && iMouse.y == .0 )
+              a = vec2(0,.15);//vec2(-(iTime+sin(iTime))/15.,-.3*cos((iTime+sin(iTime))*.3));
+          a *= vec2(3,2);
+          
+          vec3 csx = vec3(cos(a.x),sin(a.x),-sin(a.x));
+          vec3 csy = vec3(cos(a.y),sin(a.y),-sin(a.y));
+          
+          pos.yz = pos.yz*csy.x + pos.zy*csy.yz;
+          pos.xz = pos.xz*csx.x + pos.zx*csx.yz;
+          ray.yz = ray.yz*csy.x + ray.zy*csy.yz;
+          ray.xz = ray.xz*csx.x + ray.zx*csx.yz;
+          
+          pos.y = max(.01,pos.y);
+          
+          float softness = .1+pow(g_blastTime,2.)*.5;
+          float density = 1.2/softness;
+          
+          const float epsilon = .001; // could scale this to pixel size - works well in big scenes
+          float visibility = 1.;
+          float light0 = 0.;
+          float light1 = 0.;
+          vec3 sunDir = normalize(vec3(1));
+          for ( int i=0; i < 20; i++ ) // can get away with really low loop counds because of the soft edges!
+          {
+              float h = SDF(pos);
+              float vis = smoothstep(epsilon,softness,h); // really should do an integral thing using previous h
+              if ( pos.y < .0 ) vis = 1.;
+              h = max(h,epsilon); // ensure we always march forward
+              if ( vis < 1. )
+              {
+                  float newvis = visibility * pow(vis,h*density);
+              light0 += (visibility - newvis)
+                          *smoothstep( -.5, 1., (SDF(pos+sunDir*softness) - h)/softness );
+                  vec3 lightDelta = g_cloudCentre-pos;
+              light1 += (visibility - newvis)
+                          *pow(smoothstep( -1., 1., (SDF(pos+normalize(lightDelta)*softness) - h)/softness ),2.)
+                          /(dot(lightDelta,lightDelta)+1.); // inverse square falloff
+                  visibility = newvis;
+              }
+              
+              if ( vis <= 0.|| pos.y < .0 ) // cut off to ground plane (assumes camera is above)
+                  break;
+              pos += h*ray;
+          }
+      
+          o = vec4(.1,.2,.3,1); // ambient
+          o += light0*vec4(.9,.8,.7,0);
+          o *= pow(g_blastTime,.5)*.5; // albedo (before the glow, so I can blance the two lights separately
+          
+          o += light1*vec4(8,2,.25,0)/(25.*pow(g_blastTime,2.));
+          
+          // sky
+          o = mix( o, vec4(.2,.4,.8,1)+.003/g_blastTime, visibility );
+          o = pow(o,vec4(1./2.2));
+          o.a=1.;
+      }
+      `
+    } 
+    MushroomCloud3(){
+      return /* glsl */`
+      float g_blastTime;
+      vec3 g_cloudCentre;
+      void InitBlastParams()
+      {
+          g_blastTime = fract(iTime/20.);
+          g_cloudCentre = vec3(0,g_blastTime*5.,0);
+      }
+      
+      vec3 Flow( vec3 pos )
+      {
+          // make a toroidal roll, like a mushroom cloud
+          vec3 p = pos - g_cloudCentre;
+          vec3 v;
+          v.xz = -normalize(p.xz)*p.y;
+          v.y = length(p.xz)-.8;
+          v *= .1;
+          
+          // reduce velocity with distance from cloud top edge
+          float g = length(vec2(p.y,length(p.xz)-.8))-1.; // this doesn't match the one in SDF, but it looks better with the mismatch
+       
+          
+          return v;
+      }
+      
+      float SDF( vec3 pos )
+      {
+          // multi fractal
+          const float period = 1.6;
+          float tt = fract(iTime/period /*+ texture(iChannel0,pos/20.).x /*break up the pattern - screws up texture filtering and I'm too lazy to fix/hide it*/);
+          float t[2] = float[2]( tt*period, (tt-1.)*period );
+          vec3 uvw = (pos-g_cloudCentre)/30.;
+          float f[2] = float[2]( .0, .0 );
+      
+          for ( int i=0; i < 2; i++ )
+          {
+
+              vec3 offset = Flow(pos)*t[i];
+              vec3 u = uvw+offset*.2; 
+              offset *= .2; 
+              for ( float j=2.; j <= 32.; j*=2.)
+                f[i] += texture(iChannel0,10.*(offset+u*j).xy).x/j;
+              // f[i] += texture(iChannel0,(offset+u*2.).xy).x/2.;
+
+          }
+          
+          float ff = mix( f[0], f[1], tt );// actually better with a longer fade imo smoothstep(.4,.6,tt) );
+          
+          vec3 p = pos - g_cloudCentre;
+          float bulge = 1.-exp2(-20.*g_blastTime);
+          float g = length(vec2(p.y,length(p.xz)-1.*bulge))-1.;
+      
+          ff += g*.6;
+          
+          return ff;
+      }
+      
+      void mainImage( out vec4 o, in vec2 uv )
+      {
+          InitBlastParams();
+          
+          vec3 ray = vec3((uv-iResolution.xy*.5)/iResolution.y,.9);
+          ray = normalize(ray);
+          vec3 pos = vec3(0,2,-5);
+          
+          vec2 a = iMouse.xy/iResolution.xy - .5;
+          if ( iMouse.x == .0 && iMouse.y == .0 )
+              a = vec2(0,.15);//vec2(-(iTime+sin(iTime))/15.,-.3*cos((iTime+sin(iTime))*.3));
+          a *= vec2(3,2);
+          
+          vec3 csx = vec3(cos(a.x),sin(a.x),-sin(a.x));
+          vec3 csy = vec3(cos(a.y),sin(a.y),-sin(a.y));
+          
+          pos.yz = pos.yz*csy.x + pos.zy*csy.yz;
+          pos.xz = pos.xz*csx.x + pos.zx*csx.yz;
+          ray.yz = ray.yz*csy.x + ray.zy*csy.yz;
+          ray.xz = ray.xz*csx.x + ray.zx*csx.yz;
+          
+          pos.y = max(.01,pos.y);
+          
+          float softness = .1+pow(g_blastTime,2.)*.5;
+          float density = 1.2/softness;
+          
+          const float epsilon = .001; // could scale this to pixel size - works well in big scenes
+          float visibility = 1.;
+          float light0 = 0.;
+          float light1 = 0.;
+          vec3 sunDir = normalize(vec3(1));
+          for ( int i=0; i < 20; i++ ) // can get away with really low loop counds because of the soft edges!
+          {
+              float h = SDF(pos);
+              float vis = smoothstep(epsilon,softness,h); // really should do an integral thing using previous h
+              if ( pos.y < .0 ) vis = 1.;
+              h = max(h,epsilon); // ensure we always march forward
+              if ( vis < 1. )
+              {
+                  float newvis = visibility * pow(vis,h*density);
+              light0 += (visibility - newvis)
+                          *smoothstep( -.5, 1., (SDF(pos+sunDir*softness) - h)/softness );
+                  vec3 lightDelta = g_cloudCentre-pos;
+              light1 += (visibility - newvis)
+                          *pow(smoothstep( -1., 1., (SDF(pos+normalize(lightDelta)*softness) - h)/softness ),2.)
+                          /(dot(lightDelta,lightDelta)+1.); // inverse square falloff
+                  visibility = newvis;
+              }
+              
+              if ( vis <= 0.
+                  || pos.y < .0 ) // cut off to ground plane (assumes camera is above)
+                  break;
+              pos += h*ray;
+          }
+      
+          o = vec4(.1,.2,.3,1); // ambient
+          o += light0*vec4(.9,.8,.7,0);
+        o *= pow(g_blastTime,.5)*.5; // albedo (before the glow, so I can blance the two lights separately
+          
+          o += light1*vec4(8,2,.25,0)/(25.*pow(g_blastTime,2.));
+          
+          // sky
+          o = mix( o, vec4(.2,.4,.8,1)+.003/g_blastTime, visibility );
+          o = pow(o,vec4(1./2.2));
+      }
+      `
+    } 
+    MushroomCloud4(){
+      return /* glsl */`
+      float g_blastTime;
+      vec3 g_cloudCentre;
+      void InitBlastParams()
+      {
+          g_blastTime = fract(iTime/20.);
+          g_cloudCentre = vec3(0,g_blastTime*5.,0);
+      }
+      
+      vec3 Flow( vec3 pos )
+      {
+          // make a toroidal roll, like a mushroom cloud
+          vec3 p = pos - g_cloudCentre;
+          vec3 v;
+          v.xz = -normalize(p.xz)*p.y;
+          v.y = length(p.xz)-.8;
+          //v *= smoothstep(.0,.5,length(pos.xz)); bad: this squashes/stretches it
+          v *= .1;
+          
+          // reduce velocity with distance from cloud top edge
+          float g = length(vec2(p.y,length(p.xz)-.8))-1.; // this doesn't match the one in SDF, but it looks better with the mismatch
+          v *= exp2(-pow(g*3.,2.));
+          
+          return v;
+      }
+      
+      float SDF( vec3 pos )
+      {
+          // multi fractal
+          const float period = 1.6;
+          float tt = fract(iTime/period /*+ texture(iChannel0,pos/20.).x /*break up the pattern - screws up texture filtering and I'm too lazy to fix/hide it*/);
+          float t[2] = float[2]( tt*period, (tt-1.)*period );
+          vec3 uvw = (pos-g_cloudCentre)/30.;
+          float f[2] = float[2]( .0, .0 );
+      
+      // applying flow to the whole SDF causes a "pulsing" - because we're displacing in a straight line so convex curves shrink
+          for ( int i=0; i < 2; i++ )
+          {
+            vec3 offset = Flow(pos)*t[i];
+            vec3 u = uvw
+      //            +offset*.25; offset *= .0; // makes the loop more obvious but looks generally good
+                  +offset*.2; offset *= .2; // makes the loop more obvious but looks generally good
+            for ( float j=2.; j <= 32.; j*=2.)
+                f[i] += texture(iChannel1,1.*(offset+u*j).xy).x/j;
+          }
+          
+          float ff = mix( f[0], f[1], tt );// actually better with a longer fade imo smoothstep(.4,.6,tt) );
+          //this doesn't help: const float p = 1.; float ff = pow( mix( pow(f[0],p), pow(f[1],p), tt ), 1./p );
+      
+      /*this looks far worse
+        f[0] *= smoothstep(1.,.5,tt);
+          f[1] *= smoothstep(0.,.5,tt);
+          const float p = 20.; float ff = pow( pow(f[0],p) + pow(f[1],p), 1./p );*/
+      //    float ff = max(f[0],f[1]);
+      
+          ff *= .5; // strength of clouds vs bounding shapes
+      
+      //    float g = length(vec3(pos.yz,max(0.,abs(pos.x)-.5)))-1.2;
+      //    float g = length(pos.xz)-1.3-.5*abs(sin(pos.y*1.5-iTime));
+      //    g = min(g,length(pos-vec3(0,-2,0))-1.2);
+      //    float g = length(vec2(pos.y,length(pos.xz)-(.5+.5*sin(iTime*.31))*2.)) - 1.; // smoke ring!
+      //    float g = max(max(abs(pos.x),abs(pos.y)),abs(pos.z)) - 1.; // cube - even hard corners look soft!
+          vec3 p = pos - g_cloudCentre;
+          float bulge = 1.-exp2(-20.*g_blastTime);
+          float g = length(vec2(p.y,length(p.xz)-1.*bulge))-1.;
+          ff *= bulge; // smooth sphere to start
+          
+      //    g = min(g,max(length(pos.xz)-.7,abs(pos.y-g_cloudCentre.y*.5)-g_cloudCentre.y*.5));
+          
+          // vertical column
+          float h = length(pos.xz)-.7+.2*(g_cloudCentre.y-pos.y-1.2); // cylinder - slightly tapered to cone
+          h = max(h, pos.y-g_cloudCentre.y); // cut off at top (inside cloud)
+          h = max(h,(g_cloudCentre.y*1.25-4.-pos.y)*.3); // softer cut off at the bottom
+          
+          g = min(g,h);
+          ff += g*.6;
+          
+      //    ff += smoothstep(.9,1.,g_blastTime)*2.1;//1.*pow(g_blastTime,2.); // fade
+          
+          // hard cut at ground level
+      //    ff = max(ff,-pos.y);
+          
+          return ff;
+      }
+      
+      void mainImage( out vec4 o, in vec2 uv )
+      {
+          InitBlastParams();
+          
+          vec3 ray = vec3((uv-iResolution.xy*.5)/iResolution.y,.9);
+          ray = normalize(ray);
+          vec3 pos = vec3(0,2,-5);
+          
+          vec2 a = iMouse.xy/iResolution.xy - .5;
+          if ( iMouse.x == .0 && iMouse.y == .0 )
+              a = vec2(0,.15);//vec2(-(iTime+sin(iTime))/15.,-.3*cos((iTime+sin(iTime))*.3));
+          a *= vec2(3,2);
+          
+          vec3 csx = vec3(cos(a.x),sin(a.x),-sin(a.x));
+          vec3 csy = vec3(cos(a.y),sin(a.y),-sin(a.y));
+          
+          pos.yz = pos.yz*csy.x + pos.zy*csy.yz;
+          pos.xz = pos.xz*csx.x + pos.zx*csx.yz;
+          ray.yz = ray.yz*csy.x + ray.zy*csy.yz;
+          ray.xz = ray.xz*csx.x + ray.zx*csx.yz;
+          
+          pos.y = max(.01,pos.y);
+          
+          float softness = .1+pow(g_blastTime,2.)*.5;
+          float density = 1.2/softness;
+          
+          const float epsilon = .001; // could scale this to pixel size - works well in big scenes
+          float visibility = 1.;
+          float light0 = 0.;
+          float light1 = 0.;
+          vec3 sunDir = normalize(vec3(1));
+          for ( int i=0; i < 20; i++ ) // can get away with really low loop counds because of the soft edges!
+          {
+              float h = SDF(pos);
+              float vis = smoothstep(epsilon,softness,h); // really should do an integral thing using previous h
+              if ( pos.y < .0 ) vis = 1.;
+              h = max(h,epsilon); // ensure we always march forward
+              if ( vis < 1. )
+              {
+                  float newvis = visibility * pow(vis,h*density);
+              light0 += (visibility - newvis)
+                          *smoothstep( -.5, 1., (SDF(pos+sunDir*softness) - h)/softness );
+                  vec3 lightDelta = g_cloudCentre-pos;
+              light1 += (visibility - newvis)
+                          *pow(smoothstep( -1., 1., (SDF(pos+normalize(lightDelta)*softness) - h)/softness ),2.)
+                          /(dot(lightDelta,lightDelta)+1.); // inverse square falloff
+                  visibility = newvis;
+              }
+              
+              if ( vis <= 0.
+                  || pos.y < .0 ) // cut off to ground plane (assumes camera is above)
+                  break;
+              pos += h*ray;
+          }
+      
+          o = vec4(.1,.2,.3,1); // ambient
+          o += light0*vec4(.9,.8,.7,0);
+        o *= pow(g_blastTime,.5)*.5; // albedo (before the glow, so I can blance the two lights separately
+          
+          o += light1*vec4(8,2,.25,0)/(25.*pow(g_blastTime,2.));
+          
+          // sky
+          o = mix( o, vec4(.2,.4,.8,1)+.003/g_blastTime, visibility );
+          
+          o = pow(o,vec4(1./2.2));
+      } 
+      `
+    } 
 }
