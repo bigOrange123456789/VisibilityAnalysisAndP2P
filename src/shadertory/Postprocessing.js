@@ -7,9 +7,19 @@ import {
 import { Shader } from "./Shader.js";
 export class Postprocessing{
     constructor(){
+        this.mouse=this.getMouse()
+
 
         this.godrays_stength={ value: 0.2 }
         this.init()
+    }
+    getMouse(){
+        const mouse = new THREE.Vector2();
+        window.addEventListener( 'mousemove', event=>{//鼠标移动事件
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1 ;
+        }, false );
+        return mouse
     }
     init(){
         this.scene = new THREE.Scene()
@@ -64,6 +74,9 @@ export class Postprocessing{
                     iChannel1: { type: 't', value: load('img1.jpg',1) },
                     iChannel2: { type: 't', value: load('img2.jpg',2) },
                     iChannel3: { type: 't', value: load('img3.jpg',3) },
+                    iMouse:{
+                        value: new THREE.Vector2(1, 1)
+                    }
                 },
                 vertexShader: /* glsl */`
                     varying vec2 vUv;
@@ -75,6 +88,9 @@ export class Postprocessing{
             } )
         }
         this.materialTest.uniforms[ 'iTime'   ].value+=(1/60)
+        this.materialTest.uniforms[ 'iMouse'   ].value=this.mouse
+
+
         this.scene.overrideMaterial = this.materialTest
         renderer.setRenderTarget( null )
         renderer.render( this.scene, this.camera )

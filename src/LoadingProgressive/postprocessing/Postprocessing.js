@@ -9,6 +9,10 @@ import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
+        this.scene=scene
+        this.camera=camera
+        this.renderer=renderer
+
         this.godrays_stength={ value: 0.2 }
         this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays=new Godrays(camera,scene)
@@ -43,6 +47,7 @@ export class Postprocessing{
             this.godrays.getTexture(),
             this.unrealBloom.getTexture(),
         )  
+        // this.renderer.render(this.scene,this.camera)
         // this.unrealBloom.render()//getTexture()    
     }
     mix(textureGodrays,textureBloom){
