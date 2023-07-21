@@ -143,7 +143,7 @@ export class AvatarManager {
         // this.poslist=[
         //     [0,10,0]
         // ]
-        console.log(this.poslist)
+        // console.log(this.poslist)
 
     }
     initPos_test(){
@@ -205,7 +205,7 @@ export class AvatarManager {
             glb0.scene.traverse(o=>{
                 if(o instanceof THREE.Mesh){
                     // console.log(o.material)
-                    o.material.metalness=0.5
+                    o.material.metalness=0.25//0.5
                     o.material.roughness=0//0.5
                     // console.log(o.name)
                     if(o.name=="CloW_A_xiezi_geo")o.visible=false

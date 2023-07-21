@@ -19,7 +19,7 @@ import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-
+import { TreeManager } from "./TreeManager";
 export class Main{
     constructor(body){
         this.speed=1
@@ -46,6 +46,7 @@ export class Main{
             new AvatarManager(this.scene,this.camera)
 
         this.ui=new UI(this)
+        this.TreeManager = new TreeManager(this.scene);
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({

@@ -79,7 +79,7 @@ class LightProducer{
         const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
    
         directionalLight.shadow.camera.near = -1000//0.01 //产生阴影的最近距离
-        directionalLight.shadow.camera.far = 3000 //产生阴影的最远距离
+        directionalLight.shadow.camera.far = 1000 //产生阴影的最远距离
         directionalLight.shadow.camera.left = -1000 //产生阴影距离位置的最左边位置
         directionalLight.shadow.camera.right = 1000 //最右边
         directionalLight.shadow.camera.top = 500 //最上边
@@ -87,8 +87,8 @@ class LightProducer{
         //告诉平行光需要开启阴影投射
         directionalLight.castShadow = true
         // directionalLight.shadow.bias = -0.0005;
-        directionalLight.shadow.mapSize.width = 2*2048; 
-        directionalLight.shadow.mapSize.height = 2*2048;//这两个值决定使用多少像素生成阴影 默认512
+        directionalLight.shadow.mapSize.width = 4*2048; 
+        directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512
         this.objectMove.add( directionalLight )
         // directionalLight.target = new THREE.Object3D();
         // directionalLight.target.origin=new THREE.Object3D(10,10,10)
