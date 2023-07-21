@@ -105,7 +105,6 @@ export class PostprocessingNew {
     }
     render()
     {
-        // console.log(12)
         this.renderer.setRenderTarget(null);
         this.renderer.render(this.scene, this.camera);
         this.texture.needsUpdate = true;

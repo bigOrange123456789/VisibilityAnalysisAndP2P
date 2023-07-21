@@ -87,7 +87,7 @@ export class AvatarManager {
                                 }
 
     }
-    initPos(){
+    initPos_subway(){
         this.poslist=[]
         let c={
             "x": [
@@ -111,6 +111,39 @@ export class AvatarManager {
                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
                     this.poslist.push([x,y,z])
                 }
+
+    }
+    initPos(){
+        this.poslist=[]
+        let c={
+            "x": [
+                -100,
+                100,
+                5
+            ],
+            // "y": [
+            //     0,
+            //     1,
+            //     1
+            // ],
+            "z": [
+                -100,
+                100,
+                5
+            ],
+        }
+        // for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+        //         for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+        //             this.poslist.push([x,5.5,z])
+        //         }
+        for(let x=0;x<40;x++)
+                for(let z=0;z<=40;z++){
+                    this.poslist.push([(x-4*5)*20,5.5,(z-4*5)*20])
+                }
+        // this.poslist=[
+        //     [0,10,0]
+        // ]
+        console.log(this.poslist)
 
     }
     initPos_test(){
@@ -153,6 +186,10 @@ export class AvatarManager {
             c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
             c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
             c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
+
+            c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
+            c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
+            c1.lod_avatarCount=[ 1640, 900/2, 3240/2, 8800/2, 12600/2]
         }
         console.log(config)
         return config[0]
@@ -165,6 +202,36 @@ export class AvatarManager {
         const c=this.getConfig()
         const self = this
         new GLTFLoader().load(c.path+"sim.glb", async (glb0) => {
+            glb0.scene.traverse(o=>{
+                if(o instanceof THREE.Mesh){
+                    // console.log(o.material)
+                    o.material.metalness=0.5
+                    o.material.roughness=0//0.5
+                    // console.log(o.name)
+                    if(o.name=="CloW_A_xiezi_geo")o.visible=false
+                    if(
+                        //o.name=="head"||
+                    // o.name=="CloW_A_body_geo"
+                    o.name=="hair"
+                    ){
+                        o.material.side=2
+                        // console.log(o)
+                        //o.material.scattering=true
+                    }
+                    if(
+                        o.name=="CloM_B_body_geo2"||
+                        o.name=="CloM_C_head_geo"
+                    ){
+                        o.material.scattering=true
+                    }
+                    // if(o.name=="CloW_C_body_geo1"){
+                    //     o.material.color.r=0.7
+                    //     o.material.color.g=1.
+                    //     o.material.color.b=1.
+
+                    // }
+                }
+            })
             process([glb0.scene],0)
         })
         function process(scenes){
@@ -186,10 +253,15 @@ export class AvatarManager {
             })
             for (var i00 = 0; i00 < crowd.count; i00++) {
                 const p=self.poslist[i00]//[i00*1500-50,100,0]
+                // crowd.setPosition(i00,[
+                //     p[0]+(2*Math.random()-1)*500,
+                //     p[1]-2000,
+                //     p[2]+(2*Math.random()-1)*500])
                 crowd.setPosition(i00,[
-                    p[0]+(2*Math.random()-1)*500,
-                    p[1]-2000,
-                    p[2]+(2*Math.random()-1)*500])
+                    p[0]+(2*Math.random()-1)*5,
+                    p[1],
+                    p[2]+(2*Math.random()-1)*5
+                ])
                 crowd.setRotation(i00,[0,Math.random()*30,0])
                 crowd.setAnimation(
                     i00,
@@ -197,16 +269,21 @@ export class AvatarManager {
                     Math.random()*10000
                     )
                 crowd.setSpeed(i00, 1+4*Math.random())
+                // crowd.setScale(i00, [
+                //     -900,
+                //     -900*(1-0.2+0.2*Math.random()),
+                //     900])
                 crowd.setScale(i00, [
-                    -900,
-                    -900*(1-0.2+0.2*Math.random()),
-                    900])
+                    2,
+                    2,//*(1-0.2+0.2*Math.random()),
+                    2])
                 crowd.setObesity(i00, 0.8+0.4*Math.random())
                 const j=10
                 crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")
                 crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_waitao_geo1")
             }
             crowd.init(scenes)
+            window.crowd=crowd
             self.scene.add(crowd)
             // crowd.visible=false
             // self.scene.add(crowd.CrowdPoints)

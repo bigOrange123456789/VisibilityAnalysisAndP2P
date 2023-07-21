@@ -10,7 +10,7 @@ import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
-// import {AvatarManager } from './AvatarManager.js'
+import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
@@ -30,7 +30,7 @@ export class Main{
 
         this.initScene()
         this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)
@@ -43,7 +43,7 @@ export class Main{
         this.lightProducer=new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
         // if(typeof AvatarManager!=="undefined")
-        //     new AvatarManager(this.scene,this.camera)
+            new AvatarManager(this.scene,this.camera)
 
         this.ui=new UI(this)
     }
@@ -61,14 +61,13 @@ export class Main{
         // // 渲染器开启阴影效果
         // this.renderer.shadowMap.enabled = true
 
-
         this.renderer = new THREE.WebGLRenderer({ 
             antialias: true,//抗锯齿
             alpha:true,
             canvas:this.canvas
         })
         this.renderer.setPixelRatio(window.devicePixelRatio)
-		this.renderer.setSize(this.body.clientWidth,this.body.clientHeight)
+        this.renderer.setSize(window.innerWidth, window.innerHeight)//this.body.clientWidth,this.body.clientHeight)
 		// 告诉渲染器需要阴影效果
 		this.renderer.shadowMap.enabled = true
 		this.renderer.shadowMapSoft = true;
@@ -123,13 +122,6 @@ export class Main{
             this.config.camera.rotation.x,
             this.config.camera.rotation.y,
             this.config.camera.rotation.z
-        )
-
-        this.camera.position.set(
-            -554.5302472516439, 16,  161.9772128995289
-        )
-        this.camera.rotation.set(
-            -0.272276339435702,  -1.1540831676065246,  -0.24997636267457884
         )
 
         window.camera=this.camera
@@ -189,9 +181,7 @@ export class Main{
     }
     animate(){
         this.stats.update()
-        // console.log(this.config)
         if(this.config.render!=="false"){
-            
                 if(this.config.useIndirectMaterial){
                     this.scene.traverse(node=>{
                         if(node instanceof THREE.Mesh)
@@ -211,14 +201,16 @@ export class Main{
                     })  
                     renderer.setRenderTarget(null)
                     renderer.render(this.scene,this.camera)
-                }else if(true){
-                    // renderer.render(this.scene,this.camera)
+                } else {
+
+                    //const size = renderer.getSize(new THREE.Vector2());
+                    //console.log("render size:" + size.width+" "+size.height)
+                    //renderer.render(this.scene,this.camera)
                     if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
-                    else this.postprocessing.render()
+                    else if(this.postprocessing) this.postprocessing.render()
+                    else this.renderer.render(this.scene,this.camera)
                     //this.godrays.render()
-                }else{
-                    renderer.render(this.scene,this.camera)
-                }               
+                }                  
         }
         requestAnimationFrame(this.animate)
     }
@@ -228,7 +220,6 @@ export class Main{
         this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
         this.camera.updateProjectionMatrix()
         if(this.renderer)this.renderer.setSize(this.canvas.width, this.canvas.height)
-
     }
     initSky() {
         if(this.config.render=="false")return
@@ -267,7 +258,7 @@ export class Main{
         
     }
 }
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -308,4 +299,4 @@ document.addEventListener('DOMContentLoaded', () => {
 
     window.configALL=config
     new Main(document.body)
-})
+// })

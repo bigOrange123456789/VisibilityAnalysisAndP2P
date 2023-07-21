@@ -6,9 +6,6 @@ import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { BokehPass  } from 'three/examples/jsm/postprocessing/BokehPass.js';
 import { LUTPass } from 'three/examples/jsm/postprocessing/LUTPass.js';
-
-import { FXAAShader } from "three/examples/jsm/shaders/FXAAShader.js";
-
 import { MyEffectComposer } from "./src/MyEffectComposer.js";
 import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
 
@@ -24,11 +21,13 @@ import { SSAODebugGUI } from "./src2/SSAODebugGUI"
 import { HBAOSSAOComparisonEffect } from "./src2/HBAOSSAOComparisonEffect"
 
 export class UnrealBloom{
-    constructor(camera,scene,renderer){
+    constructor(camera, scene, renderer) {
+        
         this.camera=camera
-        this.scene=scene
+        this.scene = scene
+        //this.renderer=renderer
         // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
-        this.composer=this.initComposer0(renderer)
+         this.composer=this.initComposer0(renderer)
         // this.composer2=this.initComposer2()
         
     }
@@ -100,54 +99,44 @@ export class UnrealBloom{
         return composer
     }
     initComposer0(renderer){//设置光晕
+        console.log(renderer)
         const scene=this.scene
         const camera=this.camera
-        
-        // this.saoPass=this.getSAO()
-        this.ssaoPass=this.getSSAO()
-        this.lutPass=this.getLUT()
-        // this.renderPass=new RenderPass(scene, camera)
-        // this.ssrPass=this.getSSR()
-        this.bokehPass=this.getDOF()
+        this.renderPass=new RenderPass(scene, camera)
         this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
                 0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
                 2,//0.3,//参数三：bloomRadius 泛光散发半径
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
-
-        ///////////////
-        // var pixelRatio = renderer.getPixelRatio();
-        // var fxaaPass = new ShaderPass(FXAAShader);
-        // fxaaPass.material.uniforms['resolution'].value.x = 1 / (window.innerWidth * pixelRatio);
-        // fxaaPass.material.uniforms['resolution'].value.y = 1 / (window.innerHeight * pixelRatio);
-        // composer.addPass(fxaaPass);
-        ///////////////
-
-
+        this.ssrPass=this.getSSR()
+        this.saoPass=this.getSAO()
+        this.ssaoPass=this.getSSAO()
+        this.bokehPass=this.getDOF()
+        this.lutPass = this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
         
-        if(this.ssaoPass)composer.addPass(
+        composer.addPass(
             this.ssaoPass//屏幕空间环境光遮蔽
         )
 
-        if(this.lutPass)composer.addPass(
+        composer.addPass(
             this.lutPass
         )
 
-        if(this.renderPass)composer.addPass(
-            this.renderPass
-        )
+        // composer.addPass(
+        //     this.renderPass
+        // )
         
-        if(this.ssrPass)composer.addPass(
-            this.ssrPass//屏幕空间反射
-        )
+        // composer.addPass(
+        //     this.ssrPass//屏幕空间反射
+        // )
         
-        if(this.bokehPass)composer.addPass(
-            this.bokehPass
-        )
+        // composer.addPass(
+        //     this.bokehPass
+        // )
         
-        if(this.bloomPass)composer.addPass(
+        composer.addPass(
             this.bloomPass//辉光
         )
         
@@ -158,7 +147,9 @@ export class UnrealBloom{
         ssaoPass.kernelRadius = 32
         ssaoPass.minDistance = 0.001
         ssaoPass.maxDistance = 0.3
-
+        console.log(
+            this.scene, this.camera, window.innerWidth, window.innerHeight
+        )
         // console.log(SSAOPass.OUTPUT)
         // saoPass.params.output = SSAOPass.OUTPUT.Default;
         // saoPass.params.saoBias = 0.5;
@@ -193,17 +184,11 @@ export class UnrealBloom{
             width: window.innerWidth,
             height: window.innerHeight,
             groundReflector: null,//params.groundReflector ? groundReflector : null,
-            selects: []//params.groundReflector ? selects : null
+            selects: null//params.groundReflector ? selects : null
         } );
-        // _selects
-        window.ssrPass=ssrPass
-        window.metalnessOnMaterial=ssrPass.metalnessOnMaterial
-        console.log(ssrPass.metalnessOnMaterial)
-        ssrPass.opacity = 1.35//0.15
+        ssrPass.opacity = 0.1
         ssrPass.distanceAttenuation = true
         ssrPass.maxDistance = 100//.1;
-        console.log(ssrPass)
-        // ssrPass.
         return ssrPass
     }
     getDOF(){//depth of field with bokeh 散焦景深

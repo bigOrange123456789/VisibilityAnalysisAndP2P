@@ -9,7 +9,7 @@ class LightProducer{
         this.object.add(this.objectMove)
         this.targetList=[]
         this.init(scene)//this.test()
-        // this.add_lensflares()
+        this.add_lensflares()
 
         // this.setPos(-319.59561744433125,  16,  323.70333357412926)
         // this.objectMove.position.set(-319.59561744433125,  16,  323.70333357412926)
@@ -64,7 +64,7 @@ class LightProducer{
     }
     init(scene){
         // Lights 
-        const x=2.//0.5
+        const x=3.//0.5
         const ambient = new THREE.AmbientLight( 0xffffff ,0.8);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
         scene.add( ambient );
@@ -76,19 +76,12 @@ class LightProducer{
         // Light1.name="Light1"
         // return
 
-        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5 );
+        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
    
         directionalLight.shadow.camera.near = -1000//0.01 //产生阴影的最近距离
         directionalLight.shadow.camera.far = 3000 //产生阴影的最远距离
         directionalLight.shadow.camera.left = -1000 //产生阴影距离位置的最左边位置
         directionalLight.shadow.camera.right = 1000 //最右边
-        directionalLight.shadow.camera.top = 500 //最上边
-        directionalLight.shadow.camera.bottom = -100 //最下面
-
-        directionalLight.shadow.camera.near = -2000//0.01 //产生阴影的最近距离
-        directionalLight.shadow.camera.far = 2000 //产生阴影的最远距离
-        directionalLight.shadow.camera.left = -2000 //产生阴影距离位置的最左边位置
-        directionalLight.shadow.camera.right = 2000 //最右边
         directionalLight.shadow.camera.top = 500 //最上边
         directionalLight.shadow.camera.bottom = -100 //最下面
         //告诉平行光需要开启阴影投射

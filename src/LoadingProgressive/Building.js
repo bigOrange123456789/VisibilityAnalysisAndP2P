@@ -129,6 +129,19 @@ export class Building{
             this.meshes,
             this.detection
         )
+
+        // const l1=Array.from(Array(100)).map((v,i) => {return i } )
+        // const l2=Array.from(Array(100)).map((v,i) => {return i+100 } )
+        // const l3=Array.from(Array(100)).map((v,i) => {return i+200 } )
+        // const l4=Array.from(Array(100)).map((v,i) => {return i+300 } )
+        // const l5=Array.from(Array(100)).map((v,i) => {return i+400 } )
+        // const l6=Array.from(Array(29)).map((v,i) => {return i+500 } )
+        // setTimeout(()=>{self.loading(l1)},1000)
+        // setTimeout(()=>{self.loading(l2)},2000)
+        // setTimeout(()=>{self.loading(l3)},3000)
+        // setTimeout(()=>{self.loading(l4)},4000)
+        // setTimeout(()=>{self.loading(l5)},5000)
+        // setTimeout(()=>{self.loading(l6)},6000)
     }
     createFloor(){
         const geometry = new THREE.BoxGeometry( 1000000, 500, 50000 );
@@ -190,6 +203,7 @@ export class Building{
         return mesh
     }
     addMesh(id,mesh){
+        //if(false)if(id!==194&&id!=175&&id!=174&&id!=171&&id!=29)
         if(this.config.updateColor){
             mesh.geometry.computeVertexNormals()
             let t=id*256*256*256/8431 ///2665
@@ -200,24 +214,24 @@ export class Building{
             mesh.geometry.computeVertexNormals()
             // mesh.material.depthTest=true
             mesh.material.depthWrite=true
-            mesh.material.transparent=false
+            // mesh.material.transparent=false
             mesh.material.side=0//THREE.DoubleSide
         }
-        if(mesh.material.transparent)console.log(id)
-        mesh.material=new THREE.MeshStandardMaterial({
-            color:mesh.material.color ,
-            map:mesh.material.map,
+        // if(mesh.material.transparent)console.log(id)
+        // mesh.material=new THREE.MeshStandardMaterial({
+        //     color:mesh.material.color ,
+        //     map:mesh.material.map,
 
-            bumpScale: 1,
-            displacementBias:0,
-            displacementScale: 1,
+        //     bumpScale: 1,
+        //     displacementBias:0,
+        //     displacementScale: 1,
 
-            emissiveIntensity: 1,
-            envMapIntensity:1,
-            metalness: 0.5,
-            roughness: 0.5,
-            // shininess:300,
-        })
+        //     emissiveIntensity: 1,
+        //     envMapIntensity:1,
+        //     metalness: 0.5,
+        //     roughness: 0.5,
+        //     // shininess:300,
+        // })
         // mesh.material.side=2
         const underground=this.InY2(mesh,15)
         if(underground){//if(id==171||id==174){
@@ -259,10 +273,10 @@ export class Building{
                     bumpScale: 1,
                     displacementBias:0,
                     displacementScale: 1,
-                    emissiveIntensity: 1,
-                    envMapIntensity:1,
-                    metalness: 0.95,
-                    roughness: 0.1+0.4,
+                    emissiveIntensity: mesh.material.emissiveIntensity,//1,
+                    envMapIntensity:mesh.material.envMapIntensity,//1,
+                    metalness: mesh.material.metalness,//0.95,
+                    roughness: mesh.material.roughness//0.1+0.4,
                     // shininess:300,
                 }),
                 instance_info)
@@ -284,23 +298,13 @@ export class Building{
             mesh.lod=[mesh,mesh2]
             // mesh.lod=[mesh,mesh]
             // mesh.visible=false
-            if(true)if(this.config.waterCidList){
+            if(false)if(this.config.waterCidList){
                 for(let i=0;i<this.config.waterCidList.length;i++)
                     if(id==this.config.waterCidList[i]){
                         var water = new WaterController(meshOld).water
                         mesh.visible=mesh2.visible=false
                         mesh.lod=[water,water]
                         if(true)this.parentGroup2.add(water)
-                        // const water=mesh
-                        // water.lod=[mesh,mesh]
-                        if(window.ssrPass&&window.ssrPass._selects)
-                            window.ssrPass._selects.push(water)
-                        // water.material.color.r=0.5
-                        // water.material.color.g=0.5
-                        // water.material.color.b=0.5
-
-                        console.log(water,"water")
-                        // water.material.envMapIntensity=0//1
                     }
             }
             this.parentGroup2.add(mesh2)
