@@ -55,7 +55,6 @@ export class Main{
         //this.renderer.toneMapping = THREE.ReinhardToneMapping;this.renderer.toneMappingExposure=2.14
 		this.renderer.setScissorTest = true;
 		this.renderer.outputEncoding = THREE.sRGBEncoding;
-        
         this.body.appendChild(this.renderer.domElement)
         window.renderer=this.renderer
         //////////////////////////////////////

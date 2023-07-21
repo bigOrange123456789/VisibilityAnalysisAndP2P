@@ -129,19 +129,6 @@ export class Building{
             this.meshes,
             this.detection
         )
-
-        // const l1=Array.from(Array(100)).map((v,i) => {return i } )
-        // const l2=Array.from(Array(100)).map((v,i) => {return i+100 } )
-        // const l3=Array.from(Array(100)).map((v,i) => {return i+200 } )
-        // const l4=Array.from(Array(100)).map((v,i) => {return i+300 } )
-        // const l5=Array.from(Array(100)).map((v,i) => {return i+400 } )
-        // const l6=Array.from(Array(29)).map((v,i) => {return i+500 } )
-        // setTimeout(()=>{self.loading(l1)},1000)
-        // setTimeout(()=>{self.loading(l2)},2000)
-        // setTimeout(()=>{self.loading(l3)},3000)
-        // setTimeout(()=>{self.loading(l4)},4000)
-        // setTimeout(()=>{self.loading(l5)},5000)
-        // setTimeout(()=>{self.loading(l6)},6000)
     }
     createFloor(){
         const geometry = new THREE.BoxGeometry( 1000000, 500, 50000 );
@@ -306,8 +293,8 @@ export class Building{
                         if(true)this.parentGroup2.add(water)
                         // const water=mesh
                         // water.lod=[mesh,mesh]
-                        console.log(window.ssrPass._selects)
-                        window.ssrPass._selects.push(water)
+                        if(window.ssrPass&&window.ssrPass._selects)
+                            window.ssrPass._selects.push(water)
                         // water.material.color.r=0.5
                         // water.material.color.g=0.5
                         // water.material.color.b=0.5

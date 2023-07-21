@@ -107,7 +107,7 @@ export class UnrealBloom{
         this.ssaoPass=this.getSSAO()
         this.lutPass=this.getLUT()
         // this.renderPass=new RenderPass(scene, camera)
-        this.ssrPass=this.getSSR()
+        // this.ssrPass=this.getSSR()
         this.bokehPass=this.getDOF()
         this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
