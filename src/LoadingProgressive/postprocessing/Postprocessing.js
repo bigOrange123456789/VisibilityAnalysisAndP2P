@@ -7,7 +7,7 @@ import {
 import {PostprocessingNew} from './PostprocessingNew.js';
 
 import{Godrays}from"./Godrays.js"
-import{UnrealBloom}from"./UnrealBloom.js"
+// import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
