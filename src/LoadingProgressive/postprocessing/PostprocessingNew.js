@@ -49,12 +49,12 @@ export class PostprocessingNew {
         const bokehPass = unrealBloom.getDOF()
         const lutPass = unrealBloom.getLUT()
         
-        //this.composer.addPass(texturePass)
-        this.composer.addPass(mySSAOPass)
+        this.composer.addPass(texturePass)
+        //this.composer.addPass(mySSAOPass)
 
         //this.composer.addPass(ssaoPass)
         this.composer.addPass(lutPass)
-        this.composer.addPass(bloomPass)
+        //this.composer.addPass(bloomPass)
         // var fxaaPass = new ShaderPass(FXAAShader);
         // var uniforms = fxaaPass.material.uniforms;
 

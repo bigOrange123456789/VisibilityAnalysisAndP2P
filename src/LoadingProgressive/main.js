@@ -20,6 +20,10 @@ import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { TreeManager } from "./TreeManager";
+
+import CSM from 'three-csm';
+THREE.CSM = CSM;
+
 export class Main{
     constructor(body){
         this.speed=1
@@ -45,6 +49,7 @@ export class Main{
         // if(typeof AvatarManager!=="undefined")
             new AvatarManager(this.scene,this.camera)
 
+        this.initCSM();
         this.ui=new UI(this)
         this.TreeManager = new TreeManager(this.scene);
     }
@@ -158,6 +163,26 @@ export class Main{
 
 
     }
+
+    initCSM() {
+        this.csm = new THREE.CSM({
+            maxFar: this.camera.far,
+            cascades: 2,
+            shadowMapSize: 1024,
+            lightDirection: new THREE.Vector3(1, -1, 1).normalize(),
+            camera: this.camera,
+            parent: this.scene,
+            lightIntensity:1
+        });
+        let material = new THREE.MeshPhongMaterial(); // works with Phong and Standard materials
+        this.csm.setupMaterial(material); // must be called to pass all CSM-related uniforms to the shader
+        //this.csm.lightIntensity = 1000;
+        let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
+        this.scene.add(mesh);
+    }
     getCubeMapTexture(path) {
         var scope = this
         return new Promise((resolve, reject) => {//'.exr'
@@ -180,7 +205,8 @@ export class Main{
             )
         })
     }
-    animate(){
+    animate() {
+        this.csm.update(this.camera.matrix);
         this.stats.update()
         if(this.config.render!=="false"){
                 if(this.config.useIndirectMaterial){

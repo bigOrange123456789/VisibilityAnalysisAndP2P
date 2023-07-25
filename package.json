@@ -41,6 +41,7 @@
     "src": "^1.1.2",
     "stats.js": "^0.17.0",
     "three": "^0.152.2",
+    "three-csm": "^3.2.0",
     "tweakpane": "^3.1.0",
     "webpack": "^5.74.0",
     "webpack-cli": "^4.10.0"

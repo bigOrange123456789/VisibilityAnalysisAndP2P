@@ -28,7 +28,7 @@ export class UI{
         this.control_camera(main.camera,main.playerControl)
         this.control_material(main.scene)
         // this.control_renderer(main.renderer)
-        this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient)
+        this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient,main.csm)
 
         console.log(main.postprocessing,"main.postprocessing")
         const postprocessing=main.postprocessing
@@ -147,7 +147,8 @@ export class UI{
         } );
         
     }
-    control_light(directionalLight,ambient){
+    control_light(directionalLight, ambient, csm) {
+        console.log(csm)
         const gui=this.gui
         const params=this.params
         var directionFolder = gui.addFolder('光照');
@@ -175,6 +176,7 @@ export class UI{
         .onChange(function(e) {
             directionalLight.target.position.x =
             directionalLight.position.x + e;
+            csm.lightDirection.x = e;
         });
         params['平行光方向Y']=directionalLight.target.position.y -directionalLight.position.y
         directionFolder
@@ -183,6 +185,7 @@ export class UI{
         .onChange(function(e) {
             directionalLight.target.position.y = 
             directionalLight.position.y + e;
+            csm.lightDirection.y = e;
         });
         params['平行光方向Z']=directionalLight.target.position.z -directionalLight.position.z
         directionFolder
@@ -191,20 +194,23 @@ export class UI{
         .onChange(function(e) {
             directionalLight.target.position.z = 
             directionalLight.position.z + e;
+            csm.lightDirection.z = e;
         });
         /*shadow*/
-        params['平行光阴影']=directionalLight.castShadow 
-        directionFolder
-        .add(params, '平行光阴影')
-        .onChange(function(e) {
-            directionalLight.castShadow = e
-        });
+        directionalLight.castShadow =false
+        // params['平行光阴影']=directionalLight.castShadow 
+        // directionFolder
+        // .add(params, '平行光阴影')
+        // .onChange(function(e) {
+        //     directionalLight.castShadow = e
+        // });
 
         // params['shadow_radius']=directionalLight.shadow.radius
         // directionFolder.add( params, 'shadow_radius', 0, 20 ).step( 0.05 ).onChange( function ( value ) {
         //     directionalLight.shadow.radius = value
         // } );
         /*visible*/
+        directionalLight.visible = false;
         params['平行光启用']=directionalLight.visible
         directionFolder
         .add(params, '平行光启用')
