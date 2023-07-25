@@ -3,7 +3,9 @@ import { Crowd } from '../../lib/crowd/Crowd.js'//let Crowd=Pack//
 import conifg_woman01     from '../../config/avatar/sceneConifg_woman01.json';
 import * as THREE from "three"
 export class AvatarManager {
-    constructor(scene, camera) {
+    constructor(scene, camera,posConfig) {
+        this.posConfig=posConfig
+        window.posConfig=posConfig
         // return
         window.scene=scene
         this.scene = scene
@@ -12,7 +14,7 @@ export class AvatarManager {
         // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
         // this.sum_count = 0; //当前row_index前面行的人数总和
         // this.row_count = 0; //当前行的可放置人数
-        this.initPos()//this.initPos_test()//this.initPos_old()
+        this.initPos2()//this.initPos_test()//this.initPos_old()
         this.init()//this.init_test()//
     }
     initPos_old(){
@@ -146,6 +148,24 @@ export class AvatarManager {
         // console.log(this.poslist)
 
     }
+    initPos2(){
+        this.poslist=[]
+        const list=[
+            173,182,
+        ]
+
+        for(let cid of list){
+            const arr=this.posConfig[cid+""]
+            console.log(arr,cid)
+            if(arr)
+            for(let i=0;i<arr.length/2;i++){
+                const x=arr[2*i]
+                const y=5.5
+                const z=arr[2*i+1]
+                this.poslist.push([x,y,z])
+            }
+        }
+    }
     initPos_test(){
         this.poslist=[]
         let c={
@@ -258,9 +278,9 @@ export class AvatarManager {
                 //     p[1]-2000,
                 //     p[2]+(2*Math.random()-1)*500])
                 crowd.setPosition(i00,[
-                    p[0]+(2*Math.random()-1)*5,
+                    p[0],//+(2*Math.random()-1)*5,
                     p[1],
-                    p[2]+(2*Math.random()-1)*5
+                    p[2]//+(2*Math.random()-1)*5
                 ])
                 crowd.setRotation(i00,[0,Math.random()*30,0])
                 crowd.setAnimation(

@@ -24,6 +24,7 @@ import { TreeManager } from "./TreeManager";
 import CSM from 'three-csm';
 THREE.CSM = CSM;
 
+import { TreeBuilder } from "./TreeBuilder";
 export class Main{
     constructor(body){
         this.speed=1
@@ -46,9 +47,21 @@ export class Main{
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
-        // if(typeof AvatarManager!=="undefined")
-            // new AvatarManager(this.scene,this.camera)
-        // this.TreeManager = new TreeManager(this.scene);   
+
+        this.loadJson(
+            "LoadingProgressive/pos.json",
+            data=>{
+                // setTimeout(()=>{
+                //     console.log("data",data)
+                new TreeManager(self.scene).init(data) 
+                // })
+                // if(typeof AvatarManager!=="undefined")
+                    new AvatarManager(self.scene,self.camera,data)
+                // self.TreeManager.init(data) 
+            }
+        )
+        // self.TreeManager = new TreeManager(self.scene,data) 
+          
 
         this.initCSM();
         this.ui=new UI(this)
@@ -285,6 +298,18 @@ export class Main{
             }
         },100)
         
+    }
+    loadJson(path,cb){
+        // console.log(path)
+        var xhr = new XMLHttpRequest()
+        xhr.open('GET', path, true)
+        xhr.send()
+        xhr.onreadystatechange = ()=> {
+            if (xhr.readyState == 4 && xhr.status == 200) {
+                var json_data = JSON.parse(xhr.responseText)
+                cb(json_data)
+            }
+        }
     }
 }
 // document.addEventListener('DOMContentLoaded', () => {

@@ -2,15 +2,21 @@ import content from '../../config/TreeGeneration/all.json';
 
 import * as THREE from "three";
 import { TreeBuilder } from "./TreeBuilder";
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
+
 export class TreeManager {
   constructor(scene) {
+    this.object=new THREE.Object3D()
+    scene.add(this.object)
+    this.TreeBuilder=TreeBuilder
+  }
+  init(posConfig){
+    this.posConfig=posConfig
+    this.pos=this.initPos()
     this.content = this.getContent()
     this.param=this.getParam(content[0])
     window.param=this.param
-    this.object=new THREE.Object3D()
+    
     this.builder = new TreeBuilder()
-    scene.add(this.object)
     this.updateTree()
   }
   getContent(){
@@ -18,6 +24,22 @@ export class TreeManager {
       if(!i.seed)i.seed="随机种子"
     }
     return content
+  }
+  initPos(){
+    this.poslist=[]
+    const list=[
+        171
+    ]
+    for(let cid of list){
+        const arr=this.posConfig[cid+""]
+        for(let i=0;i<arr.length/2;i++){
+            const x=arr[2*i  ]//+(2*Math.random()-1)*25
+            const y=5.5
+            const z=arr[2*i+1]//+(2*Math.random()-1)*25
+            this.poslist.push([x,y,z])
+        }
+    }
+    return this.poslist
   }
   getParam(obj){
     const self=this
@@ -76,7 +98,7 @@ export class TreeManager {
     this.object.add(singleTree)
     this.updateLeaves()
   }
-  instance(singleTree){
+  instance1(singleTree){
     const meshList=[
       singleTree.children[0],
       singleTree.children[1]
@@ -100,17 +122,47 @@ export class TreeManager {
         instance_info.push(mat4)
     }
     for(let mesh0 of meshList){
-      // mesh0.material=new THREE.MeshStandardMaterial({
-      //   color:mesh0.material.color ,
-      //   map:mesh0.material.map,
-
-      //   emissiveIntensity: 1,
-      //   envMapIntensity:1,
-      //   metalness: 0.95,
-      //   roughness: 0.1+0.4,
-      //   transparent:true//mesh0.material.transparent
-      //   // shininess:300,
-      // })
+      const mesh=new THREE.InstancedMesh(
+        mesh0.geometry,
+        mesh0.material,
+        instance_info.length
+      )
+      for(let i=0;i<instance_info.length;i++){
+          mesh.setMatrixAt(
+              i,
+              instance_info[i]
+          )
+      }
+      mesh0.visible=false//position.y+=8
+      mesh.castShadow = true;
+      mesh.receiveShadow = true;
+      singleTree.add(mesh)
+    }
+    console.log(singleTree,"singleTree")
+  }
+  instance(singleTree){
+    const meshList=[
+      singleTree.children[0],
+      singleTree.children[1]
+    ]
+    const instance_info=[]
+    for(let p of this.pos){
+      const i=p[0]
+      const j=p[1]
+      const k=p[2]
+      const a=0.5*Math.random()+0.5
+      const b=0.5*Math.random()+0.5
+      const c=0.5*Math.random()+0.5
+      
+        var mat4 = new THREE.Matrix4().fromArray( [
+          a,0,0,0,
+          0,b,0,0,
+          0,0,c,0,
+          i,j,k,1
+        ] )
+        instance_info.push(mat4)
+    }
+    for(let mesh0 of meshList){
       const mesh=new THREE.InstancedMesh(
         mesh0.geometry,
         mesh0.material,
@@ -161,16 +213,5 @@ export class TreeManager {
   getTreeBySpecies(name) {
     for(let i=0;i<this.content.length;i++)
       if(this.content[i].name==name)return this.content[i]
-  }
-  saveGLTF(){
-    const scene=new THREE.Scene()
-    scene.add(this.object)
-    new GLTFExporter().parse(scene,function(result){
-        var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
-        let link = document.createElement('a')
-        link.href = URL.createObjectURL(myBlob)
-        link.download = "tree.gltf"
-        link.click()
-    })
   }
 }
