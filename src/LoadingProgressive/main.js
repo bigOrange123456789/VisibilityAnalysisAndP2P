@@ -47,11 +47,12 @@ export class Main{
         this.lightProducer=new LightProducer(this.scene,this.camera)
         this.building=new Building(this.scene,this.camera)
         // if(typeof AvatarManager!=="undefined")
-            new AvatarManager(this.scene,this.camera)
+            // new AvatarManager(this.scene,this.camera)
+        // this.TreeManager = new TreeManager(this.scene);   
 
         this.initCSM();
         this.ui=new UI(this)
-        this.TreeManager = new TreeManager(this.scene);
+        
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -155,7 +156,8 @@ export class Main{
               self.scene.backgroundIntensity=0.8
             }
           )
-        this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+        this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
+        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
               self.scene.environment = envMap
             }
