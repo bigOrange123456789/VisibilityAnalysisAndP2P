@@ -11,8 +11,9 @@ export class AvatarManager {
         this.scene = scene
         this.camera = camera
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
-        this.initPos_test()//this.initPos_test()//this.initPos_old()
-        this.init()//this.init_test()//
+        this.initPos2()//this.initPos_test()//this.initPos_old()
+        const self=this
+        this.init()
     }
     initPos_subway(){
         this.poslist=[]
@@ -180,7 +181,7 @@ export class AvatarManager {
             window.crowd=crowd
             self.scene.add(crowd)
             // crowd.visible=false
-            // self.scene.add(crowd.CrowdPoints)
+            self.scene.add(crowd.CrowdPoints)
         }
     }
     init_test() {

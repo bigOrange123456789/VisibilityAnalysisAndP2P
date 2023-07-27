@@ -46,7 +46,7 @@ export class Main{
         this.initWander()
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        // this.building=new Building(this.scene,this.camera)
+        this.building=new Building(this.scene,this.camera)
 
         this.loadJson(
             "LoadingProgressive/pos.json",
@@ -192,11 +192,11 @@ export class Main{
         let material = new THREE.MeshPhongMaterial(); // works with Phong and Standard materials
         this.csm.setupMaterial(material); // must be called to pass all CSM-related uniforms to the shader
         //this.csm.lightIntensity = 1000;
-        let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
 
-        this.scene.add(mesh);
+        // let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
+        // mesh.castShadow = true;
+        // mesh.receiveShadow = true;
+        // this.scene.add(mesh);
     }
     getCubeMapTexture(path) {
         var scope = this
