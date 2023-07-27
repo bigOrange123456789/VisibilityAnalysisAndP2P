@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>静态模型处理</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<script src="js/threeLib/three.js"></script>
+<script src="js/threeLib/GLTFLoader.js"></script>
+<script src="js/threeLib/GLTFExporter.js"></script>
+<div id="mydivSplit"  style="position:absolute;left:200px;top:200px;background:#aaa;border:10px solid #111;">
+    <h4>文件名称：</h4>
+    <textarea rows="1" cols="50" id="fileName">0</textarea>
+    <button onclick="start(0)">查看构件个数</button>
+    <h4>打包数据列表：</h4>
+    <textarea rows="10" cols="30" id="nums">all</textarea>
+    <br/>
+    <button onclick="start(1)">打成一个数据包</button>
+    <button onclick="start(2)">打成多个数据包</button>
+    <button onclick="start(3)">将补集打包</button>
+    <div>
+<script>
+var h1Top=0
+function h1(str,size){
+    var oText=document.createElement('h1');
+    oText.innerHTML=str;
+    oText.style.cssText=
+        'font-size:'+size+'px;'+//文字大小
+        'font-weight:normal;'+
+        'position:fixed;'+//到窗体的位置
+        'left:'+0+'px;'+//到部件左边距离
+        'top:'+h1Top+'px;'; //到部件右边 距离
+    h1Top+=(size*2)
+    var parent=document.getElementById("mydivSplit")
+    parent.appendChild(oText);
+    return oText;
+}
+function so(o1,o2) {
+    o2.position.set(o1.position.x, o1.position.y, o1.position.z)
+    o2.scale.set(o1.scale.x, o1.scale.y, o1.scale.z)
+    o2.rotation.set(o1.rotation.x, o1.rotation.y, o1.rotation.z)
+}
+function start(type){
+    console.log('type',type)
+    var name=document.getElementById("fileName").value;
+    new h1('正在读取模型文件:'+name+'.glb',10)
+    new THREE.GLTFLoader().load('./in/output'+name+'.gltf', (glb) => {
+        //读取全部构件
+        new h1('正在获取全部构件',10)
+        var group=glb.scene.children[0];
+        
+        var arr=[]
+        for(var i=0;i<group.children.length;i++)
+            arr.push(group.children[i])
+        console.log(arr)
+        return 
+        new h1("构件个数为："+arr.length,10)
+        
+        group.children=arr[index];
+        var scene=new THREE.Scene();
+        scene.add(new THREE.Group())
+        so(glb.scene,scene)
+        var str00=document.getElementById("nums").value
+        if(str00==='all'){
+            var nums=[]
+            for(var i=0;i<arr.length;i++)
+                nums.push(i)
+            new h1("全部构件(all)",10)
+        }else{
+            var nums=str00.split(',')
+            for(var i=0;i<nums.length;i++){
+                nums[i]=parseInt(nums[i])
+            }
+        }
+        if(type===3){//将nums变为自己的补集
+            var flag={}
+            for(i in nums)
+                flag[nums[i]]=true
+            nums=[]
+            for(var i=0;i<arr.length;i++)
+                if(!flag[i])    
+                    nums.push(i)
+            var str=''
+            for(var i in nums)
+                str=str+','+nums[i]
+            console.log(str)
+            type=1
+        }
+        new h1('数据包中构件个数:'+nums.length,10)
+        console.log("1.nums.length",nums.length)
+
+        for(var i=0;i<arr.length;i++){
+            // arr[i].name=''+i   //该版本下mesh.name是structdec的编号，不能随意更改
+        }
+        //保存
+        console.log("2.nums.length",nums.length)
+        if(type===1){
+            for(var i=0;i<nums.length;i++){//将全部数据放入scene对象中
+                var j=nums[i]
+                console.log(j,arr[j])
+                scene.children[0].add(arr[j].clone())
+            }
+            var fileName=name+'all.gltf';
+            new THREE.GLTFExporter().parse(scene, function (result) {
+                var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+                let link = document.createElement('a');
+                link.href = URL.createObjectURL(myBlob);
+                link.download = fileName;
+                link.click();
+                new h1('完成',10)
+            });
+            /*
+            if(++index===arr.length){
+                clearInterval(myInterval);
+                console.log("完成")
+            }*/
+        //},500);
+        }else if(type==2){
+            var myTag0=new h1('',10)
+            var index=0
+            console.log("3.nums.length",nums.length)
+            function download(index){
+                
+                    myTag0.innerHTML='处理进度：'+index+"/"+nums.length
+                    var scene=new THREE.Scene()
+                    scene.add(new THREE.Group())
+                    so(glb.scene,scene)
+                    //so(glb.scene.children[0],scene.children[0])
+                    scene.children[0].add(
+                        arr[ nums[index] ].clone()
+                    )
+                    var fileName=arr[ nums[index] ].name+'.gltf'//name +"_"+ nums[index] +'.gltf'
+                    console.log(
+                        'fileName:'+fileName,
+                        'scene.children[0].name:'+arr[ nums[index]  ] .name
+                    )
+
+                    new THREE.GLTFExporter().parse(scene, function (result) {
+                        var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+                        let link = document.createElement('a')
+                        link.href = URL.createObjectURL(myBlob)
+                        link.download = fileName
+                        link.click()
+                        setTimeout(()=>{
+                            if(++index>=nums.length){
+                                next()//myTag0.innerHTML='处理进度：完成'//new h1('完成',10)
+                            }else download(index)
+                        },100)//setTimeout
+                    });
+                
+            }//download
+            download(0)//download(nums.length-1)//
+        }
+        
+    });
+}
+function next(){
+    var index=
+        parseInt(document.getElementById("fileName").value)+1
+    if(index<9){
+        document.getElementById("fileName").value=index
+        start(2)
+    }
+    
+}
+//next()
+</script>
+
+</body>

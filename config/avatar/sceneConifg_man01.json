@@ -1,11 +1,11 @@
 [
     { 
         "path": [
-            "assets/sim/man01/"
+            "assets/avatar/sim/man01/"
         ],
 
         "pathTexture":[
-            "./assets/textures_sim1/man01/"
+            "./assets/avatar/textures_sim1/man01/"
         ],
         "meshType":[
             {
@@ -62,7 +62,7 @@
         "standAnimationList": [
             0,1,2,3,4,6,7,9,10
         ],
-        "pathAnima":  "assets/animation_man0.bin" ,
+        "pathAnima":  "assets/avatar/animation_man0.bin" ,
 
         "lod_distance":[ 5,   15,   30,    60,  100 ],
         "lod_geometry":    [ 20,  15,   1,    0,   0  ],

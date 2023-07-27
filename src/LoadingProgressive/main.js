@@ -26,7 +26,21 @@ THREE.CSM = CSM;
 
 import { TreeBuilder } from "./TreeBuilder";
 export class Main{
+    addTool(obj){
+        obj.loadJson=(path,cb)=>{
+            var xhr = new XMLHttpRequest()
+            xhr.open('GET', path, true)
+            xhr.send()
+            xhr.onreadystatechange = ()=> {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var json_data = JSON.parse(xhr.responseText)
+                    cb(json_data)
+                }
+            }
+        }
+    }
     constructor(body){
+        this.addTool(window)
         this.speed=1
         this.config=window.configALL.src.main
         this.body = body

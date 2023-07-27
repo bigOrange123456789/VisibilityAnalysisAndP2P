@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Test</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {overflow:hidden;}
+		</style>
+	</head>
+
+	<body>
+		<script src="three.js"></script>
+		<script>
+			let loader = new THREE.FileLoader();
+			loader.setResponseType("arraybuffer");
+			loader.load(
+  				'test.bin',
+  				buffer => {
+					let itemSize1=4
+					let itemSize2=2
+    				let head = new Uint32Array(buffer.slice(0, 4 * itemSize1))
+    				let config_len=head[0]
+					let config_0=head[1]
+					let animationDataLength=head[2]
+					let animationTextureLength = 
+						THREE.MathUtils.ceilPowerOfTwo( Math.sqrt(animationDataLength / 4) )
+					let data1 = new Uint16Array(buffer.slice(
+						4 * itemSize1, 
+						4 * itemSize1+head[2]* itemSize2
+						))
+					console.log(
+						"data1",
+						data1
+					)
+				    let data2 = new Uint16Array(buffer.slice(
+						4 * itemSize1+head[2]* itemSize2, 
+						buffer.byteLength
+						))	
+					console.log(
+						"data2",
+						data2
+					)
+					let texSize = head[0]
+					
+    				let map1 = new THREE.DataTexture()
+    				map1.type = THREE.HalfFloatType
+    				map1.image = {
+      					data: data1,
+      					width: animationTextureLength,
+      					height: animationTextureLength,
+    				}	
+					let map2 = new THREE.DataTexture()
+    				map2.type = THREE.HalfFloatType
+    				map2.image = {
+      					data: data2,
+      					width: animationTextureLength,
+      					height: animationTextureLength,
+    				}	
+
+					console.log(
+						"head",
+						head
+					)
+					console.log(
+						"length * length * 4",
+						animationTextureLength*animationTextureLength*4
+					)
+    				console.log(
+						"map1",
+						map1
+					)
+					console.log(
+						"map2",
+						map2
+					)
+  				}	
+			)
+		</script>
+	</body>
+</html>

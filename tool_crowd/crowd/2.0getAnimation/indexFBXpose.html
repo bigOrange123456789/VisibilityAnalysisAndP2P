@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>共用骨骼动画</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {overflow:hidden;}
+    </style>
+</head>
+
+<body>
+<script src="./lib/three.js"></script>
+<script src="./lib/GLTFLoader.js"></script>
+<script src="./lib/GLTFExporter.js"></script>
+<script type="module">
+    import {FBXLoader} from "./lib2/examples/jsm/loaders/FBXLoader.js";
+    var camera, scene, renderer;
+    var light;
+    init();
+    render();
+    function init() {
+        camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.01, 10000);
+        camera.position.z = 20;
+
+        scene = new THREE.Scene();
+
+        renderer = new THREE.WebGLRenderer();
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0xddddff);
+        document.body.appendChild( renderer.domElement );
+
+        light = new THREE.AmbientLight(0xffffff,1.0)
+        scene.add(light);
+    }
+    function render(){
+        renderer.render( scene, camera );
+        requestAnimationFrame(render);
+    }
+
+    var loader1= new THREE.GLTFLoader();
+    var loader2= new FBXLoader();
+    var path1="model/woman01_0.glb"
+    var path2="model/woman01_10.fbx"
+    var path_anim =prompt("请输入动画文件名:",path1)
+    var path_model=prompt("请输入模型文件名:",path2)
+    loader1.load(path_anim, (glb) => {
+        var animation=glb.animations[0];
+        loader2.load(path_model, (fbx) => {
+            var glb={scene:fbx}
+            console.log(glb)
+            scene.add(glb.scene);
+
+            var skeleton;
+            glb.scene.traverse(function (node) {
+                if(node instanceof THREE.SkinnedMesh)
+                    skeleton=node.skeleton;
+            })
+
+            var skeleton_all=get_skeleton(glb)
+            var n= prompt("动画的总帧数为:",animation.tracks[0].times.length);//帧数量
+
+            function next(index){
+                console.log("skinnedmesh编号",index,skeleton_all.length)
+                if(index==skeleton_all.length){
+                    exportGltf(glb.scene,"model.gltf",()=>{
+                        alert("finish!")
+                    })
+                    return
+                }
+                play(glb,animation,skeleton_all[index][1],skeleton_all[index][0]+".json",n,()=>{
+                    next(index+1)
+                })
+            }
+            next(0)
+
+        });
+    });
+    function get_skeleton(glb){
+        var index0=0
+        var skeleton_all=[]
+        glb.scene.traverse(function (node) {
+            if(node.type=="SkinnedMesh"){//if(node instanceof THREE.SkinnedMesh){
+                node.skeleton.parent=node
+                skeleton_all.push([node.name,node.skeleton])
+                // skeleton_all.push([index0+"."+node.name,node.skeleton])
+                index0++
+            }  
+        })
+        // for(var i=0;i<skeleton_all.length;i++){
+        //     console.log(skeleton_all[i][1].parent.name)
+        //     skeleton_all[i][1].parent.visible=false
+        // }
+        // skeleton_all[0][1].parent.visible=true
+        console.log("skeleton_all",skeleton_all)
+        return skeleton_all
+    }
+    function exportGltf(scene,fileName,cb){
+        new THREE.GLTFExporter().parse(scene, function (result) {
+            var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+            let link = document.createElement('a')
+            link.href = URL.createObjectURL(myBlob)
+            link.download = fileName
+            link.click()
+            if(cb)cb()
+        })
+    }
+    function play(glb,animation,skeleton,name,n,cb){
+        console.log("该模型的骨骼个数为:",skeleton.bones.length)
+        // var animation=glb.animations[0];
+        var times=animation.tracks[0].times;
+        var time_all=times[times.length-1]//该动画的的总时长
+        var mixer = new THREE.AnimationMixer(glb.scene);//new THREE.AnimationMixer(skeleton.parent);//
+        var action=mixer.clipAction(animation);
+        action.play();
+
+        var boneMatrice=[]
+        var t=0;
+        mixer.update(animation.tracks[0].times[t]);
+        var interval=setInterval(function () {
+            if(t<n){
+                // console.log(time,n)
+                mixer.update(time_all/n);//时间增量
+                for(var i=0;i<skeleton.bones.length;i++)
+                    for(var j=0;j<4;j++)//4行
+                        for(var k=0;k<3;k++)//3列
+                            boneMatrice.push(skeleton.boneMatrices[16*i+4*j+k])
+                t++;
+            }else{
+                clearInterval(interval)
+                var result={
+                    "config":[boneMatrice.length],
+                    "frameNumber": n,
+	                "boneNumber": skeleton.bones.length,
+                    "animation":[boneMatrice]
+                }
+
+                var str=JSON.stringify(result , null, "\t")
+
+                var link = document.createElement('a');
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
+                link.download =name//"crowdData_male.json";
+                link.click();
+                
+                if(cb)cb()
+            }
+        },30)
+    }
+</script>
+
+</body>
+</html>

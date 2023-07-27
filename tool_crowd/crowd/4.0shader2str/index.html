@@ -1,0 +1,41 @@
+<script type="module">
+    var path_real="shader/"
+    var path_virturl="./assets/shader/"
+    var names=[
+        "frag_lights_physical_pars_fragment_Scattering.glsl",
+        "frag_lights_physical_pars_fragment_Specular.glsl",
+        "frag_MeshStandardMaterial.glsl",
+        "vert_anim.glsl",
+        "vert_anim_sim.glsl",
+        "vert_MeshStandardMaterial.glsl"
+    ]
+    window.my_shader={}
+    function loadShader(name) {
+        return new Promise((resolve, reject) => {
+
+            let xhr = new XMLHttpRequest();
+            xhr.onload =  () => {
+                resolve(xhr.responseText)
+                window.my_shader[path_virturl+name]=xhr.responseText
+            };
+            xhr.onerror =  event => reject(event);
+            xhr.open('GET', path_real+name);
+            xhr.overrideMimeType("text/html;charset=utf-8");
+            xhr.send();
+        })
+    }
+    async function start(){
+        for(var i=0;i<names.length;i++)
+            await loadShader(names[i])
+        console.log(window.my_shader)
+
+        var str=JSON.stringify( window.my_shader, null, "\t")
+        var link = document.createElement('a');
+        link.style.display = 'none';
+        document.body.appendChild(link);
+        link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
+        link.download =name?name:"shader.json";
+        link.click();
+    }
+    start()
+</script>
