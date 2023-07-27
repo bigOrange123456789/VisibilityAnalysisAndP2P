@@ -46,14 +46,14 @@ export class Main{
         this.initWander()
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        this.building=new Building(this.scene,this.camera)
+        // this.building=new Building(this.scene,this.camera)
 
         this.loadJson(
             "LoadingProgressive/pos.json",
             data=>{
                 // setTimeout(()=>{
                 //     console.log("data",data)
-                new TreeManager(self.scene).init(data) 
+                // new TreeManager(self.scene).init(data) 
                 // })
                 // if(typeof AvatarManager!=="undefined")
                     new AvatarManager(self.scene,self.camera,data)

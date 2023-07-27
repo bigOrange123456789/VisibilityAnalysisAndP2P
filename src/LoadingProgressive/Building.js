@@ -651,7 +651,7 @@ class Tool{
             this.building.parentGroup.children[i].visible=true
         }
         const arr=this.getMeshList()
-        const result=[]
+        // const result=[]
         const direction=new THREE.Vector3(0,-100,0)
         const n=150
         const m=150

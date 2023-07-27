@@ -11,83 +11,8 @@ export class AvatarManager {
         this.scene = scene
         this.camera = camera
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
-        // this.row_index = 0; //在梯形看台中计算当前人物所在看台行数(貌似含义和小看台中正好相反)
-        // this.sum_count = 0; //当前row_index前面行的人数总和
-        // this.row_count = 0; //当前行的可放置人数
-        this.initPos2()//this.initPos_test()//this.initPos_old()
+        this.initPos_test()//this.initPos_test()//this.initPos_old()
         this.init()//this.init_test()//
-    }
-    initPos_old(){
-        this.poslist=[]
-        let c={
-            "x": [
-                -124000,
-                126000,
-                2000
-            ],
-            "y": [
-                -1530.26+3000,
-                -1530.26+3000,
-                2000
-            ],
-            "z": [
-                -3000,
-                        15000,
-                        2000
-            ],
-        }
-        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
-                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-                    this.poslist.push([x,y,z])
-                }
-                
-                c={
-                    "x": [
-                        -124000,
-                        126000,
-                        2000
-                    ],
-                    "y": [
-                        -7430.26+4000,
-                        -7430.26+4000,
-                        2000
-                    ],
-                    "z": [
-                        -3000,
-                        15000,
-                        2000
-                    ],
-                }
-                for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-                    for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
-                        for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-                            this.poslist.push([x,y,z])
-                        }
-            
-                        c={
-                            "x": [
-                                -124000,
-                                126000,
-                                2000
-                            ],
-                            "y": [
-                                -12230.26+3500,
-                                -12230.26+3500,
-                                2000
-                            ],
-                            "z": [
-                                -3000,
-                                15000,
-                                2000
-                            ],
-                        }
-                        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-                            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
-                                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-                                    this.poslist.push([x,y,z])
-                                }
-
     }
     initPos_subway(){
         this.poslist=[]
@@ -115,39 +40,6 @@ export class AvatarManager {
                 }
 
     }
-    initPos(){
-        this.poslist=[]
-        let c={
-            "x": [
-                -100,
-                100,
-                5
-            ],
-            // "y": [
-            //     0,
-            //     1,
-            //     1
-            // ],
-            "z": [
-                -100,
-                100,
-                5
-            ],
-        }
-        // for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-        //         for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-        //             this.poslist.push([x,5.5,z])
-        //         }
-        for(let x=0;x<40;x++)
-                for(let z=0;z<=40;z++){
-                    this.poslist.push([(x-4*5)*20,5.5,(z-4*5)*20])
-                }
-        // this.poslist=[
-        //     [0,10,0]
-        // ]
-        // console.log(this.poslist)
-
-    }
     initPos2(){
         this.poslist=[]
         const list=[
@@ -156,7 +48,6 @@ export class AvatarManager {
 
         for(let cid of list){
             const arr=this.posConfig[cid+""]
-            console.log(arr,cid)
             if(arr)
             for(let i=0;i<arr.length/2;i++){
                 const x=arr[2*i]
@@ -170,48 +61,47 @@ export class AvatarManager {
         this.poslist=[]
         let c={
             "x": [
-                -121000,
-                117000,
-                2000
-            ],
-            "y": [
-                2286,
-                2286,
-                2000
+                -100,
+                100,
+                10
             ],
             "z": [
-                -4000,
-                16000,
-                2000
+                -100,
+                100,
+                10
             ],
         }
         for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
-            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-                    this.poslist.push([x,y,z])
+                    this.poslist.push([x,0,z])
                 }
+        console.log(this.poslist.length)
 
     }
     getConfig(){
         const config=conifg_woman01
         for(let i=0;i<config.length;i++){
             let c1=config[i]
-
-            // for(let j=0;j<c1.path.length;j++)
-            //     c1.path[j]       =c1.path[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
-            // for(let j=0;j<c1.pathTexture.length;j++)
-            //     c1.pathTexture[j]=c1.pathTexture[j].replace(new RegExp("assets/","gm"),"assets/avatar/")
-            // c1.pathAnima=c1.pathAnima.replace(new RegExp("assets/","gm"),"assets/avatar/")
+            c1.scale=2
             
-            c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
-            c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
-            c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
+            // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
+            // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
+            // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
 
-            c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
-            c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
-            c1.lod_avatarCount=[ 1640, 900/2, 3240/2, 8800/2, 12600/2]
+            c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
+            c1.lod_geometry=[ 19, 15,  7,  2,   1,   0 ]
+            // c1.lod_avatarCount=[ 1640, 900/2, 3240/2, 8800/2, 12600/2]
+            c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
+
+
+            c1.lod_distance=[ 100, 200,  ]
+            c1.lod_geometry=[ 19,   1 ]
+            c1.lod_avatarCount=[ 500,500]
+            for(let i=0;i<c1.lod_distance.length;i++){
+                c1.lod_distance[i]*=c1.scale
+            }
         }
-        console.log(config)
+        // console.log(config)
         return config[0]
     }
     init() {
@@ -224,19 +114,13 @@ export class AvatarManager {
         new GLTFLoader().load(c.path+"sim.glb", async (glb0) => {
             glb0.scene.traverse(o=>{
                 if(o instanceof THREE.Mesh){
-                    // console.log(o.material)
                     o.material.metalness=0.25//0.5
                     o.material.roughness=0//0.5
-                    // console.log(o.name)
                     if(o.name=="CloW_A_xiezi_geo")o.visible=false
                     if(
-                        //o.name=="head"||
-                    // o.name=="CloW_A_body_geo"
                     o.name=="hair"
                     ){
                         o.material.side=2
-                        // console.log(o)
-                        //o.material.scattering=true
                     }
                     if(
                         o.name=="CloM_B_body_geo2"||
@@ -244,12 +128,6 @@ export class AvatarManager {
                     ){
                         o.material.scattering=true
                     }
-                    // if(o.name=="CloW_C_body_geo1"){
-                    //     o.material.color.r=0.7
-                    //     o.material.color.g=1.
-                    //     o.material.color.b=1.
-
-                    // }
                 }
             })
             process([glb0.scene],0)
@@ -272,11 +150,7 @@ export class AvatarManager {
                 useColorTag:  c.useColorTag
             })
             for (var i00 = 0; i00 < crowd.count; i00++) {
-                const p=self.poslist[i00]//[i00*1500-50,100,0]
-                // crowd.setPosition(i00,[
-                //     p[0]+(2*Math.random()-1)*500,
-                //     p[1]-2000,
-                //     p[2]+(2*Math.random()-1)*500])
+                const p=self.poslist[i00]
                 crowd.setPosition(i00,[
                     p[0],//+(2*Math.random()-1)*5,
                     p[1],
@@ -294,9 +168,9 @@ export class AvatarManager {
                 //     -900*(1-0.2+0.2*Math.random()),
                 //     900])
                 crowd.setScale(i00, [
-                    2,
-                    2,//*(1-0.2+0.2*Math.random()),
-                    2])
+                    c.scale,
+                    c.scale,//*(1-0.2+0.2*Math.random()),
+                    c.scale])
                 crowd.setObesity(i00, 0.8+0.4*Math.random())
                 const j=10
                 crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")
