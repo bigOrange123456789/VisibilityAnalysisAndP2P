@@ -1,6 +1,6 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Crowd } from '../../lib/crowd/Crowd.js'//let Crowd=Pack// 
-import conifg_woman01     from '../../config/avatar/sceneConifg_woman01.json'
+import conifg_woman01     from '../../config/avatar/sceneConifg_woman0.json'
 import * as THREE from "three"
 export class AvatarManager {
     constructor(scene, camera,posConfig) {
@@ -103,171 +103,155 @@ export class AvatarManager {
         // console.log(config)
         return config[0]
     }
-    loadMaterial(path,cb){
+    adjustParam(group){
+        group.traverse(o=>{
+            if(o instanceof THREE.Mesh){
+                // o.material.metalness=0.1//0.5
+                // o.material.roughness=0.5//0.5
+                if(o.name=="CloW_A_xiezi_geo")o.visible=false
+                if(o.name=="hair"){
+                    o.material.side=2
+                }
+                if(
+                    o.name=="CloM_B_body_geo2"||
+                    o.name=="CloM_C_head_geo"
+                ){
+                    o.material.scattering=true
+                }
+            }
+        })
+    }
+    async loadMaterial_json(path){
+        const self=this
         function json2obj(j,o){
             for(let t in j.base){
                 o[t]=j.base[t]
             }
             return o
         }
-        window.loadJson(path,(data)=>{
-            console.log(data)
-            const group=new THREE.Group()
-            for(let t in data){
-                const v=data[t]
+        return new Promise((resolve, reject) => {
+            window.loadJson(path,data=>{
+                console.log(data)
+                const group=new THREE.Group()
+                for(let t in data){
+                    const v=data[t]
 
-                const mesh=new THREE.Mesh()
-                mesh.geometry=new THREE.BufferGeometry()
-                for(let tag of ["position","skinIndex","skinWeight","uv","normal"])
-                    mesh.geometry.attributes[tag]=new THREE.BufferAttribute(new Float32Array([]),3)         
-                mesh.name=t
-                mesh.skeleton={bones:{
-                    length:v.lenb
-                }}
-                mesh.material=new THREE[v.type]()
-   
-                json2obj(v,mesh.material)
-                for(let i in v.text){
-                    mesh.material[i]=new THREE.Texture()//{}
-                    json2obj(v.text[i],mesh.material[i])
+                    const mesh=new THREE.Mesh()
+                    mesh.geometry=new THREE.BufferGeometry()
+                    for(let tag of ["position","skinIndex","skinWeight","uv","normal"])
+                        mesh.geometry.attributes[tag]=new THREE.BufferAttribute(new Float32Array([]),3)         
+                    mesh.name=t
+                    mesh.skeleton={bones:{
+                        length:v.lenb
+                    }}
+                    mesh.material=new THREE[v.type]()
+    
+                    json2obj(v,mesh.material)
+                    for(let i in v.text){
+                        mesh.material[i]=new THREE.Texture()//{}
+                        json2obj(v.text[i],mesh.material[i])
+                    }
+                    console.log(mesh.material,v.text)
+                    group.add(mesh)
                 }
-                console.log(mesh.material,v.text)
-                group.add(mesh)
-            }
-            cb(group)//return group
+                self.adjustParam(group)
+                resolve(group)//cb(group)//return group
+            })
         })
     }
-    init() {
+    async loadMaterial_glb(path){//c.path+"sim.glb"
+        const self=this
+        return new Promise((resolve, reject) => {
+            new GLTFLoader().load(path, (glb0) => {
+                self.adjustParam(glb0.scene)
+                // resolve(glb0.scene)// process([glb0.scene],0)
+                var test=new THREE.Group()
+                console.log(glb0.scene,"glb0.scene")
+                glb0.scene.traverse(i=>{
+                    if(i instanceof THREE.Mesh){
+                        const material1=i.material
+                        const material2=new THREE[material1.constructor.name]()
+                        for(let t in material1){
+                            const v=material1[t]
+                            if(
+                                typeof(v)=="number"
+                                ||typeof(v)=="boolean"
+                                ||typeof(v)=="string"&&v!=="uuid"){
+                                material2[t]=v
+                            }
+                            if(v instanceof THREE.Color){
+                                material2[t]=v
+                            }
+                            if(v instanceof THREE.Vector2){
+                                material2[t]=v
+                            }
+                            window.material=material1
+                            // if(v!=="uuid"){
+                            //     material2[t]=v
+                            // }
+                        }
+                        for(let t of [
+                            'map'
+                        ]){
+                            material2[t]=material1[t]
+                        }
+                        material2.map=new THREE.Texture()
+                        for(let t of['flipY']){
+                            material2.map[t]=material1.map[t]
+                        }
+
+                        const mesh=new THREE.Mesh()
+                        mesh.geometry=new THREE.BufferGeometry()
+                        for(let tag of ["position","skinIndex","skinWeight","uv","normal"])
+                            mesh.geometry.attributes[tag]=new THREE.BufferAttribute(new Float32Array([]),3)         
+                        mesh.material=material1//i.material
+                        mesh.name=i.name
+                        mesh.skeleton={bones:{
+                            length:i.skeleton.bones.length
+                        }}
+                        /////////////////////////////////////////////////////////////
+                        const material={}
+                        for(let t in i.material){
+                            const v=i.material[t]
+                            if(
+                                typeof(v)=="number"
+                                ||typeof(v)=="boolean"
+                                ||typeof(v)=="string"&&v!=="uuid"){
+                                material[t]=v
+                            }
+                            if(v instanceof THREE.Color){
+                                material[t]=[v.r,v.g,v.b]
+                            }
+                            // console.log(t,v.r,v.g,v.b])
+                        
+                        }
+                        
+                        // console.log(material)
+                        /////////////////////////////////////////////////////////////
+                        test.add(mesh)
+                    }
+                })
+                resolve(test)//process([test],0)
+            })
+        })
+    }
+
+    async init() {
         function r(arr){
             const randomIndex = Math.floor(Math.random() * arr.length)
             return arr[randomIndex]
         }
         const c=this.getConfig()
         const self = this
-        self.loadMaterial(c.path+"material.json",group=>{
-            group.traverse(o=>{
-                if(o instanceof THREE.Mesh){
-                    o.material.metalness=0.25//0.5
-                    o.material.roughness=0//0.5
-                    if(o.name=="CloW_A_xiezi_geo")o.visible=false
-                    if(o.name=="hair"){
-                        o.material.side=2
-                    }
-                    if(
-                        o.name=="CloM_B_body_geo2"||
-                        o.name=="CloM_C_head_geo"
-                    ){
-                        o.material.scattering=true
-                    }
-                }
-            })
-            process([group],0)
+        
+        Promise.all(
+            Array.from(Array(c.path.length)).map((_, i) => 
+                self.loadMaterial_glb(c.path[i]+"sim.glb")
+                // self.loadMaterial_json(c.path[i]+"material.json")
+            )
+        ).then(res => {
+            process(res) // 10
         })
-        // new GLTFLoader().load(c.path+"sim.glb", async (glb0) => {
-        //     glb0.scene.traverse(o=>{
-        //         if(o instanceof THREE.Mesh){
-        //             o.material.metalness=0.25//0.5
-        //             o.material.roughness=0//0.5
-        //             if(o.name=="CloW_A_xiezi_geo")o.visible=false
-        //             if(o.name=="hair"){
-        //                 o.material.side=2
-        //             }
-        //             if(
-        //                 o.name=="CloM_B_body_geo2"||
-        //                 o.name=="CloM_C_head_geo"
-        //             ){
-        //                 o.material.scattering=true
-        //             }
-        //         }
-        //     })
-        //     // process([glb0.scene],0)
-            
-        //     var test=new THREE.Group()
-        //     console.log(glb0.scene,"glb0.scene")
-        //     glb0.scene.traverse(i=>{
-        //         if(i instanceof THREE.Mesh){
-        //             const material1=i.material
-        //             const material2=new THREE[material1.constructor.name]()
-        //             for(let t in material1){
-        //                 const v=material1[t]
-        //                 if(
-        //                     typeof(v)=="number"
-        //                     ||typeof(v)=="boolean"
-        //                     ||typeof(v)=="string"&&v!=="uuid"){
-        //                     material2[t]=v
-        //                 }
-        //                 if(v instanceof THREE.Color){
-        //                     material2[t]=v
-        //                 }
-        //                 if(v instanceof THREE.Vector2){
-        //                     material2[t]=v
-        //                 }
-        //                 window.material=material1
-        //                 // if(v!=="uuid"){
-        //                 //     material2[t]=v
-        //                 // }
-        //             }
-        //             // for(let t of [
-        //             //      'map'
-        //             // ]){
-        //             //     material2[t]=material1[t]
-        //             //     window.map=material1[t]
-        //             // }
-        //             material2.map=new THREE.Texture()
-        //             // console.log()
-        //             for(let t of[
-
-                        
-        //                 // 'premultiplyAlpha', 
-        //                 'flipY', 
-                        
-        //             ]){
-        //                 material2.map[t]=material1.map[t]
-        //             }
-        //             // for(let i in v.base){
-        //             //     material2[i]=v.base[i]
-        //             // }
-        //             // for(let i in v.colo){
-        //             //     material2[i]=new THREE.Color({
-        //             //         r:v.colo[0],
-        //             //         g:v.colo[1],
-        //             //         b:v.colo[2]
-        //             //     })
-        //             // }
-
-        //             const mesh=new THREE.Mesh()
-        //             mesh.geometry=new THREE.BufferGeometry()
-        //             for(let tag of ["position","skinIndex","skinWeight","uv","normal"])
-        //                 mesh.geometry.attributes[tag]=new THREE.BufferAttribute(new Float32Array([]),3)         
-        //             mesh.material=material2//i.material
-        //             mesh.name=i.name
-        //             mesh.skeleton={bones:{
-        //                 length:i.skeleton.bones.length
-        //             }}
-        //             /////////////////////////////////////////////////////////////
-        //             const material={}
-        //             for(let t in i.material){
-        //                 const v=i.material[t]
-        //                 if(
-        //                     typeof(v)=="number"
-        //                     ||typeof(v)=="boolean"
-        //                     ||typeof(v)=="string"&&v!=="uuid"){
-        //                     material[t]=v
-        //                 }
-        //                 if(v instanceof THREE.Color){
-        //                     material[t]=[v.r,v.g,v.b]
-        //                 }
-        //                 // console.log(t,v.r,v.g,v.b])
-                       
-        //             }
-                    
-        //             // console.log(material)
-        //             /////////////////////////////////////////////////////////////
-        //             test.add(mesh)
-        //         }
-        //     })
-        //     process([test],0)
-        // })
         function process(scenes){
             var crowd = new Crowd({
                 camera: self.camera,
@@ -280,9 +264,15 @@ export class AvatarManager {
                 lod_geometry:  c.lod_geometry,
                 lod_visible: c.lod_visible,
                 meshType: c.meshType,
-                pathLodGeo: [c.path+"LOD/"],
+                pathLodGeo: 
+                    Array.from(Array(c.path.length)).map((_, i) => 
+                        c.path[i]+"LOD/"
+                    ),//[c.path+"LOD/"],
                 pathTexture: c.pathTexture,
-                pathTextureConfig: [c.path+"texture_names.json"],
+                pathTextureConfig: 
+                    Array.from(Array(c.path.length)).map((_, i) => 
+                        c.path[i]+"texture_names.json"
+                    ),//[c.path+"texture_names.json"],
                 useColorTag:  c.useColorTag
             })
             for (var i00 = 0; i00 < crowd.count; i00++) {

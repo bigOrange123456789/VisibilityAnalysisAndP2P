@@ -217,7 +217,7 @@ export class Building{
             // mesh.material.depthTest=true
             mesh.material.depthWrite=true
             // mesh.material.transparent=false
-            mesh.material.side=0//THREE.DoubleSide
+            ////mesh.material.side=0//THREE.DoubleSide
         }
         // if(mesh.material.transparent)console.log(id)
         // mesh.material=new THREE.MeshStandardMaterial({

@@ -1,10 +1,10 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import * as THREE from "three"
 class AvatarManager {
-    constructor() {
+    constructor(path) {
         this.result={
         }
-        this.init()
+        this.init(path)
     }
     extract(obj){
         const type=obj.constructor.name
@@ -34,9 +34,9 @@ class AvatarManager {
             // 'vec2':vec2,
         }
     }
-    init() {
+    init(path) {
         const self=this
-        const path="assets/avatar/sim/woman01/sim.glb"
+        // const path="assets/avatar/sim/woman01/sim.glb"
         new GLTFLoader().load(path, async (glb0) => {
             console.log(glb0)
             // return 
@@ -121,4 +121,5 @@ class AvatarManager {
         link.click()
     }
 }
-new AvatarManager()
+// new AvatarManager("temp/woman01.gltf")
+new AvatarManager("assets/avatar/sim/woman01/sim.glb")

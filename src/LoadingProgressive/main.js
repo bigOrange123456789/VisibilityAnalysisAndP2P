@@ -28,6 +28,7 @@ import { TreeBuilder } from "./TreeBuilder";
 export class Main{
     addTool(obj){
         obj.loadJson=(path,cb)=>{
+            console.log(path)
             var xhr = new XMLHttpRequest()
             xhr.open('GET', path, true)
             xhr.send()
