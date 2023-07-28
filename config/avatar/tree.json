@@ -1,0 +1,42 @@
+[
+    { 
+        "path": [
+            "assets/avatar/sim/tree/"
+        ],
+
+        "pathTexture":[
+            "./assets/avatar/textures_sim1/tree/"
+        ],
+        "meshType":[
+            {
+
+                "Mesh_0": "leaf",
+                "Mesh_1": "branch"
+            }
+        ],
+        "lod_visible": [
+            {
+                "Mesh_0": 5,
+                "Mesh_1": 5
+                
+            }
+        ],
+        "useColorTag": [
+            "Mesh_1"
+        ],
+        
+
+        "walkAnimationList": [
+        ],
+        "sitAnimationList": [
+        ],
+        "standAnimationList": [
+        ],
+        "pathAnima":  null ,
+
+
+        "lod_distance":[ 5,   15,   30,    60,  100 ],
+        "lod_geometry":    [ 20,  15,   1,    0,   0  ],
+        "lod_avatarCount": [ 200, 900, 3240,  8800, 12600]
+    }
+]

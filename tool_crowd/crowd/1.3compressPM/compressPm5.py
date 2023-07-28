@@ -58,28 +58,30 @@ class Mesh:
                 array1.append(i['aUV'][0])
                 array1.append(i['aUV'][1])
 
-                array1.append(i['aSkinWeight'][0])
-                array1.append(i['aSkinWeight'][1])
-                array1.append(i['aSkinWeight'][2])
-                array1.append(i['aSkinWeight'][3])
+                if i['aSkinWeight']:
+                    array1.append(i['aSkinWeight'][0])
+                    array1.append(i['aSkinWeight'][1])
+                    array1.append(i['aSkinWeight'][2])
+                    array1.append(i['aSkinWeight'][3])
 
-                array1.append(i['aSkinIndex'][0])
-                array1.append(i['aSkinIndex'][1])
-                array1.append(i['aSkinIndex'][2])
-                array1.append(i['aSkinIndex'][3])
+                    array1.append(i['aSkinIndex'][0])
+                    array1.append(i['aSkinIndex'][1])
+                    array1.append(i['aSkinIndex'][2])
+                    array1.append(i['aSkinIndex'][3])
 
                 array1.append(i['bUV'][0])
                 array1.append(i['bUV'][1])
 
-                array1.append(i['bSkinWeight'][0])
-                array1.append(i['bSkinWeight'][1])
-                array1.append(i['bSkinWeight'][2])
-                array1.append(i['bSkinWeight'][3])
+                if i['bSkinWeight']:
+                    array1.append(i['bSkinWeight'][0])
+                    array1.append(i['bSkinWeight'][1])
+                    array1.append(i['bSkinWeight'][2])
+                    array1.append(i['bSkinWeight'][3])
 
-                array1.append(i['bSkinIndex'][0])
-                array1.append(i['bSkinIndex'][1])
-                array1.append(i['bSkinIndex'][2])
-                array1.append(i['bSkinIndex'][3])
+                    array1.append(i['bSkinIndex'][0])
+                    array1.append(i['bSkinIndex'][1])
+                    array1.append(i['bSkinIndex'][2])
+                    array1.append(i['bSkinIndex'][3])
 
                 array1.append(array2length)
                 array1.append(array3length)

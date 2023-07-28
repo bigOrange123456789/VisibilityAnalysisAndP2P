@@ -1,5 +1,7 @@
 classdef MeshJson < handle
     properties
+        isSkinnedMesh
+
         flag0
         V%��  nv*3
         E%��  ne*3 
@@ -122,8 +124,13 @@ classdef MeshJson < handle
             o.V=reshape(data.position,3,[])';
             o.F=reshape(data.index,3,[])'+1;
             o.uv=reshape(data.uv,2,[])';
-            o.skinWeight=reshape(data.skinWeight,4,[])';
-            o.skinIndex=reshape(data.skinIndex,4,[])';  %'
+            
+            o.isSkinnedMesh=isfield(data, 'skinWeight');%判断是skinnedmesh还是普通mesh
+            if o.isSkinnedMesh
+                o.skinWeight=reshape(data.skinWeight,4,[])';
+                o.skinIndex=reshape(data.skinIndex,4,[])';  
+            end
+            
             
             %{
             %%#####测试案例########
@@ -189,12 +196,18 @@ classdef MeshJson < handle
             o.record(i).cPos=cPos;
 
             o.record(i).aUV=o.uv(aI,:);
-            o.record(i).aSkinWeight=o.skinWeight(aI,:);
-            o.record(i).aSkinIndex=o.skinIndex(aI,:);
+            if isfield(o, 'skinWeight')%判断是skinnedmesh还是普通mesh
+                o.record(i).aSkinWeight=o.skinWeight(aI,:);
+                o.record(i).aSkinIndex=o.skinIndex(aI,:); 
+            end
+            
 
             o.record(i).bUV=o.uv(bI,:);
-            o.record(i).bSkinWeight=o.skinWeight(bI,:);
-            o.record(i).bSkinIndex=o.skinIndex(bI,:);
+            if isfield(o, 'skinWeight')%判断是skinnedmesh还是普通mesh
+                o.record(i).bSkinWeight=o.skinWeight(bI,:);
+                o.record(i).bSkinIndex=o.skinIndex(bI,:);
+            end
+            
 
             f=zeros(size(o.F));
             f(:)=o.F(:);
@@ -355,20 +368,31 @@ classdef MeshJson < handle
             skinWeight=skinWeight';
             skinIndex=skinIndex';
             index=o.F'-1;
-            data=struct( ... 
-                'position', position(:)', ... 
-                'uv', uv(:)', ... 
-                'skinWeight', skinWeight(:)', ... 
-                'skinIndex', skinIndex(:)', ... 
-                'index',index(:)'...
-            );
+            if o.isSkinnedMesh
+                data=struct( ... 
+                    'position', position(:)', ... 
+                    'uv', uv(:)', ... 
+                    'skinWeight', skinWeight(:)', ... 
+                    'skinIndex', skinIndex(:)', ... 
+                    'index',index(:)'...
+                );
+            else
+                data=struct( ... 
+                    'position', position(:)', ... 
+                    'uv', uv(:)', ... 
+                    'index',index(:)'...
+                );
+            end
             %data=savejson(data);
         end
         function data=getJson2(o)
             
             uv0=o.uv;
-            skinWeight0=o.skinWeight;
-            skinIndex0=o.skinIndex;
+            if o.isSkinnedMesh
+                skinWeight0=o.skinWeight;
+                skinIndex0=o.skinIndex;
+            end
+            
 
             uv=zeros(o.nv2(),2);
             skinWeight=zeros(o.nv2(),4);
@@ -377,26 +401,42 @@ classdef MeshJson < handle
             for i =1:o.nv2()
                 j=o.list2(i);
                 uv(i,:)=uv0(j,:);
-                skinWeight(i,:)=skinWeight0(j,:);
-                skinIndex(i,:) =skinIndex0(j,:);
+                if o.isSkinnedMesh
+                    skinWeight(i,:)=skinWeight0(j,:);
+                    skinIndex(i,:) =skinIndex0(j,:);
+                end
             end
 
             
             index=o.recF'-1;  %o.F'-1;
             position=o.recV';   %o.V';
             uv=uv';
-            skinWeight=skinWeight';
-            skinIndex=skinIndex';
+            if o.isSkinnedMesh
+                skinWeight=skinWeight';
+                skinIndex=skinIndex';
+            end
             
-            data=struct( ... 
-                'position', position(:)', ... 
-                'uv', uv(:)', ... 
-                'skinWeight', skinWeight(:)', ... 
-                'skinIndex', skinIndex(:)', ... 
-                'index',index(:)', ...
-                'vId',o.list2', ... %'
-                'fId',o.listF ...
-            );
+            
+            if o.isSkinnedMesh
+                data=struct( ... 
+                    'position', position(:)', ... 
+                    'uv', uv(:)', ... 
+                    'skinWeight', skinWeight(:)', ... 
+                    'skinIndex', skinIndex(:)', ... 
+                    'index',index(:)', ...
+                    'vId',o.list2', ... %'
+                    'fId',o.listF ...
+                );
+            else
+                data=struct( ... 
+                    'position', position(:)', ... 
+                    'uv', uv(:)', ... 
+                    'index',index(:)', ...
+                    'vId',o.list2', ... %'
+                    'fId',o.listF ...
+                );
+            end
+            
             %data=savejson(data);
         end
         function downloadJson(o)

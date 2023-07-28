@@ -34,68 +34,36 @@ class AvatarManager {
             // 'vec2':vec2,
         }
     }
+    adjustParam(group){
+        group.traverse(o=>{
+            if(o instanceof THREE.Mesh){
+                // o.material.metalness=0.1//0.5
+                // o.material.roughness=0.5//0.5
+                // if(o.name=="CloW_A_xiezi_geo")o.visible=false
+                if(o.name=="hair"){
+                    o.material.side=2
+                }
+                if(
+                    o.name=="CloM_B_body_geo2"||
+                    o.name=="CloM_C_head_geo"
+                ){
+                    o.material.scattering=true
+                }
+            }
+        })
+    }
     init(path) {
         const self=this
         // const path="assets/avatar/sim/woman01/sim.glb"
         new GLTFLoader().load(path, async (glb0) => {
             console.log(glb0)
-            // return 
-            glb0.scene.traverse(o=>{
-                if(o instanceof THREE.Mesh){
-                    // o.material.metalness=0.25//0.5
-                    // o.material.roughness=0//0.5
-                    // if(o.name=="CloW_A_xiezi_geo")o.visible=false
-                    if(
-                    o.name=="hair"
-                    ){
-                        o.material.side=2
-                    }
-                    if(
-                        o.name=="CloM_B_body_geo2"||
-                        o.name=="CloM_C_head_geo"
-                    ){
-                        o.material.scattering=true
-                    }
-                }
-            })
+            self.adjustParam(glb0.scene)
 
             const material={}
             glb0.scene.traverse(i=>{
                 if(i instanceof THREE.Mesh){
-                    /////////////////////////////////////////////////////////////
-                    // const mesh=new THREE.Mesh()
-                    // mesh.geometry=new THREE.BufferGeometry()
-                    // for(let tag of ["position","skinIndex","skinWeight","uv","normal"])
-                    //     mesh.geometry.attributes[tag]=new THREE.BufferAttribute(new Float32Array([]),3)         
-                    // mesh.material=i.material
-                    // mesh.name=i.name
-                    // mesh.skeleton={bones:{
-                    //     length:i.skeleton.bones.length
-                    // }}
-                    /////////////////////////////////////////////////////////////
-                    // const material_base={}
-                    // const material_color={}
-                    // for(let t in i.material){
-                    //     const v=i.material[t]
-                    //     if(
-                    //         typeof(v)=="number"
-                    //         ||typeof(v)=="boolean"
-                    //         ||typeof(v)=="string"&&v!=="uuid"){
-                    //         material_base[t]=v
-                    //     }
-                    //     if(v instanceof THREE.Color){
-                    //         material_color[t]=[v.r,v.g,v.b]
-                    //     }
-                    // }
-                    // material[i.name]={
-                    //     'type':i.material.constructor.name,
-                    //     'base':material_base,
-                    //     'colo':material_color,
-                    //     'lenb':i.skeleton.bones.length
-                    // }
-                    /////////////////////////////////////////////////////////////
-
                     const temp=self.extract(i.material)
+                    if(i.skeleton)
                     temp['lenb']=i.skeleton.bones.length
                     temp['text']={}
                     for(let t in i.material){
@@ -122,4 +90,5 @@ class AvatarManager {
     }
 }
 // new AvatarManager("temp/woman01.gltf")
-new AvatarManager("assets/avatar/sim/woman01/sim.glb")
+// new AvatarManager("assets/avatar/sim/woman01/sim.glb")
+new AvatarManager("assets/avatar/sim/tree/sim.glb")
