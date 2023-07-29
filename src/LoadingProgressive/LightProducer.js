@@ -65,9 +65,9 @@ class LightProducer{
     init(scene){
         // Lights 
         const x=3.//0.5
-        const ambient = new THREE.AmbientLight( 0xffffff ,0.8);//new THREE.AmbientLight( 0xffffff ,.8);
+        const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
-        scene.add( ambient );
+        // scene.add( ambient );
         // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
@@ -86,6 +86,7 @@ class LightProducer{
         directionalLight.shadow.camera.bottom = -100 //最下面
         //告诉平行光需要开启阴影投射
         directionalLight.castShadow = true
+        // alert(directionalLight.shadowDarkness)
         // directionalLight.shadow.bias = -0.0005;
         directionalLight.shadow.mapSize.width = 4*2048; 
         directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512

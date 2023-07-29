@@ -148,7 +148,6 @@ export class UI{
         
     }
     control_light(directionalLight, ambient, csm) {
-        console.log(csm)
         const gui=this.gui
         const params=this.params
         var directionFolder = gui.addFolder('光照');

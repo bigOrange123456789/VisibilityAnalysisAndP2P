@@ -20,9 +20,7 @@ import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { TreeManager } from "./TreeManager";
-
-import CSM from 'three-csm';
-THREE.CSM = CSM;
+import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
 
 import { TreeBuilder } from "./TreeBuilder";
 export class Main{
@@ -61,7 +59,7 @@ export class Main{
         this.initWander()
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        this.building=new Building(this.scene,this.camera)
+        // this.building=new Building(this.scene,this.camera)
 
         this.loadJson(
             "LoadingProgressive/pos.json",
@@ -195,7 +193,7 @@ export class Main{
     }
 
     initCSM() {
-        this.csm = new THREE.CSM({
+        this.csm = new CSM({
             maxFar: this.camera.far,
             cascades: 2,
             shadowMapSize: 1024,
@@ -206,12 +204,7 @@ export class Main{
         });
         let material = new THREE.MeshPhongMaterial(); // works with Phong and Standard materials
         this.csm.setupMaterial(material); // must be called to pass all CSM-related uniforms to the shader
-        //this.csm.lightIntensity = 1000;
-
-        // let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
-        // mesh.castShadow = true;
-        // mesh.receiveShadow = true;
-        // this.scene.add(mesh);
+        
     }
     getCubeMapTexture(path) {
         var scope = this
@@ -236,8 +229,8 @@ export class Main{
         })
     }
     animate() {
-        this.csm.update(this.camera.matrix);
-        this.stats.update()
+        if(this.csm)this.csm.update(this.camera.matrix);
+        if(this.stats)this.stats.update()
         if(this.config.render!=="false"){
                 if(this.config.useIndirectMaterial){
                     this.scene.traverse(node=>{
@@ -272,6 +265,7 @@ export class Main{
         requestAnimationFrame(this.animate)
     }
     resize(){
+        return
         this.canvas.width = window.innerWidth;//this.body.clientWidth
         this.canvas.height = window.innerHeight;//this.body.clientHeight
         this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
