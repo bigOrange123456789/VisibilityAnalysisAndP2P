@@ -1,7 +1,7 @@
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { Crowd } from '../../lib/crowd/Crowd.js'//let Crowd=Pack// 
-import conifg_woman01     from '../../config/avatar/sceneConifg_woman0.json'
-// import conifg_woman01     from '../../config/avatar/tree.json'
+// import conifg_woman01     from '../../config/avatar/sceneConifg_woman0.json'
+import conifg_woman01     from '../../config/avatar/tree.json'
 import * as THREE from "three"
 export class AvatarManager {
     constructor(scene, camera,posConfig) {
