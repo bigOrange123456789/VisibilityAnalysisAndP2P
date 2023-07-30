@@ -1,5 +1,5 @@
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-import * as THREE from "three"
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+// import * as THREE from "three"
 class AvatarManager {
     constructor(path) {
         this.result={
@@ -55,7 +55,7 @@ class AvatarManager {
     init(path) {
         const self=this
         // const path="assets/avatar/sim/woman01/sim.glb"
-        new GLTFLoader().load(path, async (glb0) => {
+        new THREE.GLTFLoader().load(path, async (glb0) => {
             console.log(glb0)
             self.adjustParam(glb0.scene)
 
@@ -91,4 +91,5 @@ class AvatarManager {
 }
 // new AvatarManager("temp/woman01.gltf")
 // new AvatarManager("assets/avatar/sim/woman01/sim.glb")
-new AvatarManager("assets/avatar/sim/tree/sim.glb")
+// new AvatarManager("assets/avatar/sim/tree/sim.glb")
+new AvatarManager("./sim.glb")

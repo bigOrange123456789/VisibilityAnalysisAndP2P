@@ -59,7 +59,7 @@ export class Main{
         this.initWander()
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        // this.building=new Building(this.scene,this.camera)
+        this.building=new Building(this.scene,this.camera)
 
         this.loadJson(
             "LoadingProgressive/pos.json",
