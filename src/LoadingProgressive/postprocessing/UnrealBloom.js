@@ -25,7 +25,7 @@ export class UnrealBloom{
         
         this.camera=camera
         this.scene = scene
-        //this.renderer=renderer
+        this.renderer=renderer
         // this.renderTarget=new THREE.WebGLRenderTarget( window.innerWidth , window.innerHeight )
          this.composer=this.initComposer0(renderer)
         // this.composer2=this.initComposer2()
@@ -177,6 +177,8 @@ export class UnrealBloom{
         return saoPass
     }
     getSSR(){
+        // console.log(this.renderer,this.scene,this.camera)
+        
         const ssrPass = new SSRPass( {
             renderer:this.renderer,
             scene:this.scene,

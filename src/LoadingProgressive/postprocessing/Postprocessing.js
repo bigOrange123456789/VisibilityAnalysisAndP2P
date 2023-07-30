@@ -44,13 +44,11 @@ export class Postprocessing{
         //     this.unrealBloom.getTexture(),
         //     this.godrays.getTexture()
         // )  
-        //this.PostprocessingNew.render()
-        //this.renderer.render(this.scene, this.camera);
+        // this.PostprocessingNew.render()
+        // this.renderer.render(this.scene, this.camera);
         this.mix(
-
             this.PostprocessingNew.render(),//unrealBloom.getTexture(),
             this.godrays.getTexture()
-            
         )  
         // this.unrealBloom.render()//getTexture()    
     }

@@ -15,6 +15,8 @@ import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
 import{Postprocessing}from"./postprocessing/Postprocessing.js"
+// import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
+// const Postprocessing=PostprocessingNew
 import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
@@ -69,7 +71,7 @@ export class Main{
                 // new TreeManager(self.scene).init(data) 
                 // })
                 // if(typeof AvatarManager!=="undefined")
-                    new AvatarManager(self.scene,self.camera,data)
+                    // new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             }
         )

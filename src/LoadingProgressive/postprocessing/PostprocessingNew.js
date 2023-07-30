@@ -42,11 +42,11 @@ export class PostprocessingNew {
         )
 
         const texturePass = new TexturePass(this.texture);
-        const ssrPass = unrealBloom.getSSR()
-        const saoPass = unrealBloom.getSAO()
-        const ssaoPass = unrealBloom.getSSAO();
-        const mySSAOPass = new MySSAOPass(this.scene, this.camera, this.texture, window.innerWidth, window.innerHeight)
-        const bokehPass = unrealBloom.getDOF()
+        // const ssrPass = unrealBloom.getSSR()
+        // const saoPass = unrealBloom.getSAO()
+        // const ssaoPass = unrealBloom.getSSAO();
+        // const mySSAOPass = new MySSAOPass(this.scene, this.camera, this.texture, window.innerWidth, window.innerHeight)
+        // const bokehPass = unrealBloom.getDOF()
         const lutPass = unrealBloom.getLUT()
         
         this.composer.addPass(texturePass)
@@ -112,6 +112,7 @@ export class PostprocessingNew {
         this.composer.render();
         //this.renderer.clear();
         //this.composer2.render();
+        
         return this.composer.readBuffer.texture;
     }
 }
