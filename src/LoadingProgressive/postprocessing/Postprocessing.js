@@ -11,6 +11,10 @@ import{Godrays}from"./Godrays.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
+        this.scene=scene
+        this.camera=camera
+        this.renderer=renderer
+
         this.godrays_stength={ value: 0.2 }
         this.PostprocessingNew = new PostprocessingNew(scene, camera, renderer);
 
@@ -19,7 +23,7 @@ export class Postprocessing{
 
      
         this.init()
-         }
+    }
     init(){
         this.scene = new THREE.Scene()
 		this.camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 )

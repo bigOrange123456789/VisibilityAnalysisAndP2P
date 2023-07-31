@@ -25,6 +25,7 @@ import { TreeManager } from "./TreeManager";
 import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
 
 import { TreeBuilder } from "./TreeBuilder";
+// import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js';
 export class Main{
     addTool(obj){
         obj.loadJson=(path,cb)=>{
@@ -101,6 +102,7 @@ export class Main{
             alpha:true,
             canvas:this.canvas
         })
+        // this.renderer = new WebGPURenderer()
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(window.innerWidth, window.innerHeight)//this.body.clientWidth,this.body.clientHeight)
 		// 告诉渲染器需要阴影效果
