@@ -5,7 +5,50 @@
         ],
 
         "pathTexture":[
-            "./assets/avatar/textures_sim1/woman01/"
+            {
+                "rootPath":"./assets/avatar/textures_sim1/woman01/",
+            
+                "CloW_A_body_geo": {
+                    "map": "CloW_A_body_BaseColor.jpg"
+                },
+                "CloW_A_kuzi_geo": {
+                    "map": "CloW_A_body_BaseColor.jpg"
+                },
+                "CloW_A_shangyi_geo": {
+                    "map": "CloW_A_body_BaseColor.jpg"
+                },
+                "CloW_A_waitao_geo1": {
+                    "map": "CloW_A_body_BaseColor.jpg"
+                },
+                "CloW_A_xiezi_geo": {
+                    "map": "CloW_A_body_BaseColor.jpg"
+                },
+            
+            
+                "CloW_E_eyeLeft_geo02": {
+                    "map": "woman_mouth.png"
+                },
+                "CloW_E_eyeRight_geo01": {
+                    "map": "woman_mouth.png"
+                },
+                "eyelash": {
+                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png"
+                },
+                "teeth": {
+                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png"
+                },
+            
+            
+                "hair": {
+                    "map": "CloW_A_hair_BaseColor.png"
+                },
+            
+                "head": {
+                    "map": "CloW_A_head_BaseColor.jpg"
+                }
+            
+                
+            }
         ],
         "meshType":[
             {
