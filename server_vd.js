@@ -93,6 +93,8 @@ class VD{
     this.load(areaInf.path)
   }
   load(path){
+    console.log(require('jsonfile'))
+    console.log(path)
     const self=this
     // self.VisibleArea
     self.databaseEvd={}

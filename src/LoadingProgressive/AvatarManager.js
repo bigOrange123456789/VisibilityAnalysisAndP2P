@@ -12,7 +12,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_avatar(),"glb_material")
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material")
         // window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")
     }
     initPos_subway(){
@@ -60,6 +60,18 @@ export class AvatarManager {
         console.log("initPos_avatar",poslist)
         return poslist
     }
+    initPos_avatarTest(){
+        const poslist=[]
+        for(let i=0;i<1000;i++)
+        for(let j=0;j<100;j++){
+            poslist.push([
+                5*2*(i-50),
+                5.5,
+                5*2*(j-50),
+            ])
+        }
+        return poslist
+    }
     initPos_tree(){
         const poslist=[]
         const list=[
@@ -101,7 +113,7 @@ export class AvatarManager {
         // console.log(config)
         return config[0]
     }
-    getConfig_avatar(){
+    getConfig_avatar20(){
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
@@ -116,7 +128,7 @@ export class AvatarManager {
             c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
             
             const lodConut=20
-            const countAll=10000
+            const countAll=2500
             const distanceAll=200
             c1.lod_distance=[ ]
             c1.lod_geometry=[ ]
@@ -129,12 +141,60 @@ export class AvatarManager {
 
                 const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
                 r_pre=r
-                c1.lod_avatarCount.push(Math.floor(n))
+                c1.lod_avatarCount.push(Math.ceil(n))
             }
             for(let i=0;i<c1.lod_distance.length;i++){
                 c1.lod_distance[i]*=c1.scale
             }
-            console.log(c1)
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=20
+                }
+            }
+        }
+        console.log(config)
+        return config[0]
+    }
+    getConfig_avatar(){
+        const config=conifg_woman
+        for(let i=0;i<config.length;i++){
+            let c1=config[i]
+            c1.scale=2
+            
+            // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
+            // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
+            // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
+
+            c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
+            c1.lod_geometry=[ 19, 15,  7,  2,   1,   0 ]
+            c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
+            
+            const lodConut=21
+            const countAll=2500*2
+            const distanceAll=200
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ ]
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=(j+1)*distanceAll/lodConut
+                c1.lod_distance.push(r)
+                c1.lod_geometry.push(lodConut-j-1)
+
+                const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(Math.ceil(n))
+            }
+            for(let i=0;i<c1.lod_distance.length;i++){
+                c1.lod_distance[i]*=c1.scale
+            }
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=lodConut
+                }
+            }
         }
         // console.log(config)
         return config[0]

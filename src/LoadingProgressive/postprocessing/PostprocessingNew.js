@@ -52,9 +52,9 @@ export class PostprocessingNew {
         this.composer.addPass(texturePass)
         //this.composer.addPass(mySSAOPass)
 
-        //this.composer.addPass(ssaoPass)
+        // this.composer.addPass(ssaoPass)
         this.composer.addPass(lutPass)
-        //this.composer.addPass(bloomPass)
+        // this.composer.addPass(bloomPass)
         // var fxaaPass = new ShaderPass(FXAAShader);
         // var uniforms = fxaaPass.material.uniforms;
 

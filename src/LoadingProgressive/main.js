@@ -79,7 +79,7 @@ export class Main{
         // self.TreeManager = new TreeManager(self.scene,data) 
           
 
-        this.initCSM();
+        // this.initCSM();
         this.ui=new UI(this)
         
     }
