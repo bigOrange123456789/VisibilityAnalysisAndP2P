@@ -14,56 +14,20 @@
 <script src="lib/GLTFLoader.js"></script>
 <script src="lib/GLTFExporter.js"></script>
 <script type="module">
-    var path0 =prompt("请输入数据路径:","woman/test.glb")//"monkey.glb")
+    import { ExtractMaterial } from './ExtractMaterial.js'
+    import { ExtractGeometry } from './ExtractGeometry.js'
+    import { ExtractAnimation } from './ExtractAnimation.js'
+    var path0 =prompt("请输入数据路径:","woman01/woman01.gltf")//"monkey.glb")
+    
     process()
     function process(){
-        // var path0="monkey.glb"//pathPre+index+".glb"
         new THREE.GLTFLoader().load(path0, (glb) => {
-            console.log(glb)
-            var result={};
-            setTimeout(()=>{
-                glb.scene.traverse( node => {
-                    if(node instanceof THREE.Mesh){
-                        saveGeometry(node,result)
-                    }
-                })
-                exportJson(result,"20.json")
-            },1000)
-            // console.log(result)
-            // if(index<20)process(index+1)
+            new ExtractMaterial(glb)
+            new ExtractGeometry(glb)
+            new ExtractAnimation(glb)
         });
     }
     
-    function saveGeometry(node,result){
-        // console.log(node,node.geometry.attributes)
-        result[node.name]={}
-        const tags=//,'normal']//normal可以在前端根据拓扑关系重新计算，不需要传输
-            node instanceof THREE.SkinnedMesh?['position','uv','skinIndex','skinWeight']:['position','uv']
-        var attributes=node.geometry.attributes
-        console.log(":1:",node,attributes)
-        for(var i=0;i<tags.length;i++ ){
-            var t=tags[i]
-            console.log(":2:",node,attributes,t,attributes[t])
-            result[node.name][t]=
-                arr(attributes[t].array)
-        }
-        if(node.geometry.index!==null)
-            result[node.name]["index"]=
-                arr(node.geometry.index.array)
-    }
-    function arr(a){
-        var b=[];
-        for(var i=0;i<a.length;i++)
-            b.push(a[i])
-        return b
-    }
-    function exportJson(result,fileName){
-        var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
-        let link = document.createElement('a')
-        link.href = URL.createObjectURL(myBlob)
-        link.download = fileName
-        link.click()
-    }
 </script>
 
 </body>

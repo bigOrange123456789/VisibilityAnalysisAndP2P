@@ -43,7 +43,7 @@ def saveImgBin(head,img,img2,path):
     storeBin(path,data)
 
 if __name__ == "__main__":
-    path="test.json"
+    path="animation.json"
     print("数据的路径为:",path)
     file=open(path)
     result=json.load(file)

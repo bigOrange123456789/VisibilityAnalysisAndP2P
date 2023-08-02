@@ -196,14 +196,14 @@ classdef MeshJson < handle
             o.record(i).cPos=cPos;
 
             o.record(i).aUV=o.uv(aI,:);
-            if isfield(o, 'skinWeight')%判断是skinnedmesh还是普通mesh
+            if o.isSkinnedMesh%判断是skinnedmesh还是普通mesh
                 o.record(i).aSkinWeight=o.skinWeight(aI,:);
                 o.record(i).aSkinIndex=o.skinIndex(aI,:); 
             end
             
 
             o.record(i).bUV=o.uv(bI,:);
-            if isfield(o, 'skinWeight')%判断是skinnedmesh还是普通mesh
+            if o.isSkinnedMesh%判断是skinnedmesh还是普通mesh
                 o.record(i).bSkinWeight=o.skinWeight(bI,:);
                 o.record(i).bSkinIndex=o.skinIndex(bI,:);
             end
