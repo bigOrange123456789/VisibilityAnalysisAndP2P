@@ -11,8 +11,9 @@ export class AvatarManager {
         this.camera = camera
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")
+        // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
+        window.avatar=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_avatar(),"glb_material")
+        // window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")
     }
     initPos_subway(){
         this.poslist=[]
@@ -113,12 +114,27 @@ export class AvatarManager {
             c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
             c1.lod_geometry=[ 19, 15,  7,  2,   1,   0 ]
             c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
-
-
             
+            const lodConut=20
+            const countAll=10000
+            const distanceAll=200
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ ]
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=(j+1)*distanceAll/lodConut
+                c1.lod_distance.push(r)
+                c1.lod_geometry.push(lodConut-j)
+
+                const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(Math.floor(n))
+            }
             for(let i=0;i<c1.lod_distance.length;i++){
                 c1.lod_distance[i]*=c1.scale
             }
+            console.log(c1)
         }
         // console.log(config)
         return config[0]
