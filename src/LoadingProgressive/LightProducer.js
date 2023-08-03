@@ -133,7 +133,7 @@ class LightProducer{
     init(scene){
         // Lights 
         const x=3.//0.5
-        const ambient = new THREE.AmbientLight( 0xffffff ,0.5+0.4);//new THREE.AmbientLight( 0xffffff ,.8);
+        const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
         scene.add( ambient );
         // ambient.name="ambient"

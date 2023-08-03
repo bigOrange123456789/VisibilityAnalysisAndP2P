@@ -15,7 +15,7 @@ import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
-// import{Postprocessing}from"./postprocessing/Postprocessing.js"
+import{Postprocessing}from"./postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
 // import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
@@ -51,7 +51,7 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
         //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
@@ -83,7 +83,7 @@ export class Main{
         // self.TreeManager = new TreeManager(self.scene,data) 
           
 
-        // this.initCSM();
+        this.initCSM();
         // if(UI)this.ui=new UI(this)
         
     }
@@ -152,7 +152,7 @@ export class Main{
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
-            10*this.config.camera.far)
+            this.config.camera.far)
 
         window.camera=this.camera
         this.camera.position.set(
@@ -185,18 +185,18 @@ export class Main{
         // this.orbitControl.target = camera_tar[id].clone()
 
         // const self=this
-        // this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
-        //     ({ envMap }) => {
-        //       self.scene.background = envMap
-        //       self.scene.backgroundIntensity=0.8
-        //     }
-        //   )
-        // //this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
-        // this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-        //     ({ envMap }) => {
-        //       self.scene.environment = envMap
-        //     }
-        // )
+        this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
+            ({ envMap }) => {
+              self.scene.background = envMap
+              self.scene.backgroundIntensity=0.8
+            }
+          )
+        this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
+        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+            ({ envMap }) => {
+              self.scene.environment = envMap
+            }
+        )
 
 
     }

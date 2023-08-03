@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>静态模型处理</title>
+    <meta charset="utf-8">
+</head>
+<body>
+<script src="js/threeLib/three.js"></script>
+<script src="js/threeLib/GLTFLoader.js"></script>
+<script src="js/threeLib/GLTFExporter.js"></script>
+
+<script src="js/myLib/Download.js"></script>
+<script src="js/myLib/DuplicateRemoval.js"></script>
+<script src="js/myLib/MaterialHandle.js"></script>
+<script src="js/myLib/GlbSplit.js"></script>
+<script src="js/myLib/InDe.js"></script>
+<script src="js/myLib/ResourceManager.js"></script>
+
+<script src="js/GlbHandle.js"></script>
+
+<script>
+    var name=
+        prompt(
+            "Please enter a file name to process:",
+            "space8"//"ConferenceRoom"//"mymen"//"ExhibitionHall"//
+        );
+    new THREE.GLTFLoader().load('./in/'+name+'.glb', (glb) => {
+        console.log(glb)
+        new GlbHandle().process({name:name,glb:glb});
+    });
+</script>
+
+</body>

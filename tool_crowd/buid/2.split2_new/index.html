@@ -10,7 +10,7 @@
 <script src="js/threeLib/GLTFExporter.js"></script>
 <div id="mydivSplit"  style="position:absolute;left:200px;top:200px;background:#aaa;border:10px solid #111;">
     <h4>文件名称：</h4>
-    <textarea rows="1" cols="50" id="fileName">0</textarea>
+    <textarea rows="1" cols="50" id="fileName">space8</textarea>
     <button onclick="start(0)">查看构件个数</button>
     <h4>打包数据列表：</h4>
     <textarea rows="10" cols="30" id="nums">all</textarea>
@@ -44,7 +44,7 @@ function start(type){
     console.log('type',type)
     var name=document.getElementById("fileName").value;
     new h1('正在读取模型文件:'+name+'.glb',10)
-    new THREE.GLTFLoader().load('./in/output'+name+'.gltf', (glb) => {
+    new THREE.GLTFLoader().load('./in/'+name+'.glb', (glb) => {
         //读取全部构件
         new h1('正在获取全部构件',10)
         var group=glb.scene.children[0];
@@ -53,7 +53,7 @@ function start(type){
         for(var i=0;i<group.children.length;i++)
             arr.push(group.children[i])
         console.log(arr)
-        return 
+        // return 
         new h1("构件个数为："+arr.length,10)
         
         group.children=arr[index];
