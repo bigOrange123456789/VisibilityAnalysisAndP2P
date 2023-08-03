@@ -9,6 +9,7 @@ class LightProducer{
         this.object.add(this.objectMove)
         this.targetList=[]
         this.init(scene)//this.test()
+        // alert()
         this.add_lensflares()
 
         // this.setPos(-319.59561744433125,  16,  323.70333357412926)
@@ -62,12 +63,12 @@ class LightProducer{
         //     )
         // }
     }
-    init(scene){
+    init_(scene){
         // Lights 
         const x=3.//0.5
         const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
-        // scene.add( ambient );
+        scene.add( ambient );
         // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
@@ -91,6 +92,73 @@ class LightProducer{
         directionalLight.shadow.mapSize.width = 4*2048; 
         directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512
         this.objectMove.add( directionalLight )
+        // directionalLight.target = new THREE.Object3D();
+        // directionalLight.target.origin=new THREE.Object3D(10,10,10)
+        directionalLight.target.position.set(1,-0.5,1)
+        
+        window.target=directionalLight.target
+        this.targetList.push(directionalLight.target)
+        this.objectMove.add( directionalLight.target )
+        this.directionalLight=directionalLight
+        
+
+
+        // const directionalLight2 = new THREE.DirectionalLight( 0xcffffff,x+1.5 );
+        // directionalLight2.position.set(-1,0,0)
+        // directionalLight2.lookAt(new THREE.Vector3(0,0,0))
+        // light.add( directionalLight2 )
+
+        // const Light4 = new THREE.PointLight( 0xcffffff,x+0.5-3.3 );
+        // this.object.add( Light4 )//window.scene.add(Light4)//
+
+        // const Light2 = new THREE.PointLight( 0xc0000ff,0.01 );
+        // Light2.position.set(-257, 35, 196)
+        // this.object.add(Light2)
+
+
+        //创建区域光 
+        // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
+        // //设置区域光位置
+        // rectLight.position.set(0,50,0);
+        // //设置区域光旋转角度
+        // rectLight.rotation.x = 0.5*Math.PI;
+        // //将区域光添加进场景
+        // scene.add(rectLight);
+        //创建区域光辅助器
+        // let rectLightHelper = new THREE.RectAreaLightHelper(rectLight,0xff0000);
+        //将区域光辅助器添加进场景
+        // scene.add(rectLightHelper);
+
+    }
+    init(scene){
+        // Lights 
+        const x=3.//0.5
+        const ambient = new THREE.AmbientLight( 0xffffff ,0.5+0.4);//new THREE.AmbientLight( 0xffffff ,.8);
+        this.ambient=ambient
+        scene.add( ambient );
+        // ambient.name="ambient"
+
+        // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
+        // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
+        // scene.add( Light1 );
+        // Light1.name="Light1"
+        // return
+
+        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
+   
+        directionalLight.shadow.camera.near = -1000//0.01 //产生阴影的最近距离
+        directionalLight.shadow.camera.far = 1000 //产生阴影的最远距离
+        directionalLight.shadow.camera.left = -1000 //产生阴影距离位置的最左边位置
+        directionalLight.shadow.camera.right = 1000 //最右边
+        directionalLight.shadow.camera.top = 500 //最上边
+        directionalLight.shadow.camera.bottom = -100 //最下面
+        //告诉平行光需要开启阴影投射
+        directionalLight.castShadow = true
+        // alert(directionalLight.shadowDarkness)
+        // directionalLight.shadow.bias = -0.0005;
+        directionalLight.shadow.mapSize.width = 4*2048; 
+        directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512
+        // scene.add( directionalLight )
         // directionalLight.target = new THREE.Object3D();
         // directionalLight.target.origin=new THREE.Object3D(10,10,10)
         directionalLight.target.position.set(1,-0.5,1)

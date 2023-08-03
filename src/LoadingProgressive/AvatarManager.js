@@ -1,5 +1,5 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConifg_woman_test.json'
+import conifg_woman     from '../../config/avatar/sceneConifg_woman03.json'
 import conifg_tree     from '../../config/avatar/tree.json'
 
 export class AvatarManager {
@@ -12,7 +12,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material")
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material")
         // window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")
     }
     initPos_subway(){
@@ -61,15 +61,55 @@ export class AvatarManager {
         return poslist
     }
     initPos_avatarTest(){
+        // const poslist=[]
+        // for(let i=0;i<1000;i++)
+        // for(let j=0;j<1000;j++){
+        //     poslist.push([
+        //         5*2*(i-100),
+        //         5.5,
+        //         5*2*(j-250),
+        //     ])
+        // }
+        // return poslist
         const poslist=[]
-        for(let i=0;i<10;i++)
-        for(let j=0;j<10;j++){
-            poslist.push([
-                5*2*(i-5),
-                5.5,
-                5*2*(j-5),
-            ])
+        const list=[
+            171,
+            173,182
+        ]
+        for(let cid of list){
+            const arr=this.posConfig[cid+""]
+            for(let i=0;i<arr.length/2;i++){
+                const x=arr[2*i  ]+(2*Math.random()-1)
+                const y=5.5
+                const z=arr[2*i+1]+(2*Math.random()-1)
+                poslist.push([x,y,z])
+            }
         }
+        const a=400,b=400
+        for(let i=0;i<a;i++)
+        for(let j=0;j<b;j++){
+            const x=5*2*(i-a/2)+(2*Math.random()-1)*5
+            const z=5*2*(j-b/2)+(2*Math.random()-1)*5
+            // "x": [
+            //     -815,879,
+            //     11
+            // ],
+            // "y": [
+            //     16,16,
+            //     11
+            // ],
+            // "z": [
+            //     -962,1084,
+            //     11
+            // ],
+            if(!(-815<x&&x<879&&-962<z&&z<1054))
+                poslist.push([
+                    x,
+                    5.5,
+                    z,
+                ])
+        }
+        console.log("initPos",poslist)
         return poslist
     }
     initPos_tree(){
@@ -167,7 +207,7 @@ export class AvatarManager {
             // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
 
             c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
-            c1.lod_geometry=[ 19, 15,  7,  2,   1,   0 ]
+            c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
             c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
             
             const lodConut=21

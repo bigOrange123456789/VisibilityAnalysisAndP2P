@@ -2,6 +2,7 @@ import config_haiNing0 from '../../config/LoadingProgressive/configOP6.json';
 import config_haiNing from '../../config/LoadingProgressive/configOP7.json';
 import config_gkd     from '../../config/LoadingProgressive/configOP8.json';
 import * as THREE from "three";
+
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
@@ -9,22 +10,22 @@ import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
-import {UI } from './UI.js'
+// import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
-import{Postprocessing}from"./postprocessing/Postprocessing.js"
+// import{Postprocessing}from"./postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
-import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+// import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-import { TreeManager } from "./TreeManager";
-import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
+// import { TreeManager } from "./TreeManager";
+// import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
 
-import { TreeBuilder } from "./TreeBuilder";
+// import { TreeBuilder } from "./TreeBuilder";
 // import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js';
 export class Main{
     addTool(obj){
@@ -50,7 +51,7 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
         //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
@@ -58,29 +59,32 @@ export class Main{
         requestAnimationFrame(this.animate)
         // this.test()
         
-        // this.initSky()
+        this.initSky()
         this.initWander()
         this.panel=new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        // this.building=new Building(this.scene,this.camera)
+        this.building=new Building(this.scene,this.camera)
 
-        this.loadJson(
-            "LoadingProgressive/pos.json",
-            data=>{
-                // setTimeout(()=>{
-                //     console.log("data",data)
-                // new TreeManager(self.scene).init(data) 
-                // })
-                // if(typeof AvatarManager!=="undefined")
-                    new AvatarManager(self.scene,self.camera,data)
-                // self.TreeManager.init(data) 
-            }
-        )
+        // setTimeout(()=>{
+            self.loadJson(
+                "LoadingProgressive/pos.json",
+                data=>{
+                    // setTimeout(()=>{
+                    //     console.log("data",data)
+                    // new TreeManager(self.scene).init(data) 
+                    // })
+                    // if(typeof AvatarManager!=="undefined")
+                        new AvatarManager(self.scene,self.camera,data)
+                    // self.TreeManager.init(data) 
+                }
+            )
+        // },2000)
+        
         // self.TreeManager = new TreeManager(self.scene,data) 
           
 
         // this.initCSM();
-        this.ui=new UI(this)
+        // if(UI)this.ui=new UI(this)
         
     }
     async initScene(){
@@ -108,7 +112,8 @@ export class Main{
 		// 告诉渲染器需要阴影效果
 		this.renderer.shadowMap.enabled = true
 		this.renderer.shadowMapSoft = true;
-		this.renderer.setClearColor(0xcccccc)
+		this.renderer.setClearColor(0xffffff)//(0xcccccc)
+        // alert(0xffffff)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
 		this.renderer.shadowMap.autoUpdate = true;
 		this.renderer.tonemapping = THREE.NoToneMapping;
@@ -147,7 +152,7 @@ export class Main{
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
-            this.config.camera.far)
+            10*this.config.camera.far)
 
         window.camera=this.camera
         this.camera.position.set(
@@ -179,19 +184,19 @@ export class Main{
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
 
-        const self=this
-        this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
-            ({ envMap }) => {
-              self.scene.background = envMap
-              self.scene.backgroundIntensity=0.8
-            }
-          )
-        this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
-        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-            ({ envMap }) => {
-              self.scene.environment = envMap
-            }
-        )
+        // const self=this
+        // this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
+        //     ({ envMap }) => {
+        //       self.scene.background = envMap
+        //       self.scene.backgroundIntensity=0.8
+        //     }
+        //   )
+        // //this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
+        // this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+        //     ({ envMap }) => {
+        //       self.scene.environment = envMap
+        //     }
+        // )
 
 
     }
