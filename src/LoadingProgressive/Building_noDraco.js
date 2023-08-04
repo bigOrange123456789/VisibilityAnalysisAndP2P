@@ -9,7 +9,7 @@ import { Tool } from './Tool.js'
 import { ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 import { WaterController  } from '../../lib/threejs/WaterController'
-import { DRACOLoader } from './dracoLoader/DRACOLoader.js';
+
 export class Building{
     constructor(scene,camera){
         document.getElementById("LoadProgress").innerHTML=""
@@ -41,25 +41,12 @@ export class Building{
         this.p2p=new P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         this.loaderZip=new THREE.LoadingManager()
-        this.initLoader()
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
                 self.start(camera)
             })
         })
         new Tool(this)
-    }
-    initLoader()
-    {
-        THREE.Cache.enabled = true;
-        const file = new THREE.FileLoader();
-
-        const dracoLoader = new DRACOLoader();
-        dracoLoader.setDecoderPath('assets/textures/environment/');
-        dracoLoader.setDecoderConfig({ type: "js" });
-        this.glbLoader = new GLTFLoader(this.loaderZip);
-        dracoLoader.preload();
-        this.glbLoader.setDRACOLoader(dracoLoader);
     }
     test(){
         const sphereGeometry = new THREE.SphereGeometry(3, 32, 32);
@@ -452,7 +439,7 @@ export class Building{
                 },()=>{});
 		    });
 	    } ).then( function ( configJson ) {
-		    const loader = self.glbLoader//new GLTFLoader(self.loaderZip);
+		    const loader = new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 // self.p2p.send({cid:id,myArray:loader.myArray})
                 self.meshes_info[id].parsed=performance.now()//解析完成
@@ -515,7 +502,7 @@ export class Building{
                 },()=>{});
 		    });
 	    } ).then( function ( configJson ) {
-		    const loader = self.glbLoader//new GLTFLoader(self.loaderZip);
+		    const loader = new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
                 // self.meshes_info[id].parsed=performance.now()//解析完成
                 gltf.scene.traverse(o=>{
