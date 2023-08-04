@@ -224,20 +224,19 @@ export class Building{
         
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
-        mesh.geometry=meshOld.geometry
         if(this.instance_info){
             meshOld.materialOld=meshOld.material
             
             const mesh0=meshOld
             const instance_info=this.instance_info[id]
             const geometry=meshOld.geometry
-            // const mesh2=this.getInstancedMesh(
-            //     geometry,
-            //     meshOld.material,
-            //     instance_info)
-            // mesh2.castShadow = false//true
-            // mesh2.receiveShadow = false//true
-            // mesh2.visible=false
+            const mesh2=this.getInstancedMesh(
+                geometry,
+                meshOld.material,
+                instance_info)
+            mesh2.castShadow = true
+            mesh2.receiveShadow = true
+            mesh2.visible=false
             const mesh1=this.getInstancedMesh(
                 geometry,
                 new THREE.MeshStandardMaterial({
@@ -255,9 +254,8 @@ export class Building{
                     // // shininess:300,
                 }),
                 instance_info)
-            mesh1.castShadow = false
-            mesh1.receiveShadow = false//true
-            const mesh2=mesh1.clone()
+            mesh1.castShadow = true
+            mesh1.receiveShadow = true
             
             //////////
             if(this.config.useIndirectMaterial){
@@ -269,9 +267,9 @@ export class Building{
             // mesh2.material=mesh.material=mesh.material2
             
             ///////////////
-            mesh.lod=[mesh1,mesh2]
+            mesh.lod=[mesh1,mesh1]
             if(id==194){//雕塑
-                // mesh.lod=[mesh2,mesh2]
+                mesh.lod=[mesh2,mesh2]
             }
             // mesh.lod=[mesh,mesh]
             // mesh.visible=false
@@ -282,7 +280,7 @@ export class Building{
                         // mesh.visible=mesh2.visible=false
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)
-                        // window.waterMaterial = mesh.lod[1].material;
+                        window.waterMaterial = mesh.lod[1].material;
                     }
             }
             mesh.add(mesh1)
@@ -304,72 +302,7 @@ export class Building{
 
         mesh.myId=id
         this.detection.receiveMesh(mesh)   
-    }
-    addMesh_fine(id,meshOld){
-        if(this.config.updateColor){
-            meshOld.geometry.computeVertexNormals()
-            let t=id*256*256*256/8431 ///2665
-            meshOld.material.color.r=0.5*((t&0xff)    )/255
-            meshOld.material.color.g=0.5*((t&0xff00)>>8 )/255
-            meshOld.material.color.b=0.5*((t&0xff0000)>>16)/255
-        }else{
-            meshOld.geometry.computeVertexNormals()
-            meshOld.material.depthWrite=true
-        }
-        meshOld.material.metalness0=meshOld.material.metalness//-0.5
-        meshOld.material.roughness0=meshOld.material.roughness//-0.5
-        meshOld.material.envMapIntensity0=meshOld.material.envMapIntensity//-0.5
-        meshOld.material.emissiveIntensity0=meshOld.material.emissiveIntensity//-0.5
-        // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
-        
-        // mesh.material.shininess = 10;
-        const mesh=this.meshes[id]
-        // meshOld.geometry=mesh.lod[0].geometry
-        if(this.instance_info){
-            meshOld.materialOld=meshOld.material
-            const instance_info=this.instance_info[id]
-            const mesh2=this.getInstancedMesh(
-                meshOld.geometry,
-                meshOld.material,
-                instance_info)
-            mesh2.castShadow = true
-            mesh2.receiveShadow = true
-            mesh2.visible=true
-            
-            //////////
-            if(this.config.useIndirectMaterial){
-                mesh2.material1=mesh2.material
-                mesh2.material2=new IndirectMaterial(mesh.material)
-            }
-            // mesh2.material=mesh.material=mesh.material2
-            
-            ///////////////
-            const meshLod1_pre=mesh.lod[1]
-            meshLod1_pre.visible=false
-            meshLod1_pre.parent.remove(meshLod1_pre)//meshLod1_pre.visible=false
 
-            mesh.lod[1]=mesh2
-            if(id==194){//雕塑
-                mesh.lod[0].visible=false
-                mesh.lod=[mesh2,mesh2]
-            }
-            if(this.config.waterCidList){//175
-                for(let i=0;i<this.config.waterCidList.length;i++)
-                    if(id==this.config.waterCidList[i]){
-                        // var water = new WaterController(meshOld).water
-                        // mesh.visible=mesh2.visible=false
-                        // mesh.lod=[water,water]
-                        // if(true)this.parentGroup2.add(water)
-                        window.waterMaterial = mesh2.material;
-                        // window.waterMaterial = mesh.lod[0].material;
-                    }
-            }
-            mesh.add(mesh2)
-        }else{
-            mesh.lod=[meshOld,meshOld]
-        }
-        const self=this
-        this.visibiity.prePoint2=""//重新进行可见剔除
         if(window.csm)window.csm.setupMaterial(mesh.lod[1].material);
     }
     loadGLB(id,cb){
@@ -389,6 +322,64 @@ export class Building{
         }, undefined, function (error) {
             console.error(error);
         });
+    }
+    loadZip_test(id,cb){
+        if(this.meshes_info[id])return
+        this.detection.receivePack("server")
+        this.meshes_info[id]={request:performance.now()}//请求
+        this.detection.request("zip")
+        const self=this
+        var url=self.config.path+id+".zip"
+	    const zipLoader=new ZipLoader()
+		zipLoader.load( 
+            url,
+            ()=>{},
+            ()=>{}).then( ( zip )=>{//解析压缩包
+                self.meshes_info[id].loaded=performance.now()//加载完成
+                // new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
+                //     self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
+                //     const loader = new GLTFLoader(self.loaderZip);
+                //     loader.load(zip.find( /\.(gltf|glb)$/i )[0], () => {
+                //         self.meshes_info[id].parsed=performance.now()//解析完成
+                //         self.meshes[id]={"config0":self.meshes_info[id]}
+                //     });
+                // },()=>{});
+                new Promise( function ( resolve, reject ) {
+                    new THREE.TextureLoader().load( 
+                    'assets/textures/test/0.png',
+                    ()=>{
+                        self.meshes_info[id].parsed=performance.now()//解析完成
+                        self.meshes[id]={"config0":self.meshes_info[id]}
+                    } );
+                })
+                
+		    });
+    }
+    loadZip_test2(id,cb){
+        if(this.meshes_info[id])return
+        this.detection.receivePack("server")
+        this.meshes_info[id]={request:performance.now()}//请求
+        this.detection.request("zip")
+        const self=this
+        var url=self.config.path+id+".zip"
+        var url=self.config.path+"0.zip"
+	    const zipLoader=new ZipLoader()
+		zipLoader.load( 
+            url,
+            ()=>{},
+            ()=>{}).then( ( zip )=>{//解析压缩包
+                self.meshes_info[id].loaded=performance.now()//加载完成
+                new Promise( function ( resolve, reject ) {
+                    new THREE.TextureLoader().load( 
+                        'assets/textures/test/'+id+'.png',
+                    ()=>{
+                        console.log(id)
+                        self.meshes_info[id].parsed=performance.now()//解析完成
+                        self.meshes[id]={"config0":self.meshes_info[id]}
+                    } );
+                })
+                
+		    });
     }
     loadZip(id,cb){
         if(this.meshes_info[id])return
@@ -446,65 +437,6 @@ export class Building{
                     }
                 })
                 if(cb)cb()
-                setTimeout(()=>{
-                    self.loadZip_fine(id)
-                },500)
-                
-		    });
-	    } );
-    }
-    loadZip_fine(id){
-        // if(this.meshes_info[id])return
-        // this.detection.receivePack("server")
-        // this.meshes_info[id]={request:performance.now()}//true
-        // this.detection.request("zip")
-        const self=this
-        var url=self.config.path+"fine/"+id+".zip"
-	    new Promise( function( resolve, reject ) {//加载资源压缩包
-            const zipLoader=new ZipLoader()
-            if(self.config.crossOriginSocket&&self.config.crossOriginSocket.length>0){
-                const i=Math.floor(Math.random()*self.config.crossOriginSocket.length)
-                zipLoader.crossOriginSocket=self.config.crossOriginSocket[i]
-                console.log(zipLoader.crossOriginSocket)
-            }
-		    zipLoader.load( url,()=>{
-		    },()=>{
-			    console.log("加载失败："+id)
-			    setTimeout(()=>{//重新请求
-			    },1000*(0.5*Math.random()+1))//1~1.5秒后重新加载
-		    }).then( ( zip )=>{//解析压缩包
-                self.meshes_info[id].loaded=performance.now()//加载完成
-                self.p2p.send({
-                    cid:id,
-                    baseUrl:zipLoader.baseUrl,
-                    buffer:zipLoader.buffer
-                })
-                self.meshes_info[id].forwarded=performance.now()//转发完成
-                new ZipLoader().parse(zipLoader.baseUrl,zipLoader.buffer).then( ( zip )=>{//解析压缩包
-                    self.loaderZip.setURLModifier( zip.urlResolver );//装载资源
-                    resolve({//查看文件是否存在？以及路径
-                        fileUrl: zip.find( /\.(gltf|glb)$/i )
-                    });
-                },()=>{});
-		    });
-	    } ).then( function ( configJson ) {
-		    const loader = new GLTFLoader(self.loaderZip);
-		    loader.load(configJson.fileUrl[0], (gltf) => {
-                // self.meshes_info[id].parsed=performance.now()//解析完成
-                gltf.scene.traverse(o=>{
-                    if(o instanceof THREE.Mesh){  
-                        // o.delay={
-                        //     load   :self.meshes_info[id].loaded   -self.meshes_info[id].request,  //加载延迟
-                        //     forward:self.meshes_info[id].forwarded-self.meshes_info[id].loaded,   //转发延迟
-                        //     parse  :self.meshes_info[id].parsed   -self.meshes_info[id].forwarded,//解析延迟
-                            
-                        //     parsed :self.meshes_info[id].parsed,//解析完成的时刻
-                        // }
-                        // o.LoadDelay   =self.meshes_info[id].loaded   -self.meshes_info[id].request
-                        // o.originType="centerServer"
-                        self.addMesh_fine(id,o)
-                    }
-                })
 		    });
 	    } );
     }
@@ -580,7 +512,7 @@ export class Building{
         const self=this;
         window.list=list
         const NUMBER=this.config.NUMBER?this.config.NUMBER:30//50//350//50//50
-        const TIME=this.config.TIME?this.config.TIME:120//0//100
+        const TIME=this.config.TIME?this.config.TIME:1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
         

@@ -134,21 +134,46 @@ export class AvatarManager {
         const config=conifg_tree
         for(let i=0;i<config.length;i++){
             let c1=config[i]
-            c1.scale=2
+            c1.scale=1//2
             
             // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
             // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
             // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
 
-            c1.lod_distance=[ 10, 20, 40, 80, 160, 640 ]
-            c1.lod_geometry=[ 20, 19,  15,  6,   3,   1 ]//1
-            //                 .   .    .   .   *   *
-            c1.lod_avatarCount=[ 1500, 3900, 4900, 5900, 6900, 8900]
+            // c1.lod_distance=[ 10, 20, 40, 80, 160, 640 ]
+            // c1.lod_geometry=[ 20, 19,  15,  6,   3,   1 ]//1
+            // //                 .   .    .   .   *   *
+            // c1.lod_avatarCount=[ 1500, 3900, 4900, 5900, 6900, 8900]
 
 
             
+            // for(let i=0;i<c1.lod_distance.length;i++){
+            //     c1.lod_distance[i]*=c1.scale
+            // }
+            const lodConut=21
+            const countAll=2500*2
+            const distanceAll=200
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ ]
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=(j+1)*distanceAll/lodConut
+                c1.lod_distance.push(r)
+                c1.lod_geometry.push(lodConut-j-1)
+
+                const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(Math.ceil(n))
+            }
             for(let i=0;i<c1.lod_distance.length;i++){
                 c1.lod_distance[i]*=c1.scale
+            }
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=lodConut
+                }
             }
         }
         // console.log(config)

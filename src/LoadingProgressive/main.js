@@ -51,7 +51,7 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
         //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
@@ -72,7 +72,7 @@ export class Main{
                 // new TreeManager(self.scene).init(data) 
                 // })
                 // if(typeof AvatarManager!=="undefined")
-                    new AvatarManager(self.scene,self.camera,data)
+                    // new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             }
         )
@@ -81,9 +81,9 @@ export class Main{
         this.initCSM();
 
         this.building = new Building(this.scene, this.camera)
-        this.ui=new UI(this)
-        console.log(this.csm)
-        console.log(this.lightProducer.ambient)
+        // this.ui=new UI(this)
+        // console.log(this.csm)
+        // console.log(this.lightProducer.ambient)
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({

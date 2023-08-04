@@ -349,7 +349,7 @@ export class Visibility{
                 if(this.meshes[i].lod){
                     for(let j=0;j<this.meshes[i].lod.length;j++)    
                         this.meshes[i].lod[j].visible=false
-                    if(this.vd[i]>Math.PI/(40*6*400))this.meshes[i].lod[1].visible=true//this.meshes[i].lod[0].visible=true
+                    if(this.vd[i]>Math.PI/(40))this.meshes[i].lod[1].visible=true//this.meshes[i].lod[0].visible=true
                     else if(this.vd[i]>0)         this.meshes[i].lod[0].visible=true
                 }else{
                     this.meshes[i].visible= this.vd[i]>0

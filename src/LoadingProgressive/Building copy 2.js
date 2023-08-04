@@ -224,20 +224,19 @@ export class Building{
         
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
-        mesh.geometry=meshOld.geometry
         if(this.instance_info){
             meshOld.materialOld=meshOld.material
             
             const mesh0=meshOld
             const instance_info=this.instance_info[id]
             const geometry=meshOld.geometry
-            // const mesh2=this.getInstancedMesh(
-            //     geometry,
-            //     meshOld.material,
-            //     instance_info)
-            // mesh2.castShadow = false//true
-            // mesh2.receiveShadow = false//true
-            // mesh2.visible=false
+            const mesh2=this.getInstancedMesh(
+                geometry,
+                meshOld.material,
+                instance_info)
+            mesh2.castShadow = false//true
+            mesh2.receiveShadow = false//true
+            mesh2.visible=false
             const mesh1=this.getInstancedMesh(
                 geometry,
                 new THREE.MeshStandardMaterial({
@@ -257,7 +256,6 @@ export class Building{
                 instance_info)
             mesh1.castShadow = false
             mesh1.receiveShadow = false//true
-            const mesh2=mesh1.clone()
             
             //////////
             if(this.config.useIndirectMaterial){
@@ -324,7 +322,6 @@ export class Building{
         
         // mesh.material.shininess = 10;
         const mesh=this.meshes[id]
-        // meshOld.geometry=mesh.lod[0].geometry
         if(this.instance_info){
             meshOld.materialOld=meshOld.material
             const instance_info=this.instance_info[id]
@@ -345,13 +342,11 @@ export class Building{
             
             ///////////////
             const meshLod1_pre=mesh.lod[1]
-            meshLod1_pre.visible=false
             meshLod1_pre.parent.remove(meshLod1_pre)//meshLod1_pre.visible=false
 
             mesh.lod[1]=mesh2
             if(id==194){//雕塑
-                mesh.lod[0].visible=false
-                mesh.lod=[mesh2,mesh2]
+                //mesh.lod=[mesh2,mesh2]
             }
             if(this.config.waterCidList){//175
                 for(let i=0;i<this.config.waterCidList.length;i++)
@@ -396,7 +391,7 @@ export class Building{
         this.meshes_info[id]={request:performance.now()}//true
         this.detection.request("zip")
         const self=this
-        var url=self.config.path+id+".zip"
+        var url=self.config.path+"fine/"+id+".zip"
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
             const zipLoader=new ZipLoader()
             if(self.config.crossOriginSocket&&self.config.crossOriginSocket.length>0){
@@ -580,7 +575,7 @@ export class Building{
         const self=this;
         window.list=list
         const NUMBER=this.config.NUMBER?this.config.NUMBER:30//50//350//50//50
-        const TIME=this.config.TIME?this.config.TIME:120//0//100
+        const TIME=this.config.TIME?this.config.TIME:1200//100
         window.NUMBER=NUMBER
         window.TIME0=TIME
         
