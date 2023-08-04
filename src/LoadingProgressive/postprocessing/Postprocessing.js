@@ -7,23 +7,19 @@ import {
 import {PostprocessingNew} from './PostprocessingNew.js';
 
 import{Godrays}from"./Godrays.js"
-// import{UnrealBloom}from"./UnrealBloom.js"
+import{UnrealBloom}from"./UnrealBloom.js"
 
 export class Postprocessing{
     constructor(camera,scene,renderer){
-        this.scene=scene
-        this.camera=camera
-        this.renderer=renderer
-
         this.godrays_stength={ value: 0.2 }
         this.PostprocessingNew = new PostprocessingNew(scene, camera, renderer);
 
         //this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays = new Godrays(camera, scene)
-
+        this._camera = camera;
      
-        this.init()
-    }
+        //this.init()
+        }
     init(){
         this.scene = new THREE.Scene()
 		this.camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 )
@@ -48,12 +44,16 @@ export class Postprocessing{
         //     this.unrealBloom.getTexture(),
         //     this.godrays.getTexture()
         // )  
-        // this.PostprocessingNew.render()
-        // this.renderer.render(this.scene, this.camera);
-        this.mix(
-            this.PostprocessingNew.render(),//unrealBloom.getTexture(),
-            this.godrays.getTexture()
-        )  
+        this.PostprocessingNew.render()
+        //this.renderer.render(this.scene, this.camera);
+        //this.godrays.getTexture()
+        
+        // this.mix(
+
+        //      this.PostprocessingNew.render(),//unrealBloom.getTexture(),
+        //      null
+            
+        //  )  
         // this.unrealBloom.render()//getTexture()    
     }
     mix(textureGodrays, textureBloom){
@@ -96,7 +96,12 @@ export class Postprocessing{
         this.materialTest.uniforms[ 'textureBloom'   ].value=textureBloom//renderTarget.texture
         this.materialTest.uniforms[ 'textureGodrays' ].value=textureGodrays
         this.scene.overrideMaterial = this.materialTest
-        renderer.setRenderTarget( null )
-        renderer.render( this.scene, this.camera )
+
+        console.log(this._camera.rotation);
+        renderer.setRenderTarget(null)
+        
+        renderer.render(this.scene, this.camera)
+
+        console.log(this._camera.rotation);
     }
 }

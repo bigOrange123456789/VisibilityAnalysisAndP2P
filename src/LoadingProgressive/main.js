@@ -1,8 +1,8 @@
 import config_haiNing0 from '../../config/LoadingProgressive/configOP6.json';
 import config_haiNing from '../../config/LoadingProgressive/configOP7.json';
-import config_gkd     from '../../config/LoadingProgressive/configOP8.json';
+import config_gkd from '../../config/LoadingProgressive/configOP8.json';
+import pos from './postprocessing/pos.json'
 import * as THREE from "three";
-
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
@@ -10,7 +10,7 @@ import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
-// import {UI } from './UI.js'
+import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
@@ -18,14 +18,14 @@ import { SkyController  } from '../../lib/threejs/SkyController'
 import{Postprocessing}from"./postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
-// import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-// import { TreeManager } from "./TreeManager";
-// import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
-
-// import { TreeBuilder } from "./TreeBuilder";
+import { TreeManager } from "./TreeManager";
+import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
+THREE.CSM = CSM;
+import { TreeBuilder } from "./TreeBuilder";
 // import WebGPURenderer from 'three/examples/jsm/renderers/webgpu/WebGPURenderer.js';
 export class Main{
     addTool(obj){
@@ -59,33 +59,31 @@ export class Main{
         requestAnimationFrame(this.animate)
         // this.test()
         
-        this.initSky()
+        // this.initSky()
         this.initWander()
-        this.panel=new Panel(this)
+        this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        this.building=new Building(this.scene,this.camera)
-
-        // setTimeout(()=>{
-            self.loadJson(
-                "LoadingProgressive/pos.json",
-                data=>{
-                    // setTimeout(()=>{
-                    //     console.log("data",data)
-                    // new TreeManager(self.scene).init(data) 
-                    // })
-                    // if(typeof AvatarManager!=="undefined")
-                        new AvatarManager(self.scene,self.camera,data)
-                    // self.TreeManager.init(data) 
-                }
-            )
-        // },2000)
-        
+        //
+        this.loadJson(
+            "LoadingProgressive/pos.json",
+            data=>{
+                // setTimeout(()=>{
+                //     console.log("data",data)
+                // new TreeManager(self.scene).init(data) 
+                // })
+                // if(typeof AvatarManager!=="undefined")
+                    new AvatarManager(self.scene,self.camera,data)
+                // self.TreeManager.init(data) 
+            }
+        )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
-
         this.initCSM();
-        // if(UI)this.ui=new UI(this)
-        
+
+        this.building = new Building(this.scene, this.camera)
+        this.ui=new UI(this)
+        console.log(this.csm)
+        console.log(this.lightProducer.ambient)
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -112,11 +110,10 @@ export class Main{
 		// 告诉渲染器需要阴影效果
 		this.renderer.shadowMap.enabled = true
 		this.renderer.shadowMapSoft = true;
-		this.renderer.setClearColor(0xffffff)//(0xcccccc)
-        // alert(0xffffff)
+		this.renderer.setClearColor(0xcccccc)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
 		this.renderer.shadowMap.autoUpdate = true;
-		this.renderer.tonemapping = THREE.NoToneMapping;
+		//this.renderer.tonemapping = THREE.NoToneMapping;
         //this.renderer.toneMapping = THREE.ReinhardToneMapping;this.renderer.toneMappingExposure=2.14
 		this.renderer.setScissorTest = true;
 		this.renderer.outputEncoding = THREE.sRGBEncoding;
@@ -149,7 +146,7 @@ export class Main{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            (this.config["FlipY"]?-1:1)*30,//50,
+            45,//(this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
@@ -184,7 +181,7 @@ export class Main{
         // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         // this.orbitControl.target = camera_tar[id].clone()
 
-        // const self=this
+        const self=this
         this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
             ({ envMap }) => {
               self.scene.background = envMap
@@ -202,18 +199,29 @@ export class Main{
     }
 
     initCSM() {
-        this.csm = new CSM({
+
+        //window.material.side = THREE.BackSide;
+        this.csm = new THREE.CSM({
+            fade: true,
             maxFar: this.camera.far,
-            cascades: 2,
+            cascades: 4,
             shadowMapSize: 1024,
-            lightDirection: new THREE.Vector3(1, -1, 1).normalize(),
+            lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
             parent: this.scene,
-            lightIntensity:1
+            lightIntensity: 2.9,
+            lightColor: new THREE.Color(0xf7f2d9),
+            shadowBias: -0.0004,
+            mode: 'practical',
+            lightMargin: 200
         });
-        let material = new THREE.MeshPhongMaterial(); // works with Phong and Standard materials
-        this.csm.setupMaterial(material); // must be called to pass all CSM-related uniforms to the shader
-        
+        window.csm=this.csm
+        //this.csm.lightIntensity = 1000;
+        //let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
+        //mesh.castShadow = true;
+        //mesh.receiveShadow = true;
+
+        //this.scene.add(mesh);();
     }
     getCubeMapTexture(path) {
         var scope = this

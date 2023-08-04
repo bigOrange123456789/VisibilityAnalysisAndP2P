@@ -3,8 +3,10 @@ import * as THREE from "three";
 import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
+import { GodRayShader } from './postprocessing/DepthtoNormal';
 export class UI{
     constructor(main) {
+        this.main = main;
         this.gui = new GUI();
         this.gui._closed=true
         window.gui=this.gui
@@ -28,7 +30,7 @@ export class UI{
         this.control_camera(main.camera,main.playerControl)
         this.control_material(main.scene)
         // this.control_renderer(main.renderer)
-        this.control_light(main.lightProducer.directionalLight,main.lightProducer.ambient,main.csm)
+        this.control_light(null, main.lightProducer.ambient)
 
         console.log(main.postprocessing,"main.postprocessing")
         const postprocessing=main.postprocessing
@@ -42,7 +44,7 @@ export class UI{
                 this.control_lut(main.postprocessing.unrealBloom.lutPass)
                 this.control_sao(main.postprocessing.unrealBloom.saoPass)
             }
-            this.control_godrays(postprocessing.godrays,main.postprocessing)
+            this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.PostprocessingNew.GodRayShader)
         }
         if(unrealBloom){
             this.control_ssao(unrealBloom.ssaoPass)
@@ -147,56 +149,66 @@ export class UI{
         } );
         
     }
-    control_light(directionalLight, ambient, csm) {
+    control_light(directionalLight, ambient) {
+        const csm = this.main.csm;
+        const main = this.main;
         const gui=this.gui
         const params=this.params
         var directionFolder = gui.addFolder('光照');
         /*color*/
-        params['平行光颜色']=directionalLight.color
+        params['平行光颜色'] = new THREE.Color(0xffffff)
         directionFolder
         .addColor(params, '平行光颜色')
         .onChange(function(e)
         {
-            directionalLight.color = new THREE.Color(e);
+            //directionalLight.color = new THREE.Color(e);
+            csm.lights.forEach(function (item) {
+                item.color = e;
+            });
         });
         /*power*/
-        params['平行光强度']=directionalLight.intensity
+        params['平行光强度'] = csm.lightIntensity
         directionFolder
         .add(params, '平行光强度', 0.0, 10.0)
         .step(0.1)
         .onChange(function(e) {
-            directionalLight.intensity = e
+            //directionalLight.intensity = e
+            csm.lightIntensity = e;
+            csm.lights.forEach(function (item) {
+                item.intensity = e;
+            });
+            //main.updateCSM(e)
+            //csm.updateFrustums()
         });
         /*direction*/
-        params['平行光方向X']=directionalLight.target.position.x -directionalLight.position.x
+        params['平行光方向X'] = csm.lightDirection.x;
         directionFolder
         .add(params, '平行光方向X', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
-            directionalLight.target.position.x =
-            directionalLight.position.x + e;
+            //directionalLight.target.position.x =
+                //directionalLight.position.x + e;
             csm.lightDirection.x = e;
         });
-        params['平行光方向Y']=directionalLight.target.position.y -directionalLight.position.y
+        params['平行光方向Y'] = csm.lightDirection.y
         directionFolder
-        .add(params, '平行光方向Y', -1.0, -0.6)
+        .add(params, '平行光方向Y', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
-            directionalLight.target.position.y = 
-            directionalLight.position.y + e;
+            //directionalLight.target.position.y = 
+                //directionalLight.position.y + e;
             csm.lightDirection.y = e;
         });
-        params['平行光方向Z']=directionalLight.target.position.z -directionalLight.position.z
+        params['平行光方向Z'] = csm.lightDirection.z
         directionFolder
         .add(params, '平行光方向Z', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
-            directionalLight.target.position.z = 
-            directionalLight.position.z + e;
+            //directionalLight.target.position.z = 
+                //directionalLight.position.z + e;
             csm.lightDirection.z = e;
         });
         /*shadow*/
-        directionalLight.castShadow =false
         // params['平行光阴影']=directionalLight.castShadow 
         // directionFolder
         // .add(params, '平行光阴影')
@@ -209,13 +221,13 @@ export class UI{
         //     directionalLight.shadow.radius = value
         // } );
         /*visible*/
-        directionalLight.visible = false;
-        params['平行光启用']=directionalLight.visible
-        directionFolder
-        .add(params, '平行光启用')
-        .onChange(function(e) {
-            directionalLight.visible = e
-        });
+        // directionalLight.visible = false;
+        // params['平行光启用']=directionalLight.visible
+        // directionFolder
+        // .add(params, '平行光启用')
+        // .onChange(function(e) {
+        //     directionalLight.visible = e
+        // });
 
 
         /*power*/
@@ -254,23 +266,36 @@ export class UI{
             bloomPass.radius = Number( value );
         } );
     }
-    control_godrays(godrays,postprocessing){
-        if(!godrays||!postprocessing)return
+    control_godrays(godrays,postprocessing,GodRayShader){
+        if (!godrays || !postprocessing || !GodRayShader)return
         const gui=this.gui
-        const params=this.params
-        params.filterLen=godrays.filterLen;
-        params.TAPS_PER_PASS=godrays.TAPS_PER_PASS;
-        params.godrays_stength=postprocessing.godrays_stength.value
+        const params = this.params
+        params.decay = GodRayShader.uniforms['decay'].value
+        params.density = GodRayShader.uniforms['density'].value
+        params.weight = GodRayShader.uniforms['weight'].value
         const folder = gui.addFolder("隙间光")
-        folder.add( params, 'godrays_stength', 0.0, 1.5 ).step( 0.05 ).onChange( function ( value ) {
-            postprocessing.godrays_stength.value=value
-        } );
-        folder.add( params, 'filterLen', 0.5, 2.0 ).step( 0.01 ).onChange( function ( value ) {
-            godrays.filterLen = Number( value );
-        } );
-        folder.add( params, 'TAPS_PER_PASS', 1.0, 10.0 ).step( 0.1 ).onChange( function ( value ) {
-            godrays.TAPS_PER_PASS = Number( value );
-        } );
+        folder.add(params, 'decay', 0.0, 1.0).step(0.01).onChange(function (value) {
+            GodRayShader.uniforms['decay'].value = value;
+        });
+        folder.add(params, 'density', 0.0, 1.0).step(0.01).onChange(function (value) {
+            GodRayShader.uniforms['density'].value = value;
+        });
+        folder.add(params, 'weight', 0.0, 0.05).step(0.002).onChange(function (value) {
+            GodRayShader.uniforms['weight'].value = value;
+        });
+
+        // params.filterLen = godrays.filterLen;
+        // params.TAPS_PER_PASS = godrays.TAPS_PER_PASS;
+        // params.godrays_stength = postprocessing.godrays_stength.value
+        // folder.add( params, 'godrays_stength', 0.0, 1.5 ).step( 0.05 ).onChange( function ( value ) {
+        //     postprocessing.godrays_stength.value=value
+        // } );
+        // folder.add( params, 'filterLen', 0.5, 2.0 ).step( 0.01 ).onChange( function ( value ) {
+        //     godrays.filterLen = Number( value );
+        // } );
+        // folder.add( params, 'TAPS_PER_PASS', 1.0, 10.0 ).step( 0.1 ).onChange( function ( value ) {
+        //     godrays.TAPS_PER_PASS = Number( value );
+        // } );
     }
     control_ssr(ssrPass){
         if(!ssrPass)return
@@ -433,5 +458,9 @@ export class UI{
         folder.add( ssaoPass, 'minDistance' ).min( 0.001 ).max( 0.02 ).step( 0.0001 )
         folder.add( ssaoPass, 'maxDistance' ).min( 0.01 ).max( 0.6 ).step( 0.001 )
         
+    }
+    control_csm(csm)
+    {
+
     }
 }
