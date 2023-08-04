@@ -23,6 +23,8 @@ import { Water } from "three/examples/jsm/objects/Water.js";
 
 import { SSRDebugGUI } from "./SSRDebugGUI"
 
+import { MyUnrealBloomPass} from "./src/MyUnrealBloomPass.js";
+
 export class PostprocessingNew {
     constructor(scene, camera, renderer) {
         this.waterNormalCreator = new WaterNormalCreator();
@@ -56,13 +58,9 @@ export class PostprocessingNew {
     }
     initWater()
     {
-        // this.waterNormalCreator.composer.readBuffer.texture.wrapS = THREE.RepeatWrapping;
-        // this.waterNormalCreator.composer.readBuffer.texture.wrapT = THREE.RepeatWrapping;
-        // this.waterNormalCreator.composer.readBuffer.texture.needsUpdate=false
-        // this.waterNormalCreator.composer.readBuffer.texture.repeat = new THREE.Vector2(0.001, 0.001);
-
         this.ischange = false;
     }
+
     initComposer0()
     {
         const canvas = document.getElementById('myCanvas')
@@ -81,47 +79,6 @@ export class PostprocessingNew {
         const texturePass = new TexturePass(this.texture);
         this.composer.addPass(texturePass)
 
-        // this.composer.addPass(new ShaderPass({
-
-        //     uniforms: {
-        //         'cameraNear': { value: 1 },
-        //         'cameraFar':{value:100},
-        //         'tDiffuse': { value: null },
-        //         'opacity': { value: 1.0 },
-        //         'depthTexture':{value:this.finalTarget.depthTexture}
-        //     },
-
-        //     vertexShader: /* glsl */`
-        //             varying vec2 vUv;
-        //             void main() {
-        //                 vUv = uv;
-        //                 gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-        //             }`,
-        //     fragmentShader: /* glsl */`
-
-        // uniform float cameraNear;
-        // uniform float cameraFar;
-        // uniform sampler2D depthTexture;
-        // varying vec2 vUv;
-
-        // #include <packing>
-
-        // float getLinearDepth( const in vec2 screenPosition ) {
-
-        // 	float fragCoordZ = texture2D( depthTexture, screenPosition ).x;
-        // 	float viewZ = perspectiveDepthToViewZ( fragCoordZ, cameraNear, cameraFar );
-        // 	return viewZToOrthographicDepth( viewZ, cameraNear, cameraFar );
-        // }
-
-        // void main() {
-
-        // 	float depth = getLinearDepth( vUv );
-        // 	gl_FragColor = vec4( vec3( 1.0 - depth ), 1.0 );
-
-        // }`
-        // }))
-
-        // this.composer.addPass(new ShaderPass(DepthtoNormal));
 
         this.GodRayShader = GodRayShader;
         this.GodRayPass = new ShaderPass(this.GodRayShader)
@@ -172,10 +129,19 @@ export class PostprocessingNew {
         // HBAO
         //const hbaoEffect = new HBAOEffect(composer, camera, scene)
         const ssrEffect = new SSREffect(scene, camera, velocityDepthNormalPass)
-        //var gui = new SSRDebugGUI(ssrEffect)
-        //const effectPass = new POSTPROCESSING.EffectPass(camera)
+        // var gui = new SSRDebugGUI(ssrEffect)
+        const effectPass = new POSTPROCESSING.EffectPass(camera)
+        // composer.addPass(effectPass)
 
-        //composer.addPass(effectPass)
+
+        // const bloomPass=new MyUnrealBloomPass(//创建辉光通道
+        //         new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
+        //         0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
+        //         2,//0.3,//参数三：bloomRadius 泛光散发半径
+        //         0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
+        //     )
+        // composer.addPass(bloomPass)    
+
         this.composer = composer;
     }
     

@@ -17,6 +17,7 @@ export class AvatarManager {
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
             }
+            
             for (var i00 = 0; i00 < crowd.count; i00++) {
                 // const p=self.poslist[i00]
                 // crowd.setPosition(i00,[
@@ -135,7 +136,8 @@ export class AvatarManager {
                 const z=arr[2*i+1]+(6*Math.random()-3)
                 for(let i1=0;i1<3;i1++)
                 for(let i2=0;i2<3;i2++)
-                poslist.push([x+i1*3,y,z+i2*3])
+                //if(-400<x+i1*3&&x+i1*3<0&&-0<z+i2*3&&z+i2*3<400)
+                    poslist.push([x+i1*3,y,z+i2*3])
             }
         }
         // const a=400,b=400
@@ -291,13 +293,13 @@ export class AvatarManager {
             
             const lodConut=21
             const countAll=2500*2*10
-            const distanceAll=300
+            const distanceAll=200//300
             c1.lod_distance=[ ]
             c1.lod_geometry=[ ]
             c1.lod_avatarCount=[ ]
             let r_pre=0
             for(let j=0;j<lodConut;j++){
-                const r=Math.pow((j+1)/lodConut,2.5)*distanceAll
+                const r=Math.pow((j+1)/lodConut,5.5)*distanceAll
                 c1.lod_distance.push(r)
                 c1.lod_geometry.push(lodConut-j-1)
 

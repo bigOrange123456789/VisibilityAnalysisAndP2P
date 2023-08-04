@@ -105,38 +105,38 @@ export class UnrealBloom{
         this.renderPass=new RenderPass(scene, camera)
         this.bloomPass=new MyUnrealBloomPass(//创建辉光通道
                 new THREE.Vector2(window.innerWidth, window.innerHeight),//参数一：泛光覆盖场景大小，二维向量类型
-                0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
+                0.31,//0.65,//0.4,    //参数二：bloomStrength 泛光强度，值越大明亮的区域越亮，较暗区域变亮的范围越广
                 2,//0.3,//参数三：bloomRadius 泛光散发半径
                 0//0.75//参数四：bloomThreshold 泛光的光照强度阈值，如果照在物体上的光照强度大于该值就会产生泛光
             )
-        this.ssrPass=this.getSSR()
-        this.saoPass=this.getSAO()
-        this.ssaoPass=this.getSSAO()
-        this.bokehPass=this.getDOF()
-        this.lutPass = this.getLUT()
+        // this.ssrPass=this.getSSR()
+        // this.saoPass=this.getSAO()
+        // this.ssaoPass=this.getSSAO()
+        //this.bokehPass=this.getDOF()
+        // this.lutPass = this.getLUT()
         var composer = new MyEffectComposer(renderer)//效果组合器
         
-        composer.addPass(
+        if(this.ssaoPass)composer.addPass(
             this.ssaoPass//屏幕空间环境光遮蔽
         )
 
-        composer.addPass(
+        if(this.lutPass)composer.addPass(
             this.lutPass
         )
 
-        // composer.addPass(
-        //     this.renderPass
-        // )
+        composer.addPass(
+            this.renderPass
+        )
         
-        // composer.addPass(
-        //     this.ssrPass//屏幕空间反射
-        // )
+        if(this.ssrPass)composer.addPass(
+            this.ssrPass//屏幕空间反射
+        )
         
         // composer.addPass(
         //     this.bokehPass
         // )
         
-        composer.addPass(
+        if(this.bloomPass)composer.addPass(
             this.bloomPass//辉光
         )
         

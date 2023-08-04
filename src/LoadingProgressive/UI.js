@@ -8,7 +8,8 @@ export class UI{
     constructor(main) {
         this.main = main;
         this.gui = new GUI();
-        this.gui._closed=true
+        // this.gui._closed=true
+        this.gui.close()
         window.gui=this.gui
         window.panelDiv=this.gui.domElement
         this.params = {
@@ -27,8 +28,8 @@ export class UI{
                 window.inPanel=false
         }, false);
         
-        this.control_camera(main.camera,main.playerControl)
-        this.control_material(main.scene)
+        // this.control_camera(main.camera,main.playerControl)
+        // this.control_material(main.scene)
         // this.control_renderer(main.renderer)
         this.control_light(null, main.lightProducer.ambient)
 
@@ -56,7 +57,6 @@ export class UI{
 
             this.control_ssao(unrealBloom.ssaoPass)
             this.control_lut(unrealBloom.lutPass)
-            this.control_bloomPass(unrealBloom.bloomPass)
 
 
             this.control_ssao2(unrealBloom.ssaoPass2)
@@ -151,6 +151,9 @@ export class UI{
     }
     control_light(directionalLight, ambient) {
         const csm = this.main.csm;
+        csm.lightDirection.x=0.04
+        csm.lightDirection.y=-0.18
+        csm.lightDirection.z=0.6666
         const main = this.main;
         const gui=this.gui
         const params=this.params

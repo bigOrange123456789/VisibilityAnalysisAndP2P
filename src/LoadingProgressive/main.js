@@ -51,8 +51,8 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        //this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)
@@ -81,7 +81,7 @@ export class Main{
         this.initCSM();
 
         this.building = new Building(this.scene, this.camera)
-        // this.ui=new UI(this)
+        this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
     }
@@ -210,8 +210,8 @@ export class Main{
         this.csm = new THREE.CSM({
             fade: true,
             maxFar: this.camera.far,
-            cascades: 4,
-            shadowMapSize: 1024,
+            cascades: 4,//4,
+            shadowMapSize: 1024,//1024,
             lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
             parent: this.scene,

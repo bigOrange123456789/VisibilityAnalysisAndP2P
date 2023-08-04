@@ -322,7 +322,9 @@ export class Building{
         this.detection.receiveMesh(mesh)   
     }
     addMesh_fine(id,meshOld){
+        // meshOld.material=new THREE.MeshStandardMaterial()
         // return
+
         if(this.config.updateColor){
             meshOld.geometry.computeVertexNormals()
             let t=id*256*256*256/8431 ///2665
@@ -337,7 +339,21 @@ export class Building{
         meshOld.material.roughness0=meshOld.material.roughness//-0.5
         meshOld.material.envMapIntensity0=meshOld.material.envMapIntensity//-0.5
         meshOld.material.emissiveIntensity0=meshOld.material.emissiveIntensity//-0.5
-        meshOld.material.transparent=false
+        const m=meshOld.material
+        if(id==29||id==3){//玻璃
+            m.transparent=true
+            m.opacity=0.6
+        }else if(id==166){//护栏
+        }else if(id==174||id==182){//道路
+            m.metalness=0.8
+            m.roughness=0.4
+            m.metal=true
+            // alert(m.shininess)
+            console.log(m)
+        }else{
+            m.transparent=false
+        }
+        
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
         
         // mesh.material.shininess = 10;
@@ -352,6 +368,8 @@ export class Building{
                 instance_info)
             mesh2.castShadow = true
             mesh2.receiveShadow = true
+            // mesh2.castShadow = false
+            // mesh2.receiveShadow = false//true
             mesh2.visible=true
             
             //////////
@@ -384,12 +402,8 @@ export class Building{
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)
                         if(id==175){
-                            // mesh2.material.color.r=1
-                            // mesh2.position.y+=5
                             window.waterMaterial = mesh2.material;
                         }
-                        
-                        // window.waterMaterial = mesh.lod[0].material;
                     }
             }
             mesh.add(mesh2)
