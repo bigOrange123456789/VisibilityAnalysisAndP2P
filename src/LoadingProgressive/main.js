@@ -72,7 +72,7 @@ export class Main{
                 // new TreeManager(self.scene).init(data) 
                 // })
                 // if(typeof AvatarManager!=="undefined")
-                    // new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             }
         )
@@ -80,7 +80,7 @@ export class Main{
           
         this.initCSM();
 
-        this.building = new Building(this.scene, this.camera)
+        // this.building = new Building(this.scene, this.camera)
         // this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
