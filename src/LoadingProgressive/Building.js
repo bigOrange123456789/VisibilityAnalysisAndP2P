@@ -357,6 +357,10 @@ export class Building{
                 mesh.lod[0].visible=false
                 mesh.lod=[mesh2,mesh2]
             }
+            if(id==175){
+                window.waterMaterial = mesh2.material;
+                mesh.lod=[mesh2,mesh2]
+            }
             if(this.config.waterCidList){//175
                 for(let i=0;i<this.config.waterCidList.length;i++)
                     if(id==this.config.waterCidList[i]){
@@ -364,8 +368,12 @@ export class Building{
                         // mesh.visible=mesh2.visible=false
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)
-                        if(id==175)
-                        window.waterMaterial = mesh2.material;
+                        if(id==175){
+                            // mesh2.material.color.r=1
+                            
+                            //window.waterMaterial = mesh2.material;
+                        }
+                        
                         // window.waterMaterial = mesh.lod[0].material;
                     }
             }
