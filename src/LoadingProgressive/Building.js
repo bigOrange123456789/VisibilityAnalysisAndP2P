@@ -337,6 +337,7 @@ export class Building{
         meshOld.material.roughness0=meshOld.material.roughness//-0.5
         meshOld.material.envMapIntensity0=meshOld.material.envMapIntensity//-0.5
         meshOld.material.emissiveIntensity0=meshOld.material.emissiveIntensity//-0.5
+        meshOld.material.transparent=false
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
         
         // mesh.material.shininess = 10;
@@ -384,7 +385,7 @@ export class Building{
                         // if(true)this.parentGroup2.add(water)
                         if(id==175){
                             // mesh2.material.color.r=1
-                            mesh2.position.y+=5
+                            // mesh2.position.y+=5
                             window.waterMaterial = mesh2.material;
                         }
                         
