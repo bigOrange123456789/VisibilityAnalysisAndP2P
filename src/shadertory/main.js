@@ -9,6 +9,7 @@ import{Postprocessing}from"./Postprocessing.js"
 
 export class Main{
     constructor(body){
+        document.getElementById("plumpness").style.visibility="hidden";
         this.speed=1
         this.config=window.configALL.src.main
         this.body = body

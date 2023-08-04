@@ -130,10 +130,12 @@ export class AvatarManager {
         for(let cid of list){
             const arr=this.posConfig[cid+""]
             for(let i=0;i<arr.length/2;i++){
-                const x=arr[2*i  ]+(2*Math.random()-1)
+                const x=arr[2*i  ]+(6*Math.random()-3)
                 const y=5.5
-                const z=arr[2*i+1]+(2*Math.random()-1)
-                poslist.push([x,y,z])
+                const z=arr[2*i+1]+(6*Math.random()-3)
+                for(let i1=0;i1<3;i1++)
+                for(let i2=0;i2<3;i2++)
+                poslist.push([x+i1*3,y,z+i2*3])
             }
         }
         // const a=400,b=400
@@ -277,7 +279,7 @@ export class AvatarManager {
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
-            c1.scale=1//2
+            c1.scale=1
             
             // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
             // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
@@ -288,14 +290,14 @@ export class AvatarManager {
             c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
             
             const lodConut=21
-            const countAll=2500*2
+            const countAll=2500*2*10
             const distanceAll=300
             c1.lod_distance=[ ]
             c1.lod_geometry=[ ]
             c1.lod_avatarCount=[ ]
             let r_pre=0
             for(let j=0;j<lodConut;j++){
-                const r=Math.pow((j+1)/lodConut,1.5)*distanceAll
+                const r=Math.pow((j+1)/lodConut,2.5)*distanceAll
                 c1.lod_distance.push(r)
                 c1.lod_geometry.push(lodConut-j-1)
 

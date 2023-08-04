@@ -15,7 +15,7 @@ export class Panel{
     var ui=new MyUI()
     ui.init()
     for(let id=0;id<self.main.wanderList.length;id++)
-      new ui.Button('漫游路径'+(id+1), 
+      new ui.Button('自动漫游',//'漫游路径'+(id+1), 
         "#3498DB", 
         '#2980B9', 
         0x01DFD7,
@@ -26,6 +26,7 @@ export class Panel{
           })
   }
   setWander(id){
+    console.log(id,this.prePathId)
     if(id==this.prePathId){
       for(let i=0;i<this.main.wanderList.length;i++)
         if(i!==id)this.main.wanderList[i].stopFlag=true

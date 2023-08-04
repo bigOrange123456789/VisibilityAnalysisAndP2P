@@ -5,14 +5,15 @@ import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass.js";
 export class WaterNormalCreator {
 	constructor()
 	{
-		this.target = new THREE.WebGLRenderTarget();
-		this.renderer = window.renderer;
-		this.renderer.setRenderTarget(this.target);
-		this.composer = new EffectComposer(this.renderer);
-		this.composer.renderToScreen = false;
+    this.target = new THREE.WebGLRenderTarget(512, 512, { wrapS: THREE.RepeatWrapping, wrapT: THREE.RepeatWrapping });
+    this.renderer = window.renderer;
+    this.target.texture.repeat.set(0.001,0.001);
+    this.renderer.setRenderTarget(this.target);
+    this.composer = new EffectComposer(this.renderer, this.target);
+    this.composer.renderToScreen = false;
     this.composer.setSize(512, 512);
     this.shaderPass = new ShaderPass(WaterNormal);
-		this.composer.addPass(this.shaderPass);
+    this.composer.addPass(this.shaderPass);
 	}
 	GetTexture(time)
 	{

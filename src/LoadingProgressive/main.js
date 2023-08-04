@@ -80,7 +80,7 @@ export class Main{
           
         this.initCSM();
 
-        // this.building = new Building(this.scene, this.camera)
+        this.building = new Building(this.scene, this.camera)
         // this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
@@ -182,13 +182,19 @@ export class Main{
         // this.orbitControl.target = camera_tar[id].clone()
 
         const self=this
-        this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
+        // this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
+        //     ({ envMap }) => {
+        //       self.scene.background = envMap
+        //       self.scene.backgroundIntensity=0.8
+        //     }
+        //   )
+        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
             ({ envMap }) => {
               self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
             }
-          )
-        this.getCubeMapTexture('assets/textures/environment/evn.hdr').then(
+        )
+        this.getCubeMapHDR('assets/textures/environment/evn.hdr').then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
               self.scene.environment = envMap
@@ -226,23 +232,45 @@ export class Main{
     getCubeMapTexture(path) {
         var scope = this
         return new Promise((resolve, reject) => {//'.exr'
-            new RGBELoader()
-            .setDataType(THREE.FloatType)
+            new THREE.TextureLoader()
+            //.setDataType(THREE.FloatType)
             .load(
                 path,
                 texture => {
-                const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
-                pmremGenerator.compileEquirectangularShader()
+                //const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
+                //pmremGenerator.compileEquirectangularShader()
 
-                const envMap =
-                    pmremGenerator.fromEquirectangular(texture).texture
-                pmremGenerator.dispose()
+                const envMap =texture
+                //     pmremGenerator.fromEquirectangular(texture).texture
+                // pmremGenerator.dispose()
 
                 resolve({ envMap })
                 },
                 undefined,
                 reject
             )
+        })
+    }
+    getCubeMapHDR(path) {
+        var scope = this
+        return new Promise((resolve, reject) => {//'.exr'
+            new RGBELoader()
+                .setDataType(THREE.FloatType)
+                .load(
+                    path,
+                    texture => {
+                        const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
+                        pmremGenerator.compileEquirectangularShader()
+
+                        const envMap = 
+                            pmremGenerator.fromEquirectangular(texture).texture
+                        pmremGenerator.dispose()
+
+                        resolve({ envMap })
+                    },
+                    undefined,
+                    reject
+                )
         })
     }
     animate() {
@@ -305,12 +333,16 @@ export class Main{
         this.wanderList=[]
         if(this.config.pathList)
         for(let i=0;i<this.config.pathList.length;i++){
+            const a=this.config.pathList[i]
+            for(let j=0;j<a.length;j++){
+                a[j][6]*=2//速度减慢
+            }
             this.wanderList.push(
                 new MoveManager(this.camera, this.config.pathList[i])
             )
         }
         const self=this
-        setTimeout(()=>{
+        // setTimeout(()=>{
             if(self.config.autoMove=="true"){
                 const pathId=Math.floor(Math.random()*self.wanderList.length)
                 // this.wanderList[pathId].stopFlag=false
@@ -322,7 +354,7 @@ export class Main{
                 // window.pathId=pathId
                 self.panel.setWander(pathId)
             }
-        },100)
+        // },1)
         
     }
     loadJson(path,cb){

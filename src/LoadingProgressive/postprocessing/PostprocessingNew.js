@@ -39,7 +39,7 @@ export class PostprocessingNew {
     SetTonemap()
     {
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1;
+        renderer.toneMappingExposure = 1.5;
 
 
         // Set CustomToneMapping to Uncharted2
@@ -56,9 +56,10 @@ export class PostprocessingNew {
     }
     initWater()
     {
-        this.waterNormalCreator.composer.readBuffer.texture.wrapS = THREE.RepeatWrapping;
-        this.waterNormalCreator.composer.readBuffer.texture.wrapT = THREE.RepeatWrapping;
-        this.waterNormalCreator.composer.readBuffer.texture.repeat = new THREE.Vector2(0.001, 0.001);
+        // this.waterNormalCreator.composer.readBuffer.texture.wrapS = THREE.RepeatWrapping;
+        // this.waterNormalCreator.composer.readBuffer.texture.wrapT = THREE.RepeatWrapping;
+        // this.waterNormalCreator.composer.readBuffer.texture.needsUpdate=false
+        // this.waterNormalCreator.composer.readBuffer.texture.repeat = new THREE.Vector2(0.001, 0.001);
 
         this.ischange = false;
     }
@@ -179,6 +180,7 @@ export class PostprocessingNew {
     }
     
     render() {
+        
         this.waterNormalCreator.GetTexture(this.clock.getElapsedTime()*0.3);
         if (!this.ischange&&window.waterMaterial) {
             //window.waterMaterial.map = this.waterNormalCreator.target.texture;

@@ -282,6 +282,9 @@ export class Building{
                         // mesh.visible=mesh2.visible=false
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)
+                        // alert(id)
+                        // mesh.lod=[mesh2,mesh2]
+                        // if(id==175)
                         // window.waterMaterial = mesh.lod[1].material;
                     }
             }
@@ -306,6 +309,7 @@ export class Building{
         this.detection.receiveMesh(mesh)   
     }
     addMesh_fine(id,meshOld){
+        // return
         if(this.config.updateColor){
             meshOld.geometry.computeVertexNormals()
             let t=id*256*256*256/8431 ///2665
@@ -360,6 +364,7 @@ export class Building{
                         // mesh.visible=mesh2.visible=false
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)
+                        if(id==175)
                         window.waterMaterial = mesh2.material;
                         // window.waterMaterial = mesh.lod[0].material;
                     }
