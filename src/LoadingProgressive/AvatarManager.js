@@ -1,5 +1,5 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConifg_woman03.json'
+import conifg_woman     from '../../config/avatar/sceneConifg_woman01.json'
 import conifg_tree     from '../../config/avatar/tree.json'
 
 export class AvatarManager {
@@ -12,7 +12,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material",(crowd,c)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -113,60 +113,60 @@ export class AvatarManager {
         return poslist
     }
     initPos_avatarTest(){
-        // const poslist=[]
-        // for(let i=0;i<1000;i++)
-        // for(let j=0;j<1000;j++){
-        //     poslist.push([
-        //         5*2*(i-100),
-        //         5.5,
-        //         5*2*(j-250),
-        //     ])
-        // }
-        // return poslist
         const poslist=[]
-        const list=[
-            171,
-            173,182
-        ]
-        for(let cid of list){
-            const arr=this.posConfig[cid+""]
-            for(let i=0;i<arr.length/2;i++){
-                const x=arr[2*i  ]+(6*Math.random()-3)
-                const y=5.5
-                const z=arr[2*i+1]+(6*Math.random()-3)
-                for(let i1=0;i1<3;i1++)
-                for(let i2=0;i2<3;i2++)
-                //if(-400<x+i1*3&&x+i1*3<0&&-0<z+i2*3&&z+i2*3<400)
-                    poslist.push([x+i1*3,y,z+i2*3])
-            }
+        for(let i=0;i<1000;i++)
+        for(let j=0;j<1000;j++){
+            poslist.push([
+                3*(i-500),
+                5.5,
+                3*(j-500),
+            ])
         }
-        // const a=400,b=400
-        // for(let i=0;i<a;i++)
-        // for(let j=0;j<b;j++){
-        //     const x=5*2*(i-a/2)+(2*Math.random()-1)*5
-        //     const z=5*2*(j-b/2)+(2*Math.random()-1)*5
-        //     // "x": [
-        //     //     -815,879,
-        //     //     11
-        //     // ],
-        //     // "y": [
-        //     //     16,16,
-        //     //     11
-        //     // ],
-        //     // "z": [
-        //     //     -962,1084,
-        //     //     11
-        //     // ],
-        //     if(!(-750<x&&x<750&&-750<z&&z<750))
-        //     // if(!(-15<x&&x<879&&-962<z&&z<1054))
-        //         poslist.push([
-        //             x,
-        //             5.5,
-        //             z,
-        //         ])
-        // }
-        console.log("initPos",poslist)
         return poslist
+        // const poslist=[]
+        // const list=[
+        //     171,
+        //     173,182
+        // ]
+        // for(let cid of list){
+        //     const arr=this.posConfig[cid+""]
+        //     for(let i=0;i<arr.length/2;i++){
+        //         const x=arr[2*i  ]+(6*Math.random()-3)
+        //         const y=5.5
+        //         const z=arr[2*i+1]+(6*Math.random()-3)
+        //         for(let i1=0;i1<3;i1++)
+        //         for(let i2=0;i2<3;i2++)
+        //         //if(-400<x+i1*3&&x+i1*3<0&&-0<z+i2*3&&z+i2*3<400)
+        //             poslist.push([x+i1*3,y,z+i2*3])
+        //     }
+        // }
+        // // const a=400,b=400
+        // // for(let i=0;i<a;i++)
+        // // for(let j=0;j<b;j++){
+        // //     const x=5*2*(i-a/2)+(2*Math.random()-1)*5
+        // //     const z=5*2*(j-b/2)+(2*Math.random()-1)*5
+        // //     // "x": [
+        // //     //     -815,879,
+        // //     //     11
+        // //     // ],
+        // //     // "y": [
+        // //     //     16,16,
+        // //     //     11
+        // //     // ],
+        // //     // "z": [
+        // //     //     -962,1084,
+        // //     //     11
+        // //     // ],
+        // //     if(!(-750<x&&x<750&&-750<z&&z<750))
+        // //     // if(!(-15<x&&x<879&&-962<z&&z<1054))
+        // //         poslist.push([
+        // //             x,
+        // //             5.5,
+        // //             z,
+        // //         ])
+        // // }
+        // console.log("initPos",poslist)
+        // return poslist
     }
     initPos_tree(){
         const poslist=[]

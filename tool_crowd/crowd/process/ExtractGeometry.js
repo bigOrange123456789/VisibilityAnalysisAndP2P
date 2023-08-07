@@ -16,10 +16,10 @@ export class ExtractGeometry {
                 b.push(a[i])
             return b
         }
-        // console.log(node,node.geometry.attributes)
+        console.log(node,node.geometry.attributes)
         result[node.name]={}
-        const tags=//,'normal']//normal可以在前端根据拓扑关系重新计算，不需要传输
-            node instanceof THREE.SkinnedMesh?['position','uv','skinIndex','skinWeight']:['position','uv']
+        const tags=//,'normal']//normal可以在前端根据拓扑关系重新计算，不需要传输//重新计算有损失
+            node instanceof THREE.SkinnedMesh?['position','normal','uv','skinIndex','skinWeight']:['position','normal','uv']
         var attributes=node.geometry.attributes
         console.log(":1:",node,attributes)
         for(var i=0;i<tags.length;i++ ){

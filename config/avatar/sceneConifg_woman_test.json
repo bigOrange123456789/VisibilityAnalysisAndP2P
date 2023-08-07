@@ -26,10 +26,10 @@
             
             
                 "CloW_E_eyeLeft_geo02": {
-                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png.png"
+                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png"
                 },
                 "CloW_E_eyeRight_geo01": {
-                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png.png"
+                    "map": "CloW_A_EyeLash_kouqiang_BaseColor.png"
                 },
                 "eyelash": {
                     "map": "CloW_A_EyeLash_kouqiang_BaseColor.png"

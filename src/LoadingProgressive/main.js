@@ -78,10 +78,10 @@ export class Main{
         )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
-        this.initCSM();
+        // this.initCSM();
 
-        this.building = new Building(this.scene, this.camera)
-        this.ui=new UI(this)
+        // this.building = new Building(this.scene, this.camera)
+        // this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
     }

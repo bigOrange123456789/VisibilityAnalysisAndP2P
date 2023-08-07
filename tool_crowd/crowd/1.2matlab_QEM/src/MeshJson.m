@@ -6,8 +6,8 @@ classdef MeshJson < handle
         V%��  nv*3
         E%��  ne*3 
         F%��  nf*3
-        NV
-        NF
+        NV%顶点法向量
+        NF%三角面法向量
         file_name
         matrix0
         
@@ -145,6 +145,7 @@ classdef MeshJson < handle
             o.listF=1:o.nf();
             o.list=o.mergeVertex();
             o.computeNormal();
+            % o.NV=reshape(data.normal,3,[])'; 
             o.computeEdge();
             o.computeRimV();
             %disp(o.E);
@@ -173,9 +174,11 @@ classdef MeshJson < handle
                 "aUV",[],...
                 "aSkinWeight",[],...
                 "aSkinIndex",[],...
+                "aNormal",[],...%
                 "bUV",[],...
                 "bSkinWeight",[],...
-                "bSkinIndex",[]...
+                "bSkinIndex",[],...
+                "bNormal",[]...%
                 ),o.nv(),1);
             o.recordSize=0;
         end
@@ -194,13 +197,14 @@ classdef MeshJson < handle
             o.record(i).aPos=aPos;
             o.record(i).bPos=bPos;
             o.record(i).cPos=cPos;
+            o.record(i).aNormal=o.NV(aI,:);
+            o.record(i).bNormal=o.NV(bI,:);
 
             o.record(i).aUV=o.uv(aI,:);
             if o.isSkinnedMesh%判断是skinnedmesh还是普通mesh
                 o.record(i).aSkinWeight=o.skinWeight(aI,:);
                 o.record(i).aSkinIndex=o.skinIndex(aI,:); 
             end
-            
 
             o.record(i).bUV=o.uv(bI,:);
             if o.isSkinnedMesh%判断是skinnedmesh还是普通mesh
@@ -208,7 +212,6 @@ classdef MeshJson < handle
                 o.record(i).bSkinIndex=o.skinIndex(bI,:);
             end
             
-
             f=zeros(size(o.F));
             f(:)=o.F(:);
             f(f == b) = a;  %边中e2的索引现在都指向e1
@@ -351,27 +354,32 @@ classdef MeshJson < handle
             uv0=o.uv;
             skinWeight0=o.skinWeight;
             skinIndex0=o.skinIndex;
+            normal0=o.NV;
 
             uv=zeros(o.nv(),2);
             skinWeight=zeros(o.nv(),4);
             skinIndex=zeros(o.nv(),4);
+            normal=zeros(o.nv(),3)
 
             for i =1:o.nv()
                 j=o.list(i);
                 uv(i,:)=uv0(j,:);
                 skinWeight(i,:)=skinWeight0(j,:);
                 skinIndex(i,:) =skinIndex0(j,:);
+                noraml(i,:)=normal0(j,:);
             end
 
             position=o.V';
             uv=uv';
             skinWeight=skinWeight';
             skinIndex=skinIndex';
+            normal=normal';
             index=o.F'-1;
             if o.isSkinnedMesh
                 data=struct( ... 
                     'position', position(:)', ... 
                     'uv', uv(:)', ... 
+                    'normal',normal(:)',...
                     'skinWeight', skinWeight(:)', ... 
                     'skinIndex', skinIndex(:)', ... 
                     'index',index(:)'...
@@ -380,13 +388,14 @@ classdef MeshJson < handle
                 data=struct( ... 
                     'position', position(:)', ... 
                     'uv', uv(:)', ... 
+                    'normal',normal(:)',...
                     'index',index(:)'...
                 );
             end
             %data=savejson(data);
         end
-        function data=getJson2(o)
-            
+        function data=getJson2(o)%这个函数没有被使用到
+            exit(0);
             uv0=o.uv;
             if o.isSkinnedMesh
                 skinWeight0=o.skinWeight;
@@ -604,8 +613,6 @@ classdef MeshJson < handle
             this.download();
         end
         function computeNormal(o)
-            %���룺 vertex��nv*3   face:nf*3
-            %�����
             % compute_normal - compute the normal of a triangulation
             %
             %   [normal,normalf] = compute_normal(vertex,face);
