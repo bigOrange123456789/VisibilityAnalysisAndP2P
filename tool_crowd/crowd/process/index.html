@@ -18,14 +18,14 @@
     import { ExtractGeometry } from './ExtractGeometry.js'
     import { ExtractAnimation } from './ExtractAnimation.js'
     import { ExtractConfig } from './ExtractConfig.js'
-    var path0 =prompt("请输入数据路径:","woman01/woman01.gltf")//"monkey.glb")
+    var path0 =prompt("请输入数据路径:","woman02/woman02.gltf")//"monkey.glb")
     
     process()
     function process(){
         new THREE.GLTFLoader().load(path0, (glb) => {
-            new ExtractConfig(glb)
-            new ExtractMaterial(glb)
-            new ExtractGeometry(glb)
+            // new ExtractConfig(glb)
+            // new ExtractMaterial(glb)
+            // new ExtractGeometry(glb)
             new ExtractAnimation(glb)
         });
     }

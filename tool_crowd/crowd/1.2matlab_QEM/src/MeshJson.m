@@ -237,33 +237,6 @@ classdef MeshJson < handle
                 end
             end
             
-            %{
-            if sum(f_remove)==0
-                "sum(f_remove)==0"
-                [sum(f_remove),size(o.record(i).face.x,1),sum(sum(f==a,2)==2)]
-                "a,b"
-                [a,b]
-                
-                e=zeros(size(o.E));
-                e(:)=o.E(:);
-                e(e==b)=a;
-                "sum(sum(e==a,2)==2)"
-                sum(sum(e==a,2)==2)
-
-                
-                %{
-                "V"
-                o.V
-                "F"
-                o.F
-                "E"
-                o.E
-                %}
-            end
-            %}
-
-            
-
             updateIndex= sum(f==a,2)==1;    %三角形中现在有了a且未被删除
             updateIndexNo=sum(o.F==a,2)==1; %三角形中原本有a
             for k =1:size(updateIndex,1)
@@ -350,7 +323,7 @@ classdef MeshJson < handle
             %inv(o.matrix0);
             o.write(o.file_name+"_save",o.V,o.F);
         end
-        function data=getJson(o)
+        function data=getJson(o)%没有被执行
             uv0=o.uv;
             skinWeight0=o.skinWeight;
             skinIndex0=o.skinIndex;
@@ -366,7 +339,7 @@ classdef MeshJson < handle
                 uv(i,:)=uv0(j,:);
                 skinWeight(i,:)=skinWeight0(j,:);
                 skinIndex(i,:) =skinIndex0(j,:);
-                noraml(i,:)=normal0(j,:);
+                normal(i,:)=normal0(j,:);
             end
 
             position=o.V';
@@ -394,32 +367,35 @@ classdef MeshJson < handle
             end
             %data=savejson(data);
         end
-        function data=getJson2(o)%这个函数没有被使用到
-            exit(0);
+        function data=getJson2(o)%用于最后导出基网格
             uv0=o.uv;
+            normal0=o.NV;
             if o.isSkinnedMesh
                 skinWeight0=o.skinWeight;
                 skinIndex0=o.skinIndex;
             end
-            
 
             uv=zeros(o.nv2(),2);
+            normal=zeros(o.nv(),3);
             skinWeight=zeros(o.nv2(),4);
             skinIndex=zeros(o.nv2(),4);
 
             for i =1:o.nv2()
                 j=o.list2(i);
                 uv(i,:)=uv0(j,:);
+                normal(i,:)=normal0(j,:);
                 if o.isSkinnedMesh
                     skinWeight(i,:)=skinWeight0(j,:);
                     skinIndex(i,:) =skinIndex0(j,:);
                 end
             end
+            % disp("normal");
 
             
             index=o.recF'-1;  %o.F'-1;
             position=o.recV';   %o.V';
             uv=uv';
+            normal=normal';
             if o.isSkinnedMesh
                 skinWeight=skinWeight';
                 skinIndex=skinIndex';
@@ -430,6 +406,7 @@ classdef MeshJson < handle
                 data=struct( ... 
                     'position', position(:)', ... 
                     'uv', uv(:)', ... 
+                    'normal',normal(:)',...
                     'skinWeight', skinWeight(:)', ... 
                     'skinIndex', skinIndex(:)', ... 
                     'index',index(:)', ...
@@ -440,6 +417,7 @@ classdef MeshJson < handle
                 data=struct( ... 
                     'position', position(:)', ... 
                     'uv', uv(:)', ... 
+                    'normal',normal(:)',...
                     'index',index(:)', ...
                     'vId',o.list2', ... %'
                     'fId',o.listF ...

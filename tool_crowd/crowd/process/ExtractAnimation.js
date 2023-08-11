@@ -32,8 +32,22 @@ export class ExtractAnimation {
                 glb.animations[index]
             )
         }
-    
-        scene.add(glb.scene);
+
+        glb.scene.traverse(node=>{
+            if(node instanceof THREE.Object3D||node instanceof THREE.Group){
+                // node.applyMatrix4(new THREE.Matrix4().set(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1))
+                // node.matrixAutoUpdate=true
+                // node.matrix.set(1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1)
+                // node.matrixAutoUpdate=true
+                node.position.set(0,0,0)
+                node.rotation.set(0,0,0)
+                node.scale.set(1,1,1)
+            }
+        })
+
+        scene.add(glb.scene)
+
+        
 
         var skeleton_all=get_skeleton(glb)//获取所有的SkinMesh对象
         var n= prompt("动画的总帧数为:",animations[0].tracks[0].times.length);//帧数量

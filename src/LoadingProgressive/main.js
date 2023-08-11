@@ -84,6 +84,9 @@ export class Main{
         // this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
+        window.capture=()=>{
+            self.capture()
+        }
     }
     async initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -188,18 +191,18 @@ export class Main{
         //       self.scene.backgroundIntensity=0.8
         //     }
         //   )
-        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
-            ({ envMap }) => {
-              self.scene.background = envMap
-              self.scene.backgroundIntensity=0.8
-            }
-        )
-        this.getCubeMapHDR('assets/textures/environment/evn.hdr').then(
-        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-            ({ envMap }) => {
-              self.scene.environment = envMap
-            }
-        )
+        // this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
+        //     ({ envMap }) => {
+        //       self.scene.background = envMap
+        //       self.scene.backgroundIntensity=0.8
+        //     }
+        // )
+        // this.getCubeMapHDR('assets/textures/environment/evn.hdr').then(
+        // //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+        //     ({ envMap }) => {
+        //       self.scene.environment = envMap
+        //     }
+        // )
 
 
     }
@@ -369,6 +372,27 @@ export class Main{
             }
         }
     }
+    downloadCanvas(){
+        var imgURL = canvas.toDataURL({format: "image/png", quality:1, width:12000, height:4000});
+        var dlLink = document.createElement('a');
+        dlLink.download = "fileName";
+        dlLink.href = imgURL;
+        dlLink.dataset.downloadurl = [MIME_TYPE, dlLink.download, dlLink.href].join(':');
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+    }
+    capture() {
+        // const canvas = this.renderer.domElement
+        // this.camera.aspect = canvas.clientWidth / canvas.clientHeight
+        // this.camera.updateProjectionMatrix()
+        this.renderer.render(this.scene, this.camera)
+        const imageURL = this.renderer.domElement.toDataURL("image/png")
+        const anchor = document.createElement("a")
+        anchor.href = imageURL
+        anchor.download = "capture.png"
+        anchor.click()
+      }
 }
 // document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{

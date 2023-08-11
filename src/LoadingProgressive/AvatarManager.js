@@ -1,5 +1,5 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConifg_woman01.json'
+import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 import conifg_tree     from '../../config/avatar/tree.json'
 
 export class AvatarManager {
@@ -12,7 +12,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material",(crowd,c)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -114,12 +114,12 @@ export class AvatarManager {
     }
     initPos_avatarTest(){
         const poslist=[]
-        for(let i=0;i<1000;i++)
-        for(let j=0;j<1000;j++){
+        for(let i=0;i<50;i++)
+        for(let j=0;j<50;j++){
             poslist.push([
-                3*(i-500),
+                5*(i-25)/3,
                 5.5,
-                3*(j-500),
+                5*(j-25)/3,
             ])
         }
         return poslist
