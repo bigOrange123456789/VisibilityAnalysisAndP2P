@@ -1,4 +1,6 @@
 console.log("version:01")
+import { createRequire } from 'module';
+const require = createRequire(import.meta.url);
 require('fs').mkdir("detection", ()=>{})
 const port=9999
 let id=0

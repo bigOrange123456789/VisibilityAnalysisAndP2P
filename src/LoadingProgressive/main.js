@@ -51,8 +51,8 @@ export class Main{
         window.addEventListener('resize', this.resize.bind(this), false)
 
         this.initScene()
-        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         const self=this
         this.animate = this.animate.bind(this)
@@ -78,10 +78,10 @@ export class Main{
         )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
-        // this.initCSM();
+        this.initCSM();
 
         // this.building = new Building(this.scene, this.camera)
-        // this.ui=new UI(this)
+        this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
         window.capture=()=>{
@@ -197,12 +197,12 @@ export class Main{
         //       self.scene.backgroundIntensity=0.8
         //     }
         // )
-        // this.getCubeMapHDR('assets/textures/environment/evn.hdr').then(
-        // //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-        //     ({ envMap }) => {
-        //       self.scene.environment = envMap
-        //     }
-        // )
+        this.getCubeMapHDR('assets/textures/environment/evn.hdr').then(
+        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+            ({ envMap }) => {
+              self.scene.environment = envMap
+            }
+        )
 
 
     }
@@ -386,7 +386,32 @@ export class Main{
         // const canvas = this.renderer.domElement
         // this.camera.aspect = canvas.clientWidth / canvas.clientHeight
         // this.camera.updateProjectionMatrix()
+        // const texture = this.unrealBloom.getTexture()
+        // const image=texture.image
+        // console.log(texture)
+        // return
+
+        // const canvas = document.createElement("canvas");
+        // canvas.width = image.width;
+        // canvas.height = image.height;
+        // const context = canvas.getContext("2d");
+        // // console.log(context)
+        // context.drawImage(image , 0,0);// context.drawImage(image , 0,0,image.width,image.height);
+
+        // let url = canvas.toDataURL("image/jpeg")
+        // let a = document.createElement("a"); // 生成一个a元素
+        // let event = new MouseEvent("click"); // 创建一个单击事件
+        // a.download = "photo.jpg"; // 设置图片名称
+        // a.href = url; // 将生成的URL设置为a.href属性
+        // a.dispatchEvent(event); // 触发a的单击事件
+        // return
+
+
+        // document.body.appendChild(image);
+
         this.renderer.render(this.scene, this.camera)
+        // console.log(image.toDataURL("image/png"))
+        console.log(this.renderer.domElement)
         const imageURL = this.renderer.domElement.toDataURL("image/png")
         const anchor = document.createElement("a")
         anchor.href = imageURL

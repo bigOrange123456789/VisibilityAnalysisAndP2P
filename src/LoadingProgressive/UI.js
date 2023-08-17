@@ -45,7 +45,11 @@ export class UI{
                 this.control_lut(main.postprocessing.unrealBloom.lutPass)
                 this.control_sao(main.postprocessing.unrealBloom.saoPass)
             }
+            if(main.postprocessing.PostprocessingNew)
             this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.PostprocessingNew.GodRayShader)
+            else
+            this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.GodRayShader)
+            
         }
         if(unrealBloom){
             this.control_ssao(unrealBloom.ssaoPass)
@@ -55,8 +59,8 @@ export class UI{
             this.control_lut(unrealBloom.lutPass)
             this.control_sao(unrealBloom.saoPass)
 
-            this.control_ssao(unrealBloom.ssaoPass)
-            this.control_lut(unrealBloom.lutPass)
+            // this.control_ssao(unrealBloom.ssaoPass)
+            // this.control_lut(unrealBloom.lutPass)
 
 
             this.control_ssao2(unrealBloom.ssaoPass2)

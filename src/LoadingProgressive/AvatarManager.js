@@ -1,7 +1,67 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
 import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 import conifg_tree     from '../../config/avatar/tree.json'
+class Test{
+    constructor(avatar){
+        this.avatar=avatar
+        window.t=this
+    }
+    init(){
+        const i5=this.avatar.crowd
+        window.i5=i5
+        i5.setScale(0,[10,10,10]);
+        window.f=(i,j,k)=>{i5.setPartType(0,'body',i);i5.setPartType(0,'coat',j);i5.setPartType(0,'trousers',k);i5.update();}
+        window.f(0,0,0)
+        i5.setPartType(0,'hair',0)
+        window.camera.position.set(-40.316744366725,  8,  37.8613180818328)
+        window.camera.rotation.set(-0.6503317661947894, -0.876727763380061,  -0.5291184829295812)
+        const self=this
+        const show=(obj)=>{
+            obj.visible=true
+            if(obj.children)
+            for(let i=0;i<obj.children.length;i++){
+                show(obj.children[i])
+            }
+        }
+        this.i5=this.avatar.crowd
+        // this.i4=this.i5.children[0]
+        // this.i3=this.i4.children[0]
+        // this.i2=this.i3.children[0]
+        this.set5=()=>{
+            show(self.i5)
+        }
+        this.set4=(i0)=>{
+            const a=self.i5
+            self.i4=a.children[i0]
+            for(let i=0;i<a.children.length;i++)a.children[i].visible=(i==i0);
+            show(a.children[i0])
+        }
+        this.set3=(i0)=>{
+            const a=self.i4
+            self.i3=a.children[i0]
+            for(let i=0;i<a.children.length;i++)a.children[i].visible=(i==i0);
+            show(a.children[i0])
+        }
+        this.set2=(i0)=>{
+            const a=self.i3
+            self.i2=a.children[i0]
+            for(let i=0;i<a.children.length;i++)a.children[i].visible=(i==i0);
+            show(a.children[i0])
+        }
+        // this.set4(0)
+        this.setMaterial=(i5)=>{
+            for(let i4 of i5.children)
+                for(let i3 of i4.children)
+                    for(let i2 of i3.children)
+                        i2.material.side=2;
+        }
+        this.setMaterial(i5)
+        // this.set3(0)
+        // this.set2(0)
 
+        // window.i5=
+    }
+}
 export class AvatarManager {
     constructor(scene, camera,posConfig) {
         this.posConfig=posConfig
@@ -26,7 +86,7 @@ export class AvatarManager {
                 //     p[2]//+(2*Math.random()-1)*5
                 // ])
                 // crowd.setRotation(i00,[0,Math.random()*30,0])
-                if(Math.random()>0.3){
+                if(true){//if(Math.random()>0.3){
                     crowd.setAnimation(
                         i00,
                         r(c.standAnimationList),
@@ -65,6 +125,7 @@ export class AvatarManager {
                 // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_shangyi_geo")
             }
         })
+        window.t=new Test(window.avatar)
         // window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")
     }
     initPos_subway(){
@@ -113,6 +174,17 @@ export class AvatarManager {
         return poslist
     }
     initPos_avatarTest(){
+        // const poslist=[]
+        // for(let i=0;i<1;i++)
+        // for(let j=0;j<1;j++){
+        //     poslist.push([
+        //         5*(i-0)/3,
+        //         5.5,
+        //         5*(j-0)/3,
+        //     ])
+        // }
+        // return poslist
+        
         const poslist=[]
         for(let i=0;i<50;i++)
         for(let j=0;j<50;j++){
@@ -123,6 +195,7 @@ export class AvatarManager {
             ])
         }
         return poslist
+
         // const poslist=[]
         // const list=[
         //     171,
@@ -299,7 +372,7 @@ export class AvatarManager {
             c1.lod_avatarCount=[ ]
             let r_pre=0
             for(let j=0;j<lodConut;j++){
-                const r=Math.pow((j+1)/lodConut,5.5)*distanceAll
+                const r=Math.pow((j+1)/lodConut,1)*distanceAll
                 c1.lod_distance.push(r)
                 c1.lod_geometry.push(lodConut-j-1)
 

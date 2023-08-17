@@ -130,8 +130,8 @@
         "meshType":[
             {
 
-                "CloW_A_body_geo": "body",
-                "CloW_A_kuzi_geo": "trousers",
+                "CloW_A_body_geo": "coat",
+                "CloW_A_kuzi_geo": "coat",
                 "CloW_A_shangyi_geo": "coat",
                 "CloW_A_waitao_geo1": "coat",
 
@@ -149,16 +149,16 @@
                 "eyelash":null,
                 "hair":"hair",
 
-                "body2":"body",
-                "qipao22":"trousers",
+                "body2":"coat",
+                "qipao22":"coat",
                 "waitao1": "coat",
                 "xiezi":null,
                 "head":null,
                 "teeth":null
             },
             {
-                "CloW_C_body_geo1":"body",
-                "CloW_C_qunzi_geo3456":"trousers",
+                "CloW_C_body_geo1":"coat",
+                "CloW_C_qunzi_geo3456":"coat",
                 "CloW_C_shangyi_geo":"coat",
                 "CloW_C_xie_geo":null,
                 "head":null,
@@ -168,13 +168,6 @@
                 "teeth":null,
                 "hair":"hair"
             }
-        ],
-        "constraint":[
-            {"body":0,"coat":0,"trousers":0},
-            {"body":1,"coat":1,"trousers":1},
-            {"body":2,"coat":2,"trousers":2},
-            {"body":2,"coat":0,"trousers":2},
-            {"body":2,"coat":0,"trousers":1}
         ],
         "lod_visible": [
             {
@@ -209,8 +202,6 @@
             }
         ],
         "useColorTag": [
-            "CloW_A_kuzi_geo",
-            "CloW_A_waitao_geo1"
         ],
         
 

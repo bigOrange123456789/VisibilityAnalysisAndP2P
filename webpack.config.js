@@ -1,11 +1,14 @@
+//https://blog.csdn.net/lyy180236/article/details/115553624
+//npm install webpack --save-dev
+//npm install webpack-cli --save-dev
+
+//common JS模块
 module.exports = {
-    //需要被打包的js文件路径及文件名
     entry: './src/LoadingProgressive/main.js',
-    // entry: '../../lib/Crowd.js',
     output: {
-        //打包输出的目标文件的绝对路径(其中__dirname为当前目录的绝对路径)
         path: __dirname + '/src/LoadingProgressive',  
-        //打包输出的js文件名及相对于dist目录所在路径
         filename: 'index.js'  
     }
 };
+//ES6 模块
+//....

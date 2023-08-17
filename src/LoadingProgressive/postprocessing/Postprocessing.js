@@ -4,7 +4,7 @@ import {
     GodRaysFakeSunShader, GodRaysDepthMaskShader, GodRaysCombineShader, GodRaysGenerateShader 
 } from 'three/examples/jsm/shaders/GodRaysShader.js';
 
-import {PostprocessingNew} from './PostprocessingNew.js';
+// import {PostprocessingNew} from './PostprocessingNew.js';
 
 import{Godrays}from"./Godrays.js"
 import{UnrealBloom}from"./UnrealBloom.js"
@@ -12,22 +12,22 @@ import{UnrealBloom}from"./UnrealBloom.js"
 export class Postprocessing{
     constructor(camera,scene,renderer){
         this.godrays_stength={ value: 0.2 }
-        this.PostprocessingNew = new PostprocessingNew(scene, camera, renderer);
+        // this.PostprocessingNew = new PostprocessingNew(scene, camera, renderer);
 
-        //this.unrealBloom=new UnrealBloom(camera,scene,renderer)
+        this.unrealBloom=new UnrealBloom(camera,scene,renderer)
         this.godrays = new Godrays(camera, scene)
         this._camera = camera;
      
-        //this.init()
+        if(this.unrealBloom)this.init(camera,scene)
         }
     init(){
-        this.scene = new THREE.Scene()
-		this.camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 )
-		this.camera.position.z = 100
-		this.scene.add( camera )
+        const scene = new THREE.Scene()
+		const camera = new THREE.OrthographicCamera( - 0.5, 0.5, 0.5, - 0.5, - 10000, 10000 )
+		camera.position.z = 100
+		scene.add( camera )
 
         this.uniforms=THREE.UniformsUtils.clone( GodRaysGenerateShader.uniforms )
-        this.quad = new THREE.Mesh(//？
+        const quad = new THREE.Mesh(//？
             new THREE.PlaneGeometry( 1.0, 1.0 ),
             new THREE.ShaderMaterial( {//生成
                 uniforms: this.uniforms,
@@ -35,16 +35,24 @@ export class Postprocessing{
                 fragmentShader: GodRaysGenerateShader.fragmentShader
             })
         );
-        this.quad.position.z = - 9900
-        this.scene.add( this.quad )
+        // quad.material.transparent=true
+        quad.position.z = - 9900
+        scene.add( quad )
+        this.scene=scene
+        this.camera=camera
     }
     render(){
         // this.test(this.godrays.getTexture())
-        // this.mix(
-        //     this.unrealBloom.getTexture(),
-        //     this.godrays.getTexture()
-        // )  
-        this.PostprocessingNew.render()
+        if(this.unrealBloom){
+            this.mix(
+                this.unrealBloom.getTexture(),
+                this.godrays.getTexture()
+            )  
+        }else{
+           this.PostprocessingNew.render() 
+        }
+        
+        // 
         //this.renderer.render(this.scene, this.camera);
         //this.godrays.getTexture()
         
@@ -97,11 +105,11 @@ export class Postprocessing{
         this.materialTest.uniforms[ 'textureGodrays' ].value=textureGodrays
         this.scene.overrideMaterial = this.materialTest
 
-        console.log(this._camera.rotation);
+        // console.log(this._camera.rotation);
         renderer.setRenderTarget(null)
         
         renderer.render(this.scene, this.camera)
 
-        console.log(this._camera.rotation);
+        // console.log(this._camera.rotation);
     }
 }
