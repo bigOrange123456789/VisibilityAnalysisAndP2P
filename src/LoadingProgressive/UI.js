@@ -37,14 +37,14 @@ export class UI{
         const postprocessing=main.postprocessing
         const unrealBloom=  main.unrealBloom?main.unrealBloom:(main.postprocessing?main.postprocessing.unrealBloom:null)
         if(postprocessing){
-            if(main.postprocessing.unrealBloom){
-                this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
-                this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
-                this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
-                this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
-                this.control_lut(main.postprocessing.unrealBloom.lutPass)
-                this.control_sao(main.postprocessing.unrealBloom.saoPass)
-            }
+            // if(main.postprocessing.unrealBloom){
+            //     this.control_ssao(main.postprocessing.unrealBloom.ssaoPass)
+            //     this.control_bloomPass(main.postprocessing.unrealBloom.bloomPass)
+            //     this.control_ssr(main.postprocessing.unrealBloom.ssrPass)
+            //     this.control_bokeh(main.postprocessing.unrealBloom.bokehPass)
+            //     this.control_lut(main.postprocessing.unrealBloom.lutPass)
+            //     this.control_sao(main.postprocessing.unrealBloom.saoPass)
+            // }
             if(main.postprocessing.PostprocessingNew)
             this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.PostprocessingNew.GodRayShader)
             else

@@ -23,12 +23,105 @@
     process()
     function process(){
         new THREE.GLTFLoader().load(path0, (glb) => {
+            window.glb=glb
             // new ExtractConfig(glb)
             // new ExtractMaterial(glb)
             // new ExtractGeometry(glb)
             new ExtractAnimation(glb)
         });
     }
+    a=[
+        2. ,4. ,1. ,
+        5. ,7. ,2. ,
+        8. ,8. ,3. ,
+        9. ,10.,4. ,
+        12.,13.,5. ,
+        14.,14.,6. ,
+        15.,16.,7. ,
+        17.,18.,8. ,
+        19.,19.,9. ,
+        20.,22.,10.,
+        23.,25.,11.,
+        26.,26.,12.,
+        27.,46.,13.,
+
+        47.,47., 9.,
+        48.,50.,10.,
+        51.,53.,11.,
+        54.,54.,12.,
+        55.,74.,13.,
+        75.,77., 1.,
+        78.,80., 2.,
+        81.,81., 3.,
+        82.,83., 4.,
+    ]
+    b=0
+
+    0,root;
+    1,Root_M;
+    
+    //臀部 1
+    2,Hip_R;3,HipPart1_R;4,HipPart2_R;
+
+    //膝盖 2
+    5,Knee_R;6,KneePart1_R;7,KneePart2_R;
+    
+    //踝关节 3
+    8,Ankle_R;
+    //脚趾 4
+    9,Toes_R;10,ToesEnd_R;
+    11,RootPart1_M;
+    //脊柱 5
+    12,Spine1_M;13,Spine1Part1_M;
+    //胸部 6
+    14,Chest_M;
+    //脖子 7
+    15,Neck_M;16,NeckPart1_M;
+    //头 8
+    17,Head_M;18,HeadEnd_M;
+
+    //肩胛骨 9
+    19,Scapula_R;
+    //肩部 10
+    20,Shoulder_R;21,ShoulderPart1_R;22,ShoulderPart2_R;
+    //眉毛 11
+    23,Elbow_R;24,ElbowPart1_R;25,ElbowPart2_R;
+    //手腕 12
+    26,Wrist_R;
+    
+    //手 13
+    27,MiddleFinger1_R;28,MiddleFinger2_R;29,MiddleFinger3_R;
+    30,MiddleFinger4_R;31,ThumbFinger1_R;32,ThumbFinger2_R;33,ThumbFinger3_R;34,ThumbFinger4_R;
+    35,IndexFinger1_R;36,IndexFinger2_R;37,IndexFinger3_R;38,IndexFinger4_R;39,RingFinger1_R;
+    40,RingFinger2_R;41,RingFinger3_R;42,RingFinger4_R;43,PinkyFinger1_R;44,PinkyFinger2_R;
+    45,PinkyFinger3_R;46,PinkyFinger4_R;
+
+    ////////////////////////////////////
+    //肩胛骨 9
+    47,Scapula_L;
+    //肩部 10
+    48,Shoulder_L;49,ShoulderPart1_L;50,ShoulderPart2_L;
+    //眉毛 11
+    51,Elbow_L;52,ElbowPart1_L;53,ElbowPart2_L;
+    //手腕 12
+    54,Wrist_L;
+    
+    //左手 13
+    55,MiddleFinger1_L;56,MiddleFinger2_L;57,MiddleFinger3_L;58,MiddleFinger4_L;59,ThumbFinger1_L;60,ThumbFinger2_L;
+    61,ThumbFinger3_L;62,ThumbFinger4_L;63,IndexFinger1_L;64,IndexFinger2_L;65,IndexFinger3_L;
+    66,IndexFinger4_L;67,RingFinger1_L;68,RingFinger2_L;69,RingFinger3_L;
+    70,RingFinger4_L;71,PinkyFinger1_L;72,PinkyFinger2_L;73,PinkyFinger3_L;
+    74,PinkyFinger4_L;
+    
+    //臀部 1
+    75,Hip_L;76,HipPart1_L;77,HipPart2_L;
+    
+    //膝盖 2
+    78,Knee_L;79,KneePart1_L;80,KneePart2_L;
+    //踝关节 3
+    81,Ankle_L;
+    //脚趾 4
+    82,Toes_L;83,ToesEnd_L;
     
 </script>
 

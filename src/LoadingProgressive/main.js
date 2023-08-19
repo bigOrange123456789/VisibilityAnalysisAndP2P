@@ -80,7 +80,7 @@ export class Main{
           
         this.initCSM();
 
-        // this.building = new Building(this.scene, this.camera)
+        this.building = new Building(this.scene, this.camera)
         this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)

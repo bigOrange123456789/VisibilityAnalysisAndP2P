@@ -218,10 +218,10 @@
             5,8
         ],
         "sitAnimationList": [
-            
+            6,7
         ],
         "standAnimationList": [
-            0,1,2,3,4,6,7,9,10,11,12
+            0,1,2,3,4,9,10,11,12
         ],
         "pathAnima":  "assets/avatar/animation_woman0.bin" ,
 

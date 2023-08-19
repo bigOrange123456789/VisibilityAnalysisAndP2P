@@ -1,6 +1,7 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
 import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 import conifg_tree     from '../../config/avatar/tree.json'
+import * as THREE from "three"
 class Test{
     constructor(avatar){
         this.avatar=avatar
@@ -72,7 +73,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -123,12 +124,69 @@ export class AvatarManager {
                 //     c.scale*(1-0.2+0.2*Math.random()),
                 //     c.scale])
                 // crowd.setObesity(i00, 0.8+0.4*Math.random())
-                // let j=100
-                // // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")
-                // // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_waitao_geo1")
-                // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_qunzi_geo3456")
-                // j=-0.5
-                // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_shangyi_geo")
+                let flag=true
+                if(c.constraint){
+                    const i000 = Math.floor(Math.random() * c.constraint.length)
+                    const constraint0=c.constraint[i000]
+                    for(let partName in constraint0)
+                        crowd.setPartType(i00,partName,constraint0[partName])
+                    if(i000>=3)flag=false
+                }
+                if(flag){
+                    let j=10
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_shangyi_geo")
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_waitao_geo1")
+
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"qipao22")
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"waitao1")
+
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_qunzi_geo3456")
+                    // j=-0.5
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_shangyi_geo")
+                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_xiezi_geo")
+
+                }
+                
+            }
+            for(let i=0;i<scenes.length;i++){
+                scenes[i].traverse(node=>{
+                    if(node instanceof THREE.SkinnedMesh){
+                        node.material=node.material.clone()
+                        let material=node.material
+                        let name=node.name
+                        let meshType=c['meshType'][i][name]
+                        if(meshType=='body'||meshType=='head'){
+                            material.color.r-=0.6
+                            material.color.g-=0.6
+                            material.color.b-=0.6
+                            // material.roughness=0//-=0.6
+                            // material.metalness=0//+=0.2
+                            // material.envMapIntensity=0
+                            // material.emissiveIntensity=0
+                            // material.lightMapIntensity=0
+                        }else if(meshType=='hair'){
+                            material.side=2
+                            // material.color.r=1000;
+                            material.metalness=0.5
+                            material.roughness=0.5
+                        }else if(meshType=="eye"){
+                            material.metalness=1
+                            material.roughness=0.5
+                        }else if(meshType=="trousers"||meshType=="coat"){
+                            material.metalness=1
+                            // material.roughness-=0.5
+                            material.color.r=material.color.g=material.color.b=1
+
+                            material.envMapIntensity=1
+                            material.emissiveIntensity=1
+                            material.lightMapIntensity=1
+                        }else if(meshType=="shoes"){
+                            material.metalness=1
+                            material.roughness=0.5
+                        }
+                    }
+                })
             }
         })
         window.t=new Test(window.avatar)
