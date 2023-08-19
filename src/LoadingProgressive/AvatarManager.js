@@ -108,6 +108,12 @@ export class AvatarManager {
                 }
                 
                 crowd.setSpeed(i00, 1+8*Math.random())
+                crowd.setBodyScale(i00,[
+                    (Math.random()-0.5)/1.5,
+                    (Math.random()-0.5)/1.5,
+                    (Math.random()-0.5)/1.5,
+                    (Math.random()-0.5)/1.5,
+                ])
                 // crowd.setScale(i00, [
                 //     -900,
                 //     -900*(1-0.2+0.2*Math.random()),
