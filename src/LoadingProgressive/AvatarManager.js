@@ -135,16 +135,17 @@ export class AvatarManager {
                 if(flag){
                     let j=10
                     crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_kuzi_geo")
-                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_shangyi_geo")
+                    // crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_shangyi_geo")
                     crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_waitao_geo1")
-
-                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"qipao22")
-                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"waitao1")
-
-                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_qunzi_geo3456")
-                    // j=-0.5
-                    crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_C_shangyi_geo")
                     crowd.setColor(i00,[j*Math.random()*2,j*Math.random(),j*Math.random()],"CloW_A_xiezi_geo")
+
+                    j=-0.3
+                    crowd.setColor(i00,[j*Math.random(),j*Math.random(),j*Math.random()],"qipao22")
+                    crowd.setColor(i00,[j*Math.random(),j*Math.random(),j*Math.random()],"waitao1")
+
+                    j=0.1
+                    crowd.setColor(i00,[j*Math.random(),j*Math.random(),j*Math.random()],"CloW_C_qunzi_geo3456")
+                    crowd.setColor(i00,[j*Math.random(),j*Math.random(),j*Math.random()],"CloW_C_shangyi_geo")
 
                 }
                 
@@ -253,9 +254,9 @@ export class AvatarManager {
         for(let i=0;i<50;i++)
         for(let j=0;j<50;j++){
             poslist.push([
-                5*(i-25)/3,
+                5*(i-25)/3-392+40,
                 5.5,
-                5*(j-25)/3,
+                5*(j-25)/3+195,
             ])
         }
         return poslist
@@ -418,7 +419,7 @@ export class AvatarManager {
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
-            c1.scale=1
+            c1.scale=2
             
             // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
             // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
@@ -430,13 +431,13 @@ export class AvatarManager {
             
             const lodConut=21
             const countAll=2500*2*10
-            const distanceAll=200//300
+            const distanceAll=200*0.8//300
             c1.lod_distance=[ ]
             c1.lod_geometry=[ ]
             c1.lod_avatarCount=[ ]
             let r_pre=0
             for(let j=0;j<lodConut;j++){
-                const r=Math.pow((j+1)/lodConut,1)*distanceAll
+                const r=Math.pow((j+1)/lodConut,1.2)*distanceAll
                 c1.lod_distance.push(r)
                 c1.lod_geometry.push(lodConut-j-1)
 
