@@ -193,7 +193,7 @@ export class Visibility{
             } 
             
 
-            document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
+            document.getElementById("plumpness").innerHTML=""//"饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
             
             // console.log(this.vd)
             window.vd=this.vd
@@ -251,85 +251,6 @@ export class Visibility{
                 .map((value, index) => value.index )
             console.log("list2.length",list2.length)
             if(list2.length>0)this.loading(list2)
-        }
-    }
-    getListOld(){
-        const self=this
-        let vd_had=0
-        let vd_hading=0
-        const posIndexAll=this.getPosIndex()
-        const arr=posIndexAll[5]
-        let loaded=true
-        for(let i=0;i<arr.length;i++){
-            const posIndex0=arr[i][3]
-            if(!this.visualList[posIndex0]){
-                loaded=false
-                this.request(posIndex0)
-            }
-        }
-        // window.arr=arr
-        // console.log(arr)
-        if(loaded){
-            // const posIndex=posIndexAll[3]
-            const d=this.getDirection()
-            
-            for(let i=0;i<this.componentNum;i++){
-                const getVD=(j)=>{
-                    const posIndex=arr[j][3]
-                    const weight=arr[j][4]
-                    const visualList0=self.visualList[posIndex] 
-                    const vd1=i in visualList0["1"]?visualList0["1"][i]:0
-                    const vd2=i in visualList0["2"]?visualList0["2"][i]:0
-                    const vd3=i in visualList0["3"]?visualList0["3"][i]:0
-                    const vd4=i in visualList0["4"]?visualList0["4"][i]:0
-                    const vd5=i in visualList0["5"]?visualList0["5"][i]:0
-                    const vd6=i in visualList0["6"]?visualList0["6"][i]:0
-                    // console.log(posIndex,weight,vd1,vd2,vd3,vd4,vd5,vd6)
-                    return (vd1*d[0]+vd2*d[1]+vd3*d[2]+vd4*d[3]+vd5*d[4]+vd6*d[5])*weight
-                }
-                
-                // this.vd[i]=getVD(posIndex)//posIndexAll[3]
-                this.vd[i]=0
-                for(let j=0;j<arr.length;j++){
-                    // console.log()
-                    this.vd[i]+=getVD(j)
-                }
-                if(Object.keys(this.meshes).length!==0&&this.meshes[i])
-                    vd_had+=this.vd[i]
-                else vd_hading+=this.vd[i]
-            } 
-            document.getElementById("plumpness").innerHTML="饱满度:"+(100*vd_had/(vd_had+vd_hading)).toFixed(4)+"%"
-            
-            
-            let list=this.vd.map((value, index) => ({ value, index }))
-                .filter(item => item.value > 0)
-                .sort((a, b) => b.value - a.value)
-            if(false){
-                let i=0  
-                // console.log(list,list.length)
-                for(let sum=0;i<list.length&&sum< 4*Math.PI/300;i++,sum=sum+list[list.length-1-i].value);//console.log(i);
-                console.log("不加载数量:",i)
-                const list2=[]
-                for(let j=0;j<list.length-i;j++)
-                    list2.push(
-                        list[j].index
-                    )
-                list=list2
-            }else{
-                list=list.map((value, index) => value.index )
-            }
-                
-            if(list.length>0)this.loading(list)
-            // list.filter((value, index) => index<list.length-i )
-            // console.log(list.length)
-            // list=list.map((value, index) => value.index )
-            // if(list.length>0)this.loading(list)
-
-            // const list=this.vd.map((value, index) => ({ value, index }))
-            //     .filter(item => item.value > 4*Math.PI/600)
-            //     .sort((a, b) => b.value - a.value)
-            //     .map((value, index) => value.index )
-            // if(list.length>0)this.loading(list)
         }
     }
     showOnlyEvs(){

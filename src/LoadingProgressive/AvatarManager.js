@@ -189,6 +189,7 @@ export class AvatarManager {
                     }
                 })
             }
+            crowd.update()
         })
         window.t=new Test(window.avatar)
         // window.tree=new CrowdManager(scene, camera,this.initPos_tree(),this.getConfig_tree(),"glb_material")

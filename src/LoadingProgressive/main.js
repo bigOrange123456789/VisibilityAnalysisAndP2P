@@ -61,12 +61,13 @@ export class Main{
         
         // this.initSky()
         this.initWander()
-        this.panel = new Panel(this)
+        // this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         //
-        this.loadJson(
-            "LoadingProgressive/pos.json",
-            data=>{
+        // this.loadJson(
+        //     "LoadingProgressive/pos.json",
+        //     data=>{
+                let data=null
                 // setTimeout(()=>{
                 //     console.log("data",data)
                 // new TreeManager(self.scene).init(data) 
@@ -74,14 +75,14 @@ export class Main{
                 // if(typeof AvatarManager!=="undefined")
                     new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
-            }
-        )
+            // }
+        // )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
         this.initCSM();
 
         this.building = new Building(this.scene, this.camera)
-        this.ui=new UI(this)
+        //this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
         window.capture=()=>{
@@ -144,7 +145,7 @@ export class Main{
         var statsContainer = document.createElement('div')
         statsContainer.id = 'stats-container'
         statsContainer.appendChild(this.stats.domElement)
-        this.body.appendChild(statsContainer)
+        // this.body.appendChild(statsContainer)
 
         this.scene = new THREE.Scene()
 
@@ -165,8 +166,10 @@ export class Main{
             this.config.camera.rotation.y,
             this.config.camera.rotation.z
         )
-        this.camera.position.set(-308.56840222832017, 10, 166.02712517757053)
-        this.camera.rotation.set( -2.291182507503793,  1.0271322042424738, 2.368845340479064)
+        // this.camera.position.set(-308.56840222832017, 10, 166.02712517757053)
+        // this.camera.rotation.set( -2.291182507503793,  1.0271322042424738, 2.368845340479064)
+        this.camera.position.set(-397.3510808960445,  10,  232.54895927846817)
+        this.camera.rotation.set( -0.676092545575108,  -0.9466703787193923,  -0.5770638807113051)
 
         window.camera=this.camera
         
