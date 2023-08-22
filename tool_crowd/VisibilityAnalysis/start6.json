@@ -3,6 +3,7 @@
     "getwall":{
         "threshold_entropy":0,
         "threshold_difference":1,
+        "threshold_sim":0.5,
         "threshold_distance":5000
     },
     "doorCid":[66,67,68,16,17,20],

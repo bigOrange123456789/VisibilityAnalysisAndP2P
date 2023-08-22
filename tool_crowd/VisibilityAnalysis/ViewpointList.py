@@ -226,6 +226,7 @@ class ViewpointList: #所有视点,每个视点的可见特征
                 name_max=name
                 vd_max=database[name]
             self.c["entropy"][name]=entropy   
+        print(self.c["entropy"])
         print("kernelPosition",name_max,"\n",entropy_max,"\n",vd_max.path)
         self.c["kernelPosition"]=name_max
         

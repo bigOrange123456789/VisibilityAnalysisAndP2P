@@ -62,7 +62,7 @@ class Loader: #所有视点,每个视点的可见特征
         print("repeat8 end")
     def pos2pos(self,arr):
         x=int(arr[0])
-        y=int(arr[1])
+        y=int(float(arr[1]))
         z=int(arr[2])
         c=self.c_all["src"]["Building_new"]["createSphere"]
         min =[c["x"][0],c["y"][0],c["z"][0]]#areaInf.min

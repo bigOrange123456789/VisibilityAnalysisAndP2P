@@ -52,8 +52,6 @@ export class Building{
     initLoader()
     {
         THREE.Cache.enabled = true;
-        const file = new THREE.FileLoader();
-
         const dracoLoader = new DRACOLoader();
         dracoLoader.setDecoderPath('assets/textures/environment/');
         dracoLoader.setDecoderConfig({ type: "js" });

@@ -10,7 +10,7 @@ class Main: #所有视点,每个视点的可见特征
             "F:/gitHubRepositories/vk-precompute-main/output"+str(id),
             config['featureCoef']
         )#不获取墙构件
-        # vf0.saveEntropy()
+        vf0.saveEntropy()
         # vf0.blocking(config["blocking"]["k"])
         
         self.featureAllA=vf0.feature_all0_1

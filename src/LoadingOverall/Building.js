@@ -43,6 +43,8 @@ export class Building{
             },
             entropy:this.config.entropy
         })
+        window.a=a
+        window.entropy=this.config.entropy
         this.colorList=a.colorList
         a.detect()
         this.kernelPosition=a.convexDot
