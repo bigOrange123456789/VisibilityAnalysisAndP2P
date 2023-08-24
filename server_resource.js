@@ -43,8 +43,13 @@ class PackCacheList{
     return null
   }
 }
-const cache=new PackCacheList(["space8Zip","space7Zip"])
-const server=require('http').createServer(function (request, response) {
+const options = {
+  key: fs.readFileSync('ssl/private.key'),
+  cert: fs.readFileSync('ssl/certificate.crt')
+};
+
+const cache=new PackCacheList(["space8Zip","space8Zip/fine","space7Zip"])
+const server=require('https').createServer(options, function (request, response) {
     let filePath;
     response.setHeader("Access-Control-Allow-Origin", "*");
     request.on('data', function (data) {//接受请求
@@ -59,8 +64,8 @@ const server=require('http').createServer(function (request, response) {
         console.log("没有缓存",filePath)
       }
     });
-}).listen(8081, '0.0.0.0', function () {
-    console.log("listening to client:8081");
+}).listen(7081, '0.0.0.0', function () {
+    console.log("listening to client:7081");
 });
 server.on('close',()=>{
   console.log('服务关闭')

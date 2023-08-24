@@ -35,6 +35,7 @@
             "useIndirectMaterial":false,
             "waterCidList":[175,180],
             "crossOriginSocket":[
+                "42.192.188.161:7081"
             ]
         },
         "Visibility":{

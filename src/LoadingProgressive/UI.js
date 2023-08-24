@@ -51,6 +51,7 @@ export class UI{
             this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.GodRayShader)
             
         }
+        console.log(main.unrealBloom,unrealBloom)
         if(unrealBloom){
             this.control_ssao(unrealBloom.ssaoPass)
             this.control_bloomPass(unrealBloom.bloomPass)

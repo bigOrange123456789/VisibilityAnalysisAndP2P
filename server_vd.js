@@ -1,5 +1,4 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+﻿
 const usePVD=true
 const configList=[
   {
@@ -178,7 +177,13 @@ class VD{
 const vdList=VD.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
 const port=8091
-const server=require('http').createServer(function (request, response) {
+const fs = require('fs');
+
+const options = {
+  key: fs.readFileSync('ssl/private.key'),
+  cert: fs.readFileSync('ssl/certificate.crt')
+};
+const server=require('https').createServer(options, function (request, response) {
     // let index;
     let info;
     response.setHeader("Access-Control-Allow-Origin", "*");

@@ -1,3 +1,4 @@
+if(typeof navigator.gpu=="undefined")alert("不支持GPU")
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
@@ -21,7 +22,9 @@ export class StartGPU{
             }
         }
     }
-    constructor(body){
+    constructor(body,useGPU){
+        this.useGPU=useGPU
+        console.log(useGPU)
         this.addTool(window)
         this.speed=1
         this.config=window.configALL.src.main
@@ -63,16 +66,21 @@ export class StartGPU{
         // // 渲染器开启阴影效果
         // this.renderer.shadowMap.enabled = true
 
-        // this.renderer = new THREE.WebGLRenderer({ 
-        //     antialias: true,//抗锯齿
-        //     alpha:true,
-        //     canvas:this.canvas
-        // })
-        this.renderer = new WebGPURenderer({ 
-            antialias: true,//抗锯齿
-            alpha:true,
-            canvas:this.canvas
-        })
+        if(this.useGPU){
+            this.renderer = new WebGPURenderer({ 
+                antialias: true,//抗锯齿
+                alpha:true,
+                canvas:this.canvas
+            })
+        }else{
+            this.renderer = new THREE.WebGLRenderer({ 
+                antialias: true,//抗锯齿
+                alpha:true,
+                canvas:this.canvas
+            })
+        }
+        
+        
         // this.renderer = new WebGPURenderer()
         this.renderer.setPixelRatio(window.devicePixelRatio)
         this.renderer.setSize(window.innerWidth, window.innerHeight)//this.body.clientWidth,this.body.clientHeight)
@@ -173,8 +181,12 @@ export class StartGPU{
         //       self.scene.environment = envMap
         //     }
         // )
-
-        return this.renderer.init();
+        if(this.useGPU){
+            return this.renderer.init();
+        }else{
+            return new Promise(( resolve, reject )=>{resolve()})
+        }
+        
 
 
     }

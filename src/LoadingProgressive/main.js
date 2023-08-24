@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         getParam('scene')=="haiNing0"?config_haiNing0:
         getParam('scene')=="haiNing"?config_haiNing:
         config_gkd
+    config.useGPU=getParam('useGPU')?getParam('useGPU'):true
     config.src.main.speed       =getParam('speed')?getParam('speed'):config.src.main.speed
     config.src.main.autoMove    =getParam('autoMove')
     config.src.main.render      =getParam('render')
@@ -45,6 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     config.src.Building_new.TIME=getParam('TIME')
 
     window.configALL=config
-    if(navigator.gpu);//new StartGPU(document.body)
-    else new Start(document.body)
+    // new StartGPU(document.body,config.useGPU)
+    new Start(document.body)
 })

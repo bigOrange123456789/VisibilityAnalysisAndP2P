@@ -87,7 +87,7 @@ export class AvatarManager {
                 //     p[2]//+(2*Math.random()-1)*5
                 // ])
                 // crowd.setRotation(i00,[0,Math.random()*30,0])
-                if(true){//if(Math.random()>0.3){
+                if(Math.random()>0.3){//if(true){//
                     crowd.setAnimation(
                         i00,
                         r(c.standAnimationList),
@@ -103,9 +103,9 @@ export class AvatarManager {
                         i00,
                         (0.5+Math.random())*10
                     )
-                    crowd.setRotation(
-                        i00,[0,0,0]
-                    )
+                    // crowd.setRotation(
+                    //     i00,[0,0,0]
+                    // )
                 }
                 
                 crowd.setSpeed(i00, 1+8*Math.random())
@@ -252,12 +252,12 @@ export class AvatarManager {
         // return poslist
         
         const poslist=[]
-        for(let i=0;i<50;i++)
-        for(let j=0;j<50;j++){
+        for(let i=0;i<100;i++)
+        for(let j=0;j<100;j++){
             poslist.push([
-                5*(i-25)/3-392+40,
+                5*(i-50)/3-392+40,
                 5.5,
-                5*(j-25)/3+195,
+                5*(j-50)/3+195,
             ])
         }
         return poslist
@@ -432,7 +432,7 @@ export class AvatarManager {
             
             const lodConut=21
             const countAll=2500*2*10
-            const distanceAll=200*0.8//300
+            const distanceAll=200*0.8*0.25//300
             c1.lod_distance=[ ]
             c1.lod_geometry=[ ]
             c1.lod_avatarCount=[ ]
@@ -455,6 +455,8 @@ export class AvatarManager {
                     c1.lod_visible[j][tag]=lodConut
                 }
             }
+            c1.lod_distance[c1.lod_distance.length-2]*=2
+            c1.lod_distance[c1.lod_distance.length-1]*=4*2
         }
         // console.log(config)
         return config[0]
