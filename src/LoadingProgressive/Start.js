@@ -54,6 +54,7 @@ export class Start{
         
         // this.initSky()
         this.initWander()
+        if(false)
         this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
@@ -93,6 +94,9 @@ export class Start{
         //     ({ envMap }) => {
         //       self.scene.background = envMap
         //       self.scene.backgroundIntensity=0.8
+
+        //       self.scene.backgroundIntensity=0.4
+        //       self.unrealBloom.bloomPass.strength=0.55
         //     }
         // )
         this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
@@ -190,7 +194,7 @@ export class Start{
         )
         // this.camera.position.set(-308.56840222832017, 10, 166.02712517757053)
         // this.camera.rotation.set( -2.291182507503793,  1.0271322042424738, 2.368845340479064)
-        this.camera.position.set(-397.3510808960445,  10,  232.54895927846817)
+        // this.camera.position.set(-397.3510808960445,  10,  232.54895927846817)
         this.camera.rotation.set( -0.676092545575108,  -0.9466703787193923,  -0.5770638807113051)
         this.camera.position.set(-619.3575551181109,  131.13974398725637,  -20.75165234572438)
 
@@ -357,7 +361,6 @@ export class Start{
         requestAnimationFrame(this.animate)
     }
     resize(){
-        return
         this.canvas.width = window.innerWidth;//this.body.clientWidth
         this.canvas.height = window.innerHeight;//this.body.clientHeight
         this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
@@ -390,6 +393,7 @@ export class Start{
         }
         const self=this
         // setTimeout(()=>{
+            if(false)
             if(self.config.autoMove=="true"){
                 const pathId=Math.floor(Math.random()*self.wanderList.length)
                 // this.wanderList[pathId].stopFlag=false
