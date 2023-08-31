@@ -1,6 +1,6 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-// import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
-import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
+import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
+// import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 import * as THREE from "three"
 class Test{
@@ -427,11 +427,11 @@ export class AvatarManager {
             // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
             // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
 
-            c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
-            c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
-            c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
+            // c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
+            // c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
+            // c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
             
-            const lodConut=21
+            const lodConut=7//21
             const countAll=2500*2*10
             const distanceAll=200*0.8*0.25//300
             c1.lod_distance=[ ]
@@ -441,7 +441,8 @@ export class AvatarManager {
             for(let j=0;j<lodConut;j++){
                 const r=Math.pow((j+1)/lodConut,1.2)*distanceAll
                 c1.lod_distance.push(r)
-                c1.lod_geometry.push(lodConut-j-1)
+                // c1.lod_geometry.push(lodConut-j-1)
+                c1.lod_geometry.push((lodConut-j)*3-3)
 
                 const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
                 r_pre=r
