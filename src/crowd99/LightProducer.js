@@ -11,20 +11,11 @@ class LightProducer{
         this.init(scene)//this.test()
         this.add_lensflares()
 
-        // this.setPos(-319.59561744433125,  16,  323.70333357412926)
-        // this.objectMove.position.set(-319.59561744433125,  16,  323.70333357412926)
-        // for(let i=0;i<this.targetList.length;i++){
-        //     const target=this.targetList[i]
-        //     const origin=target.origin
-        //     target.position.set(
-        //         position.x+origin.x,
-        //         position.y+origin.y,
-        //         position.z+origin.z
-        //     )
-        // }
-
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
+        setTimeout(()=>{
+            scene.add(this.getSpotGroup())
+        },3000)
     }
     animate(){
         this.setPos(this.camera.position)
@@ -52,81 +43,13 @@ class LightProducer{
         // this.light.position.set(position.x,position.y,position.z)
         // this.scene.position.set(position.x,position.y,position.z)
         this.objectMove.position.set(position.x,position.y,position.z)
-        // for(let i=0;i<this.targetList.length;i++){
-        //     const target=this.targetList[i]
-        //     const origin=target.origin
-        //     target.position.set(
-        //         position.x+origin.x,
-        //         position.y+origin.y,
-        //         position.z+origin.z
-        //     )
-        // }
     }
     init(scene){
-        // Lights 
-        const x=3.//0.5
-        const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
+        this.scene=scene
+        const ambient = new THREE.AmbientLight( 0xffffff ,0.05);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
-        scene.add( ambient );
-        // ambient.name="ambient"
-
-        // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
-        // Light1.position.set( 0.2001199212621189,  1.8324430884592016,  -0.285745579849489)//( 10, 10, 10 );
-        // scene.add( Light1 );
-        // Light1.name="Light1"
-        // return
-
-        // const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
-   
-        // directionalLight.shadow.camera.near = -1000//0.01 //产生阴影的最近距离
-        // directionalLight.shadow.camera.far = 1000 //产生阴影的最远距离
-        // directionalLight.shadow.camera.left = -1000 //产生阴影距离位置的最左边位置
-        // directionalLight.shadow.camera.right = 1000 //最右边
-        // directionalLight.shadow.camera.top = 500 //最上边
-        // directionalLight.shadow.camera.bottom = -100 //最下面
-        // //告诉平行光需要开启阴影投射
-        // directionalLight.castShadow = true
-        // // alert(directionalLight.shadowDarkness)
-        // // directionalLight.shadow.bias = -0.0005;
-        // directionalLight.shadow.mapSize.width = 4*2048; 
-        // directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512
-        // this.objectMove.add( directionalLight )
-        // // directionalLight.target = new THREE.Object3D();
-        // // directionalLight.target.origin=new THREE.Object3D(10,10,10)
-        // directionalLight.target.position.set(1,-0.5,1)
+        // scene.add( ambient );
         
-        // window.target=directionalLight.target
-        // this.targetList.push(directionalLight.target)
-        // this.objectMove.add( directionalLight.target )
-        // this.directionalLight=directionalLight
-        
-
-
-        // const directionalLight2 = new THREE.DirectionalLight( 0xcffffff,x+1.5 );
-        // directionalLight2.position.set(-1,0,0)
-        // directionalLight2.lookAt(new THREE.Vector3(0,0,0))
-        // light.add( directionalLight2 )
-
-        // const Light4 = new THREE.PointLight( 0xcffffff,x+0.5-3.3 );
-        // this.object.add( Light4 )//window.scene.add(Light4)//
-
-        // const Light2 = new THREE.PointLight( 0xc0000ff,0.01 );
-        // Light2.position.set(-257, 35, 196)
-        // this.object.add(Light2)
-
-
-        //创建区域光 
-        // let rectLight = new THREE.RectAreaLight(0xffffff,1500,5,5);
-        // //设置区域光位置
-        // rectLight.position.set(0,50,0);
-        // //设置区域光旋转角度
-        // rectLight.rotation.x = 0.5*Math.PI;
-        // //将区域光添加进场景
-        // scene.add(rectLight);
-        //创建区域光辅助器
-        // let rectLightHelper = new THREE.RectAreaLightHelper(rectLight,0xff0000);
-        //将区域光辅助器添加进场景
-        // scene.add(rectLightHelper);
 
     }
     getSpotGroup(){
@@ -139,16 +62,24 @@ class LightProducer{
     getSpotLight(){
         const spotLight = new THREE.SpotLight( 
             Math.floor(0xffffff*Math.random()),//0xffffff,
-            10 ,
+            10,//10 ,// intensity
             10000,
             Math.PI*(Math.random()*5+4.5)/60,
             0,
             0,
             );
+        if(Math.random()>0.3){
+            spotLight.color.r=1-spotLight.color.g
+        }else if(Math.random()>0.5){
+            spotLight.color.r=1-spotLight.color.b
+        }else{
+            spotLight.color.g=1-spotLight.color.b
+        }
         spotLight.position.set(0,50,0)
+        // console.log("spotLight",spotLight)
         // spotLight.castShadow = true
         this.scene.add(spotLight.target)
-        const speed=0.003*(Math.random()+0.2)
+        const speed=0.006*(1.5*Math.random()+0.2)
 
         const tool=new THREE.Object3D();
         tool.rotation.y=Math.random()*100
@@ -165,7 +96,7 @@ class LightProducer{
             // console.log()
             spotLight.target.position.set(x2,y2,z2)
 
-        },1/60)
+        },0)
 
 // color - (optional) hexadecimal color of the light. Default is 0xffffff (white).
 // intensity - (optional) numeric value of the light's strength/intensity. Default is 1.

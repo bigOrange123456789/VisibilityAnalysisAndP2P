@@ -267,12 +267,12 @@ export class UI{
         folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
             bloomPass.strength = Number( value );
         } );
-        folder.add( params, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
-            bloomPass.threshold = Number( value );
-        } );
-        folder.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
-            bloomPass.radius = Number( value );
-        } );
+        // folder.add( params, 'bloomThreshold', 0.0, 1.0 ).onChange( function ( value ) {
+        //     bloomPass.threshold = Number( value );
+        // } );
+        // folder.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
+        //     bloomPass.radius = Number( value );
+        // } );
     }
     control_godrays(godrays,postprocessing,GodRayShader){
         if (!godrays || !postprocessing || !GodRayShader)return

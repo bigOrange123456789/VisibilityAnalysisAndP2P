@@ -74,20 +74,28 @@ export class Building{
             new GLTFLoader(manager).load("blob:assets/Building/output"+index+".glb",gltf=>{
                 gltf.scene.traverse(object=>{
                     if(object instanceof THREE.Mesh){
-                        console.log(object)
+                        // console.log(object)
 
                         object.material.color.r/=10
                         object.material.color.g/=10
                         object.material.color.b/=10
 
-                        object.material.color.r=object.material.color.g=object.material.color.b=-1//0
                         
-                        object.material.roughness=0.5//1
+                        
+                        
+
+                        const material0=object.material
+                        object.material=new THREE.MeshStandardMaterial()
+                        object.material.map=material0.map
+
+                        object.material.roughness=1//1
                         // object.material.metalness=1
 
                         object.material.emissiveIntensity=0
                         object.material.lightMapIntensity=0
                         object.material.aoMapIntensity=0
+
+                        object.material.color.r=object.material.color.g=object.material.color.b=-1//0
 
                         
                     }

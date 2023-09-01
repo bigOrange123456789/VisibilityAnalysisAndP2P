@@ -182,6 +182,7 @@
                 "CloW_A_kuzi_geo": 5,
                 "CloW_A_shangyi_geo": 5,
                 "CloW_A_waitao_geo1": 5,
+
                 "CloW_A_xiezi_geo": 4,
                 "CloW_E_eyeLeft_geo02": 4,
                 "CloW_E_eyeRight_geo01": 4,
@@ -193,18 +194,12 @@
                 "hair":5,
                 "body2":5,
                 "qipao22":5,
-                "waitao1": 5,
-                "head":5
+                "waitao1": 5
             },
             {
                 "CloW_C_body_geo1":5,
                 "CloW_C_qunzi_geo3456":5,
                 "CloW_C_shangyi_geo":5,
-                "CloW_C_xie_geo":4,
-                "head":5,
-                "CloW_E_eyeLeft_geo02":3,
-                "CloW_E_eyeRight_geo01":3,
-                "eyelash":3,
                 "hair":5
             }
         ],

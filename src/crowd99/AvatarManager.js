@@ -75,20 +75,20 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.#initPos_avatarTest(),this.#getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
             }
             
             for (var i00 = 0; i00 < crowd.count; i00++) {
-                if(i00<8*100*100){
+                if(true){//if(i00<8*100*100){
                    let j=self.#getPosRot_9e(i00,0)
                 //    console.log(i00,j)
                    crowd.setPosition(i00,j.pos)
                    crowd.setRotation(i00,j.rot)
                 }
-                if(Math.random()>0.3){//if(true){//
+                if(true){//if(Math.random()>0.3){//
                     crowd.setAnimation(
                         i00,
                         r(c.standAnimationList),
@@ -107,6 +107,18 @@ export class AvatarManager {
                     // crowd.setRotation(
                     //     i00,[0,0,0]
                     // )
+                }
+                //if(i00<8*100*100)
+                if(self.#getPosRot_9e(i00,0).ani==-1&&Math.random()>0.5){
+                    crowd.setAnimation(
+                        i00,
+                        r(c.walkAnimationList),
+                        Math.random()*10000
+                    )
+                    crowd.setMoveMaxLength(
+                        i00,
+                        (0.5+Math.random())*10
+                    )
                 }
                 
                 crowd.setSpeed(i00, 1+8*Math.random())
@@ -176,13 +188,23 @@ export class AvatarManager {
                             material.metalness=1
                             material.roughness=0.5
                         }else if(meshType=="trousers"||meshType=="coat"){
-                            material.metalness=1
+                            material.metalness=0.15//0.45*Math.random()//1
                             // material.roughness-=0.5
-                            material.color.r=material.color.g=material.color.b=1
-
+                            // material.color.r=material.color.g=material.color.b=1
+                            if(material.color.r+material.color.g+material.color.b>2.1){
+                                material.color.r/=2
+                                material.color.g/=2
+                                material.color.b/=2
+                            }
+                            if(material.color.r+material.color.g+material.color.b>1.1){
+                                material.color.r/=2
+                                material.color.g/=2
+                                material.color.b/=2
+                            }
                             material.envMapIntensity=1
                             material.emissiveIntensity=1
                             material.lightMapIntensity=1
+                            material.roughness=0.25//0.4+0.55*Math.random()
                         }else if(meshType=="shoes"){
                             material.metalness=1
                             material.roughness=0.5
@@ -390,7 +412,7 @@ export class AvatarManager {
             // c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
             // c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
             
-            const lodConut=7//21
+            const lodConut=5//21
             const countAll=100*100*10//2500*2*10
             const distanceAll=200*0.8*0.25//*0.5//300
             c1.lod_distance=[ ]
@@ -401,7 +423,7 @@ export class AvatarManager {
                 const r=Math.pow((j+1)/lodConut,1.2)*distanceAll
                 c1.lod_distance.push(r)
                 // c1.lod_geometry.push(lodConut-j-1)
-                c1.lod_geometry.push((lodConut-j)*3-3)
+                c1.lod_geometry.push((lodConut-j)*4-4)
 
                 const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
                 r_pre=r
@@ -416,16 +438,43 @@ export class AvatarManager {
                     c1.lod_visible[j][tag]=lodConut
                 }
             }
-            c1.lod_distance[c1.lod_distance.length-2]*=2
+            c1.lod_distance[c1.lod_distance.length-2]*=3
             c1.lod_distance[c1.lod_distance.length-1]*=4*2
         }
+        config[0]["lod_visible"]=[
+            {
+                "CloW_A_body_geo": 4,
+                "CloW_A_kuzi_geo": 5,
+                "CloW_A_shangyi_geo": 5,
+                "CloW_A_waitao_geo1": 4,
+
+                "CloW_A_xiezi_geo": 2,
+                "CloW_E_eyeLeft_geo02": 2,
+                "CloW_E_eyeRight_geo01": 2,
+                "eyelash": 2,
+                "hair": 3,
+                "head": 5
+            },
+            {
+                "hair":3,
+                "body2":4,
+                "qipao22":5,
+                "waitao1": 5
+            },
+            {
+                "CloW_C_body_geo1":4,
+                "CloW_C_qunzi_geo3456":5,
+                "CloW_C_shangyi_geo":5,
+                "hair":3
+            }
+        ]
         // console.log(config)
         return config[0]
     }
     #getPosRot_e(i0,modelType) {
         this.modelList=conifg_woman
         var c = [//分组情况
-            1250,//496,   //运动
+            4*1250,//496,   //运动
             15 * 182,     //大看台1
             21 * 182,     //大看台2
             20 * 60,   //小看台1
@@ -437,6 +486,7 @@ export class AvatarManager {
             217,    //弧形看台5
         ]
         if (i0 < c[0]) {//运动
+            i0/=4
             var col_count = 25
             var row_count = 50
             var i = i0 % col_count
@@ -449,7 +499,7 @@ export class AvatarManager {
             var rotation = [0, Math.PI * 2 * Math.random(), 0]
 
             let animationTypeIndex = Math.floor(Math.random() * this.modelList[modelType].walkAnimationList.length);
-            var animationType = this.modelList[modelType].walkAnimationList[animationTypeIndex];
+            var animationType = -1//this.modelList[modelType].walkAnimationList[animationTypeIndex];
             var speed = speed = Math.random() * 7 + 4;
             var startTime = 1000 * Math.random();
         }
@@ -614,6 +664,7 @@ export class AvatarManager {
                 var rotation = [0, 0, 0]
             }
         }
+        rotation[1]+=Math.PI
         return { pos: position, rot: rotation, ani: animationType, speed: speed, startTime: startTime }
     }
     #getPosRot_9e(i0, modelType) {

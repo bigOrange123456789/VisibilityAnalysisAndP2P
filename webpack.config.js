@@ -3,10 +3,12 @@
 //npm install webpack-cli --save-dev
 
 //common JS模块
+// const path="LoadingProgressive"
+const path="crowd99"
 module.exports = {
-    entry: './src/LoadingProgressive/main.js',
+    entry: './src/'+path+'/main.js',
     output: {
-        path: __dirname + '/src/LoadingProgressive',  
+        path: __dirname + '/src/'+path+'',  
         filename: 'index.js'  
     }
 };
