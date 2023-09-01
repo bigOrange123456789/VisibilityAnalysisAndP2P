@@ -7,7 +7,6 @@ import { P2P } from './P2P.js'
 import { Detection } from './Detection.js'
 import { ZipLoader } from '../../lib/zip/Ziploader'
 import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
-import { WaterController  } from '../../lib/threejs/WaterController'
 import { DRACOLoader } from './dracoLoader/DRACOLoader.js';
 export class Building{
     constructor(scene,camera){

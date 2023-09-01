@@ -399,6 +399,7 @@ export class AvatarManager {
         return config[0]
     }
     #getConfig_avatar(){
+        if(window.quality=="low")return this.#getConfig_avatarLow()
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
@@ -429,6 +430,13 @@ export class AvatarManager {
                 r_pre=r
                 c1.lod_avatarCount.push(100*100*10)//(Math.ceil(n))
             }
+            c1.lod_avatarCount=[
+                100*100*1,
+                100*100*2,
+                100*100*3,
+                100*100*5,
+                100*100*10
+            ]
             for(let i=0;i<c1.lod_distance.length;i++){
                 c1.lod_distance[i]*=c1.scale
             }
@@ -465,6 +473,88 @@ export class AvatarManager {
                 "CloW_C_body_geo1":4,
                 "CloW_C_qunzi_geo3456":5,
                 "CloW_C_shangyi_geo":5,
+                "hair":3
+            }
+        ]
+        // console.log(config)
+        return config[0]
+    }
+    #getConfig_avatarLow(){
+        const config=conifg_woman
+        for(let i=0;i<config.length;i++){
+            let c1=config[i]
+            c1.scale=1//2
+            
+            // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
+            // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
+            // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
+
+            // c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
+            // c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
+            // c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
+            
+            const lodConut=4//21
+            const countAll=100*100*10//2500*2*10
+            const distanceAll=50*0.8*0.3*1.5//300
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ ]
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=Math.pow((j+1)/lodConut,1)*distanceAll
+                c1.lod_distance.push(r)
+                // c1.lod_geometry.push(lodConut-j-1)
+                // if(j==lodConut-1)c1.lod_geometry.push((lodConut-j)*4-4+3)
+                // else 
+                    c1.lod_geometry.push((lodConut-j)*4-4)
+
+                const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(100*100*10)//(Math.ceil(n))
+            }
+            c1.lod_avatarCount=[
+                100*100*1*0.5,
+                100*100*2*0.5,
+                100*100*3*0.5,
+                100*100*5*0.5,
+                100*100*10*0.5
+            ]
+            for(let i=0;i<c1.lod_distance.length;i++){
+                c1.lod_distance[i]*=c1.scale
+            }
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=lodConut
+                }
+            }
+            c1.lod_distance[c1.lod_distance.length-2]*=2
+            c1.lod_distance[c1.lod_distance.length-1]*=3
+        }
+        config[0]["lod_visible"]=[
+            {
+                "CloW_A_body_geo": 3,
+                "CloW_A_kuzi_geo": 4,
+                "CloW_A_shangyi_geo": 4,
+                "CloW_A_waitao_geo1": 3,
+
+                "CloW_A_xiezi_geo": 2,
+                "CloW_E_eyeLeft_geo02": 2,
+                "CloW_E_eyeRight_geo01": 2,
+                "eyelash": 2,
+                "hair": 3,
+                "head": 4
+            },
+            {
+                "hair":3,
+                "body2":3,
+                "qipao22":4,
+                "waitao1": 4
+            },
+            {
+                "CloW_C_body_geo1":3,
+                "CloW_C_qunzi_geo3456":4,
+                "CloW_C_shangyi_geo":4,
                 "hair":3
             }
         ]
