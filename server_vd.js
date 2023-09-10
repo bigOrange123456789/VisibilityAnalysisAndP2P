@@ -178,12 +178,13 @@ const vdList=VD.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
 const port=8091
 const fs = require('fs');
-
-const options = {
-  key: fs.readFileSync('ssl/private.key'),
-  cert: fs.readFileSync('ssl/certificate.crt')
-};
-const server=require('https').createServer(options, function (request, response) {
+let server
+if(false){
+  const options = {
+    key: fs.readFileSync('ssl/private.key'),
+    cert: fs.readFileSync('ssl/certificate.crt')
+  };
+  server=require('https').createServer(options, function (request, response) {
     // let index;
     let info;
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -201,9 +202,34 @@ const server=require('https').createServer(options, function (request, response)
         console.log("error 没有找到对应数据",info)
       }
     });
-}).listen(port, '0.0.0.0', function () {
+  }).listen(port, '0.0.0.0', function () {
+    console.log("listening to client:"+port);
+  })
+}else{
+  server=require('http').createServer(function (request, response) {
+    // let index;
+    let info;
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    request.on('data', function (dataFromPage) {//接受请求
+      // index=parseInt(String.fromCharCode.apply(null,dataFromPage))
+      info=JSON.parse(String.fromCharCode.apply(null,dataFromPage))
+    });
+    request.on('end', function () {//返回数据
+      let data=VD.getEvd(info,vdList)//vd.databaseEvd[index]
+      if(data){//有缓存
+        // console.log(index)
+        response.write(JSON.stringify(data));
+        response.end();
+      }else{
+        console.log("error 没有找到对应数据",info)
+      }
+    });
+  }).listen(port, '0.0.0.0', function () {
   console.log("listening to client:"+port);
-});
+  });
+}
+
+
 server.on('close',()=>{
   console.log('服务关闭')
 })

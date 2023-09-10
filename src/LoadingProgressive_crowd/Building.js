@@ -318,7 +318,6 @@ export class Building{
 
         mesh.myId=id
         this.detection.receiveMesh(mesh)   
-        // console.log(mesh,id)
     }
     addMesh_fine(id,meshOld){
         // meshOld.material=new THREE.MeshStandardMaterial()
@@ -438,7 +437,6 @@ export class Building{
         this.detection.request("zip")
         const self=this
         var url=self.config.path+id+".zip"
-        // console.log(url)
 	    new Promise( function( resolve, reject ) {//加载资源压缩包
             const zipLoader=new ZipLoader()
             if(self.config.crossOriginSocket&&self.config.crossOriginSocket.length>0){
@@ -469,7 +467,6 @@ export class Building{
 	    } ).then( function ( configJson ) {
 		    const loader = self.glbLoader//new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
-                console.log(gltf)
                 // self.p2p.send({cid:id,myArray:loader.myArray})
                 self.meshes_info[id].parsed=performance.now()//解析完成
                 gltf.scene.traverse(o=>{
@@ -489,7 +486,6 @@ export class Building{
                     }
                 })
                 if(cb)cb()
-                if(false)
                 setTimeout(()=>{
                     self.loadZip_fine(id)
                 },500)

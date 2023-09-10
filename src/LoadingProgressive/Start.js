@@ -13,10 +13,10 @@ import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
-import{Postprocessing}from"./postprocessing/Postprocessing.js"
+import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
-import{UnrealBloom}from"./postprocessing/UnrealBloom.js"
+import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
@@ -67,7 +67,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data)
+                    // new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -75,7 +75,7 @@ export class Start{
           
         this.initCSM();
 
-        // this.building = new Building(this.scene, this.camera)
+        this.building = new Building(this.scene, this.camera)
         this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
@@ -91,25 +91,29 @@ export class Start{
         //       self.scene.backgroundIntensity=0.8
         //     }
         //   )
-        // this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
-        //     ({ envMap }) => {
-        //       self.scene.background = envMap
-        //       self.scene.backgroundIntensity=0.8
-
-        //       self.scene.backgroundIntensity=0.4
-        //       self.unrealBloom.bloomPass.strength=0.55
-        //     }
-        // )
-        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
-        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
             ({ envMap }) => {
-              self.scene.environment = envMap
-              self.scene.background = envMap//test
-              self.scene.backgroundIntensity=0.1
-              self.unrealBloom.bloomPass.strength=1.5
-              window.scene=self.scene
+              self.scene.background = envMap
+              self.scene.backgroundIntensity=0.8
+
+              self.scene.backgroundIntensity=0.4
+              self.unrealBloom.bloomPass.strength=0.55
+
+            //   self.scene.environment = envMap
+            //   self.scene.backgroundIntensity=0//=0.1
             }
         )
+        // this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        // //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+        //     ({ envMap }) => {
+        //         // envMap.flipY=true 
+        //       self.scene.environment = envMap
+        //       self.scene.background = envMap//test
+        //     //   self.scene.backgroundIntensity=0.1
+        //     //   self.unrealBloom.bloomPass.strength=1.5
+        //       window.scene=self.scene
+        //     }
+        // )
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -177,7 +181,7 @@ export class Start{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            45,//(this.config["FlipY"]?-1:1)*30,//50,
+            (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,
             this.config.camera.far)
@@ -193,39 +197,34 @@ export class Start{
             this.config.camera.rotation.y,
             this.config.camera.rotation.z
         )
-        // this.camera.position.set(-308.56840222832017, 10, 166.02712517757053)
-        // this.camera.rotation.set( -2.291182507503793,  1.0271322042424738, 2.368845340479064)
-        // this.camera.position.set(-397.3510808960445,  10,  232.54895927846817)
-        this.camera.rotation.set( -0.676092545575108,  -0.9466703787193923,  -0.5770638807113051)
-        this.camera.position.set(-619.3575551181109,  131.13974398725637,  -20.75165234572438)
 
         window.camera=this.camera
         
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        // this.playerControl=new PlayerControl(this.camera,this.config["FlipY"])
-        // this.playerControl.target.set(
-        //     this.config.camera.target.x,
-        //     this.config.camera.target.y,
-        //     this.config.camera.target.z
-        // )
-        // this.playerControl.mode.set("viewpoint")
-        // this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
-        // this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
+        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"])
+        this.playerControl.target.set(
+            this.config.camera.target.x,
+            this.config.camera.target.y,
+            this.config.camera.target.z
+        )
+        this.playerControl.mode.set("viewpoint")
+        this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
+        this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
 
-        this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
-        window.orbitControl=this.orbitControl
-        this.orbitControl.target.set(
-            -340.67888298324596, 
-            8.573750000000038,  
-            199.38166396137652
-        )
-        this.camera.lookAt(
-            -340.67888298324596, 
-            8.573750000000038,  
-            199.38166396137652
-        )
+        // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
+        // window.orbitControl=this.orbitControl
+        // this.orbitControl.target.set(
+        //     -340.67888298324596, 
+        //     8.573750000000038,  
+        //     199.38166396137652
+        // )
+        // this.camera.lookAt(
+        //     -340.67888298324596, 
+        //     8.573750000000038,  
+        //     199.38166396137652
+        // )
 
         // this.playerControl.target.set(
         //     this.config.camera.target.x,

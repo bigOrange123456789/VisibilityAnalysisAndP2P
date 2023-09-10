@@ -3,7 +3,7 @@ import * as THREE from "three";
 import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js';
-import { GodRayShader } from './postprocessing/DepthtoNormal';
+import { GodRayShader } from '../../lib/postprocessing/DepthtoNormal';
 export class UI{
     constructor(main) {
         this.main = main;

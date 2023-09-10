@@ -72,7 +72,7 @@
             ],
             "componentNum":8437,
             "sceneId":"gkd",
-            "urlVdServer":"https://42.192.188.161:8091"
+            "urlVdServer":"http://localhost:8091"
         },
         "P2P":{
             "urlP2pControllerServer":"http://139.196.217.153:8010"
