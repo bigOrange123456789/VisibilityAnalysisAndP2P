@@ -7,7 +7,6 @@ import {
 	LinearSRGBColorSpace,
 	SRGBColorSpace
 } from 'three';
-import { decode } from './draco_decoder';
 
 const _taskCache = new WeakMap();
 

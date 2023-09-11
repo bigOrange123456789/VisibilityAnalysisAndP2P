@@ -1,10 +1,10 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+// import { createRequire } from 'module';
+// const require = createRequire(import.meta.url);
 class EdgeNetController{
   constructor(edgeSeverList){
     this.edgeSeverList=edgeSeverList
     this.initEdgeCloud1()
-    this.groupNum=2
+    this.groupNum=1//2
     this.io=this.createIo()
     const self=this
     setInterval(()=>{
@@ -109,25 +109,29 @@ class EdgeNetController{
 }
 new EdgeNetController({
   "NanJing":{
-    "ip":"47.122.19.36",
-    "neighbour":["HanZhou","ShangHai","ChengDu"]
+    "ip":"localhost",
+    "neighbour":[]
   },
-  "HangZhou":{
-    "ip":"120.55.83.175",
-    "neighbour":["ShangHai","NanJing","GuangZhou"]
-  },
-  "ChengDu":{
-    "ip":"47.109.92.188",
-    "neighbour":["NanJing","GuangZhou"]
-  },
-  "GuangZhou":{
-    "ip":"8.134.117.255",
-    "neighbour":["ChengDu","HangZhou"]
-  },
-  "ShangHai":{
-    "ip":"106.14.198.71",
-    "neighbour":["NanJing","HangZhou"]
-  }
+  // "NanJing":{
+  //   "ip":"47.122.19.36",
+  //   "neighbour":["HanZhou","ShangHai","ChengDu"]
+  // },
+  // "HangZhou":{
+  //   "ip":"120.55.83.175",
+  //   "neighbour":["ShangHai","NanJing","GuangZhou"]
+  // },
+  // "ChengDu":{
+  //   "ip":"47.109.92.188",
+  //   "neighbour":["NanJing","GuangZhou"]
+  // },
+  // "GuangZhou":{
+  //   "ip":"8.134.117.255",
+  //   "neighbour":["ChengDu","HangZhou"]
+  // },
+  // "ShangHai":{
+  //   "ip":"106.14.198.71",
+  //   "neighbour":["NanJing","HangZhou"]
+  // }
 })
 ///////////////////////////////////
 function kmeans(data, k, maxIter) {

@@ -241,6 +241,33 @@ export class AvatarManager {
         return poslist
     }
     initPos_avatarTest(){
+        return [
+            [-285.95269775390625,6,218.32791137695312],
+            [-285.33740234375,6,221.08370971679688],
+            [-309.4652099609375,6,246.4104461669922],
+            [-299.6354064941406,6,216.35232543945312],
+            [-283.8999938964844,6,250.60000610351562],
+            [-283.7325439453125,6,219.4379425048828],
+            [-289.5063781738281,6,261.7447814941406],
+            [-284.3406677246094,6,200.56495666503906],
+            [-259.5779113769531,6,178.1188507080078],
+            [-225.1352081298828,6,166.5204315185547],
+            [-283.0642395019531,6,222.4715118408203],
+            [-308.688720703125,6,198.91307067871094],
+            [-228.17825317382812,6,187.5029754638672],
+            [-286.31768798828125,6,279.5467224121094],
+            [-272.9983825683594,6,240.62742614746094],
+            [-279.2871398925781,6,191.10101318359375],
+            [-232.09054565429688,6,184.14584350585938],
+            [-219.9696044921875,6,222.8343048095703],
+            [-270.5052185058594,6,271.94256591796875],
+            [-228.67724609375,6,139.8816680908203],
+            [-286.82684326171875,6,257.61163330078125],
+            [-239.37496948242188,6,241.25621032714844],
+            [-223.19073486328125,6,195.17373657226562],
+            [-251.70550537109375,6,242.40097045898438],
+            [-253.61163330078125,6,244.5153045654297]
+        ]
         // const poslist=[]
         // for(let i=0;i<1;i++)
         // for(let j=0;j<1;j++){
@@ -417,7 +444,7 @@ export class AvatarManager {
         console.log(config)
         return config[0]
     }
-    getConfig_avatar(){
+    getConfig_avatar_lod8(){
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
@@ -457,7 +484,53 @@ export class AvatarManager {
                     c1.lod_visible[j][tag]=lodConut
                 }
             }
-            c1.lod_distance[c1.lod_distance.length-2]*=2
+            c1.lod_distance[c1.lod_distance.length-2]*=2*2
+            c1.lod_distance[c1.lod_distance.length-1]*=4*2
+        }
+        // console.log(config)
+        return config[0]
+    }
+    getConfig_avatar(){
+        const config=conifg_woman
+        for(let i=0;i<config.length;i++){
+            let c1=config[i]
+            c1.scale=2
+            
+            // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
+            // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]
+            // c1.lod_avatarCount=[ 200, 900, 3240, 8800, 12600]
+
+            // c1.lod_distance=[ 10, 20, 40, 80, 160, 320 ]
+            // c1.lod_geometry=[ 20, 15,  7,  2,   1,   0 ]
+            // c1.lod_avatarCount=[ 500, 500, 500, 500, 500, 500]
+            
+            const lodConut=3//21
+            const countAll=2500*2*10
+            const distanceAll=200*0.8*0.25//300
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ ]
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=Math.pow((j+1)/lodConut,1.2)*distanceAll
+                c1.lod_distance.push(r)
+                // c1.lod_geometry.push(lodConut-j-1)
+                c1.lod_geometry.push((lodConut-j)*3-3)
+
+                const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(Math.ceil(n))
+            }
+            for(let i=0;i<c1.lod_distance.length;i++){
+                c1.lod_distance[i]*=c1.scale
+            }
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=lodConut
+                }
+            }
+            c1.lod_distance[c1.lod_distance.length-2]*=2*3
             c1.lod_distance[c1.lod_distance.length-1]*=4*2
         }
         // console.log(config)

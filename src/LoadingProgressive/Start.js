@@ -23,7 +23,6 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { TreeManager } from "./TreeManager";
 import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
-import { TreeBuilder } from "./TreeBuilder";
 
 
 export class Start{
@@ -54,7 +53,7 @@ export class Start{
         
         // this.initSky()
         this.initWander()
-        if(false)
+        // if(false)
         this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
@@ -67,7 +66,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -103,17 +102,17 @@ export class Start{
             //   self.scene.backgroundIntensity=0//=0.1
             }
         )
-        // this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
-        // //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-        //     ({ envMap }) => {
-        //         // envMap.flipY=true 
-        //       self.scene.environment = envMap
-        //       self.scene.background = envMap//test
-        //     //   self.scene.backgroundIntensity=0.1
-        //     //   self.unrealBloom.bloomPass.strength=1.5
-        //       window.scene=self.scene
-        //     }
-        // )
+        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+            ({ envMap }) => {
+                // envMap.flipY=true 
+              self.scene.environment = envMap
+            //   self.scene.background = envMap//test
+            //   self.scene.backgroundIntensity=0.1
+            //   self.unrealBloom.bloomPass.strength=1.5
+              window.scene=self.scene
+            }
+        )
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -249,8 +248,8 @@ export class Start{
             lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
             parent: this.scene,
-            lightIntensity: 2.9,
-            lightColor: new THREE.Color(0xf7f2d9),
+            lightIntensity: 1.,//2.9,
+            lightColor: new THREE.Color(0xffffff),//new THREE.Color(0xf7f2d9),
             shadowBias: -0.0004,
             mode: 'practical',
             lightMargin: 200

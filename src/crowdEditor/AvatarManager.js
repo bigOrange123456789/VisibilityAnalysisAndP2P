@@ -6,6 +6,7 @@ import { ControlEdit } from '../../lib/playerControl/ControlEdit.js';
         
 import * as THREE from "three"
 export class AvatarManager {
+    editAble=true//false//
     constructor(scene, camera,posConfig,cb,orbitControls) {
         this.orbitControls=orbitControls
         this.renderer=renderer
@@ -26,48 +27,35 @@ export class AvatarManager {
             }
             
             for (var i00 = 0; i00 < crowd.count; i00++) {
-                const material = 
-                    // new THREE.LineBasicMaterial( {
-                    //     color: 0,
-                    //     linewidth: 1,
-                    //     linecap: 'round', //ignored by WebGLRenderer
-                    //     linejoin:  'round' //ignored by WebGLRenderer
-                    // } );
-                    // new THREE.LineDashedMaterial({
-                    //     color : 0x9B30FF
-                    // });
-                    new THREE.MeshStandardMaterial({
-                        color:0,
-                        transparent:true,
-                        opacity:0
-                    }) 
-                const box = new THREE.Mesh( 
-                    new THREE.BoxGeometry( 1, 2.35 ), 
-                    material
-                    // new THREE.MeshStandardMaterial({
-                    //     color:0
-                    // }) 
-                )
-                // box.visible=false
-                // box.scale.y=2.35
-                const box2=new THREE.Mesh( 
-                    new THREE.BoxGeometry( 1, 0.2), 
-                    new THREE.MeshStandardMaterial({
-                        color:0
-                    }) 
-                )
-                box2.material.color.r=0.5
-                box2.visible=false
-                // box2.scale.y=0.2
-                box2.position.y=-1.8
-                box.add(box2)
-                // box.position.y=40
-                const p=this.initPos_avatarTest()[i00]
-                box.position.set(p[0],p[1]+1.6,p[2])
-                box.name=i00
-
-                self.boxlist.push(box)
-                self.scene.add(box)
+                if(self.editAble){
+                    const box = new THREE.Mesh( 
+                        new THREE.BoxGeometry( 1, 2.35 ), 
+                        new THREE.MeshStandardMaterial({
+                            color:0,
+                            transparent:true,
+                            opacity:0
+                        })
+                    )
+                    const box2=new THREE.Mesh( 
+                        new THREE.BoxGeometry( 1, 0.2), 
+                        new THREE.MeshStandardMaterial({
+                            color:0
+                        }) 
+                    )
+                    box2.material.color.r=0.5
+                    box2.visible=false
+                    // box2.scale.y=0.2
+                    box2.position.y=-1.8
+                    box.add(box2)
+                    // box.position.y=40
+                    const p=this.initPos_avatarTest()[i00]
+                    box.position.set(p[0],p[1]+1.6,p[2])
+                    box.name=i00
+    
+                    self.boxlist.push(box)
+                    self.scene.add(box)
+                }
+                
                 // const p=self.poslist[i00]
                 // crowd.setPosition(i00,[
                 //     p[0],//+(2*Math.random()-1)*5,
@@ -183,7 +171,7 @@ export class AvatarManager {
             crowd.update()
             window.crowd=crowd
             if(cb)cb()
-            new ControlEdit(self.camera,self.renderer,self.boxlist,orbitControls,
+            if(self.editAble)new ControlEdit(self.camera,self.renderer,self.boxlist,orbitControls,
                 obj=>{//点击选中控制函数
                     const id=obj.name
                     if(window.avatar){
@@ -215,7 +203,6 @@ export class AvatarManager {
                         window.avatar.crowd.update()
                     }
                 },
-
             )
             // self.checkOnPanel()
         })
@@ -230,9 +217,9 @@ export class AvatarManager {
         for(let i=0;i<5;i++)
         for(let j=0;j<5;j++){
             arr.push([
-                (i-2.5)*4,
+                (i-2.5)*4+-273.9,
                 -1.5+7.5,
-                (j-2.5)*4,
+                (j-2.5)*4+244.6,
             ])
         }
         return arr

@@ -75,7 +75,7 @@
             "urlVdServer":"http://114.80.207.60:8092"
         },
         "P2P":{
-            "urlP2pControllerServer":"http://139.196.217.153:8010"
+            "urlP2pControllerServer":"http://localhost:8010"
         },
         "Detection":{
             "urlDetectionServer":"http://123.57.58.224:9999",
