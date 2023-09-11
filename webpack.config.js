@@ -4,7 +4,8 @@
 
 //common JS模块
 // const path="LoadingProgressive"
-const path="crowd99"
+// const path="crowd99"
+const path="crowdEditor"
 module.exports = {
     entry: './src/'+path+'/main.js',
     output: {

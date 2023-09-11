@@ -8,6 +8,7 @@ export class UI{
     constructor(main) {
         this.main = main;
         this.gui = new GUI();
+        window.gui=this.gui
         // this.gui._closed=true
         // this.gui.close()
         window.gui=this.gui

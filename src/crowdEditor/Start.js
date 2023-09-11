@@ -65,7 +65,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data,()=>{
+                    this.avatar=new AvatarManager(self.scene,self.camera,data,()=>{
                             console.log("ttt")
                             self.ui=new UI(self)
                             document.getElementById("LoadProgress").innerHTML=""

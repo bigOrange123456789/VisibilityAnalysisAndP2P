@@ -470,7 +470,7 @@ export class Building{
 	    } ).then( function ( configJson ) {
 		    const loader = self.glbLoader//new GLTFLoader(self.loaderZip);
 		    loader.load(configJson.fileUrl[0], (gltf) => {
-                console.log(gltf)
+                // console.log(gltf)
                 // self.p2p.send({cid:id,myArray:loader.myArray})
                 self.meshes_info[id].parsed=performance.now()//解析完成
                 gltf.scene.traverse(o=>{

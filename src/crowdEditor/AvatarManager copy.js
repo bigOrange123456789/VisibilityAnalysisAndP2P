@@ -2,13 +2,12 @@ import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
 import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
-import { ControlEdit } from '../../lib/playerControl/ControlEdit.js';
+import { DragControls } from 'three/examples/jsm/controls/DragControls.js';
         
 import * as THREE from "three"
 export class AvatarManager {
     constructor(scene, camera,posConfig,cb,orbitControls) {
         this.orbitControls=orbitControls
-        this.renderer=renderer
         const self=this
         this.boxlist=[]
         this.posConfig=posConfig
@@ -139,8 +138,7 @@ export class AvatarManager {
                 }
                 
             }
-            // self.drag(self.boxlist)
-            
+            self.drag(self.boxlist)
             for(let i=0;i<scenes.length;i++){
                 scenes[i].traverse(node=>{
                     if(node instanceof THREE.SkinnedMesh){
@@ -183,43 +181,9 @@ export class AvatarManager {
             crowd.update()
             window.crowd=crowd
             if(cb)cb()
-            new ControlEdit(self.camera,self.renderer,self.boxlist,orbitControls,
-                obj=>{//点击选中控制函数
-                    const id=obj.name
-                    if(window.avatar){
-                        // obj.position.y=window.avatar.crowd.getPosition(id)[1]+1.6
-                        // window.avatar.crowd.setPosition(id,[
-                        //     obj.position.x,
-                        //     obj.position.y-1.6,//+3.85,
-                        //     obj.position.z,
-                        // ])  
-                        // window.avatar.crowd.update()
-                        window.avatarI=id
-                        const arr=self.boxlist
-                        for(let i=0;i<arr.length;i++){
-                            // arr[i].children[0].material.color.r=(i==id?0.5:0)
-                            arr[i].children[0].visible=(i==id)
-                            // console.log(arr[i].children[0].material.color)
-                        }
-                    }
-                },
-                obj=>{//移动拖拽控制函数
-                    const id=obj.name
-                    if(window.avatar){
-                        // obj.position.y=window.avatar.crowd.getPosition(id)[1]+1.6
-                        window.avatar.crowd.setPosition(id,[
-                            obj.position.x,
-                            obj.position.y-1.6,//+3.85,
-                            obj.position.z,
-                        ])  
-                        window.avatar.crowd.update()
-                    }
-                },
-
-            )
-            // self.checkOnPanel()
+            self.checkOnPanel()
         })
-        // this.radiographic()
+        this.radiographic()
     
 
         // window.t=new Test(window.avatar)
@@ -284,4 +248,87 @@ export class AvatarManager {
         // console.log(config)
         return config[0]
     }
+    radiographic(){
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        window.addEventListener( 'mousemove', event=>{//鼠标移动事件
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1 ;
+        }, false );
+        const camera=this.camera
+        const arr=this.boxlist
+        const self=this
+        window.addEventListener('click',()=>{
+                raycaster.setFromCamera( mouse, camera )
+                var intersects =raycaster.intersectObjects( arr )
+                // console.log(intersects)
+                if(!self.onPanel)
+                if(intersects.length>0){
+                    const id=intersects[0].object.name
+                    window.avatarI=id
+                    for(let i=0;i<arr.length;i++){
+                        // arr[i].children[0].material.color.r=(i==id?0.5:0)
+                        arr[i].children[0].visible=(i==id)
+                        // console.log(arr[i].children[0].material.color)
+                    }
+                }
+                self.onPanel=false
+        },false)
+
+    }
+    drag(objects){
+        const orbitControls=this.orbitControls
+        const self=this
+        createDragControls(objects)
+        function createDragControls(objects) {
+            // 初始化拖拽控件
+            var dragControls = new DragControls(objects, camera, renderer.domElement);
+
+            // 鼠标略过事件
+            dragControls.addEventListener('hoveron', function (event) {
+                console.log("createDragControls hoveron");
+                // 让变换控件对象和选中的对象绑定
+            });
+
+            // 开始拖拽
+            dragControls.addEventListener('dragstart', function (event) {
+                console.log("createDragControls dragstart");
+                orbitControls.enabled = false;
+            });
+
+            // 拖拽过程
+            dragControls.addEventListener('drag', function (event) {
+                // console.log("createDragControls drag",event);
+                const obj=event.object
+                const id=obj.name
+                if(window.avatar){
+                    // obj.position.y=window.avatar.crowd.getPosition(id)[1]+1.6
+                    window.avatar.crowd.setPosition(id,[
+                        obj.position.x,
+                        obj.position.y-1.6,//+3.85,
+                        obj.position.z,
+                    ])  
+                    window.avatar.crowd.update()
+                }
+
+                // dragControlsRender();
+            });
+
+            // 拖拽结束
+            dragControls.addEventListener('dragend', function (event) {
+                console.log("createDragControls dragend");
+                orbitControls.enabled = true;
+            });
+        }
+    }
+    onPanel=false//鼠标是否位于控制面板上
+    checkOnPanel(){
+        const self=this
+        document.getElementsByClassName('lil-gui allow-touch-styles root autoPlace')[0].onclick=()=>{
+            self.onPanel=true
+            
+        }
+    }
+
+
 }
