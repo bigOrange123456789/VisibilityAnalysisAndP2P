@@ -14,7 +14,7 @@ import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
 import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
-// import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
+import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
 import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
@@ -36,9 +36,11 @@ export class Start{
 
         const self=this
         this.initScene();
+        // alert(123)
         
         
-        // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
+        // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
         this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
@@ -66,7 +68,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data)
+                    // new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -96,6 +98,7 @@ export class Start{
               self.scene.backgroundIntensity=0.8
 
               self.scene.backgroundIntensity=0.4
+              if(self.unrealBloom.bloomPass)
               self.unrealBloom.bloomPass.strength=0.55
 
             //   self.scene.environment = envMap
@@ -133,6 +136,7 @@ export class Start{
             alpha:true,
             canvas:this.canvas
         })
+        this.renderer.flag=11102
         // this.renderer = new WebGPURenderer({ 
         //     antialias: true,//抗锯齿
         //     alpha:true,
@@ -353,6 +357,7 @@ export class Start{
                     //renderer.render(this.scene,this.camera)
                     if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
                     else if(this.postprocessing) this.postprocessing.render()
+                    else if(this.postprocessingNew) this.postprocessingNew.render()
                     else this.renderer.render(this.scene,this.camera)
                     //this.godrays.render()
                 }                  

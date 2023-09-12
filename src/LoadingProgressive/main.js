@@ -5,7 +5,7 @@ import config_gkd from '../../config/LoadingProgressive/configOP8.json';
 import { Start } from './Start.js'
 // import { StartGPU } from './StartGPU.js'
 
-document.addEventListener('DOMContentLoaded', () => {
+// document.addEventListener('DOMContentLoaded', () => {
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -48,4 +48,4 @@ document.addEventListener('DOMContentLoaded', () => {
     window.configALL=config
     // new StartGPU(document.body,config.useGPU)
     new Start(document.body)
-})
+// })
