@@ -1,8 +1,8 @@
 
-const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8GLTF/"
-const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8GLB/"
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLTF/"
+const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
+// import { createRequire } from 'module';
+// const require = createRequire(import.meta.url);
 const gltfPipeline = require('gltf-pipeline');
 const fsExtra = require('fs-extra');
 

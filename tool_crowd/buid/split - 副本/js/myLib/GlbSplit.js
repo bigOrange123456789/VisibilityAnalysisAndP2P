@@ -7,7 +7,7 @@ function GlbSplit(){
 }
 GlbSplit.prototype={
     init:function(){
-        this.names=[];//getNames();
+        this.names=getNames();
         function getNames(){
             var names=[
                 '室内-会议横幅（非）',

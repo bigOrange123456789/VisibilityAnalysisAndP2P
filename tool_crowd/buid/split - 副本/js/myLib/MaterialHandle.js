@@ -37,7 +37,6 @@ MaterialHandle.prototype={
                 this.meshArr[i].material=new THREE.MeshStandardMaterial({//反光材质
                     color:this.getColor(canvas)
                 });
-                else this.meshArr[i].material.map=canvas
                 this.meshArr[i].material.id=materialId
             }else this.mapsIndex.push(0);
         }

@@ -308,12 +308,12 @@ export class Building{
                 if(o instanceof THREE.Mesh){                    
                     let mesh=o
                     
-                    const name=mesh.material.id
-                    if(window.data0012){
-                        if(window.data0012[name])mesh.material=window.data0012[name]//return
-                        else window.data0012[name]=mesh.material
-                    }else window.data0012={name:mesh.material}
-                    mesh=new THREE.Mesh(mesh.geometry,mesh.material)
+                    // const name=mesh.material.id
+                    // if(window.data0012){
+                    //     if(window.data0012[name])mesh.material=window.data0012[name]//return
+                    //     else window.data0012[name]=mesh.material
+                    // }else window.data0012={name:mesh.material}
+                    // mesh=new THREE.Mesh(mesh.geometry,mesh.material)
 
                     // console.log()
                     mesh.myId=self.meshes.length
@@ -399,6 +399,15 @@ export class Building{
                     matrices_all=matrices_all+"[], "
                 }
             })
+            let meshes2=Array.from(Array(self.meshes.length))
+            for(let mesh of self.meshes){
+                const id=mesh.name.split("_")[2]
+                // console.log(mesh.name,id)
+                meshes2[id]=mesh                
+            }
+            self.meshes=meshes2
+            
+
             console.log("colorList",colorList)
             // self.saveJson(colorList,"colorList.json")
 
@@ -418,6 +427,7 @@ export class Building{
             
             // console.log("matrices_all",matrices_all)
             self.parentGroup.add(gltf.scene)
+            window.test=new Test(self)
             window.meshes=self.meshes
             window.initBox=()=>{
                 window.downBox= new THREE.Mesh( 
@@ -612,6 +622,7 @@ export class Building{
         })
     }
     saveMesh2_material(mesh){
+        if(!mesh.material.map)return
         const name=mesh.material.id+".gltf"
         if(window.data0012){
             if(window.data0012[name])return
@@ -726,7 +737,30 @@ export class Building{
         
     }
 }
-
+class Test{
+    constructor(building){
+        this.ray(building.meshes,window.camera)
+    }
+    ray(objects,camera){
+        function screenToWorld(offsetX, offsetY) {
+            let x = (offsetX / window.innerWidth) * 2 - 1,
+              y = -(offsetY / window.innerHeight) * 2 + 1;
+            let raycaster = new THREE.Raycaster();
+            raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
+            return raycaster;
+        }
+        window.addEventListener('mousedown', function (e) {
+            // mousePre=[e.clientX, e.clientY]
+            //鼠标落点处创建射线
+            let raycaster = screenToWorld(e.clientX, e.clientY);
+            //获取射线经过的在指定范围内的物体集合
+            let intersect = raycaster.intersectObjects(objects);
+            if (intersect.length > 0) {
+              console.log(intersect[0])              
+            }
+          });
+    }
+}
 function PicHandle() {//只服务于MaterialHandle对象
     this.image;
     this.h;

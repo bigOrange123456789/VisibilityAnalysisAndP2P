@@ -39,7 +39,7 @@ export class Start{
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
 
@@ -65,7 +65,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )

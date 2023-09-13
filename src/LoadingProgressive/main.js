@@ -43,6 +43,7 @@ import { Start } from './Start.js'
         config.src.Detection.backURL=backURL    
     }
     config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
+    if(getParam('NUMBER'))
     config.src.Building_new.NUMBER=getParam('NUMBER')
     config.src.Building_new.TIME=getParam('TIME')
 
@@ -50,3 +51,4 @@ import { Start } from './Start.js'
     // new StartGPU(document.body,config.useGPU)
     new Start(document.body)
 // })
+console.log(config)

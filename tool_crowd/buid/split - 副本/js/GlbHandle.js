@@ -20,7 +20,7 @@ GlbHandle.prototype={
 
         this.resourceManager.name=name;
         this.myGlbSplit.getArray(glb,this.resourceManager,opt.cb);//拆分、去除某些部件
-        this.myInDe.process(this.resourceManager);//使用兴趣度进行排序
+        // this.myInDe.process(this.resourceManager);//使用兴趣度进行排序
 
         //this.duplication.process(this.resourceManager);//模型去重
 

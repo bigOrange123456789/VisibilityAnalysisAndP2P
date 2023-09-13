@@ -1,5 +1,5 @@
-import { createRequire } from 'module';
-const require = createRequire(import.meta.url);
+// import { createRequire } from 'module';
+// const require = createRequire(import.meta.url);
 class FileProcessor{
     //构造函数
     constructor() {
@@ -97,7 +97,7 @@ class FileProcessor{
         },100)
     }
     static test2(){
-        const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8GLB/"
+        const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
         const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8Zip/"
         var fp=new FileProcessor()
         var all=fp.fs.readdirSync(path1)
