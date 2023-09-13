@@ -13,14 +13,13 @@ import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../lib/threejs/SkyController'
 
-import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
-import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
-// const Postprocessing=PostprocessingNew
-import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
+// import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
+// import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
+// import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-import { TreeManager } from "./TreeManager";
+// import { TreeManager } from "./TreeManager";
 import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
 
@@ -39,7 +38,7 @@ export class Start{
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
 

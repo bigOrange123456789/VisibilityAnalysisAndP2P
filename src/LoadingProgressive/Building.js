@@ -60,7 +60,7 @@ export class Building{
                 self.start(camera)
             })
         })
-        new Tool(this)
+        // new Tool(this)
     }
     loadConfigInstance(cb){
         const self=this
@@ -116,6 +116,23 @@ export class Building{
         // })
         // return
 
+        
+        const firstPack=[
+            174, 171, 170, 166, 182, 29, 173, 169, 62, 172, 167, 26, 193, 28, 42, 25, 162, 185, 280, 202, 175, 34, 54, 203, 199, 237, 200, 197, 277, 183, 282, 528, 179, 41, 245, 292, 184, 56, 295, 241, 180, 168, 204, 49, 3, 298, 187, 527, 30, 274, 242, 32, 315, 238, 278, 293, 22, 316, 5, 236, 9, 205, 255, 294, 37, 276, 279, 262, 240, 181, 283, 243, 194, 186, 201, 301, 272, 311, 482, 419, 196, 192, 415, 408, 405, 15, 296, 273, 515, 319, 207, 21, 31, 260, 306, 176, 406, 411, 452, 308
+        ]
+        for(let i=0;i<15;i++){
+            self.loadZip(firstPack[i])
+        }
+        setTimeout(()=>{
+            for(let i=15;i<60;i++){
+                self.loadZip(firstPack[i])
+            }
+        },500)
+        setTimeout(()=>{
+            for(let i=60;i<firstPack.length;i++){
+                self.loadZip(firstPack[i])
+            }
+        },1500)
         this.visibiity=new Visibility(
             camera,
             list=>self.loading(list),
@@ -535,6 +552,7 @@ export class Building{
         }
     }
     loading(list){
+        // console.log(list)
         // for(let i=0;i<30;i++)this.loadZip(i)
         // return
         const self=this;
@@ -597,69 +615,69 @@ export class Building{
     }
 }
 
-import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
-class Tool{
-    constructor(building){
-        this.count=529
-        this.building=building
-        window.test=this
-    }
-    start(){
-        const self=this
-        self.loadAll(()=>{
-            setTimeout(()=>{
-                if(Object.keys(self.building.meshes).length==self.count){
-                    self.saveAll()
-                }else{
-                    console.log("等待时间不足")
-                    alert("等待时间不足，请修改代码中的等待时间！")
-                }
-            },500)
-        })
-    }
-    loadAll(cb){
-        const self=this
-        function l(i){
-            console.log(i,self.count)
-            self.building.loadZip(i)
-            if(i==self.count){console.log("加载完成");if(cb)cb()}//alert("加载完成！")
-            else setTimeout(()=>{l(i+1);},100)
-        }
-        l(0)
-    }
-    saveAll(){
-        const self=this
-        function s(i){
-            console.log(i,self.count)
-            const mesh=self.building.meshes[i].lod[0]
-            self.saveGLTF(mesh,i)
-            if(i+1==self.count)alert("下载完成！")
-            else setTimeout(()=>{s(i+1);},1000)
-        }
-        s(0)
-    }
-    saveGLTF(mesh,id){
-        const scene=new THREE.Scene()
-        const name=id+".gltf"
-        scene.add(mesh)
-        mesh.visible=true
-        delete mesh.geometry.attributes.normal
-        // scene.traverse(o=>{
-        //     if(o instanceof THREE.Mesh)
-        //         o.geometry.attributes={position:o.geometry.attributes.position}
-        // })
-        const self=this
-        new GLTFExporter().parse(scene, function (result) {
-            self.saveJson(result,name);
-        });
-    }
-    saveJson(data,name){
-        const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
+// import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
+// class Tool{
+//     constructor(building){
+//         this.count=529
+//         this.building=building
+//         window.test=this
+//     }
+//     start(){
+//         const self=this
+//         self.loadAll(()=>{
+//             setTimeout(()=>{
+//                 if(Object.keys(self.building.meshes).length==self.count){
+//                     self.saveAll()
+//                 }else{
+//                     console.log("等待时间不足")
+//                     alert("等待时间不足，请修改代码中的等待时间！")
+//                 }
+//             },500)
+//         })
+//     }
+//     loadAll(cb){
+//         const self=this
+//         function l(i){
+//             console.log(i,self.count)
+//             self.building.loadZip(i)
+//             if(i==self.count){console.log("加载完成");if(cb)cb()}//alert("加载完成！")
+//             else setTimeout(()=>{l(i+1);},100)
+//         }
+//         l(0)
+//     }
+//     saveAll(){
+//         const self=this
+//         function s(i){
+//             console.log(i,self.count)
+//             const mesh=self.building.meshes[i].lod[0]
+//             self.saveGLTF(mesh,i)
+//             if(i+1==self.count)alert("下载完成！")
+//             else setTimeout(()=>{s(i+1);},1000)
+//         }
+//         s(0)
+//     }
+//     saveGLTF(mesh,id){
+//         const scene=new THREE.Scene()
+//         const name=id+".gltf"
+//         scene.add(mesh)
+//         mesh.visible=true
+//         delete mesh.geometry.attributes.normal
+//         // scene.traverse(o=>{
+//         //     if(o instanceof THREE.Mesh)
+//         //         o.geometry.attributes={position:o.geometry.attributes.position}
+//         // })
+//         const self=this
+//         new GLTFExporter().parse(scene, function (result) {
+//             self.saveJson(result,name);
+//         });
+//     }
+//     saveJson(data,name){
+//         const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
         
-        const myBlob = new Blob([jsonData], { type: 'application/json' });
-        const link = document.createElement('a');
-        link.href = URL.createObjectURL(myBlob)
-        link.download = name
-        link.click()
-    }
-}
+//         const myBlob = new Blob([jsonData], { type: 'application/json' });
+//         const link = document.createElement('a');
+//         link.href = URL.createObjectURL(myBlob)
+//         link.download = name
+//         link.click()
+//     }
+// }
