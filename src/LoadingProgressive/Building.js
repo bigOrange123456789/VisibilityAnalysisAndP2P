@@ -7,7 +7,15 @@ import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 
 export class Building{
     constructor(scene,camera){
-        // this.config.path="http://"+this.config.path
+        this.materialList={}
+        this.materialListIndex=[
+            334,172,168,154,158,164,170,174,170,156,177,180,177,178,177,160,182,79,80,154,190,156,188,185,202,334,206,81,193,185,204,196,82,204,83,198,84,200,208,232,160,156,214,216,156,85,210,177,218,334,232,230,223,160,212,244,177,234,160,86,156,242,334,236,202,87,182,250,88,89,160,90,91,258,220,226,228,92,93,94,185,258,226,95,96,97,185,98,228,99,258,226,228,100,101,102,103,104,185,186,180,105,172,106,156,246,252,264,254,239,107,105,105,180,264,105,254,172,239,156,180,240,264,254,105,172,108,156,109,156,105,239,254,264,180,172,110,156,239,252,246,264,172,254,105,180,266,105,248,334,208,268,105,177,210,230,212,262,276,270,274,280,282,111,278,224,112,272,113,290,288,276,286,284,292,298,310,314,306,168,304,318,312,308,114,115,116,328,294,272,172,117,330,296,323,105,258,248,118,323,119,292,258,105,323,324,323,278,190,120,105,258,172,301,258,306,105,156,121,332,122,258,193,156,259,193,180,123,341,337,348,316,301,264,308,352,105,180,264,341,124,301,278,345,105,105,345,320,125,126,284,341,301,345,248,105,180,301,341,127,337,350,180,126,345,337,318,320,301,264,308,341,284,105,326,128,172,337,341,301,105,264,129,337,301,180,341,320,350,105,130,105,345,320,131,180,248,341,301,345,337,350,105,180,132,301,341,337,350,364,345,133,134,105,278,301,341,342,341,264,342,350,180,105,180,301,341,126,345,284,264,337,341,180,135,172,316,301,264,308,278,105,105,356,136,264,301,362,341,316,172,345,364,316,341,301,337,264,338,137,350,105,345,138,341,342,264,301,341,337,139,316,345,337,190,330,248,105,364,362,301,372,126,140,316,126,301,341,248,345,308,264,180,314,105,141,105,264,301,341,278,180,345,350,180,142,345,337,276,316,301,372,308,341,318,105,356,143,264,301,341,316,248,345,144,308,341,301,105,345,370,180,316,264,145,320,105,180,146,345,346,370,316,301,308,341,105,356,264,147,301,308,316,172,364,341,126,368,345,278,318,180,316,301,105,276,320,258,105,354,148,258,301,320,193,354,301,258,180,359,105,149,105,150,258,301,302,359,320,105,228,258,193,194,359,172,180,156,264,360,193,218,258,164,259,156,164,258,156,164,260,156,164,165,164,165,164,166,151,160,180,366,350,204,160,152,232,332,156
+        ]
+        this.materialListHasMap=
+        [
+            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,1,1,1,1,1,1,1,1,0,1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,0,0,1,0,0,1,1,1,1,0,0,0,1,1,1,0,0,0,1,0,1,0,1,1,1,0,0,0,0,0,1,1,1,0,1,0,1,1,1,1,1,1,0,0,0,1,1,0,1,1,1,1,1,1,1,1,0,1,0,1,0,1,0,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,0,1,1,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,0,1,1,1,0,1,1,0,1,0,1,1,0,1,1,1,1,1,0,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,0,0,1,1,0,0,1,1,1,1,1,0,1,1,1,0,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,0,1,0,1,1,1,1,1,1,0,0,0,1,1,0,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,0,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1,1,0,0,1,0,1,1,1,1,1,1,1,1,0,0,0,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,0,1,0,1,1,1,1,1,1,0,1,1,1,0,1,1,1,1,1,0,1,0,1,0,1,1,1,1,1,1,1,0,1,1,0,1,1,1,1,1,1,0,1,1,1,1,1,1,1,0,1,1,1,0,1,0,1,1,1,1,1,1,1,1,1,0,0,0,0,1,1,1,1,1,0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0,1,1,1,1,1,1,0,1,1,1
+        ]
+        // this.config.path="http://"+this.config.path 
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
         this.scene=scene
@@ -36,6 +44,7 @@ export class Building{
         
         this.p2p=new P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
+        // console.log(self.config.path)
         this.loader=new Loader(self.config.path,self.config.crossOriginSocket,true)
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
@@ -89,7 +98,7 @@ export class Building{
         }else cb()
     }
     start(camera){
-        console.log(camera)
+        // console.log(camera)W
         const self=this
         // this.load0()
         // IndirectMaterial.pre(()=>{
@@ -97,12 +106,42 @@ export class Building{
         //     self.load("sponza")
         // })
         // return
+
         this.visibiity=new Visibility(
             camera,
             list=>self.loading(list),
             this.meshes,
             this.detection
         )
+        
+        // self.loading(Array.from(Array(1000)).map((v,i) => {return i } ))
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+1000 } ))
+        // },1000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+2000 } ))
+        // },2000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+3000 } ))
+        // },3000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+4000 } ))
+        // },4000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+5000 } ))
+        // },5000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+6000 } ))
+        // },6000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+7000 } ))
+        // },7000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+8000 } ))
+        // },8000)
+        // setTimeout(()=>{
+        //     self.loading(Array.from(Array(570 )).map((v,i) => {return i+9000 } ))
+        // },9000)
 
         // const l1=Array.from(Array(100)).map((v,i) => {return i } )
         // const l2=Array.from(Array(100)).map((v,i) => {return i+100 } )
@@ -177,6 +216,14 @@ export class Building{
         return mesh
     }
     addMesh(id,meshOld){
+        // console.log(meshOld)
+        // const materialId=this.materialListIndex[id]
+        // if(this.materialList[materialId]){
+        //     meshOld.material=this.materialList[materialId]
+        // }else{
+        //     this.materialList[materialId]=meshOld.material
+        // }
+
         if(this.config.updateColor){
             meshOld.geometry.computeVertexNormals()
             let t=id*256*256*256/8431 ///2665
@@ -192,25 +239,27 @@ export class Building{
         meshOld.material.envMapIntensity0=meshOld.material.envMapIntensity//-0.5
         meshOld.material.emissiveIntensity0=meshOld.material.emissiveIntensity//-0.5
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
+
         const m=meshOld.material
-        if(id==29||id==3){//玻璃
-            m.transparent=true
-            m.opacity=0.6
-        }else if(id==166){//护栏
-        }else if(id==174||id==182){//道路
-            m.metalness=0.8
-            m.roughness=0.4
-            // m.visible=false
-            // m.metal=true
-            // alert(m.shininess)
-            // console.log(m)
-        }else{
-            m.transparent=false
-        }
+        // if(id==29||id==3){//玻璃
+        //     m.transparent=true
+        //     m.opacity=0.6
+        // }else if(id==166){//护栏
+        // }else if(id==174||id==182){//道路
+        //     m.metalness=0.8
+        //     m.roughness=0.4
+        //     // m.visible=false
+        //     // m.metal=true
+        //     // alert(m.shininess)
+        //     // console.log(m)
+        // }else{
+        //     m.transparent=false
+        // }
 
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
         mesh.geometry=meshOld.geometry
+        // console.log(this.instance_info,"this.instance_info")
         if(this.instance_info){
             meshOld.materialOld=meshOld.material
             
@@ -243,8 +292,8 @@ export class Building{
                 // })
                 ,
                 instance_info)
-            mesh1.castShadow =true// false
-            mesh1.receiveShadow = true//false//true
+            mesh1.castShadow =false//true// 
+            mesh1.receiveShadow = false//true//
             const mesh2=mesh1.clone()
             
             //////////
@@ -285,19 +334,22 @@ export class Building{
             mesh.config0=this.meshes_info[id]
         }else{
             mesh.lod=[meshOld,meshOld]
+            mesh.add(meshOld)
         }
         const self=this
         // setTimeout(()=>{
             self.meshes[id]=mesh
         // },1000)
         this.parentGroup.add(mesh)
-        this.visibiity.prePoint2=""//重新进行可见剔除
+        if(this.visibiity)this.visibiity.prePoint2=""//重新进行可见剔除
 
         mesh.myId=id
         this.detection.receiveMesh(mesh)   
         // console.log(mesh,id)
     }
     loadZip(id,cb){
+        // this.loadGLB(id,cb)
+        // return
         if(this.meshes_info[id])return
         this.detection.receivePack("server")
         this.meshes_info[id]={request:performance.now()}//true

@@ -36,16 +36,13 @@ export class Start{
 
         const self=this
         this.initScene();
-        // alert(123)
-        
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
 
-        
     }
     init(){
         const self=this
@@ -98,7 +95,7 @@ export class Start{
               self.scene.backgroundIntensity=0.8
 
               self.scene.backgroundIntensity=0.4
-              if(self.unrealBloom.bloomPass)
+              if(self.unrealBloom)if(self.unrealBloom.bloomPass)
               self.unrealBloom.bloomPass.strength=0.55
 
             //   self.scene.environment = envMap
@@ -186,8 +183,10 @@ export class Start{
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
-            this.config.camera.near,
-            this.config.camera.far)
+            this.config.camera.near,//3,//
+            this.config.camera.far//200,//
+            )
+            // ( 65, width / height, 3, 10 )
 
         window.camera=this.camera
         this.camera.position.set(

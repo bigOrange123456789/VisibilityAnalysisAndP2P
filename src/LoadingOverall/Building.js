@@ -52,20 +52,23 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        new SamplePointList(
-            this.config.createSphere,
-            this.parentGroup,
-            this.meshes,
-            this.config.entropy
+        if(false){
+            new SamplePointList(
+                this.config.createSphere,
+                this.parentGroup,
+                this.meshes,
+                this.config.entropy
             )
-        
-        // this.createCube2(this.config.createSphere)
-        // this.createKernel(this.config.block2Kernel)
+            
+            // this.createCube2(this.config.createSphere)
+            // this.createKernel(this.config.block2Kernel)
 
-        // this.createSphere1(this.config.createSphere)
-        // this.createSphere2(this.config.createSphere)//展示凸局域分布情况 //不显示核视点 每一块视点使用不同颜色
-        // this.wallShow()
-        // this.doorTwinkle()
+            this.createSphere1(this.config.createSphere)
+            // this.createSphere2(this.config.createSphere)//展示凸局域分布情况 //不显示核视点 每一块视点使用不同颜色
+            // this.wallShow()
+            // this.doorTwinkle()  
+        }
+        
     }
     doorTwinkle(){
         const self=this
@@ -303,12 +306,20 @@ export class Building{
             let colorList=[]
             gltf.scene.traverse(o=>{
                 if(o instanceof THREE.Mesh){                    
-                    const mesh=o
+                    let mesh=o
+                    
+                    const name=mesh.material.id
+                    if(window.data0012){
+                        if(window.data0012[name])mesh.material=window.data0012[name]//return
+                        else window.data0012[name]=mesh.material
+                    }else window.data0012={name:mesh.material}
+                    mesh=new THREE.Mesh(mesh.geometry,mesh.material)
+
                     // console.log()
                     mesh.myId=self.meshes.length
                     if(false)colorList.push(self.getColor2(mesh))
                     
-                    if(true){//if(self.config.updateColor){
+                    if(false){//if(self.config.updateColor){
                         // console.log(mesh.myId)
                         let t=mesh.myId*256*256*256/1320 //2665
                         mesh.material.color.r=0.5*((t&0xff)    )/255
@@ -383,6 +394,7 @@ export class Building{
 
                     // console.log(mesh.material.color)
                     self.meshes.push(mesh)
+                    // self.parentGroup.add(mesh)
                     const id=mesh.name.split("_")[1]
                     matrices_all=matrices_all+"[], "
                 }
@@ -462,11 +474,24 @@ export class Building{
                     },250)
                 }
             }
+            const save2_material = function(index){
+                self.saveMesh2_material(meshes[index])
+                if(index+1>=meshes.length) {
+                    console.log("finish!")
+                }else{
+                    setTimeout(()=>{
+                        save2_material(index+1)
+                    },250)
+                }
+            }
             window.save=()=>{
                 save(0)
             }
             window.save2=()=>{
                 save2(0)
+            }
+            window.save2_material=()=>{
+                save2_material(0)
             }
             window.save3=()=>{
                 self.saveMesh3(self.scene,"all.gltf")
@@ -576,6 +601,45 @@ export class Building{
 
         const scene=new THREE.Scene()
         const mesh2=mesh.clone()
+        mesh2.applyMatrix4(mesh.matrixWorld);
+        scene.add(mesh2)
+        new GLTFExporter().parse(scene,function(result){
+            var myBlob=new Blob([JSON.stringify(result)], { type: 'text/plain' })
+            let link = document.createElement('a')
+            link.href = URL.createObjectURL(myBlob)
+            link.download = name
+            link.click()
+        })
+    }
+    saveMesh2_material(mesh){
+        const name=mesh.material.id+".gltf"
+        if(window.data0012){
+            if(window.data0012[name])return
+            else window.data0012[name]=true
+        }else window.data0012={name:true}
+        // console.log(mesh)
+        if(mesh.geometry.attributes.position.data){
+            const array1=mesh.geometry.attributes.position.data.array
+            const array2=[]
+            for(let i=0;i<array1.length/4;i++)
+                for(let j=0;j<3;j++)
+                    array2.push(
+                        array1[4*i+j]
+                    )
+            mesh.geometry.attributes.position = new THREE.BufferAttribute(
+                new Float32Array(array2), 
+                3//4
+            )
+        }
+        
+        delete mesh.geometry.attributes.normal// geometry.computeVertexNormals();
+
+        const scene=new THREE.Scene()
+        const mesh2=new THREE.Mesh(
+            new THREE.PlaneGeometry( 1, 1 ),//mesh.geometry,
+            mesh.material
+        )//mesh.clone()
+        delete mesh2.geometry.attributes.normal
         mesh2.applyMatrix4(mesh.matrixWorld);
         scene.add(mesh2)
         new GLTFExporter().parse(scene,function(result){

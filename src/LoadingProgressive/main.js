@@ -1,7 +1,7 @@
 import config_haiNing0 from '../../config/LoadingProgressive/configOP6.json';
 import config_haiNing from '../../config/LoadingProgressive/configOP7.json';
 import config_gkd from '../../config/LoadingProgressive/configOP8.json';
-
+// import config9 from '../../config/LoadingProgressive/configOP9.json';
 import { Start } from './Start.js'
 // import { StartGPU } from './StartGPU.js'
 
@@ -14,8 +14,9 @@ import { Start } from './Start.js'
     }
     const config=
         getParam('scene')=="haiNing0"?config_haiNing0:
-        getParam('scene')=="haiNing"?config_haiNing:
-        config_gkd
+        getParam('scene')=="haiNing"?config_haiNing:config_gkd
+        // config9
+    console.log(config)
     config.useGPU=getParam('useGPU')?getParam('useGPU'):true
     config.src.main.speed       =getParam('speed')?getParam('speed'):config.src.main.speed
     config.src.main.autoMove    =getParam('autoMove')

@@ -179,7 +179,7 @@ export class Detection {//需要服务器
     receiveMesh(mesh){
         if(mesh.originType=="centerServer")this.count_mesh_server++
         else if(mesh.originType=="edgeP2P")this.count_mesh_p2p++
-        else console.log("error:mesh.originType")
+        else console.log("error:mesh.originType",mesh.myId)
     }
     addDemand(list){
         // this.demandResponseDelay={}
