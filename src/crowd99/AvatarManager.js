@@ -145,10 +145,12 @@ export class AvatarManager {
                 //     -900,
                 //     -900*(1-0.2+0.2*Math.random()),
                 //     900])
-                // crowd.setScale(i00, [
-                //     c.scale,
-                //     c.scale*(1-0.2+0.2*Math.random()),
-                //     c.scale])
+                const s0=1-0.2+0.2*Math.random()
+                crowd.setScale(i00, [
+                    s0,
+                    1-0.3+0.3*Math.random(),
+                    s0,
+                ])
                 // crowd.setObesity(i00, 0.8+0.4*Math.random())
                 let flag=true
                 if(c.constraint){
