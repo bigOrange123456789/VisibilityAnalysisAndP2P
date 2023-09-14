@@ -1,5 +1,11 @@
-import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
+//高质量
+// import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
+// import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
+//低质量
+import { CrowdManager } from '../../lib/crowd_sim/CrowdManager.js'
+// import { CrowdManager } from '../../lib/crowd_noBS/CrowdManager.js'
+import conifg_woman     from '../../config/avatar/sceneConfig_man_linzhou.json'
+
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 import * as THREE from "three"
