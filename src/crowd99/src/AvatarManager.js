@@ -2,9 +2,9 @@
 // import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
 // import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 //低质量
-import { CrowdManager } from '../../lib/crowd_sim/CrowdManager.js'
+import { CrowdManager } from '../../../lib/crowd_sim/CrowdManager.js'
 // import { CrowdManager } from '../../lib/crowd_noBS/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConfig_man_linzhou.json'
+import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
 
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
@@ -414,6 +414,7 @@ export class AvatarManager {
         return config[0]
     }
     #getConfig_avatar(){
+        // return this.#getConfig_avatarLow()
         if(window.quality=="low")return this.#getConfig_avatarLow()
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
@@ -531,7 +532,7 @@ export class AvatarManager {
                 100*100*1*0.5,
                 100*100*2*0.5,
                 100*100*3*0.5,
-                100*100*5*0.5,
+                100*100*5*0.5*4.5,
                 100*100*10*0.5
             ]
             for(let i=0;i<c1.lod_distance.length;i++){
@@ -544,7 +545,7 @@ export class AvatarManager {
                 }
             }
             c1.lod_distance[c1.lod_distance.length-2]*=2
-            c1.lod_distance[c1.lod_distance.length-1]*=3
+            c1.lod_distance[c1.lod_distance.length-1]*=3*4.5
         }
         config[0]["lod_visible"]=[
             {

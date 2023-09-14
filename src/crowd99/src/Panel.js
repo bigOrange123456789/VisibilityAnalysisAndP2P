@@ -1,4 +1,4 @@
-import{MyUI} from "../../lib/ui/MyUI_sim.js"
+import{MyUI} from "../../../lib/ui/MyUI_sim.js"
 export class Panel{
   constructor(main){
       this.main=main

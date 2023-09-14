@@ -2,7 +2,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
+// import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building_new.js'
@@ -10,21 +10,20 @@ import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
-import { MoveManager } from '../../lib/playerControl/MoveManager.js'
-import { SkyController  } from '../../lib/threejs/SkyController'
+import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+import { SkyController  } from '../../../lib/threejs/SkyController'
 import {MyUI} from "./MyUI.js"
-import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
+// import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
-import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
+// import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-import { TreeManager } from "./TreeManager";
-import {CSM} from "../../lib/three/examples/jsm/csm/CSM.js";
+// import { TreeManager } from "./TreeManager";
+import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
-import { TreeBuilder } from "./TreeBuilder";
-
+// import { TreeBuilder } from "./TreeBuilder";
 
 export class Start{
     constructor(body){
@@ -40,7 +39,7 @@ export class Start{
         
         
         // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
         this.addMyUI()
@@ -157,7 +156,7 @@ export class Start{
               self.scene.environment = envMap
               self.scene.background = envMap//test
               self.scene.backgroundIntensity=0.1
-              self.unrealBloom.bloomPass.strength=1.5
+              if(self.unrealBloom)self.unrealBloom.bloomPass.strength=1.5
               window.scene=self.scene
             }
         )
@@ -408,6 +407,7 @@ export class Start{
                     //renderer.render(this.scene,this.camera)
                     if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
                     else if(this.postprocessing) this.postprocessing.render()
+                    else if(this.postprocessingNew) this.postprocessingNew.render()
                     else this.renderer.render(this.scene,this.camera)
                     //this.godrays.render()
                 }                  

@@ -96,6 +96,8 @@ export class Building{
                         object.material.aoMapIntensity=0
 
                         object.material.color.r=object.material.color.g=object.material.color.b=-1//0
+                        object.castShadow = false
+                        object.receiveShadow = false//true
 
                         
                     }

@@ -1,5 +1,6 @@
-// import { CrowdManager } from '../../lib/crowd_sim/CrowdManager.js'
-import { CrowdManager } from '../../lib/crowd_noBS/CrowdManager.js'
+import { CrowdManager } from '../../lib/crowd_sim/CrowdManager.js'
+// import { CrowdManager } from '../../lib/crowd_noBS/CrowdManager.js'
+
 // import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
@@ -77,7 +78,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -118,6 +119,19 @@ export class AvatarManager {
                     (Math.random()-0.5)/1.5,
                     (Math.random()-0.5)/1.5,
                     (Math.random()-0.5)/1.5,
+                ])
+                const kkk=32
+                crowd.setTexture(i00, [
+                    Math.floor(Math.random()*kkk),
+                    Math.floor(Math.random()*kkk),
+                    Math.floor(Math.random()*kkk),
+                    Math.floor(Math.random()*kkk)
+                ])
+                const s0=1-0.2+0.2*Math.random()
+                crowd.setScale(i00, [
+                    2*s0,
+                    2*(1-0.3+0.3*Math.random()),
+                    2*s0,
                 ])
                 // crowd.setScale(i00, [
                 //     -900,
