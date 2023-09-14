@@ -10,8 +10,6 @@ JSZip uses the library pako released under the MIT license :
 https://github.com/nodeca/pako/blob/main/LICENSE
 */
 
-/*! Tweakpane 3.1.10 (c) 2016 cocopon, licensed under the MIT license. */
-
 /**
  * @license
  * Copyright 2010-2023 Three.js Authors
@@ -24,11 +22,4 @@ https://github.com/nodeca/pako/blob/main/LICENSE
  * @version 0.17.0
  * @author George Michael Brower
  * @license MIT
- */
-
-/**
- * postprocessing v6.31.0 build Sun May 07 2023
- * https://github.com/pmndrs/postprocessing
- * Copyright 2015-2023 Raoul van Rüschen
- * @license Zlib
  */

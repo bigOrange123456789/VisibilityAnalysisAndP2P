@@ -2,7 +2,7 @@
     "src": {
         "Building_new": {
             "path": "assets/space8Zip/",
-            "NUMBER":50,
+            "NUMBER":30,
             "NumberOfComponents":529,
             "parentGroup": {
                 "scale": {

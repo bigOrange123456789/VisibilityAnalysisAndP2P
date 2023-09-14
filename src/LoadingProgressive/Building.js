@@ -376,7 +376,9 @@ export class Building{
             self.meshes[id]=mesh
         // },1000)
         this.parentGroup.add(mesh)
-        if(this.visibiity)this.visibiity.prePoint2=""//重新进行可见剔除
+        const v=this.visibility
+        if(typeof v!=="undefined")
+            this.visibility.culling.update()//this.visibiity.prePoint2=""//重新进行可见剔除
 
         mesh.myId=id
         mesh.name=meshOld.name
@@ -416,17 +418,23 @@ export class Building{
                         //     if(this.normalMap)
                         //         m.lod[j].material.normalMap=this.normalMap
                         // m.lod[j]=new THREE.Mesh(m.lod[j].geometry,m.lod[j].material)
-                        m.lod[j]=this.getInstancedMesh(
-                            m.lod[j].geometry,
-                            m.lod[j].material,
-                            this.instance_info[meshId]
-                        )
-                        m.lod[j].castShadow =true// false//
-                        m.lod[j].receiveShadow = true//false//
-                        m.add(m.lod[j])
+                        if(true){
+                            m.lod[j].material.needsUpdate=true
+                        }else{
+                            m.lod[j]=this.getInstancedMesh(
+                                m.lod[j].geometry,
+                                m.lod[j].material,
+                                this.instance_info[meshId]
+                            )
+                            m.lod[j].castShadow =true// false//
+                            m.lod[j].receiveShadow = true//false//
+                            m.add(m.lod[j])
+                            m.lod[1].visible=false
+                        }
+                        m.lod[1]=m.lod[0]
+                        
                     // }
-                    m.lod[1].visible=false
-                    m.lod[1]=m.lod[0]
+                    
                     this.textureList[materialId]=m.lod[0].material
                 }
                 
