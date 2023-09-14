@@ -9,7 +9,7 @@ class LightProducer{
         this.object.add(this.objectMove)
         this.targetList=[]
         this.init(scene)//this.test()
-        // this.add_lensflares()
+        this.add_lensflares()
 
         // this.setPos(-319.59561744433125,  16,  323.70333357412926)
         // this.objectMove.position.set(-319.59561744433125,  16,  323.70333357412926)
@@ -67,7 +67,7 @@ class LightProducer{
         const x=3.//0.5
         const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
         this.ambient=ambient
-        // scene.add( ambient );
+        scene.add( ambient );
         // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );

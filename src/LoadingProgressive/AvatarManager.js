@@ -1,7 +1,9 @@
 import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
+// import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
+import conifg_woman     from '../../config/avatar/sceneConfig_man_linzhou.json'
+
 import * as THREE from "three"
 class Test{
     constructor(avatar){

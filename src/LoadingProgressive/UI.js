@@ -66,8 +66,20 @@ export class UI{
 
             this.control_ssao2(unrealBloom.ssaoPass2)
         }
+        if(main.building){
+            this.control_visibility(main.building.visibiity)
+        }
         
         
+    }
+    control_visibility(v){
+        console.log(v)
+        const gui=this.gui
+        const folder = gui.addFolder("可见分析")
+        folder.add( {'最小可见度':0}, '最小可见度', 0., 1. ).step( 0.0001 ).onChange(  value => {
+            v.minvd=value
+            v.culling.update()
+        } );
     }
     control_camera(camera,playerControl) {
         var viewpointState = {
@@ -156,6 +168,7 @@ export class UI{
     }
     control_light(directionalLight, ambient) {
         const csm = this.main.csm;
+        if(!csm)return
         csm.lightDirection.x=0.04
         csm.lightDirection.y=-0.18
         csm.lightDirection.z=0.6666

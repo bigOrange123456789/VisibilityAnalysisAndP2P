@@ -13,7 +13,7 @@ import { IndirectMaterial } from '../../lib/threejs/IndirectMaterial'
 // 474 165
 
 export class Building{
-    constructor(scene,camera){
+    constructor(scene,camera,csm,cb){
         this.textureMap="textureOrigin/"
         this.materialList={}
         this.materialListIndex=[
@@ -27,6 +27,7 @@ export class Building{
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
         this.scene=scene
+        this.csm=csm
         window.save=(data,name)=>{
             self.saveJson(data,name?name:"test.json")
         }
@@ -48,6 +49,11 @@ export class Building{
         this.meshes={}
         window.meshes=this.meshes
         this.meshes_info={}
+        for(let i of
+        [17, 145, 135, 121, 112, 320, 307, 303, 313, 272, 236, 268, 291, 258, 321, 372, 379, 465, 426, 404, 447, 433, 414, 394, 314, 324, 334, 343, 54, 227, 123, 137]
+        ){
+            this.meshes_info[i]=true
+        }
 
         this.detection=new Detection(this.meshes)
         
@@ -58,6 +64,7 @@ export class Building{
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
                 self.start(camera)
+                if(cb)cb()
             })
         })
         // new Tool(this)
@@ -276,10 +283,13 @@ export class Building{
         // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
 
         const m=meshOld.material
+        
+        m.side=0
         if(id==29||id==3){//玻璃
             m.transparent=true
             m.opacity=0.6
         }else if(id==166){//护栏
+            m.side=2
         }else if(id==174||id==182){//道路
             m.metalness=0.8
             m.roughness=0.4
@@ -288,8 +298,9 @@ export class Building{
             // alert(m.shininess)
             // console.log(m)
         }else{
-            m.transparent=false
+            // m.transparent=false
         }
+        m.envMapIntensity=0.1+m.metalness
 
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
@@ -308,27 +319,13 @@ export class Building{
             // mesh2.castShadow = false//true
             // mesh2.receiveShadow = false//true
             // mesh2.visible=false
+            if(this.csm)this.csm.setupMaterial(meshOld.material);
             const mesh1=this.getInstancedMesh(
                 geometry,
-                meshOld.material
-                // new THREE.MeshStandardMaterial({
-                //     color:this.colorList[id] ,
-                //     map:null,
-        
-                //     bumpScale: 1,
-                //     displacementBias:0,
-                //     displacementScale: 1,
-                //     // emissiveIntensity: meshOld.material.emissiveIntensity,//1,
-                //     // envMapIntensity:meshOld.material.envMapIntensity,//1,
-                //     // metalness: meshOld.material.metalness,//0.95,
-                //     // roughness: meshOld.material.roughness//0.1+0.4,
-                    
-                //     // // shininess:300,
-                // })
-                ,
+                meshOld.material,
                 instance_info)
-            mesh1.castShadow =false//true// 
-            mesh1.receiveShadow = false//true//
+            mesh1.castShadow =true// false//
+            mesh1.receiveShadow = true//false//
             const mesh2=mesh1.clone()
             
             //////////
@@ -420,6 +417,7 @@ export class Building{
                         // m.lod[j]=new THREE.Mesh(m.lod[j].geometry,m.lod[j].material)
                         if(true){
                             m.lod[j].material.needsUpdate=true
+                            if(this.csm)this.csm.setupMaterial(m.lod[j].material);
                         }else{
                             m.lod[j]=this.getInstancedMesh(
                                 m.lod[j].geometry,
@@ -670,6 +668,23 @@ export class Building{
 //         scene.add(mesh)
 //         mesh.visible=true
 //         delete mesh.geometry.attributes.normal
+//         // scene.traverse(o=>{
+//         //     if(o instanceof THREE.Mesh)
+//         //         o.geometry.attributes={position:o.geometry.attributes.position}
+//         // })
+//         const self=this
+//         new GLTFExporter().parse(scene, function (result) {
+//             self.saveJson(result,name);
+//         });
+//     }
+//     saveAll(){
+//         const scene=new THREE.Scene()
+//         const name=id+".gltf"
+//         scene.add(mesh)
+//         // const meshes=self.building.meshes
+        
+//         // mesh.visible=true
+//         // delete mesh.geometry.attributes.normal
 //         // scene.traverse(o=>{
 //         //     if(o instanceof THREE.Mesh)
 //         //         o.geometry.attributes={position:o.geometry.attributes.position}

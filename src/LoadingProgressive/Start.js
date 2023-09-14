@@ -14,7 +14,7 @@ import { SkyController  } from '../../lib/threejs/SkyController'
 
 // import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
-// import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
+import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
@@ -71,8 +71,10 @@ export class Start{
           
         this.initCSM();
 
-        this.building = new Building(this.scene, this.camera)
-        this.ui=new UI(this)
+        this.building = new Building(this.scene, this.camera,this.csm,()=>{
+            this.ui=new UI(this)
+        })
+        
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
         // window.capture=()=>{
@@ -131,7 +133,7 @@ export class Start{
             alpha:true,
             canvas:this.canvas
         })
-        this.renderer.flag=11102
+        // this.renderer.flag=11102
         // this.renderer = new WebGPURenderer({ 
         //     antialias: true,//抗锯齿
         //     alpha:true,
@@ -249,7 +251,7 @@ export class Start{
             lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
             parent: this.scene,
-            lightIntensity: 1.,//2.9,
+            lightIntensity: 2.9,//1.,//
             lightColor: new THREE.Color(0xffffff),//new THREE.Color(0xf7f2d9),
             shadowBias: -0.0004,
             mode: 'practical',
