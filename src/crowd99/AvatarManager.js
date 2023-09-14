@@ -81,7 +81,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar(),"json_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -760,7 +760,7 @@ export class AvatarManager {
                 var rotation = [0, 0, 0]
             }
         }
-        rotation[1]+=Math.PI
+        // rotation[1]+=Math.PI
         return { pos: position, rot: rotation, ani: animationType, speed: speed, startTime: startTime }
     }
     #getPosRot_9e(i0, modelType) {
