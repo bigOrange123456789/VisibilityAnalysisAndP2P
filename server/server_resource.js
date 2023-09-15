@@ -2,7 +2,7 @@ const fs=require("fs")
 class PackCache{
   constructor(sceneId){
     this.sceneId=sceneId+"/"
-    this.pathPre="dist/assets/"+this.sceneId
+    this.pathPre="../dist/assets/"+this.sceneId
     this.data={}
     this.load()
   }
@@ -43,13 +43,7 @@ class PackCacheList{
     return null
   }
 }
-const options = {
-  key: fs.readFileSync('ssl/private.key'),
-  cert: fs.readFileSync('ssl/certificate.crt')
-};
-
-const cache=new PackCacheList(["space8Zip","space8Zip/fine","space7Zip"])
-const server=require('https').createServer(options, function (request, response) {
+function center(request, response) {
     let filePath;
     response.setHeader("Access-Control-Allow-Origin", "*");
     request.on('data', function (data) {//接受请求
@@ -64,9 +58,28 @@ const server=require('https').createServer(options, function (request, response)
         console.log("没有缓存",filePath)
       }
     });
-}).listen(7081, '0.0.0.0', function () {
-    console.log("listening to client:7081");
-});
+}
+
+const cache=new PackCacheList([
+  "space8Zip",
+  // "space8Zip/fine",
+  // "space7Zip"
+])
+let server
+if(true){
+  server=require('http').createServer(center).listen(7081, '0.0.0.0', function () {
+      console.log("listening to client:7081");
+  });
+}else{
+  const options = {
+    key: fs.readFileSync('ssl/private.key'),
+    cert: fs.readFileSync('ssl/certificate.crt')
+  };
+  server=require('https').createServer(options, center).listen(7081, '0.0.0.0', function () {
+      console.log("listening to client:7081");
+  });
+}
+
 server.on('close',()=>{
   console.log('服务关闭')
 })

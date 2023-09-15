@@ -1,5 +1,9 @@
-import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
-import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
+// import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
+// import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
+//低质量
+import { CrowdManager } from '../../../lib/crowd_sim/CrowdManager.js'
+import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou2.json'
+
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 import { ControlEdit } from '../../../lib/playerControl/ControlEdit.js';
@@ -20,7 +24,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]

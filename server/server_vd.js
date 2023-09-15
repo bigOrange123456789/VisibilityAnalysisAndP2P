@@ -19,7 +19,7 @@ const configList=[
       16000,
       2000
     ],
-    path:"dist/assets/configVVD-model6.json"
+    path:"../dist/assets/configVVD-model6.json"
   },
   {
     sceneId:"haiNing",
@@ -39,7 +39,7 @@ const configList=[
         24000,
         2000
     ],
-    path:"dist/assets/configVVD-model7.json"
+    path:"../dist/assets/configVVD-model7.json"
   },
   {
     sceneId:"gkd",
@@ -56,7 +56,7 @@ const configList=[
         -962,1084,
         11
     ],
-    path:"dist/assets/configVVD-model8.json"
+    path:"../dist/assets/configVVD-model8.json"
   },
   {
     sceneId:"gkd",
@@ -73,7 +73,7 @@ const configList=[
       -990,1100,
       110
     ],
-    path:"dist/assets/configVVD-model8_1.json"
+    path:"../dist/assets/configVVD-model8_1.json"
   }
 ]
 console.log('version:02(node --max_old_space_size=8192 server_vd)')
@@ -178,53 +178,36 @@ const vdList=VD.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
 const port=8092
 const fs = require('fs');
+function center(request, response) {
+  // let index;
+  let info;
+  response.setHeader("Access-Control-Allow-Origin", "*");
+  request.on('data', function (dataFromPage) {//接受请求
+    // index=parseInt(String.fromCharCode.apply(null,dataFromPage))
+    info=JSON.parse(String.fromCharCode.apply(null,dataFromPage))
+  });
+  request.on('end', function () {//返回数据
+    let data=VD.getEvd(info,vdList)//vd.databaseEvd[index]
+    if(data){//有缓存
+      // console.log(index)
+      response.write(JSON.stringify(data));
+      response.end();
+    }else{
+      console.log("error 没有找到对应数据",info)
+    }
+  });
+}
 let server
 if(false){
   const options = {
     key: fs.readFileSync('ssl/private.key'),
     cert: fs.readFileSync('ssl/certificate.crt')
   };
-  server=require('https').createServer(options, function (request, response) {
-    // let index;
-    let info;
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    request.on('data', function (dataFromPage) {//接受请求
-      // index=parseInt(String.fromCharCode.apply(null,dataFromPage))
-      info=JSON.parse(String.fromCharCode.apply(null,dataFromPage))
-    });
-    request.on('end', function () {//返回数据
-      let data=VD.getEvd(info,vdList)//vd.databaseEvd[index]
-      if(data){//有缓存
-        // console.log(index)
-        response.write(JSON.stringify(data));
-        response.end();
-      }else{
-        console.log("error 没有找到对应数据",info)
-      }
-    });
-  }).listen(port, '0.0.0.0', function () {
+  server=require('https').createServer(options, center).listen(port, '0.0.0.0', function () {
     console.log("listening to client:"+port);
   })
 }else{
-  server=require('http').createServer(function (request, response) {
-    // let index;
-    let info;
-    response.setHeader("Access-Control-Allow-Origin", "*");
-    request.on('data', function (dataFromPage) {//接受请求
-      // index=parseInt(String.fromCharCode.apply(null,dataFromPage))
-      info=JSON.parse(String.fromCharCode.apply(null,dataFromPage))
-    });
-    request.on('end', function () {//返回数据
-      let data=VD.getEvd(info,vdList)//vd.databaseEvd[index]
-      if(data){//有缓存
-        // console.log(index)
-        response.write(JSON.stringify(data));
-        response.end();
-      }else{
-        console.log("error 没有找到对应数据",info)
-      }
-    });
-  }).listen(port, '0.0.0.0', function () {
+  server=require('http').createServer(center).listen(port, '0.0.0.0', function () {
   console.log("listening to client:"+port);
   });
 }

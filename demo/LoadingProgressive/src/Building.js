@@ -34,7 +34,10 @@ export class Building{
         
         this.config=window.configALL.src.Building_new
         this.NumberOfComponents=this.config.NumberOfComponents
-        // this.normalMap=new THREE.TextureLoader().load(this.config.path+this.textureMap+"GroundGrassGreen002_NRM_0_5K.jpg" )
+        this.normalMap=new THREE.TextureLoader().load(this.config.path+this.textureMap+"GroundGrassGreen002_NRM_0_5K.jpg" )
+        this.normalMap.repeat.x=this.normalMap.repeat.y=1/1000 //0.0008 
+        this.normalMap.wrapS=this.normalMap.wrapT=THREE.RepeatWrapping
+
 
         this.parentGroup = new THREE.Group()
         // var k0=10
@@ -52,7 +55,7 @@ export class Building{
         for(let i of
         [17, 145, 135, 121, 112, 320, 307, 303, 313, 272, 236, 268, 291, 258, 321, 372, 379, 465, 426, 404, 447, 433, 414, 394, 314, 324, 334, 343, 54, 227, 123, 137]
         ){
-            this.meshes_info[i]=true
+            this.meshes_info[i]=true//不加载这些构件
         }
 
         this.detection=new Detection(this.meshes)
@@ -67,7 +70,7 @@ export class Building{
                 if(cb)cb()
             })
         })
-        // new Tool(this)
+        new Tool(this)
     }
     loadConfigInstance(cb){
         const self=this
@@ -146,48 +149,6 @@ export class Building{
             this.meshes,
             this.detection
         )
-        
-        // self.loading(Array.from(Array(1000)).map((v,i) => {return i } ))
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+1000 } ))
-        // },1000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+2000 } ))
-        // },2000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+3000 } ))
-        // },3000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+4000 } ))
-        // },4000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+5000 } ))
-        // },5000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+6000 } ))
-        // },6000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+7000 } ))
-        // },7000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(1000)).map((v,i) => {return i+8000 } ))
-        // },8000)
-        // setTimeout(()=>{
-        //     self.loading(Array.from(Array(570 )).map((v,i) => {return i+9000 } ))
-        // },9000)
-
-        // const l1=Array.from(Array(100)).map((v,i) => {return i } )
-        // const l2=Array.from(Array(100)).map((v,i) => {return i+100 } )
-        // const l3=Array.from(Array(100)).map((v,i) => {return i+200 } )
-        // const l4=Array.from(Array(100)).map((v,i) => {return i+300 } )
-        // const l5=Array.from(Array(100)).map((v,i) => {return i+400 } )
-        // const l6=Array.from(Array(29)).map((v,i) => {return i+500 } )
-        // setTimeout(()=>{self.loading(l1)},1000)
-        // setTimeout(()=>{self.loading(l2)},2000)
-        // setTimeout(()=>{self.loading(l3)},3000)
-        // setTimeout(()=>{self.loading(l4)},4000)
-        // setTimeout(()=>{self.loading(l5)},5000)
-        // setTimeout(()=>{self.loading(l6)},6000)
 
         window.test000=()=>{
             // config[i]
@@ -403,17 +364,38 @@ export class Building{
 
                         if(this.normalMap)
                         if(m.lod[j].material.normalMap){
-                            console.log(m.lod[j].material.normalMap,"m.lod[j].material.normalMap")
-                            for(let tag in this.normalMap){
-                                if(tag!=="source")this.normalMap[tag]=m.lod[j].material.normalMap[tag]
-                            }
+                            // console.log(m.lod[j].material.normalMap,"m.lod[j].material.normalMap")
+                            // for(let tag in this.normalMap){
+                            //     if(tag!=="source")this.normalMap[tag]=m.lod[j].material.normalMap[tag]
+                            // }
                             m.lod[j].material.normalMap=this.normalMap
                         }
-                        
 
-                        // if(m.lod[j].material.normalMap)
-                        //     if(this.normalMap)
-                        //         m.lod[j].material.normalMap=this.normalMap
+
+                        if(m.lod[j].material.normalMap)
+                        console.log(materialId,"materialId")
+
+
+                        if(materialId==282)//草地 [274砖墙 278人行道 282草地]
+                        if(m.lod[j].material.normalMap)
+                            if(this.normalMap){
+                                // m.lod[j].material.normalMap=this.normalMap
+                                console.log(
+                                    m.lod[j].material.normalMap,this.normalMap
+                                )
+                                const m1=m.lod[j].material.normalMap
+                                const m2=this.normalMap
+                                for(let tag in m1){
+                                    if(m1[tag]!=m2[tag]){
+                                        console.log(tag,)
+                                    }
+                                }
+                                window.t1=m1
+                                window.t2=m2
+                                window.m=m.lod[j].material
+                            }
+                                
+                        
                         // m.lod[j]=new THREE.Mesh(m.lod[j].geometry,m.lod[j].material)
                         if(true){
                             m.lod[j].material.needsUpdate=true
@@ -621,86 +603,86 @@ export class Building{
     }
 }
 
-// import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
-// class Tool{
-//     constructor(building){
-//         this.count=529
-//         this.building=building
-//         window.test=this
-//     }
-//     start(){
-//         const self=this
-//         self.loadAll(()=>{
-//             setTimeout(()=>{
-//                 if(Object.keys(self.building.meshes).length==self.count){
-//                     self.saveAll()
-//                 }else{
-//                     console.log("等待时间不足")
-//                     alert("等待时间不足，请修改代码中的等待时间！")
-//                 }
-//             },500)
-//         })
-//     }
-//     loadAll(cb){
-//         const self=this
-//         function l(i){
-//             console.log(i,self.count)
-//             self.building.loadZip(i)
-//             if(i==self.count){console.log("加载完成");if(cb)cb()}//alert("加载完成！")
-//             else setTimeout(()=>{l(i+1);},100)
-//         }
-//         l(0)
-//     }
-//     saveAll(){
-//         const self=this
-//         function s(i){
-//             console.log(i,self.count)
-//             const mesh=self.building.meshes[i].lod[0]
-//             self.saveGLTF(mesh,i)
-//             if(i+1==self.count)alert("下载完成！")
-//             else setTimeout(()=>{s(i+1);},1000)
-//         }
-//         s(0)
-//     }
-//     saveGLTF(mesh,id){
-//         const scene=new THREE.Scene()
-//         const name=id+".gltf"
-//         scene.add(mesh)
-//         mesh.visible=true
-//         delete mesh.geometry.attributes.normal
-//         // scene.traverse(o=>{
-//         //     if(o instanceof THREE.Mesh)
-//         //         o.geometry.attributes={position:o.geometry.attributes.position}
-//         // })
-//         const self=this
-//         new GLTFExporter().parse(scene, function (result) {
-//             self.saveJson(result,name);
-//         });
-//     }
-//     saveAll(){
-//         const scene=new THREE.Scene()
-//         const name=id+".gltf"
-//         scene.add(mesh)
-//         // const meshes=self.building.meshes
+import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
+class Tool{
+    constructor(building){
+        this.count=529
+        this.building=building
+        window.test=this
+    }
+    start(){
+        const self=this
+        self.loadAll(()=>{
+            setTimeout(()=>{
+                if(Object.keys(self.building.meshes).length==self.count){
+                    self.saveAll()
+                }else{
+                    console.log("等待时间不足")
+                    alert("等待时间不足，请修改代码中的等待时间！")
+                }
+            },500)
+        })
+    }
+    loadAll(cb){
+        const self=this
+        function l(i){
+            console.log(i,self.count)
+            self.building.loadZip(i)
+            if(i==self.count){console.log("加载完成");if(cb)cb()}//alert("加载完成！")
+            else setTimeout(()=>{l(i+1);},100)
+        }
+        l(0)
+    }
+    saveAll(){
+        const self=this
+        function s(i){
+            console.log(i,self.count)
+            const mesh=self.building.meshes[i].lod[0]
+            self.saveGLTF(mesh,i)
+            if(i+1==self.count)alert("下载完成！")
+            else setTimeout(()=>{s(i+1);},1000)
+        }
+        s(0)
+    }
+    saveGLTF(mesh,id){
+        const scene=new THREE.Scene()
+        const name=id+".gltf"
+        scene.add(mesh)
+        mesh.visible=true
+        delete mesh.geometry.attributes.normal
+        // scene.traverse(o=>{
+        //     if(o instanceof THREE.Mesh)
+        //         o.geometry.attributes={position:o.geometry.attributes.position}
+        // })
+        const self=this
+        new GLTFExporter().parse(scene, function (result) {
+            self.saveJson(result,name);
+        });
+    }
+    saveAll(){
+        const scene=new THREE.Scene()
+        const name=id+".gltf"
+        scene.add(mesh)
+        // const meshes=self.building.meshes
         
-//         // mesh.visible=true
-//         // delete mesh.geometry.attributes.normal
-//         // scene.traverse(o=>{
-//         //     if(o instanceof THREE.Mesh)
-//         //         o.geometry.attributes={position:o.geometry.attributes.position}
-//         // })
-//         const self=this
-//         new GLTFExporter().parse(scene, function (result) {
-//             self.saveJson(result,name);
-//         });
-//     }
-//     saveJson(data,name){
-//         const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
+        // mesh.visible=true
+        // delete mesh.geometry.attributes.normal
+        // scene.traverse(o=>{
+        //     if(o instanceof THREE.Mesh)
+        //         o.geometry.attributes={position:o.geometry.attributes.position}
+        // })
+        const self=this
+        new GLTFExporter().parse(scene, function (result) {
+            self.saveJson(result,name);
+        });
+    }
+    saveJson(data,name){
+        const jsonData = JSON.stringify(data);//JSON.stringify(data, null, 2); // Convert JSON object to string with indentation
         
-//         const myBlob = new Blob([jsonData], { type: 'application/json' });
-//         const link = document.createElement('a');
-//         link.href = URL.createObjectURL(myBlob)
-//         link.download = name
-//         link.click()
-//     }
-// }
+        const myBlob = new Blob([jsonData], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(myBlob)
+        link.download = name
+        link.click()
+    }
+}

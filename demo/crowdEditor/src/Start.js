@@ -2,7 +2,8 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-// import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
+import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+window.getState=PlayerControl.getState
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { LightProducer } from './LightProducer.js'

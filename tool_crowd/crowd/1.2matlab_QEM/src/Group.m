@@ -72,13 +72,13 @@ classdef Group < handle
                 min_cost=Inf;   %正无穷
                 min_name="";
                 cell0=fieldnames(this.children);
-                for i = 1:size(cell0,1)
+                for i = 1:size(cell0,1)%遍历模型中的所有mesh
                     name=cell2mat(cell0(i));
                     mesh=getfield(this.children,name);
                     if size(mesh.E,1)==0 %如果mesh对象中已经没有边了,就停止算法
                         continue;
                     end
-                    cost0=mesh.myQEM.simplification_getCost();
+                    cost0=mesh.myQEM.simplification_getCost();%计算这个mesh当前的压缩代价
                     if cost0<min_cost
                         min_name=name;
                         min_cost=cost0;
@@ -96,7 +96,7 @@ classdef Group < handle
                 nf=this.nf();
                 compT = 1-(nf-surplus)/(nf0-surplus);
                 waitbar(compT, hWaitbar, ['simplify:', num2str(round(compT, 4) * 100), '%']);
-                if nf0-nf>pack_index*step
+                if nf0-nf>pack_index*step || nf<=surplus%如果减少的数量达到一个包的量 或者 三角面个数到达最终目标
                     this.path=strcat('data2/',string(number-pack_index),'.json');
                     disp([this.path,strcat(num2str(round(compT, 4) * 100),'%'),strcat("三角面个数:",num2str(nf))]);
                     this.downloadPack();
