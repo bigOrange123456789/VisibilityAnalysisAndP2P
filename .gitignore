@@ -1,5 +1,12 @@
-/src/crowd99/index.js
-/src/crowd99/index.js
+/demo/crowd99/index.js
+/demo/crowdEditor/index.js
+/demo/LoadingOverall/index.js
+/demo/LoadingProgressive/index.js
+/demo/LoadingProgressive_crowd/index.js
+/demo/shadertory/index.js
+/demo/subsurface_scattering/index.js
+/demo/TreeGeneration/index.js
+
 # 忽略 /node_modules/ 目录及其下的所有文件
 /node_modules/
 /tool3/node_modules/
