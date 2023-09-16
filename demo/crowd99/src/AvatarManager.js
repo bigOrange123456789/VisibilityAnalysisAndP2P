@@ -3,12 +3,13 @@
 // import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 //低质量
 // import { CrowdManager } from '../../../lib/crowd_sim/CrowdManager.js'
-// import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
-
+// // import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
+// import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou2.json'
 
 import { Template } from '../../../lib/crowd/Template_sim.js'
 const CrowdManager=Template
-import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
+import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou2.json'
+
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 
@@ -85,7 +86,7 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar(),"json_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar_sim2(),"json_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
@@ -498,14 +499,99 @@ export class AvatarManager {
         ]
         config[0].useInstancedBuffer={
             //type,itemSize
-            // instanceMatrix:[Float32Array,16],
-            textureType:[Uint8Array,4],//null,
+            // textureType:[Uint8Array,4],//null,
             bodyScale:false,//null,//
             moveMaxLength:false,
             
-            speed:[Float32Array,1],
-            animationIndex:[Uint8Array,1],
-            animationStartTime:[Float32Array,1],
+            // speed:[Float32Array,1],
+            // animationIndex:[Uint8Array,1],
+            // animationStartTime:[Float32Array,1],
+    
+            obesity:false,//[Float32Array,1],//
+        }
+        // console.log(config)
+        return config[0]
+    }
+    #getConfig_avatar_sim2(){
+        const config=conifg_woman
+        for(let i=0;i<config.length;i++){
+            let c1=config[i]
+            c1.scale=1//2
+            
+            
+            
+            const lodConut=7//21
+            const countAll=100*100*10//2500*2*10
+            const distanceAll=200*0.8*0.25*2*1.5//*0.5//300
+            c1.lod_distance=[ ]
+            c1.lod_geometry=[ 18,13,8,6,5,4,3]//length==lodConut+1
+            c1.lod_avatarCount=[ ]
+            let r_pre=0
+            for(let j=0;j<lodConut;j++){
+                const r=Math.pow((j+1)/lodConut,1)*distanceAll
+                c1.lod_distance.push(r)
+                // c1.lod_geometry.push((lodConut-j)*4-4)
+                // const n=countAll*[Math.pow(r,2)-Math.pow(r_pre,2)]/Math.pow(distanceAll,2)
+                r_pre=r
+                c1.lod_avatarCount.push(100*100*10)//(Math.ceil(n))
+            }
+            c1.lod_avatarCount=[
+                100*100*1,
+                100*100*2,
+                100*100*3,
+                100*100*5,
+                100*100*10,
+                100*100*10,
+                100*100*10,
+            ]
+            for(let i=0;i<c1.lod_distance.length;i++){
+                c1.lod_distance[i]*=c1.scale
+            }
+            // console.log(c1)
+            for(let j=0;j<c1.lod_visible.length;j++){
+                for(let tag in c1.lod_visible[j]){
+                    c1.lod_visible[j][tag]=lodConut
+                }
+            }
+            c1.lod_distance[c1.lod_distance.length-2]*=3*2*2
+            c1.lod_distance[c1.lod_distance.length-1]*=4*3*3
+        }
+        config[0]["lod_visible"]=[
+            {
+                "CloW_A_body_geo": 4,
+                "CloW_A_kuzi_geo": 5,
+                "CloW_A_shangyi_geo": 5,
+                "CloW_A_waitao_geo1": 4,
+
+                "CloW_A_xiezi_geo": 2,
+                "CloW_E_eyeLeft_geo02": 2,
+                "CloW_E_eyeRight_geo01": 2,
+                "eyelash": 2,
+                "hair": 3,
+                "head": 5
+            },
+            {
+                "hair":3,
+                "body2":4,
+                "qipao22":5,
+                "waitao1": 5
+            },
+            {
+                "CloW_C_body_geo1":4,
+                "CloW_C_qunzi_geo3456":5,
+                "CloW_C_shangyi_geo":5,
+                "hair":3
+            }
+        ]
+        config[0].useInstancedBuffer={
+            //type,itemSize
+            // textureType:[Uint8Array,4],//null,
+            bodyScale:false,//null,//
+            moveMaxLength:false,
+            
+            // speed:[Float32Array,1],
+            // animationIndex:[Uint8Array,1],
+            // animationStartTime:[Float32Array,1],
     
             obesity:false,//[Float32Array,1],//
         }
