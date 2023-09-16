@@ -1,13 +1,17 @@
 //高质量
-// import { CrowdManager } from '../../lib/crowd/CrowdManager.js'
-// import conifg_woman     from '../../config/avatar/sceneConifg_woman0.json'
+// import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
+// import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 //低质量
-import { CrowdManager } from '../../../lib/crowd_sim/CrowdManager.js'
-// import { CrowdManager } from '../../lib/crowd_noBS/CrowdManager.js'
-import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
+// import { CrowdManager } from '../../../lib/crowd_sim/CrowdManager.js'
+// import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
 
+
+import { Template } from '../../../lib/crowd/Template_sim.js'
+const CrowdManager=Template
+import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou.json'
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
+
 import * as THREE from "three"
 class Test{
     constructor(avatar){
@@ -492,6 +496,19 @@ export class AvatarManager {
                 "hair":3
             }
         ]
+        config[0].useInstancedBuffer={
+            //type,itemSize
+            // instanceMatrix:[Float32Array,16],
+            textureType:[Uint8Array,4],//null,
+            bodyScale:false,//null,//
+            moveMaxLength:false,
+            
+            speed:[Float32Array,1],
+            animationIndex:[Uint8Array,1],
+            animationStartTime:[Float32Array,1],
+    
+            obesity:false,//[Float32Array,1],//
+        }
         // console.log(config)
         return config[0]
     }
