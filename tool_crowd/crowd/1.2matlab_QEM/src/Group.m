@@ -58,10 +58,21 @@ classdef Group < handle
             end
         end
 
-        function simplify_save(this,surplus,number)
+        function simplify_save(this,surplus,number,downFlagList)
+            
+                
+            
             nf0=this.nf();
             step=round( (nf0-surplus)/(number-1) );
             disp(strcat("三角面个数:",num2str(nf0) ));
+            if size(downFlagList,2)==0 %downFlagList为空
+                downFlagList = ((number-1):-1:1)*step;
+                downFlagList(number-1)=surplus;
+            end
+            disp(["downFlagList:",downFlagList]);
+            downFlagListReal="";
+            % disp(downFlagList);
+            
             
             %% Start add waitbar
             hWaitbar = waitbar(0, 'simplify,wait...', 'CreateCancelBtn', 'delete(gcbf)');
@@ -96,12 +107,17 @@ classdef Group < handle
                 nf=this.nf();
                 compT = 1-(nf-surplus)/(nf0-surplus);
                 waitbar(compT, hWaitbar, ['simplify:', num2str(round(compT, 4) * 100), '%']);
-                if nf0-nf>pack_index*step || nf<=surplus%如果减少的数量达到一个包的量 或者 三角面个数到达最终目标
+                % if nf0-nf>pack_index*step || nf<=surplus%如果减少的数量达到一个包的量 或者 三角面个数到达最终目标
+                % if nf<=nf0+pack_index*step || nf<=surplus%如果减少的数量达到一个包的量 或者 三角面个数到达最终目标
+                % disp(nf,downFlagList[pack_index])
+                if nf<=downFlagList(pack_index)
+                    downFlagListReal=downFlagListReal+nf+",";
                     this.path=strcat('data2/',string(number-pack_index),'.json');
                     disp([this.path,strcat(num2str(round(compT, 4) * 100),'%'),strcat("三角面个数:",num2str(nf))]);
                     this.downloadPack();
                     if pack_index>=number-1
                         this.download2();
+                        disp("downFlagListReal:"+downFlagListReal)
                         disp("finish");
                         break;
                     end
@@ -172,7 +188,7 @@ classdef Group < handle
         end
     end%methods(Hidden)
     methods(Static)
-        function process_save(inPath,percentage,pack_number)
+        function process_save(inPath,percentage,pack_number,downFlagList)
             avatarGroup=Group(inPath);
             if percentage<=1 %输入的是百分比
                 surplus=round( percentage*avatarGroup.nf() );
@@ -180,7 +196,7 @@ classdef Group < handle
                 surplus=round( percentage );
             end
             %avatarGroup.children.mesh0.download();
-            avatarGroup.simplify_save(surplus,pack_number);
+            avatarGroup.simplify_save(surplus,pack_number,downFlagList);
         end
     end%methods(Static)
     methods(Static,Hidden)

@@ -159,6 +159,7 @@ class Meshes:
         self.children=[]
         for meshname, value in result.items():
             # listSim是啥不明白
+            if type(value)==type(1):value=[value]#matlab的语法问题，"listSim"数组长度为1的时候会保存为一个整数类型
             if len(value) > 0 and meshname != 'listSim' and meshname != 'names':
                 mesh=Mesh(meshname,value)
                 self.children.append(mesh)
