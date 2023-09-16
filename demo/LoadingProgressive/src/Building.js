@@ -520,7 +520,7 @@ export class Building{
                     }
                     // o.material.color.r=255
                     // o.position.y+=5
-                    console.log("p2p",o)
+                    // console.log("p2p",o)
                     o.originType="edgeP2P"
                     self.addMesh(cid,o)
                 }
