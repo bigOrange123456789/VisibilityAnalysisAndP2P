@@ -1,4 +1,5 @@
 import { GUI } from 'three/examples/jsm/libs/lil-gui.module.min.js'//dat.gui.module.js';
+// import {GUI} from 'dat.gui'
 import * as THREE from "three";
 import { SSRPass  } from 'three/examples/jsm/postprocessing/SSRPass.js';
 import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
@@ -33,7 +34,8 @@ export class UI{
         // this.control_renderer(main.renderer)
         this.control_light(null, main.lightProducer.ambient)
 
-        console.log(main.postprocessing,"main.postprocessing")
+        // console.log(main.postprocessing,"main.postprocessing")
+        // this.control_preformance(main.stats)
         const postprocessing=main.postprocessing
         const unrealBloom=  main.unrealBloom?main.unrealBloom:(main.postprocessing?main.postprocessing.unrealBloom:null)
         if(postprocessing){
@@ -69,6 +71,7 @@ export class UI{
         if(main.building){
             this.control_visibility(main.building.visibiity)
         }
+        
         
         
     }
@@ -483,5 +486,35 @@ export class UI{
     control_csm(csm)
     {
 
+    }
+    control_preformance(stats){
+        if(!stats)return
+        // ({autoPlace: false, width: 260, hideable: true})
+        const gui = this.gui //= new GUI({autoPlace: false, width: 260, hideable: true})
+
+        const perfFolder = gui.addFolder('Performance')
+
+
+
+        const perfLi = document.createElement('li')
+        stats.dom.style.position = 'static'
+        // perfLi.appendChild(stats.dom)
+        // perfLi.classList.add('gui-stats')
+
+        perfFolder.domElement.appendChild( perfLi )
+
+        console.log(perfFolder)
+        window.perfFolder=perfFolder
+        window.perfLi=perfLi
+        // perfFolder.__ul.appendChild( perfLi )
+
+
+        window.document.body.appendChild( perfLi )
+
+        // const guiWrap = document.createElement('div')
+        // this.el.appendChild( guiWrap )
+        // guiWrap.classList.add('gui-wrap')
+        // guiWrap.appendChild(gui.domElement)
+        // gui.open()
     }
 }

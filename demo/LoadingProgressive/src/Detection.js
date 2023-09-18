@@ -1,6 +1,6 @@
 export class Detection {//需要服务器
     constructor(meshes) {
-        this.config=window.configALL.src.Detection
+        this.config=window.configALL.Detection
         this.updateGroupList=[]
         this.meshes=meshes
         window.meshes=meshes

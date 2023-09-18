@@ -20,7 +20,7 @@ export class Building{
             self.saveJson(data,name?name:"test.json")
         }
         
-        this.config=window.configALL.src.Building_new
+        this.config=window.configALL.Building_new
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()

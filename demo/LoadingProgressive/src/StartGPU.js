@@ -27,7 +27,7 @@ export class StartGPU{
         console.log(useGPU)
         this.addTool(window)
         this.speed=1
-        this.config=window.configALL.src.main
+        this.config=window.configALL.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)

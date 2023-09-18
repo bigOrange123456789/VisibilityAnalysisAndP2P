@@ -1,5 +1,6 @@
 [
     {
+        "materialLoaderType":"json_material",
         "path": [
             "assets/avatar/sim/man_linzhou/"
         ],

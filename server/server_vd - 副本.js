@@ -1,4 +1,5 @@
-﻿const usePVD=true
+﻿
+const usePVD=true
 const configList=[
   {
     sceneId:"haiNing0",
@@ -18,7 +19,7 @@ const configList=[
       16000,
       2000
     ],
-    vdFileName:"configVVD-model6.json"
+    path:"../dist/assets/configVVD-model6.json"
   },
   {
     sceneId:"haiNing",
@@ -38,7 +39,7 @@ const configList=[
         24000,
         2000
     ],
-    vdFileName:"configVVD-model7.json"
+    path:"../dist/assets/configVVD-model7.json"
   },
   {
     sceneId:"gkd",
@@ -55,7 +56,7 @@ const configList=[
         -962,1084,
         11
     ],
-    vdFileName:"configVVD-model8.json"
+    path:"../dist/assets/configVVD-model8.json"
   },
   {
     sceneId:"gkd",
@@ -72,13 +73,9 @@ const configList=[
       -990,1100,
       110
     ],
-    vdFileName:"configVVD-model8_1.json"
+    path:"../dist/assets/configVVD-model8_1.json"
   }
 ]
-const vdDataPath="./vd_data/"  //"../dist/assets/"
-for(let i of configList){
-  i.path=vdDataPath+i.vdFileName
-}
 console.log('version:02(node --max_old_space_size=8192 server_vd)')
 class VD{
   constructor(areaInf,usePVD){

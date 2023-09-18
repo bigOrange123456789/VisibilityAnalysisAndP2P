@@ -7,6 +7,8 @@
 /demo/subsurface_scattering/index.js
 /demo/TreeGeneration/index.js
 
+/server/vd_data/
+
 # 忽略 /node_modules/ 目录及其下的所有文件
 /node_modules/
 /tool3/node_modules/

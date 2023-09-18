@@ -84,9 +84,9 @@ export class AvatarManager {
         this.scene = scene
         this.camera = camera
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
-        // this.init()
+        const materialLoaderType=conifg_woman[0].materialLoaderType?conifg_woman[0].materialLoaderType:"glb_material"
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar_sim2(),"json_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,new Array(10*100*100),this.#getConfig_avatar_sim2(),materialLoaderType,(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
