@@ -4,12 +4,14 @@
 
 import config_haiNing0 from '../../../config/build/haiNing0.json';
 import config_haiNing  from '../../../config/build/haiNing.json';
-import config_gkd      from '../../../config/build/gkd.json';
+// import config_gkd      from '../../../config/build/gkd.json';
+import config_gkd      from '../../../config/build/KaiLiNan.json';
 
 
 // import config9 from '../../config/LoadingProgressive/configOP9.json';
-import { Start } from './Start.js'
+// import { Start } from './Start.js'
 // import { StartGPU } from './StartGPU.js'
+import { StartSampling } from '../../../lib/StartSampling/StartSampling.js'
 
 // document.addEventListener('DOMContentLoaded', () => {
     const h1=document.getElementById("versionId")
@@ -56,6 +58,9 @@ import { Start } from './Start.js'
 
     window.configALL=config
     // new StartGPU(document.body,config.useGPU)
-    new Start(document.body)
+    // new Start(document.body)
+    import { Building } from './Building.js'
+    new StartSampling(document.body,config,Building)
+
 // })
 console.log(config)

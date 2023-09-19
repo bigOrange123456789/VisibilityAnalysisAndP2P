@@ -97,8 +97,8 @@ class FileProcessor{
         },100)
     }
     static test2(){
-        const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
-        const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8Zip/"
+        const path1="data/glb/"//"F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
+        const path2="data/zip/"//"F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8Zip/"
         var fp=new FileProcessor()
         var all=fp.fs.readdirSync(path1)
         var i=0;

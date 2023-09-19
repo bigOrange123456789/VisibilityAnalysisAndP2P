@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>共用骨骼动画</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <style>
+        body {overflow:hidden;}
+    </style>
+</head>
+
+<body>
+<script src="lib/three.js"></script>
+<script src="lib/GLTFLoader.js"></script>
+<script src="lib/GLTFExporter.js"></script>
+<script type="module">
+    import { ExtractMaterial } from './ExtractMaterial.js'
+    import { ExtractGeometry } from './ExtractGeometry.js'
+    import { ExtractAnimation } from './ExtractAnimation.js'
+    import { ExtractConfig } from './ExtractConfig.js'
+    var path0 =prompt("请输入数据路径:","woman02/woman02.gltf")//"monkey.glb")
+    console.log(path0)
+    
+    process()
+    function process(){
+        new THREE.GLTFLoader().load(path0, (glb) => {
+            window.glb=glb
+            // new ExtractConfig(glb)
+            // new ExtractMaterial(glb)
+            // new ExtractGeometry(glb)
+            new ExtractAnimation(glb)
+        });
+    }
+  
+</script>
+
+</body>
+</html>

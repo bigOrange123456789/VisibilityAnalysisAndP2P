@@ -1,13 +1,13 @@
 
-const path1="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLTF/"
-const path2="F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
+const path1="data/gltf/" //"F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLTF/"
+const path2="data/glb/"   //"F:/gitHubRepositories/VisibilityAnalysisAndP2P/dist/assets/space8_noMap_GLB/"
 // import { createRequire } from 'module';
 // const require = createRequire(import.meta.url);
 const gltfPipeline = require('gltf-pipeline');
 const fsExtra = require('fs-extra');
 
 function process(index){
-    const inputFile  = path1+index+'.gltf';
+    const inputFile  = path1+"output"+index+'.gltf';
     const outputFile = path2+index+'.glb';
 
     
@@ -23,7 +23,7 @@ function process(index){
     
 }
 let index=0
-const number=8437
+const number=3577//8437
 const interval=setInterval(()=>{
     process(index)
     console.log(index)

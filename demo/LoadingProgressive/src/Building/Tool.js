@@ -7,6 +7,11 @@ export class Tool{
         this.doorTwinkle()
 
     }
+    static getSampleMaterial(id){
+        const material=new THREE.MeshBasicMaterial({color:id})
+        material.color.convertSRGBToLinear();
+        return material
+    }
     createFloor(){
         const geometry = new THREE.BoxGeometry( 1000000, 500, 50000 );
         const material = new THREE.MeshPhongMaterial( {color: 0x654321} );

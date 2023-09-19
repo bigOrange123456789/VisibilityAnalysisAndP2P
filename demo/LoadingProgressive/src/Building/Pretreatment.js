@@ -1,10 +1,81 @@
 import * as THREE from "three"
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
+import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
+import { saveAs } from 'file-saver';
 export class Pretreatment{
     constructor(building){
-        this.count=529
+        this.count=3577//529
         this.building=building
         window.test=this
+
+        const self=this
+        window.saveMatrix=()=>{
+            const instance_info=building.instance_info
+            const a=[]
+            for(let i=0;i<529;i++){
+                a.push(instance_info[i])
+            }
+            self.saveJson(a,"matrix.json")
+        }
+
+        window.downloadAll=()=>{
+            const scene=new THREE.Scene()
+            for(let i in meshes){
+                const o=meshes[i]
+                if(o instanceof THREE.Mesh&&o.visible){
+                    // o.geometry.attributes={position:o.geometry.attributes.position}
+                    scene.add(o)
+                }
+            }
+            const objData = new OBJExporter().parse(scene);
+            const blob = new Blob([objData], { type: 'textain' });
+            saveAs(blob, "all.obj");
+        }
+        console.log(window.downloadAll)
+
+        const save2obj = function(index){
+            console.log(index,index+".obj")
+            self.saveMesh(meshes[index],index+".obj")
+            if(index+1>=Object.keys(meshes).length) {
+                console.log("finish!")
+            }else{
+                setTimeout(()=>{
+                    save2obj(index+1)
+                },100)
+            }
+        }
+        window.save2obj=()=>{
+            save2obj(0)
+        }
+        window.getMatrix=()=>{
+            self.getMatrix()
+        }
+
+    }
+    getMatrix(){
+        const self=this
+        const matrix2str=instanceMatrix=>{
+            let str=""
+            console.log(instanceMatrix.length,"instanceMatrix.length")
+            for(let i=0;i<Object.keys(instanceMatrix).length;i++){
+                const group=instanceMatrix[""+i]
+                str+="["
+                for(let j=0;j<group.length;j++){
+                    const mesh=group[j]
+                    str+=("[")
+                    for(let k=0;k<12;k++){
+                        str+=(mesh[k])
+                        if(k<12-1)str+=(", ")
+                    }
+                    str+=("]")
+                    if(j<group.length-1)str+=(", ")
+                }
+                str+="], "
+            }
+            console.log(str)
+            self.saveStr(str,"matrices_all.json")
+        }
+        matrix2str(self.building.config.instanceMatrix)
     }
     start(){
         const self=this
@@ -29,7 +100,7 @@ export class Pretreatment{
         }
         l(0)
     }
-    saveAll(){
+    saveAll1(){
         const self=this
         function s(i){
             console.log(i,self.count)
@@ -55,7 +126,20 @@ export class Pretreatment{
             self.saveJson(result,name);
         });
     }
-    saveAll(){
+    saveMesh(mesh,name){
+        const scene=new THREE.Scene()
+        scene.add(mesh)
+        scene.traverse(o=>{
+            if(o instanceof THREE.Mesh)
+                o.geometry.attributes={position:o.geometry.attributes.position}
+        })
+        const objData = new OBJExporter().parse(scene, { includeNormals: false });
+
+        // 将数据保存为OBJ文件
+        const blob = new Blob([objData], { type: 'textain' });
+        saveAs(blob, name);
+    }
+    saveAll2(){
         const scene=new THREE.Scene()
         const name=id+".gltf"
         scene.add(mesh)

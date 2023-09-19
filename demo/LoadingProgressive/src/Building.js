@@ -22,13 +22,35 @@ export class Building{
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()
-        // var k0=10
+        // var k0=0.01
         // this.parentGroup.scale.set(
         //     this.config.parentGroup.scale.x*k0,
         //     this.config.parentGroup.scale.y*k0,
         //     this.config.parentGroup.scale.z*k0
         // )
         scene.add(this.parentGroup)
+        const matrix = new THREE.Matrix4(); 
+        // matrix.set( 
+        //     0.017926,   0,         0,          0,
+        //     0,          0.017926,  0,          0,
+        //     0,          0,         0.017926,   0,
+        //     22026.806641,2149.515381,224.10112,1
+        // );
+        // const m2 = new THREE.Matrix4(); 
+        // m2.set( 
+        //     0.1,0  ,0  ,0,
+        //     0  ,0  ,0.1,0,
+        //     0  ,0.1,0  ,0,
+        //     0  ,0  ,0  ,1
+        // );
+        // matrix.multiply(m2) 
+        matrix.set( 
+            0.0017926, 0, 0, 0, 0, 0, 0.0017926, 0, 0, 0.0017926, 0, 0, 2202.6806641, 22.410112, 214.95153810000002, 1
+        );
+        matrix.transpose ()
+        this.parentGroup.applyMatrix4(matrix)
+        console.log(matrix)
+
         // this.test()
         // return
         this.meshes={}
@@ -57,33 +79,23 @@ export class Building{
         new Pretreatment(this)
         if(self.config.needTool)
             new Tool({
+                instance_info:this.instance_info,
                 meshes:this.meshes,
                 parentGroup:this.parentGroup
             })
     }
     loadConfigInstance(cb){
         const self=this
-        const matrix2str=instanceMatrix=>{
-            let str=""
-            console.log(instanceMatrix.length,"instanceMatrix.length")
-            for(let i=0;i<Object.keys(instanceMatrix).length;i++){
-                const group=instanceMatrix[""+i]
-                str+="["
-                for(let j=0;j<group.length;j++){
-                    const mesh=group[j]
-                    str+=("[")
-                    for(let k=0;k<12;k++){
-                        str+=(mesh[k])
-                        if(k<12-1)str+=(", ")
-                    }
-                    str+=("]")
-                    if(j<group.length-1)str+=(", ")
-                }
-                str+="], "
-            }
-            console.log(str)
-            self.Pretreatment.saveStr(str,"matrices_all.json")
-        }
+        if(this.config.instanceUse){
+            self.instance_info=self.config.instanceMatrix
+            self.colorList=self.config.colorList
+            this.parentGroup2=new THREE.Group()//用于Lod
+            this.parentGroup.add(this.parentGroup2)
+        } 
+        cb()
+        // return
+        return 
+        
         if(this.config.instanceUse){
             this.parentGroup2=new THREE.Group()//用于Lod
             this.parentGroup.add(this.parentGroup2)
@@ -145,12 +157,30 @@ export class Building{
             },1500)  
         }
         
-        this.visibiity=new Visibility(
-            camera,
-            list=>self.loading(list),
-            this.meshes,
-            this.detection
-        )
+        // self.loading(Array.from(new Array(1000)).map((v,i)=>{return i}))
+        window.loading=arr=>{
+            self.loading(arr)
+        }
+        self.loadZip(0)
+        function l(i){
+            self.loadZip(i,()=>{
+                console.log(i)
+                if(i+50<3577)l(i+50) 
+                else{
+                    console.log("finish")
+                    self.loading(Array.from(new Array(3577)).map((v,i)=>{return i}))
+                }
+            })
+        }
+        // for(let i=0;i<1;i++)l(i+2500)
+        for(let i=0;i<50;i++)l(i+0)
+        
+        // this.visibiity=new Visibility(
+        //     camera,
+        //     list=>self.loading(list),
+        //     this.meshes,
+        //     this.detection
+        // )
 
     }
     getInstancedMesh(geometry,material,instance_info){
@@ -183,6 +213,7 @@ export class Building{
         return mesh
     }
     addMesh(id,meshOld){
+        // console.log(meshOld)
         this.buildMaterial.checkMaterial(id,meshOld)
 
         // meshOld.material.map=null
@@ -224,6 +255,8 @@ export class Building{
             // m.transparent=false
         }
         m.envMapIntensity=0.1+m.metalness
+
+        meshOld.material=Tool.getSampleMaterial(id)
 
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
@@ -311,7 +344,6 @@ export class Building{
         if(this.meshes_info[id])return
         else this.meshes_info[id]={request:performance.now()}//true
         this.detection.receivePack("server")
-        
         this.detection.request("zip")
         const self=this
         this.loader.loadZip(

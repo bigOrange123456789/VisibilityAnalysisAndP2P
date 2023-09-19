@@ -22,7 +22,6 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
 
-
 export class Start{
     constructor(body){
         this.addTool(window)
