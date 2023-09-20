@@ -1,183 +1,105 @@
 ﻿const usePVD=true
 const configList=[
+  // {
+  //   sceneId:"haiNing0",
+  //   areaId:0,
+  //   "x": [
+  //     -121000,
+  //     117000,
+  //     2000
+  //   ],
+  //   "y": [
+  //     2286,//2286.5,
+  //     2286,//2286.5,
+  //     2000
+  //   ],
+  //   "z": [
+  //     -4000,
+  //     16000,
+  //     2000
+  //   ],
+  //   vdFileName:"configVVD-model6.json"
+  // },
+  // {
+  //   sceneId:"haiNing",
+  //   areaId:0,
+  //   "x": [
+  //       -124000,
+  //       126000,
+  //       2000
+  //   ],
+  //   "y": [
+  //       -19000,
+  //       3000,
+  //       2000
+  //   ],
+  //   "z": [
+  //       -20000,
+  //       24000,
+  //       2000
+  //   ],
+  //   vdFileName:"configVVD-model7.json"
+  // },
+  // {
+  //   sceneId:"gkd",
+  //   areaId:0,
+  //   x: [
+  //     -815,879,
+  //     11
+  //   ],
+  //   y: [
+  //       16,16,
+  //       11
+  //   ],
+  //   z: [
+  //       -962,1084,
+  //       11
+  //   ],
+  //   vdFileName:"configVVD-model8.json"
+  // },
+  // {
+  //   sceneId:"gkd",
+  //   areaId:1,
+  //   "x": [
+  //     -880,880,
+  //     110
+  //   ],
+  //   "y": [
+  //     -110,440,
+  //     110
+  //   ],
+  //   "z": [
+  //     -990,1100,
+  //     110
+  //   ],
+  //   vdFileName:"configVVD-model8_1.json"
+  // },
   {
-    sceneId:"haiNing0",
+    sceneId:"KaiLiNan",
     areaId:0,
     "x": [
-      -121000,
-      117000,
-      2000
+      -173,183,
+      4
     ],
     "y": [
-      2286,//2286.5,
-      2286,//2286.5,
-      2000
+      8,108,
+      4
     ],
     "z": [
-      -4000,
-      16000,
-      2000
+      -92,112,
+      4
     ],
-    vdFileName:"configVVD-model6.json"
-  },
-  {
-    sceneId:"haiNing",
-    areaId:0,
-    "x": [
-        -124000,
-        126000,
-        2000
-    ],
-    "y": [
-        -19000,
-        3000,
-        2000
-    ],
-    "z": [
-        -20000,
-        24000,
-        2000
-    ],
-    vdFileName:"configVVD-model7.json"
-  },
-  {
-    sceneId:"gkd",
-    areaId:0,
-    x: [
-      -815,879,
-      11
-    ],
-    y: [
-        16,16,
-        11
-    ],
-    z: [
-        -962,1084,
-        11
-    ],
-    vdFileName:"configVVD-model8.json"
-  },
-  {
-    sceneId:"gkd",
-    areaId:1,
-    "x": [
-      -880,880,
-      110
-    ],
-    "y": [
-      -110,440,
-      110
-    ],
-    "z": [
-      -990,1100,
-      110
-    ],
-    vdFileName:"configVVD-model8_1.json"
+    vdFileName:"KaiLiNan_new/",
+    RealTimeLoading:true
   }
 ]
 const vdDataPath="./vd_data/"  //"../dist/assets/"
 for(let i of configList){
   i.path=vdDataPath+i.vdFileName
 }
-console.log('version:02(node --max_old_space_size=8192 server_vd)')
-class VD{
-  constructor(areaInf,usePVD){
-    this.usePVD=usePVD
-    this.id=areaInf.sceneId+"&"+areaInf.areaId
-    console.log(this.id)
-    this.areaInf={
-      "min": [areaInf.x[0],areaInf.y[0],areaInf.z[0]],
-      "max": [areaInf.x[1],areaInf.y[1],areaInf.z[1]],
-      "step": [
-          (areaInf.x[1]-areaInf.x[0])/areaInf.x[2],
-          (areaInf.y[1]-areaInf.y[0])/areaInf.y[2],
-          (areaInf.z[1]-areaInf.z[0])/areaInf.z[2]
-      ]
-    }
-    this.load(areaInf.path)
-  }
-  load(path){
-    const self=this
-    // self.VisibleArea
-    self.databaseEvd={}
-    if(this.usePVD)
-    self.databasePvd={}
-    require('jsonfile').readFile(
-        path, 
-        (err, jsonData)=>{
-          if (err) throw err
-          for(let vid in jsonData){
-            const d=jsonData[vid]
-            self.databaseEvd[self.getPosIndex(vid)]={
-              "1":d["1"],
-              "2":d["2"],
-              "3":d["3"],
-              "4":d["4"],
-              "5":d["5"],
-              "6":d["6"],
-              // "a":VisibleArea[vid]//visible area
-            }
-            if(self.usePVD)
-            self.databaseEvd[self.getPosIndex(vid)]['pvd']=d["pvd"]
-            // console.log(self.usePVD)
-            // self.databasePvd[self.getPosIndex(vid)]=d["pvd"]
-            // console.log(d["pvd"])
-          }
-          console.log("初始化完成")
-    });
-  }
-  getPosIndex(vid){
-    const arr=vid.split(",")
-    let x=parseInt(arr[0])
-    let y=parseInt(arr[1])
-    let z=parseInt(arr[2])
-    const min =this.areaInf.min
-    const step=this.areaInf.step
-    const max =this.areaInf.max
-    if(x>max[0]||y>max[1]||z>max[2]||x<min[0]||y<min[1]||z<min[2]){
-        if(x>max[0])x=max[0]
-        if(y>max[1])y=max[1]
-        if(z>max[2])z=max[2]
-        if(x<min[0])x=min[0]
-        if(y<min[1])y=min[1]
-        if(z<min[2])z=min[2]
-    }
-    var dl=[]
-    for(var i=0;i<3;i++)
-      dl.push(
-          step[i]==0?0:
-          (max[i]-min[i])/step[i]
-      )
-    var xi=dl[0]==0?0:Math.round((x-min[0])/dl[0])
-    var yi=dl[1]==0?0:Math.round((y-min[1])/dl[1])
-    var zi=dl[2]==0?0:Math.round((z-min[2])/dl[2])
-    // console.log(xi,yi,zi)
-    var s=step
-    var index=xi*(s[1]+1)*(s[2]+1)+yi*(s[2]+1)+zi
-    // if(index==1350)console.log(1350,vid)//-116000,1000,12000
-    return index// return [xi,yi,zi,index]
-  }
-  static getVdList(configList,usePVD){
-    const vdList=[]
-    for(let i=0;i<configList.length;i++)
-      vdList.push(new VD(configList[i],usePVD))
-    return vdList
-  } 
-  static getEvd(info,vdList){
-    if(typeof info=="undefined"||typeof info.sceneId=="undefined"||typeof info.areaId=="undefined"){
-      console.log("系统版本未更新")
-      return null
-    }
-    const id=info.sceneId+"&"+info.areaId
-    const posIndex=info.posIndex
-    for(let i=0;i<vdList.length;i++){
-      const vd0=vdList[i]
-      if(id==vd0.id)return vd0.databaseEvd[posIndex]//vd0.getPosIndex(posIndex)
-    }
-    return null
-  }
-}
-const vdList=VD.getVdList(configList,usePVD)
+console.log('version:09.20(node --max_old_space_size=8192 server_vd)')
+const VDList = require('./lib/VDList').VDList
+const vdList=VDList.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
 const port=8092
 const fs = require('fs');
@@ -190,14 +112,24 @@ function center(request, response) {
     info=JSON.parse(String.fromCharCode.apply(null,dataFromPage))
   });
   request.on('end', function () {//返回数据
-    let data=VD.getEvd(info,vdList)//vd.databaseEvd[index]
-    if(data){//有缓存
-      // console.log(index)
-      response.write(JSON.stringify(data));
-      response.end();
-    }else{
-      console.log("error 没有找到对应数据",info)
-    }
+    // let data=VDList.getEvd(info,vdList)//vd.databaseEvd[index]
+    // if(data){//有缓存
+    //   // console.log(index)
+    //   response.write(JSON.stringify(data));
+    //   response.end();
+    // }else{
+    //   console.log("error 没有找到对应数据",info)
+    // }
+    VDList.getEvd(info,vdList,data=>{
+      if(data){//有缓存
+        // console.log(index)
+        response.write(JSON.stringify(data));
+        response.end();
+      }else{
+        console.log("error 没有找到对应数据",info)
+      }
+    })//vd.databaseEvd[index]
+    
   });
 }
 let server

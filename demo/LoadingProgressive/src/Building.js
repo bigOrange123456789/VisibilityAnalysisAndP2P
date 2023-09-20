@@ -8,7 +8,8 @@ import { Tool } from './Building/Tool.js'
 import { Loader } from '../../../lib/loading/Loader.js'
 import { IndirectMaterial } from '../../../lib/threejs/IndirectMaterial'
 export class Building{
-    constructor(scene,camera,csm,cb){
+    constructor(scene,camera,csm,cb,sampling){
+        this.sampling=sampling
         // this.config.path="http://"+this.config.path 
         document.getElementById("LoadProgress").innerHTML=""
         let self=this
@@ -29,27 +30,33 @@ export class Building{
         //     this.config.parentGroup.scale.z*k0
         // )
         scene.add(this.parentGroup)
-        const matrix = new THREE.Matrix4(); 
-        // matrix.set( 
-        //     0.017926,   0,         0,          0,
-        //     0,          0.017926,  0,          0,
-        //     0,          0,         0.017926,   0,
-        //     22026.806641,2149.515381,224.10112,1
-        // );
-        // const m2 = new THREE.Matrix4(); 
-        // m2.set( 
-        //     0.1,0  ,0  ,0,
-        //     0  ,0  ,0.1,0,
-        //     0  ,0.1,0  ,0,
-        //     0  ,0  ,0  ,1
-        // );
-        // matrix.multiply(m2) 
-        matrix.set( 
-            0.0017926, 0, 0, 0, 0, 0, 0.0017926, 0, 0, 0.0017926, 0, 0, 2202.6806641, 22.410112, 214.95153810000002, 1
-        );
-        matrix.transpose ()
-        this.parentGroup.applyMatrix4(matrix)
-        console.log(matrix)
+        if(this.config.rootMatrix){
+            const matrix = new THREE.Matrix4(); 
+            matrix.set(
+                this.config.rootMatrix[0],
+                this.config.rootMatrix[1],
+                this.config.rootMatrix[2],
+                this.config.rootMatrix[3],
+
+                this.config.rootMatrix[4],
+                this.config.rootMatrix[5],
+                this.config.rootMatrix[6],
+                this.config.rootMatrix[7],
+
+                this.config.rootMatrix[8],
+                this.config.rootMatrix[9],
+                this.config.rootMatrix[10],
+                this.config.rootMatrix[11],
+
+                this.config.rootMatrix[12],
+                this.config.rootMatrix[13],
+                this.config.rootMatrix[14],
+                this.config.rootMatrix[15]
+             )
+            matrix.transpose ()
+            this.parentGroup.applyMatrix4(matrix)
+        }
+        
 
         // this.test()
         // return
@@ -61,6 +68,7 @@ export class Building{
         ){
             this.meshes_info[i]=true//不加载这些构件
         }
+        window.meshes_info=this.meshes_info
 
         
 
@@ -118,8 +126,31 @@ export class Building{
         }else cb()
     }
     start(camera){
-        // console.log(camera)W
         const self=this
+        if(this.sampling){
+            // self.loading(Array.from(new Array(1000)).map((v,i)=>{return i}))
+            window.loading=arr=>{
+                self.loading(arr)
+            }
+            // self.loadZip(0)
+            function l(i){
+                self.loadZip(i,()=>{
+                    console.log(i)
+                    if(i+50<3577)l(i+50) 
+                    else{
+                        console.log("finish")
+                        self.loading(Array.from(new Array(3577)).map((v,i)=>{return i}))
+                    }
+                })
+            }
+            // for(let i=0;i<1;i++)l(i+2500)
+            for(let i=0;i<50;i++)l(i+0)
+            // for(let i=0;i<50;i++)l(i+2000)
+            return
+        }
+
+        // console.log(camera)W
+        
         this.buildMaterial=new BuildMaterial({
             path:this.config.path,
             meshes:this.meshes,
@@ -157,30 +188,15 @@ export class Building{
             },1500)  
         }
         
-        // self.loading(Array.from(new Array(1000)).map((v,i)=>{return i}))
-        window.loading=arr=>{
-            self.loading(arr)
-        }
-        self.loadZip(0)
-        function l(i){
-            self.loadZip(i,()=>{
-                console.log(i)
-                if(i+50<3577)l(i+50) 
-                else{
-                    console.log("finish")
-                    self.loading(Array.from(new Array(3577)).map((v,i)=>{return i}))
-                }
-            })
-        }
-        // for(let i=0;i<1;i++)l(i+2500)
-        for(let i=0;i<50;i++)l(i+0)
         
-        // this.visibiity=new Visibility(
-        //     camera,
-        //     list=>self.loading(list),
-        //     this.meshes,
-        //     this.detection
-        // )
+        
+        
+        this.visibiity=new Visibility(
+            camera,
+            list=>self.loading(list),
+            this.meshes,
+            this.detection
+        )
 
     }
     getInstancedMesh(geometry,material,instance_info){
@@ -214,6 +230,8 @@ export class Building{
     }
     addMesh(id,meshOld){
         // console.log(meshOld)
+        if(!this.sampling)
+        if(this.buildMaterial)
         this.buildMaterial.checkMaterial(id,meshOld)
 
         // meshOld.material.map=null
@@ -256,7 +274,8 @@ export class Building{
         }
         m.envMapIntensity=0.1+m.metalness
 
-        meshOld.material=Tool.getSampleMaterial(id)
+        if(this.sampling)meshOld.material=Tool.getSampleMaterial(id)
+        // if(this.sampling)meshOld.material=Tool.getSampleMaterial(136)
 
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
@@ -282,7 +301,7 @@ export class Building{
                 instance_info)
             mesh1.castShadow =true// false//
             mesh1.receiveShadow = true//false//
-            const mesh2=mesh1.clone()
+            const mesh2=mesh1//mesh1.clone()
             
             //////////
             if(this.config.useIndirectMaterial){
@@ -380,6 +399,7 @@ export class Building{
                     self.loadZip_fine(id)
                 },500)  
                 if(true)setTimeout(()=>{
+                    if(self.buildMaterial)
                     self.buildMaterial.loadTexture(id)
                     if(cb)cb()
                 },500)  
@@ -428,6 +448,7 @@ export class Building{
     }
 
     loading(list){
+        // console.log(list)
         // console.log(list)
         // for(let i=0;i<30;i++)this.loadZip(i)
         // return

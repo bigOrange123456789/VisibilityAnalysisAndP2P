@@ -9,13 +9,13 @@ import config_gkd      from '../../../config/build/KaiLiNan.json';
 
 
 // import config9 from '../../config/LoadingProgressive/configOP9.json';
-// import { Start } from './Start.js'
+import { Start } from './Start.js'
 // import { StartGPU } from './StartGPU.js'
-import { StartSampling } from '../../../lib/StartSampling/StartSampling.js'
+// import { StartSampling } from '../../../lib/StartSampling/StartSampling.js'
 
 // document.addEventListener('DOMContentLoaded', () => {
     const h1=document.getElementById("versionId")
-    if(h1)h1.innerHTML="version:09.18;22:42"
+    if(h1)h1.innerHTML="version:09.21;00:39"
     const getParam=id=>{
         id=id+"="
         return window.location.search.split(id).length>1?
@@ -58,9 +58,9 @@ import { StartSampling } from '../../../lib/StartSampling/StartSampling.js'
 
     window.configALL=config
     // new StartGPU(document.body,config.useGPU)
-    // new Start(document.body)
-    import { Building } from './Building.js'
-    new StartSampling(document.body,config,Building)
+    new Start(document.body)
+    // import { Building } from './Building.js'
+    // new StartSampling(document.body,config,Building)
 
 // })
 console.log(config)

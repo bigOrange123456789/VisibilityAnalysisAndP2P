@@ -14,7 +14,7 @@ export class ExtractAnimation {
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setClearColor(0xddddff);
             document.body.appendChild( renderer.domElement );
-            light = new THREE.AmbientLight(0xffffff,1.0)
+            light = new THREE.AmbientLight(0xffffff,1.0)//0.63 0.65 0.69 0.75
             scene.add(light);
         }
         function render(){
@@ -24,7 +24,7 @@ export class ExtractAnimation {
         var animationType=prompt(
             "请输入动画编号:(动画总数"+glb.animations.length+")",
             Array.from(Array(glb.animations.length)).map((e, i) => i)+""//"0,1,2,3,4"
-            ).split(",")//挥手 点赞 跳跃 //哈欠 鼓掌 举手
+        ).split(",")//挥手 点赞 跳跃 //哈欠 鼓掌 举手
         var animations=[];
         for(var i=0;i<animationType.length;i++){
             var index=Math.floor(animationType[i])
@@ -88,7 +88,7 @@ export class ExtractAnimation {
                     index0++
                 }  
             })
-            return skeleton_all
+            return skeleton_all//获取每个skinnedmesh的名称和对应骨架
         }
         function play1(glb,animation,skeleton,name,n,meshAnima,cb){
             console.log("glb",glb)

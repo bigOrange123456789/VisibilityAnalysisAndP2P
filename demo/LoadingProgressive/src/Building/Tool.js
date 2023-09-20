@@ -8,8 +8,14 @@ export class Tool{
 
     }
     static getSampleMaterial(id){
-        const material=new THREE.MeshBasicMaterial({color:id})
-        material.color.convertSRGBToLinear();
+        const r=id>>16
+        const g=(id&0x00ff00)>>8
+        const b=id&0x0000ff
+        const material=new THREE.MeshBasicMaterial()
+        material.color.r=r/255
+        material.color.g=g/255
+        material.color.b=b/255
+        material.color.convertSRGBToLinear()
         return material
     }
     createFloor(){

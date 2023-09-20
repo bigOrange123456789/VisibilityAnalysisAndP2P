@@ -22,6 +22,7 @@ class Loader: #所有视点,每个视点的可见特征
             print("loading:",float('{:.3e}'.format(100*i/len(file_list))),"%\t",i,end="\r")
             path=path_pre_in+"/"+file_name
             v=Viewpoint()
+            # print(path,len(path_pre_in.split("_new")),path_pre_in.split("_new"))
             if len(path_pre_in.split("_new"))   ==2:v.load2(path)#v.load(path)
             if len(path_pre_in.split("_anNing"))==2:v.load3(path)
             else                                   :v.load(path)
