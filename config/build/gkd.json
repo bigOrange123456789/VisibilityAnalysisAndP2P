@@ -93,8 +93,9 @@
         "urlP2pControllerServer":"http://114.80.207.60:8010"
     },
     "Detection":{
-        "urlDetectionServer":"http://123.57.58.224:9999",
-        "testTime":120,
+        "open":false,
+        "urlDetectionServer":"http://localhost:9999",
+        "testTime":35,
         "maxBackDelay":10
     },
     "SamplePointList": {

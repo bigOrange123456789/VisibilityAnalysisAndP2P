@@ -70,6 +70,7 @@
         "urlP2pControllerServer":"http://114.80.207.60:8010"
     },
     "Detection":{
+        "open":false,
         "urlDetectionServer":"http://123.57.58.224:9999",
         "testTime":120,
         "maxBackDelay":10

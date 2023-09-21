@@ -440,7 +440,6 @@ export class Building{
                         load   :0,
                         forward:0,
                         parse  :performance.now()-self.meshes_info[cid].request,
-
                         parsed :self.meshes_info[cid].parsed,//解析完成的时刻
                     }
                     // o.material.color.r=255

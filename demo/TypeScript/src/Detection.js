@@ -41,7 +41,7 @@ export class Detection {//需要服务器
         setTimeout(()=>{
             console.log("end")
             scope.finish()
-        },scope.testTime*1000)//},100)//
+        },scope.testTime*1000)
         window.getTimeList=()=>{
             const config=scope.getTimeList()
             window.save(config,"result_n"+window.NUMBER+"t"+window.TIME0+".json")
@@ -253,8 +253,7 @@ export class Detection {//需要服务器
         return webLog
     }
     finish(){
-        if(!this.config.open)return
-        // alert(746487)
+        if(!this.config.Detection)return
         const self=this
         this.close=true
         var data={
@@ -311,9 +310,6 @@ export class Detection {//需要服务器
         setTimeout(()=>{
             oReq.send(JSON.stringify(data));//返回实验结果
         },Math.random()*self.config.maxBackDelay*1000)
-        // setTimeout(()=>{
-        //     oReq.send(JSON.stringify(data));//返回实验结果
-        // },100)
     }
     saveJson(data,name){
         const jsonData = JSON.stringify(data)
