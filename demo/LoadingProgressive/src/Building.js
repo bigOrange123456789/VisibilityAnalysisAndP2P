@@ -127,27 +127,32 @@ export class Building{
     }
     start(camera){
         const self=this
+        window.loading=arr=>{
+            self.loading(arr)
+        }
+        function l(i){
+            self.loadZip(i,()=>{
+                console.log(i)
+                if(i+50<3577)l(i+50) 
+                else{
+                    console.log("finish")
+                    self.loading(Array.from(new Array(3577)).map((v,i)=>{return i}))
+                }
+            })
+        }
         if(this.sampling){
             // self.loading(Array.from(new Array(1000)).map((v,i)=>{return i}))
-            window.loading=arr=>{
-                self.loading(arr)
-            }
+            
             // self.loadZip(0)
-            function l(i){
-                self.loadZip(i,()=>{
-                    console.log(i)
-                    if(i+50<3577)l(i+50) 
-                    else{
-                        console.log("finish")
-                        self.loading(Array.from(new Array(3577)).map((v,i)=>{return i}))
-                    }
-                })
-            }
+            
             // for(let i=0;i<1;i++)l(i+2500)
             for(let i=0;i<50;i++)l(i+0)
             // for(let i=0;i<50;i++)l(i+2000)
             return
         }
+        // for(let i=0;i<50;i++)l(i+2000)
+        // self.loading([3097])
+        return
 
         // console.log(camera)W
         
@@ -274,6 +279,7 @@ export class Building{
         }
         m.envMapIntensity=0.1+m.metalness
 
+        // meshOld.material=Tool.getSampleMaterial(id)
         if(this.sampling)meshOld.material=Tool.getSampleMaterial(id)
         // if(this.sampling)meshOld.material=Tool.getSampleMaterial(136)
 

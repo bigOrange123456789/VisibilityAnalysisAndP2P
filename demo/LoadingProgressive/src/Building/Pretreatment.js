@@ -2,8 +2,10 @@ import * as THREE from "three"
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter'
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 import { saveAs } from 'file-saver';
+import { Obstacle } from './Pretreatment/Obstacle.js'
 export class Pretreatment{
     constructor(building){
+        new Obstacle(building)
         this.count=3577//529
         this.building=building
         window.test=this
@@ -50,6 +52,8 @@ export class Pretreatment{
         window.getMatrix=()=>{
             self.getMatrix()
         }
+
+
 
     }
     getMatrix(){
@@ -180,10 +184,6 @@ export class Pretreatment{
         link.href = URL.createObjectURL(myBlob)
         link.download = name
         link.click()
-    }
-    InY2(mesh,y0){
-        var box = new THREE.Box3().setFromObject(mesh)
-        return box.max.y<y0//return box.min.y<ymax && box.max.y>ymin //&&box.max.z>-7766
     }
     load0(){
         const self=this
