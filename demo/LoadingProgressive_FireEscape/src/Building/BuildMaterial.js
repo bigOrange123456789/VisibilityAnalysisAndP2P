@@ -50,11 +50,8 @@ export class BuildMaterial{
         //     // for()
         //     self.addMaterial(materialId,texture)
         // })
-        const self=this
-        const texture=new THREE.TextureLoader().load( path ,()=>{
-            self.#addMaterial(materialId,texture)
-        })
-        
+        const texture=new THREE.TextureLoader().load( path )
+        this.#addMaterial(materialId,texture)
     }
     #addMaterial(materialId,texture){
         // console.log(materialId,texture)
@@ -99,7 +96,7 @@ export class BuildMaterial{
                                 
                         
                         // m.lod[j]=new THREE.Mesh(m.lod[j].geometry,m.lod[j].material)
-                        if(false){
+                        if(true){
                             m.lod[j].material.needsUpdate=true
                             if(this.csm)this.csm.setupMaterial(m.lod[j].material);
                         }else{

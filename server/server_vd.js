@@ -89,7 +89,7 @@ const configList=[
       -92,112,
       4
     ],
-    vdFileName:"KaiLiNan_new/",
+    vdFileName:"KaiLiNan_new2/",
     RealTimeLoading:true
   }
 ]
