@@ -38,6 +38,7 @@ export class Panel{
   }
   addMyUI_Escape()
   {
+    let first=true
     //完成设置个数
     var width=window.innerWidth
     var height=window.innerHeight
@@ -52,6 +53,12 @@ export class Panel{
           (width/10)/6, 150,
           width/10, (width/10)/4,//大小
           0,500-2*50,(b)=>{//位置
+            if(first)
+              if(window.findpath){
+                window.findpath.start()
+                first=false
+              }
+            
             if(!window.escapeFlag)window.escapeFlag=true
             else window.escapeFlag=false
             // self.setWander(id)

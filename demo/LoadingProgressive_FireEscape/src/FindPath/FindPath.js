@@ -24,7 +24,7 @@ export class FindPath {
 
         this.#init()
         this.#update()
-        this.start()
+        window.findpath=this
     }
     #init(){
         this.#statusPre =this.#statusNext

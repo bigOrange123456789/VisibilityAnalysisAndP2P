@@ -6,13 +6,14 @@ import * as THREE from "three"
 // import { Loader } from '../../../lib/loading/Loader.js'
 
 import { BuildMaterial } from './Building/BuildMaterial.js'
-import { Pretreatment } from './Building/Pretreatment.js'
+// import { Pretreatment } from './Building/Pretreatment.js'
 import { Tool } from './Building/Tool.js'
 
 
 
 export class Building{
     constructor(scene,camera,csm,cb,sampling,Engine3D){
+        this.shell=[3465, 2500, 2504, 2488, 3576, 2949, 2816, 2795, 3533, 2803, 2951, 3475, 3474, 3480, 3097, 2543, 2515, 3489, 3476, 2396, 2950, 2957, 2952, 2113, 2963, 2529, 2520, 2894, 2892, 2896, 2397, 2506, 2590, 3485, 3132, 2895, 2893, 2565, 3575, 3014, 3539, 2518, 2964, 2498, 2519, 3498, 2959, 2840, 2930, 2486, 3134, 2903, 2904, 3013, 2905, 3486, 2897, 2107, 3133, 2538, 2494, 3112, 2342, 2576, 3574, 2962, 3537, 2091, 3120, 3544, 3490, 2263, 3497, 2899, 2801, 2415, 2411, 2502, 3534, 2341, 2398, 3541, 2447, 2115, 2496, 3131, 2340, 2898, 2900, 3527, 3492, 2484, 2264, 3098, 2558, 2796, 2907, 2100, 2921, 2902]
         this.Engine3D=Engine3D
 
         this.sampling=sampling
@@ -91,14 +92,14 @@ export class Building{
                 if(cb)cb()
             })
         })
-        new Pretreatment(this)
+        // new Pretreatment(this)
         if(self.config.needTool){
             const tool=new Tool({
                 instance_info:this.instance_info,
                 meshes:this.meshes,
                 parentGroup:this.parentGroup
             })
-            tool.createFloor2()
+            // tool.createFloor2()
         }
             
     }
@@ -164,7 +165,7 @@ export class Building{
         // // self.loading([3097])
         // return
 
-        // console.log(camera)W
+        // console.log(camera)
         
         this.buildMaterial=new BuildMaterial({
             path:this.config.path,
@@ -375,6 +376,11 @@ export class Building{
         mesh.name=meshOld.name
         this.detection.receiveMesh(mesh)   
         mesh.name=meshOld.name
+
+        mesh.isShell=false
+        for(let i=0;i<this.shell.length;i++){
+            if(this.shell[i]==id)mesh.isShell=true
+        }
         // console.log(mesh,id)
     }
     loadZip(id,cb){

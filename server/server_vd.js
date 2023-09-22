@@ -89,7 +89,7 @@ const configList=[
       -92,112,
       4
     ],
-    vdFileName:"KaiLiNan_new2/",
+    vdFileName:"KaiLiNan_new4/",
     RealTimeLoading:true
   }
 ]
@@ -101,7 +101,7 @@ console.log('version:09.20(node --max_old_space_size=8192 server_vd)')
 const VDList = require('./lib/VDList').VDList
 const vdList=VDList.getVdList(configList,usePVD)
 ////////////////////////////////////////////////////////////
-const port=8092
+const port=18092
 const fs = require('fs');
 function center(request, response) {
   // let index;
