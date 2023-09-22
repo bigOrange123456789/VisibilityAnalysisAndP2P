@@ -1,6 +1,11 @@
-import config_haiNing0 from '../config/configOP6.json';
-import config_haiNing from '../config/configOP7.json';
-import config_gkd from '../config/configOP8.json';
+// import config_haiNing0 from '../config/configOP6.json';
+// import config_haiNing from '../config/configOP7.json';
+// import config_gkd from '../config/configOP8.json';
+import config_haiNing0 from '../../../config/build/haiNing0.json';
+import config_haiNing  from '../../../config/build/haiNing.json';
+import config_gkd      from '../../../config/build/gkd.json';
+// import config_gkd      from '../../../config/build/KaiLiNan.json';
+
 
 import { Start } from './Start.js'
 // import { StartGPU } from './StartGPU.js'
@@ -17,16 +22,16 @@ document.addEventListener('DOMContentLoaded', () => {
         getParam('scene')=="haiNing"?config_haiNing:
         config_gkd
     config.useGPU=getParam('useGPU')?getParam('useGPU'):true
-    config.src.main.speed       =getParam('speed')?getParam('speed'):config.src.main.speed
-    config.src.main.autoMove    =getParam('autoMove')
-    config.src.main.render      =getParam('render')
-    config.src.Detection.backURL=getParam('backURL')
+    config.main.speed       =getParam('speed')?getParam('speed'):config.main.speed
+    config.main.autoMove    =getParam('autoMove')
+    config.main.render      =getParam('render')
+    config.Detection.backURL=getParam('backURL')
     if(getParam('list2Len'))
-        config.src.Visibility.list2Len=parseFloat(getParam('list2Len'))
+        config.Visibility.list2Len=parseFloat(getParam('list2Len'))
     if(getParam('testTime'))
-        config.src.Detection.testTime=parseFloat(getParam('testTime'))
+        config.Detection.testTime=parseFloat(getParam('testTime'))
     if(getParam('maxBackDelay'))
-        config.src.Detection.maxBackDelay=parseFloat(getParam('maxBackDelay'))
+        config.Detection.maxBackDelay=parseFloat(getParam('maxBackDelay'))
     if(getParam('backURL')!==null){//backURL需要将autoMove参数传回
         let backURL=getParam('backURL')
         const add=(tag)=>{
@@ -39,11 +44,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         add('autoMove')
         add('userId') 
-        config.src.Detection.backURL=backURL    
+        config.Detection.backURL=backURL    
     }
-    config.src.main.useIndirectMaterial = config.src.Building_new.useIndirectMaterial
-    config.src.Building_new.NUMBER=getParam('NUMBER')
-    config.src.Building_new.TIME=getParam('TIME')
+    config.main.useIndirectMaterial = config.Building.useIndirectMaterial
+    config.Building.NUMBER=getParam('NUMBER')
+    config.Building.TIME=getParam('TIME')
 
     window.configALL=config
     // new StartGPU(document.body,config.useGPU)

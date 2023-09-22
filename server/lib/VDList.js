@@ -29,7 +29,6 @@ class VDList{
     const posIndex=info.posIndex
     for(let i=0;i<vdList.length;i++){
       const vd0=vdList[i]
-      console.log(vd0.isId(id))
       if(vd0.isId(id)){
         vd0.getEvd(posIndex,cb);return
       }//vd0.#getPosIndex(posIndex)

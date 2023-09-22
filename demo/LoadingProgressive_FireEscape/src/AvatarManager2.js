@@ -1,4 +1,7 @@
-import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
+// import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
+import { Template } from '../../../lib/crowd/Template_sim2.js'
+const CrowdManager=Template
+
 import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
@@ -187,6 +190,18 @@ export class AvatarManager {
             }
             c1.lod_distance[c1.lod_distance.length-2]*=2
             c1.lod_distance[c1.lod_distance.length-1]*=4*2
+        }
+        config[0].useInstancedBuffer={
+            //type,itemSize
+            // textureType:[Uint8Array,4],//null,
+            // bodyScale:false,//null,//
+            moveMaxLength:false,
+            
+            // speed:[Float32Array,1],
+            // animationIndex:false,//[Uint8Array,1],
+            // animationStartTime:[Float32Array,1],
+    
+            obesity:false,//[Float32Array,1],//
         }
         // console.log(config)
         return config[0]

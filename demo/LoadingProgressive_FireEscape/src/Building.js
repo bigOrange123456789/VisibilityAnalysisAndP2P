@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { Visibility } from '../../../lib/loading/Visibility.js'
-import { P2P } from './P2P.js'
-import { Detection } from './Detection.js'
+import { P2P } from       '../../../lib/loading/P2P/P2P.js'
+import { Detection } from '../../../lib/loading/P2P/Detection.js'
 import { BuildMaterial } from './Building/BuildMaterial.js'
 import { Pretreatment } from './Building/Pretreatment.js'
 import { Tool } from './Building/Tool.js'

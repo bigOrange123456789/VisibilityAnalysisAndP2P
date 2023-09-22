@@ -94,16 +94,17 @@ class VD{
   //   }
   // }
   getEvd(posIndex,cb){
-    console.log(posIndex)
     if(this.databaseEvd){
       cb(this.databaseEvd[posIndex]) 
     }else{
       const self=this
       const name =this.#getPosVid(posIndex)
-      console.log(self.path+name+".json")
       require('jsonfile').readFile(
         self.path+name+".json", 
-        (err, jsonData)=>{cb(jsonData)}
+        (err, jsonData)=>{
+          if(!jsonData)console.log("没有找到:",self.path+name+".json",posIndex)
+          cb(jsonData)
+        }
       );
     }
   }

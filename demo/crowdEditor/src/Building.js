@@ -1,7 +1,7 @@
 import * as THREE from "three"
 import { Visibility } from '../../../lib/loading/Visibility.js'
-import { P2P } from './P2P.js'
-import { Detection } from './Detection.js'
+import { P2P } from       '../../../lib/loading/P2P/P2P.js'
+import { Detection } from '../../../lib/loading/P2P/Detection.js'
 import { Loader } from '../../../lib/loading/Loader.js'
 import { IndirectMaterial } from '../../../lib/threejs/IndirectMaterial'
 
@@ -15,7 +15,7 @@ export class Building{
             self.saveJson(data,name?name:"test.json")
         }
         
-        this.config=window.configALL.src.Building_new
+        this.config=window.configALL.Building
         this.NumberOfComponents=this.config.NumberOfComponents
 
         this.parentGroup = new THREE.Group()
