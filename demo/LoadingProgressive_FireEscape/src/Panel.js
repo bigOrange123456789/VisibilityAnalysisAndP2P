@@ -1,6 +1,7 @@
-import{MyUI} from "../../../lib/ui/MyUI_sim.js"
+// import{MyUI} from "../../../lib/ui/MyUI_sim.js"
 export class Panel{
-  constructor(main){
+  constructor(main,Engine3D){
+      this.Engine3D=Engine3D
       this.main=main
       this.prePathId=-1
       this.addMyUI()
@@ -12,7 +13,7 @@ export class Panel{
     var width=window.innerWidth
     var height=window.innerHeight
     var self=this;
-    var ui=new MyUI()
+    var ui=new this.Engine3D.MyUI()
     ui.init()
     for(let id=0;id<self.main.wanderList.length;id++)
       new ui.Button('自动漫游',//'漫游路径'+(id+1), 

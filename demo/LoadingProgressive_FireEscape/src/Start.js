@@ -1,7 +1,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+let PlayerControl//import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
@@ -12,8 +12,8 @@ import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager2.js'
 // import {Car } from './Car.ts'
 // window.car=new Car()
-import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
-import { SkyController  } from '../../../lib/threejs/SkyController'
+let MoveManager//import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+let SkyController//import { SkyController  } from '../../../lib/threejs/SkyController'
 
 // import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
@@ -22,11 +22,16 @@ import { SkyController  } from '../../../lib/threejs/SkyController'
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
-import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
+import {CSM} from "three/examples/jsm/csm/CSM.js";//import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
 
 export class Start{
-    constructor(body){
+    constructor(body,Engine3D){
+        this.Engine3D=Engine3D
+        PlayerControl=Engine3D.PlayerControl
+        MoveManager=Engine3D.MoveManager
+        SkyController=Engine3D.SkyController
+
         this.addTool(window)
         this.speed=1
         this.config=window.configALL.main
@@ -53,7 +58,7 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        this.panel = new Panel(this)
+        this.panel = new Panel(this,this.Engine3D)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
         //     "LoadingProgressive/pos.json",
@@ -65,7 +70,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data,this.Engine3D)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -75,7 +80,7 @@ export class Start{
 
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
             this.ui=new UI(this)
-        })
+        },false,this.Engine3D)
         
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)

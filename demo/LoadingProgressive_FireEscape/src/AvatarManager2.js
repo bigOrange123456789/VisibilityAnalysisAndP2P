@@ -1,5 +1,5 @@
 // import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
-import { Template } from '../../../lib/crowd/Template_sim2.js'
+import { Template } from './crowd/Template_sim2.js'
 const CrowdManager=Template
 
 import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
@@ -8,7 +8,9 @@ import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 import { FindPath } from './FindPath/FindPath.js'
 import * as THREE from "three"
 export class AvatarManager {
-    constructor(scene, camera,posConfig) {
+    constructor(scene, camera,posConfig,Engine3D) {
+        this.Engine3D=Engine3D
+        // CrowdManager=Engine3D.Template_sim2
         this.posConfig=posConfig
         // return
         window.scene=scene
@@ -120,7 +122,9 @@ export class AvatarManager {
             }
             crowd.update()
             window.fp=new FindPath(crowd)
-        })
+        },
+        this.Engine3D
+        )
     }
     initPos_avatarTest(){
         // const poslist=[]
