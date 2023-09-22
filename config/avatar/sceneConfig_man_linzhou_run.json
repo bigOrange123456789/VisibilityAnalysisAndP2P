@@ -1,0 +1,38 @@
+[
+    {
+        "materialLoaderType":"json_material",
+        "path": [
+            "assets/avatar/sim/man_linzhou_run/"
+        ],
+        "pathTexture": [
+            {
+                "rootPath":"./assets/avatar/textures_sim1/man_linzhou2",
+                "business02_m_mediumpoly": {
+                    "map": ""
+                }
+            }
+        ],
+        "meshType": [
+            {
+                "business02_m_mediumpoly": "business02_m_mediumpoly"
+            }
+        ],
+        "lod_visible": [
+            {
+                "business02_m_mediumpoly": 22
+            }
+        ],
+        "useColorTag": [],
+        "walkAnimationList": [],
+        "sitAnimationList": [],
+        "standAnimationList": [
+            0,
+            1,
+            2
+        ],
+        "pathAnima": "assets/avatar/sim/man_linzhou_run/animation.bin",
+        "lod_distance": [],
+        "lod_geometry": [],
+        "lod_avatarCount": []
+    }
+]

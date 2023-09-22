@@ -296,7 +296,7 @@ export class Pretreatment{
                 raycaster.setFromCamera( mouse, camera )
                 const intersects = raycaster.intersectObjects( arr )
                 if (intersects.length > 0) {
-                    console.log(intersects[0].object.parent.myId,intersects[0].object)
+                    console.log(intersects[0].object.parent.myId,intersects[0].object,intersects[0])
                 }
 
         },false)

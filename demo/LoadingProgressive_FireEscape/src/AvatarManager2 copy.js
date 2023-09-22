@@ -1,11 +1,11 @@
 // import { CrowdManager } from '../../../lib/crowd/CrowdManager.js'
-import { Template } from './crowd/Template_sim2.js'
-const CrowdManager=Template
-import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
-
-// import { Template } from '../../../lib/crowd/Template_sim.js'
+// import { Template } from './crowd/Template_sim2.js'
 // const CrowdManager=Template
-// import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou2.json'
+// import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
+
+import { Template } from '../../../lib/crowd/Template_sim.js'
+const CrowdManager=Template
+import conifg_woman     from '../../../config/avatar/sceneConfig_man_linzhou2.json'
 
 // import conifg_woman     from '../../config/avatar/sceneConifg_man02.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
@@ -23,16 +23,14 @@ export class AvatarManager {
         this.assets = {}//为了防止资源重复加载，相同路径的资源只加载一次
         // this.init()
         // window.avatar=new CrowdManager(scene, camera,this.initPos_avatar(),this.getConfig_avatar(),"glb_material")
-        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"glb_material",(crowd,c,scenes)=>{
+        window.avatar=new CrowdManager(scene, camera,this.initPos_avatarTest(),this.getConfig_avatar(),"json_material",(crowd,c,scenes)=>{
             function r(arr){
                 const randomIndex = Math.floor(Math.random() * arr.length)
                 return arr[randomIndex]
             }
             
             for (var i00 = 0; i00 < crowd.count; i00++) {
-                crowd.setRotation(
-                    i00,[0,Math.random()*3.1*2,0]
-                )
+                
                 if(true){//if(Math.random()>0.3){//
                     crowd.setAnimation(
                         i00,
@@ -143,33 +141,13 @@ export class AvatarManager {
         //     ])
         // }
         // return poslist
-        const arr=[
-            [9.401352279000676,-53.919369991442025],
-            [-1.3401614984055925,-50.88549107870462],
-            [8.64432479869295,-40.69571426805416],[5.822456719402155,-34.63120099354046],
-            [9.865616104893164,-15.531480892971757],[5.1544829519191495,-20.255303318333546],
-            [42.89286874823276,33.13281422650013],
-            [-8.33280190319715,13.573104320685104],
-
-            [-12.306725271469759,21.528074988618968],[-15.493936733543848,21.184965803600633],
-            [-14.800333037373534,25.741031050020325],[-10.156258068904336,29.41631109993675],
-            [-13.238721508333626,30.91517199140445],[12.550835763709586,13.778594112992764],
-            [11.959905857695276,7.695540898943264],[14.454629275020466,37.33673948562563],
-            [-43.742833605821005,10.245196030741567],[-46.245462075015695,20.264089833475765]
-        ]
+        const arr=[[9.401352279000676,-53.919369991442025],[-1.3401614984055925,-50.88549107870462],[8.64432479869295,-40.69571426805416],[5.822456719402155,-34.63120099354046],[9.865616104893164,-15.531480892971757],[5.1544829519191495,-20.255303318333546],[10.035008489107355,-6.412812387477345],[24.793501057080917,12.654508515900503],[42.89286874823276,33.13281422650013],[-8.33280190319715,13.573104320685104],[-12.306725271469759,21.528074988618968],[-15.493936733543848,21.184965803600633],[-14.800333037373534,25.741031050020325],[-10.156258068904336,29.41631109993675],[-13.238721508333626,30.91517199140445],[12.550835763709586,13.778594112992764],[11.959905857695276,7.695540898943264],[14.454629275020466,37.33673948562563],[-43.742833605821005,10.245196030741567],[-46.245462075015695,20.264089833475765]]
         const poslist=[]
         for(let i=0;i<arr.length;i++){
             poslist.push([
                 arr[i][0],
                 48,
                 arr[i][1],
-            ])
-        }
-        for(let i=0;i<arr.length;i++){
-            poslist.push([
-                arr[i][0]+1.5,
-                48,
-                arr[i][1]+0.5,
             ])
         }
         return poslist
@@ -182,7 +160,7 @@ export class AvatarManager {
         const config=conifg_woman
         for(let i=0;i<config.length;i++){
             let c1=config[i]
-            c1.scale=2.//1.//2
+            c1.scale=1.//2
             
             // c1.lod_distance=[ 5000, 15000, 30000, 60000, 100000 ]
             // c1.lod_geometry=[ 20,  15,   1,    0,   0  ]

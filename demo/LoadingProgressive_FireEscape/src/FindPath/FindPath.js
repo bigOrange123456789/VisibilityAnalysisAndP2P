@@ -22,9 +22,9 @@ export class FindPath {
         }
         this.#statusNext=this.#statusPre
 
-
         this.#init()
         this.#update()
+        this.start()
     }
     #init(){
         this.#statusPre =this.#statusNext
@@ -37,6 +37,7 @@ export class FindPath {
             let pos2=pos
             let rot2=rot
             const next = this.map.nextStatus(pos[0],pos[2])
+            // console.log("next",next)
             if(next){
                 pos2=[
                     next.pos[0],
@@ -79,14 +80,17 @@ export class FindPath {
         loop()
     }
     #update(){
+        if(!window.escapeFlag)return
         if(this.#stepi==this.#stepNum+1){
             this.#stepi=0
             this.#init()
         }
         const k=this.#stepi/this.#stepNum
         for(let i=0;i<this.#i5.count;i++){
+            
             const statusPre=this.#statusPre[i]
             const statusNext=this.#statusNext[i]
+            // console.log("statusPre",statusPre.pos,"statusNext",statusNext.pos)
             const pos=[
                 statusPre.pos[0]+(statusNext.pos[0]-statusPre.pos[0])*k,
                 statusPre.pos[1]+(statusNext.pos[1]-statusPre.pos[1])*k,
@@ -99,11 +103,17 @@ export class FindPath {
             
             const rot=[
                 statusPre.rot[0],
-                statusPre.rot[1]+dr*k,//+Math.PI/2,
+                statusPre.rot[1]+dr*Math.pow(k+0.00000001,0.4),//+Math.PI/2,
                 statusPre.rot[2],
             ]
             this.#i5.setPosition(i,pos)
             this.#i5.setRotation(i,rot)
+            if(i==0&&window.followFlag){
+                const camera=window.camera
+                camera.position.x=pos[0]
+                camera.position.z=pos[2]-4
+                camera.lookAt(pos[0],camera.position.y-0.5,pos[2])
+            }
         }
         // if(k!==0)
         this.#i5.update()
