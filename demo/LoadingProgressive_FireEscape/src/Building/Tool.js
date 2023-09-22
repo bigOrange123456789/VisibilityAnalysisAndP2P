@@ -3,8 +3,8 @@ export class Tool{
     constructor(opt){
         this.meshes=opt.meshes
         this.parentGroup=opt.parentGroup
-        this.createFloor()
-        this.doorTwinkle()
+        // this.createFloor()
+        // this.doorTwinkle()
 
     }
     static getSampleMaterial(id){
@@ -22,6 +22,26 @@ export class Tool{
         const geometry = new THREE.BoxGeometry( 1000000, 500, 50000 );
         const material = new THREE.MeshPhongMaterial( {color: 0x654321} );
         const floor = new THREE.Mesh( geometry, material );
+        window.floor=floor
+        this.parentGroup.add( floor );
+    }
+    createFloor2(){
+        var tex_g = new THREE.TextureLoader().load( 'ground.jpeg' )// 地面贴图
+        tex_g.wrapS=tex_g.wrapT=THREE.RepeatWrapping
+        tex_g.repeat.set(500,500)
+        const material=new THREE.MeshStandardMaterial({map: tex_g})
+        material.side=2
+        material.metalness=0
+        material.roughness=0.5
+        material.envMapIntensity=0
+        // material.opacity=0.7
+        // material.transparent=true
+        material.transparent=false
+
+        
+        const floor = new THREE.Mesh(new THREE.PlaneGeometry(50000,50000), material)
+        floor.scale.set(50,50,50)
+        floor.position.set(-1239900,  -50000,  3000)
         window.floor=floor
         this.parentGroup.add( floor );
     }

@@ -69,10 +69,11 @@ export class Building{
         this.meshes={}
         window.meshes=this.meshes
         this.meshes_info={}
+        // for(let i=0;i<3577;i++)this.meshes_info[i]=true
         for(let i of
             this.config["noload"]?this.config["noload"]:[]
         ){
-            this.meshes_info[i]=true//不加载这些构件
+            this.meshes_info[i]=true//false//不加载这些构件
         }
         window.meshes_info=this.meshes_info
 
@@ -90,13 +91,16 @@ export class Building{
                 if(cb)cb()
             })
         })
-        // new Pretreatment(this)
-        if(self.config.needTool)
-            new Tool({
+        new Pretreatment(this)
+        if(self.config.needTool){
+            const tool=new Tool({
                 instance_info:this.instance_info,
                 meshes:this.meshes,
                 parentGroup:this.parentGroup
             })
+            tool.createFloor2()
+        }
+            
     }
     loadConfigInstance(cb){
         const self=this
@@ -156,8 +160,8 @@ export class Building{
             // for(let i=0;i<50;i++)l(i+2000)
             return
         }
-        // for(let i=0;i<50;i++)l(i+2000)
-        // self.loading([3097])
+        // for(let i=0;i<50;i++)l(i+0)
+        // // self.loading([3097])
         // return
 
         // console.log(camera)W
@@ -268,22 +272,25 @@ export class Building{
         const m=meshOld.material
         
         m.side=0
-        if(id==29||id==3){//玻璃
-            m.transparent=true
-            m.opacity=0.6
-        }else if(id==166){//护栏
-            m.side=2
-        }else if(id==174||id==182){//道路
-            m.metalness=0.8
-            m.roughness=0.4
-            // m.visible=false
-            // m.metal=true
-            // alert(m.shininess)
-            // console.log(m)
-        }else{
-            // m.transparent=false
-        }
-        m.envMapIntensity=0.1+m.metalness
+        // if(id==29||id==3){//玻璃
+        //     m.transparent=true
+        //     m.opacity=0.6
+        // }else if(id==166){//护栏
+        //     m.side=2
+        // }else if(id==174||id==182){//道路
+        //     m.metalness=0.8
+        //     m.roughness=0.4
+        //     // m.visible=false
+        //     // m.metal=true
+        //     // alert(m.shininess)
+        //     // console.log(m)
+        // }else{
+        //     // m.transparent=false
+        // }
+        m.metalness=0.9//0.5
+        m.roughness=0.5//0.5
+        m.envMapIntensity=0.6//0.4//0.1+m.metalness
+        m.transparent=false
 
         // meshOld.material=Tool.getSampleMaterial(id)
         if(this.sampling)meshOld.material=Tool.getSampleMaterial(id)
@@ -367,12 +374,13 @@ export class Building{
         mesh.myId=id
         mesh.name=meshOld.name
         this.detection.receiveMesh(mesh)   
+        mesh.name=meshOld.name
         // console.log(mesh,id)
     }
     loadZip(id,cb){
         // this.loadGLB(id,cb)
         // return
-        if(this.meshes_info[id])return
+        if(this.meshes_info[id]){if(cb)cb();return}
         else this.meshes_info[id]={request:performance.now()}//true
         this.detection.receivePack("server")
         this.detection.request("zip")

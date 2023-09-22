@@ -44,7 +44,10 @@ class LightProducer{
 
         const lensflare2 = new Lensflare();
         lensflare2.addElement( new LensflareElement( textureFlare3, 1500*s0, 0, new THREE.Color(0,0,0.1) ) );
-        lensflare2.position.set( -255,  32,  176)
+        lensflare2.position.set(
+            12.522814901980613,  51,  -20.56506945551601 
+            //-255,  32,  176
+             )
         this.object.add(lensflare2)
         window.lensflare2=lensflare2
     }
@@ -65,9 +68,9 @@ class LightProducer{
     init(scene){
         // Lights 
         const x=3.//0.5
-        const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
-        this.ambient=ambient
-        scene.add( ambient );
+        // const ambient = new THREE.AmbientLight( 0xffffff ,0.4);//new THREE.AmbientLight( 0xffffff ,.8);
+        // this.ambient=ambient
+        // scene.add( ambient );
         // ambient.name="ambient"
 
         // const Light1 = new THREE.PointLight( 0xffffff, 0.7, 10000 ,1.5)//new THREE.DirectionalLight( 0xffddcc, 0.5 );
@@ -76,7 +79,7 @@ class LightProducer{
         // Light1.name="Light1"
         // return
 
-        // const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
+        const directionalLight = new THREE.DirectionalLight( 0xcffffff,x+0.5+0.5 );
    
         // directionalLight.shadow.camera.near = -1000//0.01 //产生阴影的最近距离
         // directionalLight.shadow.camera.far = 1000 //产生阴影的最远距离
@@ -90,15 +93,15 @@ class LightProducer{
         // // directionalLight.shadow.bias = -0.0005;
         // directionalLight.shadow.mapSize.width = 4*2048; 
         // directionalLight.shadow.mapSize.height = 4*2048;//这两个值决定使用多少像素生成阴影 默认512
-        // this.objectMove.add( directionalLight )
-        // // directionalLight.target = new THREE.Object3D();
-        // // directionalLight.target.origin=new THREE.Object3D(10,10,10)
-        // directionalLight.target.position.set(1,-0.5,1)
+        this.objectMove.add( directionalLight )
+        // directionalLight.target = new THREE.Object3D();
+        // directionalLight.target.origin=new THREE.Object3D(10,10,10)
+        directionalLight.target.position.set(1,-0.5,1)
         
-        // window.target=directionalLight.target
-        // this.targetList.push(directionalLight.target)
-        // this.objectMove.add( directionalLight.target )
-        // this.directionalLight=directionalLight
+        window.target=directionalLight.target
+        this.targetList.push(directionalLight.target)
+        this.objectMove.add( directionalLight.target )
+        this.directionalLight=directionalLight
         
 
 

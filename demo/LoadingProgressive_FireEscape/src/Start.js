@@ -76,7 +76,7 @@ export class Start{
         // )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
-        this.initCSM();
+        // this.initCSM();
 
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
             this.ui=new UI(this)
@@ -109,7 +109,7 @@ export class Start{
             //   self.scene.backgroundIntensity=0//=0.1
             }
         )
-        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.jpg').then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
                 // envMap.flipY=true 
@@ -212,7 +212,7 @@ export class Start{
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"])
+        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,

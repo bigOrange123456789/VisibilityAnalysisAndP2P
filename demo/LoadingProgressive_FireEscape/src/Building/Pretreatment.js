@@ -4,7 +4,93 @@ import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 import { saveAs } from 'file-saver';
 import { Obstacle } from './Pretreatment/Obstacle.js'
 export class Pretreatment{
+    test(){
+
+        let s="";
+        // for(let i in window.meshes){
+        //     const color= window.meshes[i].lod[0].material.color;   
+        //     const r=color.r,g=color.g,b=color.b;  
+        //     if(
+        //         ((r>0.9)&&(r+b+g<2.7))||//红色管道
+        //         ((b>0.9)&&(r+b+g<1.7))||//蓝色管道
+        //         // ((g>0.8)&&(r+b+g<2.7))||//墙壁
+        //         ((r+b>1.6)&&(r+b+g<2.3))||//粉红色管道
+        //         (0.8<b)&&b<0.9&&(r+g+b<1.7)//紫色管道
+        //     ){
+        //         s=s+(i+",");
+        //     }
+        //     // window.meshes[i].visible=(r>0.9)&&(r+b+g<2.7)//红色管道
+        //     // window.meshes[i].visible=(b>0.9)&&(r+b+g<1.7)//蓝色管道
+        //     // window.meshes[i].visible=(g>0.8)&&(r+b+g<2.7)//墙壁
+        //     // window.meshes[i].visible=(r+b>1.6)&&(r+b+g<2.3)//粉红色管道
+        //     // window.meshes[i].visible=(0.8<b)&&b<0.9&&(r+g+b<1.7)//紫色管道
+        //     // if((r>0.9)&&(r+b+g<2.7))s=s+(i+",");
+        // }
+
+        s=""
+        for(let i in window.meshes){
+            const color= window.meshes[i].lod[0].material.color;   
+            const r=color.r,g=color.g,b=color.b;  
+            const mesh=window.meshes[i].lod[0]
+            mesh.computeBoundingBox()
+            const box=mesh.boundingBox
+            const v=(box.max.x-box.min.x)*(box.max.y-box.min.y)*(box.max.z-box.min.z)
+            if(
+                // ((r>0.9)&&(r+b+g<2.7))||//红色管道
+                // ((b>0.9)&&(r+b+g<1.7))||//蓝色管道
+                // ((g>0.8)&&(r+b+g<2.7))||//墙壁
+                // ((r+b>1.6)&&(r+b+g<2.3))||//粉红色管道
+                // (0.8<b)&&b<0.9&&(r+g+b<1.7)||//紫色管道
+                (r<0.2)&&g<0.2&&(b>0.6)//||//紫色管道2
+                // (r<0.4)&&(b>0.4)&&(b<0.5)||绿色管道
+                // (0.6<g)&&(r+b==0)||//绿色扁管
+                //(0.4<r)&&(b==0)//黄色管道
+            ){
+                s=s+(i+",");
+                window.meshes[i].visible=true
+            }else window.meshes[i].visible=false
+        }
+
+
+        for(let i in window.meshes){
+            const mesh=window.meshes[i].lod[0]
+            mesh.computeBoundingBox()
+            const box=mesh.boundingBox
+            box.applyMatrix4(mesh.matrixWorld)
+            mesh.count
+            const v=mesh.count*(box.max.x-box.min.x)*(box.max.y-box.min.y)*(box.max.z-box.min.z)
+            console.log(v)
+            mesh.visible=v<11115069537
+            // const geometry=mesh.geometry
+            // const color= window.meshes[i].lod[0].material.color;   
+
+            // const r=color.r,g=color.g,b=color.b;  
+            // if(
+            //     (0.8<b)&&b<0.9&&(r+g+b<1.7)//紫色管道 
+            // )s=s+(i+",");
+        }
+
+
+        //提取轨道
+        s=""
+        for(let i in window.meshes){
+            const color= window.meshes[i].lod[0].material.color;   
+            const r=color.r,g=color.g,b=color.b;  
+            const mesh=window.meshes[i].lod[0]
+            mesh.computeBoundingBox()
+            const box=mesh.boundingBox
+            const v=(box.max.x-box.min.x)*(box.max.y-box.min.y)*(box.max.z-box.min.z)
+            const c=mesh.geometry.attributes.position.count
+            if(
+                78==c&&r>0.5&&r<0.6
+            ){
+                s=s+(i+",");//console.log(r);
+                window.meshes[i].visible=true
+            }else window.meshes[i].visible=false
+        }
+    }
     constructor(building){
+        window.pretreatment=this
         new Obstacle(building)
         this.count=3577//529
         this.building=building
@@ -196,5 +282,23 @@ export class Pretreatment{
                 },100)
             })
         }
+    }
+    rayCaster(){//视点拾取
+        const arr=Object.values(window.meshes)
+        const camera=window.camera
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        window.addEventListener( 'mousemove', event=>{//鼠标移动事件
+                mouse.x = ( event.clientX / window.innerWidth ) * 2 - 1;
+                mouse.y = - ( event.clientY / window.innerHeight ) * 2 + 1 ;
+        }, false );
+        window.addEventListener('click',()=>{
+                raycaster.setFromCamera( mouse, camera )
+                const intersects = raycaster.intersectObjects( arr )
+                if (intersects.length > 0) {
+                    console.log(intersects[0].object.parent.myId,intersects[0].object)
+                }
+
+        },false)
     }
 }
