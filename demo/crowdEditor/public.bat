@@ -1,2 +1,4 @@
+set current_dir=%cd%
+set fileName=index.html
 cd ../../
-parcel ./demo/crowdEditor/index.html
+parcel %current_dir%\%fileName%

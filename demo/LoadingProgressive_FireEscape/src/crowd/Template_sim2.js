@@ -95,6 +95,11 @@ export class Template {
         function process(scenes){
 
             const crowd = new self.Engine3D.Instanced5Object({
+                lodParam:{
+                    "open":true,
+                    "bvhOpen":false,
+                    "radius":2
+                },
                 refreshFrequency:"eachFrame",//=500//
                 Shader:Instanced0Shader,
                 camera: self.camera,
