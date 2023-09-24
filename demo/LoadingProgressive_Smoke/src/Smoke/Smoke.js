@@ -7,6 +7,9 @@ import {vs} from "./shader/vs.js"
 export class Smoke{
 	//f(0)=f(1)
 	//g(x)+g(1-x)
+	sizex=10
+	sizey=1
+	sizez=10
     constructor(scene,camera){
         const mesh=this.#initMesh()
         mesh.position.set(
@@ -67,7 +70,7 @@ export class Smoke{
 		return texture
 	}
     #initMesh(){
-        const geometry = new THREE.BoxGeometry( 1, 1, 1 );
+        const geometry = new THREE.BoxGeometry( this.sizex, this.sizey, this.sizez );
 		const material = new THREE.RawShaderMaterial( {
 			glslVersion: THREE.GLSL3,
 			uniforms: {
@@ -78,13 +81,28 @@ export class Smoke{
 				opacity: { value: 0.25 },
 				range: { value: 0.1 },
 				steps: { value: 100 },
-				frame: { value: 0 }
+				frame: { value: 0 },
+				sizex: { value: this.sizex },
+				sizey: { value: this.sizey },
+				sizez: { value: this.sizez },
 			},
 			vertexShader:vs.shader,
 			fragmentShader:fs.shader,
 			side: THREE.BackSide,
 			transparent: true
 		} );			
-        return new THREE.Mesh( geometry, material )
+        // const mesh=new THREE.Mesh( geometry, material )
+		const mesh=new THREE.InstancedMesh( geometry, material ,1)
+		// for(let i=0;i<10;i++){
+		// 	const matrix=new THREE.Matrix4()
+		// 	matrix.set( 
+		// 		1,0,0,0,
+		// 		0,i*10,0,0,
+		// 		0,0,1,0,
+		// 		0,0,0,1,
+		// 	)
+		// 	mesh.setMatrixAt ( i, matrix  )
+		// }
+		return mesh
     }
 }
