@@ -45,24 +45,17 @@ export class fs{
 		float step = 0.01;//一个极小值
 		return sample1( coord + vec3( - step ) ) - sample1( coord + vec3( step ) );//map在对角线方向的变化速度
 	}
-	
-	
-	struct Smoke{//pixel
-		// float xid;
-		// float yid;
-		// float zid;
-		float id;//每一团云对应一个id
-		vec3 position;
-		float density;
-		float grad;
-	};
-	float r(float a,float b){
+	float r(float a,float b){//float remainder(float a,float b){
+		// return float(int(a) % int(b));
 		a+=0.5;
 		return (a/b-floor(a/b))*b-0.5;
 	}
 	float getd(vec3 p){
 		float d = sample1( p + 0.5 );
 		return smoothstep( threshold - range, threshold + range, d ) * opacity;
+	}
+	float getc(vec3 p){
+		return shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;//作用类似法向量？ 影响漫反射亮度
 	}
 	mat3 rotateX(float angle) {
 		float c = cos(angle);
@@ -72,28 +65,6 @@ export class fs{
 			0.0, c,   -s,
 			0.0, s,    c
 		);
-	}
-	Smoke setPosition(Smoke s,vec3 p){//输入一个位置
-		float xi=floor(p.x);
-		float yi=floor(p.y);
-		float zi=floor(p.z);
-		s.id=xi*sizey*sizez+yi*sizez+zi;
-		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
-		return s;
-	}
-	Smoke setDensity(Smoke s){
-		float time=frame+99.001*s.id;
-		float a1=0.5+0.5*sin(time);
-		float a2=1.-a1;
-		float a3=0.5+0.5*sin(time*1.7+3.14);
-		vec3 p2=s.position;
-		s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-		return s;
-	}
-	Smoke setGrad(Smoke s){
-		vec3 p=s.position;
-		s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
-		return s;
 	}
 
 	void main(){
@@ -106,16 +77,39 @@ export class fs{
 		float delta = 1./steps;
 
 		vec4 ac = vec4( base, 0.0 );//云雾对象的基颜色
+		// p.x+=remainder(frame,1.);
 
-		Smoke s;
+		float frame2=frame;//+10*r(p.x,1.)*r(p.y,1.)*r(p.z,1.);
+		float a1=0.5+0.5*sin(frame2);
+		float a2=1.-a1;
+		float a3=0.5+0.5*sin(frame2*1.7+3.14);
+		float timeOneFrame=1.;
 		for ( float t = bounds.x; t < bounds.y; t += delta ) {//从入射时间到出射时间之间等距离取多个点
-			s=setPosition(s,p);
-			s=setDensity(s);
-			s=setGrad(s);
+			
+			
+			// float d = getd(vec3(p.y,p.x,0.));//a1*getd(p)+a2*getd(-p)+a3*getd(vec3(p.y,p.x,0.5));
+			// float d = a1*getd(p)+(0.9+0.1*a2)*getd(rotateX(frame)*p)+a3*getd(vec3(p.y,p.x,0.1));
 
-			ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
+			
+			// vec3 p2=vec3(p.x/sizex,p.y/sizey,p.z/sizez);
+			vec3 p2=vec3(r(p.x,timeOneFrame),r(p.y,timeOneFrame),r(p.z,timeOneFrame));
+			float d1 = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(frame2)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
+			// p2=vec3(r(p.x+0.5,1.),r(p.y,1.),r(p.z,1.));
+			// float d2 = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(frame)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
+			float d=d1;
+			// d=getd(rotateX(frame)*p);
 
-			ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
+			// vec3 p2=vec3(p.x,p.y,p.z);p2.x*=max(frame,0.5);
+			// vec3 p3=vec3(p.x,p.y,p.z);p2.x*=max(1.-frame,0.5);
+			// float d =( getd(p2)+getd(p3) ) /4. ;
+
+
+			float col = getc(p2);//frame*getc(p)+(1.-frame)*getc(-p);
+			// float col =  a1*getc(p)+a2*getc(-p)+a3*getc(vec3(p.y,p.x,0.5));
+
+			ac.rgb += ( 1.0 - ac.a ) * d * col;//反射的光线变多
+
+			ac.a += ( 1.0 - ac.a ) * d;//阻光度增加
 
 			if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
 			
