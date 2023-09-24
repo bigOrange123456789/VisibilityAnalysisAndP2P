@@ -1,13 +1,4 @@
-
-/demo/crowd99/index.js
-/demo/crowdEditor/index.js
-/demo/LoadingOverall/index.js
-/demo/LoadingProgressive/index.js
-/demo/LoadingProgressive_crowd/index.js
-/demo/LoadingProgressive_FireEscape/index.js
-/demo/shadertory/index.js
-/demo/subsurface_scattering/index.js
-/demo/TreeGeneration/index.js
+/demo/*/index.js
 
 /server/vd_data/
 /tool2/data/
@@ -24,7 +15,6 @@
 /assets/space8Zip/
 /node_modules0/
 /node_modules2/
-
 
 # 忽略 /dist/ 目录及其下的所有文件
 dist
