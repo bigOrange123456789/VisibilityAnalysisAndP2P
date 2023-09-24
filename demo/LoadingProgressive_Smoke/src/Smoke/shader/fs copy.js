@@ -45,21 +45,12 @@ export class fs{
 		// return float(int(a) % int(b));
 		return (a/b-floor(a/b))*b;
 	}
-	float getd(vec3 p){
+	float getDC(vec3 p){
 		float d = sample1( p + 0.5 );//局部增强长度
-		return smoothstep( threshold - range, threshold + range, d ) * opacity;
-	}
-	float getc(vec3 p){
-		return shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;//作用类似法向量？ 影响漫反射亮度
-	}
-	mat3 rotateX(float angle) {
-		float c = cos(angle);
-		float s = sin(angle);
-		return mat3(
-			1.0, 0.0, 0.0,
-			0.0, c,   -s,
-			0.0, s,    c
-		);
+
+		d = smoothstep( threshold - range, threshold + range, d ) * opacity;
+
+		float col = shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;//作用类似法向量？ 影响漫反射亮度
 	}
 
 	void main(){
@@ -74,23 +65,13 @@ export class fs{
 		vec4 ac = vec4( base, 0.0 );//云雾对象的基颜色
 		// p.x+=remainder(frame,1.);
 
-		float a1=0.5+0.5*sin(frame);
-		float a2=1.-a1;
-		float a3=0.5+0.5*sin(frame*1.7+3.14);
 		for ( float t = bounds.x; t < bounds.y; t += delta ) {//从入射时间到出射时间之间等距离取多个点
-			
-			
-			// float d = getd(vec3(p.y,p.x,0.));//a1*getd(p)+a2*getd(-p)+a3*getd(vec3(p.y,p.x,0.5));
-			float d = a1*getd(p)+a2*getd(rotateX(frame)*p)+a3*getd(vec3(p.y,p.x,0.1));
-			// d=getd(rotateX(frame)*p);
 
-			// vec3 p2=vec3(p.x,p.y,p.z);p2.x*=max(frame,0.5);
-			// vec3 p3=vec3(p.x,p.y,p.z);p2.x*=max(1.-frame,0.5);
-			// float d =( getd(p2)+getd(p3) ) /4. ;
+			float d = sample1( p + 0.5 );//局部增强长度
 
+			d = smoothstep( threshold - range, threshold + range, d ) * opacity;
 
-			float col = getc(p);//frame*getc(p)+(1.-frame)*getc(-p);
-			// float col =  a1*getc(p)+a2*getc(-p)+a3*getc(vec3(p.y,p.x,0.5));
+			float col = shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;//作用类似法向量？ 影响漫反射亮度
 
 			ac.rgb += ( 1.0 - ac.a ) * d * col;//反射的光线变多
 

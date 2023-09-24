@@ -5,6 +5,8 @@ import {fs} from "./shader/fs.js"
 import {vs} from "./shader/vs.js"
 
 export class Smoke{
+	//f(0)=f(1)
+	//g(x)+g(1-x)
     constructor(scene,camera){
         const mesh=this.#initMesh()
         mesh.position.set(
@@ -16,14 +18,22 @@ export class Smoke{
         scene.add( mesh );
         
 		const material=mesh.material
+		let time=0
         function animate() {
-            material.uniforms.cameraPos.value.copy( camera.position )
-            // mesh.rotation.y = - performance.now() / 7500
-            material.uniforms.frame.value ++
+            time+=0.01
+			// if(time>1)time=0;
+			// if(time<1)material.uniforms.frame.value=time
+			// else material.uniforms.frame.value=time//2-time
 
-			material.uniforms.frame.value+=0.001
-			if(material.uniforms.frame.value>1)material.uniforms.frame.value=0
-            
+			material.uniforms.frame.value=time
+			// console.log(material.uniforms.frame.value)
+			material.uniforms.cameraPos.value.copy( camera.position )
+            // mesh.rotation.y = - performance.now() / 7500
+            // material.uniforms.frame.value ++
+
+			// material.uniforms.frame.value+=0.001
+			// if(material.uniforms.frame.value>1)material.uniforms.frame.value=0
+            // console.log(material.uniforms.frame)
 			requestAnimationFrame( animate )
         }
         animate()
@@ -42,6 +52,7 @@ export class Smoke{
 				for ( let x = 0; x < size; x ++ ) {
 					const d = 1.0 - vector.set( x, y, z ).subScalar( size / 2 ).divideScalar( size ).length();
 					data[ i ] = ( 128 + 128 * perlin.noise( x * scale / 1.5, y * scale, z * scale / 1.5 ) ) * d * d;
+					// data[ i ] = ( 128 + 128 * 1. ) * d * d;
 					i ++;
 				}
 			}
