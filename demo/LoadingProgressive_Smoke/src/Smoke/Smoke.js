@@ -7,9 +7,9 @@ import {vs} from "./shader/vs.js"
 export class Smoke{
 	//f(0)=f(1)
 	//g(x)+g(1-x)
-	sizex=10
+	sizex=40
 	sizey=1
-	sizez=10
+	sizez=12
     constructor(scene,camera){
         const mesh=this.#initMesh()
         mesh.position.set(
@@ -18,6 +18,9 @@ export class Smoke{
             camera.position.z
         )
         // const mesh=this.mesh
+		window.smoke=mesh
+		mesh.scale.set(2.5,2.5,2.5)
+		mesh.position.set(11.036844703233468,  55,  24.360768880533755)
         scene.add( mesh );
         
 		const material=mesh.material
@@ -91,8 +94,8 @@ export class Smoke{
 			side: THREE.BackSide,
 			transparent: true
 		} );			
-        // const mesh=new THREE.Mesh( geometry, material )
-		const mesh=new THREE.InstancedMesh( geometry, material ,1)
+        const mesh=new THREE.Mesh( geometry, material )
+		// const mesh=new THREE.InstancedMesh( geometry, material ,1)
 		// for(let i=0;i<10;i++){
 		// 	const matrix=new THREE.Matrix4()
 		// 	matrix.set( 
