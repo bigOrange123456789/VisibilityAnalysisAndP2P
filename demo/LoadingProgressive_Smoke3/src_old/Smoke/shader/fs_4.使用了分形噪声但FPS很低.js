@@ -37,11 +37,17 @@ export class fs{
 		return vec2( t0, t1 ); //射线的入射时间和出射时间
 	}
 
+	float sample1( vec3 p ) {//根据向量取一个随机值
+		return texture( map, p ).r;
+	}
 
-	
+	float shading( vec3 coord ) {//获取三维图片这这个位置的梯度
+		float step = 0.01;//一个极小值
+		return sample1( coord + vec3( - step ) ) - sample1( coord + vec3( step ) );//map在对角线方向的变化速度
+	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	//               噪声函数
+	//               Noise Functions
 	// --------------------------------------------//
 	// Taken from Inigo Quilez's Rainforest ShaderToy:
 	float hash1( float n )
@@ -83,16 +89,31 @@ export class fs{
 		float s = 0.5;
 		float a = 0.0;
 		float b = 0.5;
-		const mat3 m3  = mat3( 
-			0.00,  0.80,  0.60,
+		const mat3 m3  = mat3( 0.00,  0.80,  0.60,
 			-0.80,  0.36, -0.48,
 			-0.60, -0.48,  0.64 );
 		for( int i=0; i<4; i++ )//for( int i=min(0, iFrame); i<4; i++ )
 		{//把不同比例位置的一张噪声合并在一起
-			float n = noise(x);//texture( map, x ).r;//2.*texture( map, x ).r-1.;//(2.*texture( map, x/255. ).r-1.)
+			float n = noise(x);
 			a += b*n;
 			b *= s;
 			x = f*m3*x;
+		}
+		return a;
+	}
+
+	float fbm_4_old( in vec3 x )
+	{
+		float f = 2.0;
+		float s = 0.5;
+		float a = 0.0;
+		float b = 0.5;
+		for( int i=min(0, int(frame)); i<4; i++ )
+		{
+			float n = texture( map, x ).r;//noise(x);
+			a += b*n;
+			b *= s;
+			x = f*x;
 		}
 		return a;
 	}
@@ -110,6 +131,50 @@ export class fs{
 		float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
 		return mix( d2, d1, h ) - k*h*(1.0-h); 
 	}
+	// float QueryVolumetricDistanceField( in vec3 pos)//两个静态水滴
+	// {    
+	// 	float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+	// 	sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+	// 	// float d = sample1( p + 0.5 );
+	// 	// return smoothstep( threshold - range, threshold + range, d ) * opacity;
+	// 	return  sdfValue;
+	// }
+	// float QueryVolumetricDistanceField( in vec3 pos)//两个动态水滴
+	// {    
+	// 	// float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+	// 	// sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+	// 	float sdfValue = sdSphere(pos, vec3(-0.1,-0.1,-0.1*sin(frame)), .3);
+	// 	sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.3*sin(frame*1.41)), .1), .5f);
+	
+	// 	return  sdfValue;
+	// }
+	// float QueryVolumetricDistanceField( in vec3 pos)//效果像是液体
+	// {    
+	// 	vec3 p1=vec3(-0.1,-0.1,-0.1*sin(frame));
+	// 	float r1=.2;
+	// 	vec3 p2=vec3(0.2*sin(frame*1.41));
+	// 	float r2=.15;
+	// 	vec3 p3=vec3(-0.2*sin(frame*1.41)-0.05);
+	// 	float r3=.1;
+	// 	vec3 p4=vec3(0.4*sin(frame*2.5),-0.4*sin(frame*2.6),0.4*sin(frame*2.7));
+	// 	float r4=.01;
+
+	// 	float sdfValue = sdSphere(pos,p1, r1);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p2, r2), .5f
+	// 	);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p3, r3), .5f
+	// 	);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p4, r4), .5f
+	// 	);
+	
+	// 	return  sdfValue;
+	// }
 	float QueryVolumetricDistanceField( in vec3 pos)//效果像是液体
 	{    
 		vec3 p1=vec3(-0.1,-0.1,-0.1*sin(frame));
@@ -161,14 +226,8 @@ export class fs{
 			sdfValue,
 			sdSphere(pos, p4, r4), .5f 
 		);	
-
-		// sdfValue = sdSmoothUnion(
-		// 	sdfValue,
-		// 	.01*texture( map, 0.01*pos ).r, 
-		// 	.5f 
-		// );	
-		// return  sdfValue+ 0.1*fract(pow(pos[0]*pos[0],pos[0]*pos[0]));//10.5*texture( map, 0.01*pos ).r;
-		return  sdfValue;//+ 0.1*fbm_4(pos*10.);
+		// return  sdfValue+ 1.*texture( map, 100.*pos ).r;
+		return  sdfValue+ 0.1*fbm_4(pos*10.);
 		// float s=.0;
 		// float iTime=frame+id*100.;
 		// vec3 fbmCoord = (pos + 2.0 * vec3(iTime, 0.0, iTime)) / 1.5f;
@@ -201,62 +260,58 @@ export class fs{
 	{//有简化
 		return sdfDistance < 0.0 ? min(abs(sdfDistance), 1.) : 0.0;
 	}
-	/////////////////////////////////////////////////////////////////////////////////////////////////
-	float QueryVolumetricDistanceField3( in vec3 pos,float id)
-	{    
-		// if(pos.y>0.){
-		// 	pos.x*=sizex;
-		// 	pos.y*=sizey;
-		// 	pos.z*=sizez;
-		// 	id=0.;
-		// }
-		float f=frame+id*100.;
-		vec3 p1=-0.3*vec3(0.,0.,sin(f)-.5);
-		//p1.y-=1.;
-		float r1=.5;
-		vec3 p2=0.2*vec3(sin(f*1.41)-.5)-0.2;
-		float r2=.3;
-		vec3 p3=-0.2*vec3(sin(f*1.31)-.5)-0.05;
-		float r3=.3;
-		vec3 p4=0.25*vec3(sin(f*2.5)-.5,-0.01-1.*sin(f*2.6),sin(f*2.7)-.5);
-		float r4=.5;
+	vec3 Render()
+	{
+		vec3 rayOrigin = vOrigin;
+		vec3 rayDirection = normalize( vDirection );
+		float depth = 5.0f;//LARGE_NUMBER;
+		vec3 opaqueColor = vec3(0.0f);
 		
-		float sdfValue = sdSmoothUnion(
-			sdSphere(pos, p1, r1),
-			sdSphere(pos, p2, r2), .5f
-		);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
-			sdSphere(pos, p3, r3), .5f
-		);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
-			sdSphere(pos, p4, r4), .5f 
-		);	
-		// sdfValue = sdSmoothUnion(
-		// 	sdfValue,
-		// 	0.-pos.y, .5f 
-		// );	
-		float sd=sdSphere(pos, vec3(0.5), 0.6)+0.5*texture( map, pos ).r;
-		sd=sdfValue;//+0.5*texture( map, pos ).r;//sdSphere(pos, p4, r4);
-		// if(id>0.)
-		sd+=0.5*texture( map, (pos+0.5)/2. ).r;
-		if(sd>0.)sd=0.;
-		else sd=-1.*sd;
-		return sd;//-1.*sd*100.;//sd*sd;
-		// return  sdfValue;
-	}
-	float sample1( vec3 p ) {//根据向量取一个随机值
-		return QueryVolumetricDistanceField3( p-0.5,0.);//texture( map, p ).r;
-	}
+		vec3 normal;
+		float t;
+		int materialID = 0;//INVALID_MATERIAL_ID;
+		// t = IntersectOpaqueScene(rayOrigin, rayDirection, materialID, normal);//会更新materialID
+		// if( materialID != INVALID_MATERIAL_ID )
+		// {//在体积照明之后推迟照明计算，这样我们就可以避免对无论如何都不可见的不透明对象进行阴影跟踪
+		// 	depth = t;//跳过背景区域？
+		// }
+		
+		float volumeDepth = IntersectVolumetric(rayOrigin, rayDirection, depth);//尽可能跳过空白区域
+		float opaqueVisiblity = 1.0f;//可见度的初始值，随着不断步进会不断降低
+		vec3 volumetricColor = vec3(0.0f);//反射光的初始值，随着不断步进会不断增加
+		// return vec3(.1f)*QueryVolumetricDistanceField(rayOrigin);
+		if(1. > 0.0)//if(volumeDepth > 0.0)
+		{
+			const float marchSize = 0.06f;//最小步进单位 const float marchSize = 0.6f * MARCH_MULTIPLIER;
+			float distanceInVolume = 0.0f;//记录设置的穿透长度
+			float signedDistance = 0.0;//记录步进点的符号距离
+			for(int i = 0; i < 30 ; i++)//for(int i = 0; i < MAX_VOLUME_MARCH_STEPS; i++)//光线步近的次数
+			{
+				volumeDepth += max(marchSize, signedDistance);//计算前进后的距离，marchSize是前进距离的最小步长
+				// if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;
+				if(volumeDepth > depth || opaqueVisiblity < 0.005) break;//超出最远距离 或 透明度过低
+				
+				vec3 position = rayOrigin + volumeDepth*rayDirection;//计算前进后的位置
 
-	float shading( vec3 coord ) {//获取三维图片这这个位置的梯度
-		float step = 0.01;//一个极小值
-		return sample1( coord + vec3( - step ) ) - sample1( coord + vec3( step ) );//map在对角线方向的变化速度
+				signedDistance = QueryVolumetricDistanceField(position);//查询SDF的值
+				if(signedDistance < 0.0f)//如果在物体内
+				{
+					distanceInVolume += marchSize;//叠加穿透距离
+					float previousOpaqueVisiblity = opaqueVisiblity;//记录透明度
+					opaqueVisiblity *= BeerLambert(0.5 * GetFogDensity(position, signedDistance), marchSize);
+					// 啤酒兰伯特定律描述了穿透光的衰减    烟雾边缘的浓度为SDF距离
+					float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;//透明度的变化情况
+					//暂时注释掉了光照
+					volumetricColor += absorptionFromMarch * vec3(0.8) * GetAmbientLight();//计算由于不透明反射回来的光
+				}
+			}
+		}
+		//注释掉了背景渲染
+		return min(volumetricColor, 1.0f) + opaqueVisiblity * opaqueColor;
 	}
+	/////////////////////////////////////////////////////////////////////////////////////////////////
 	struct Smoke{//pixel
 		float id;//每一团云对应一个id
-		// vec3 position0;
 		vec3 position;
 		float density;
 		float grad;
@@ -264,6 +319,10 @@ export class fs{
 	float r(float a,float b){
 		a+=0.5;
 		return (a/b-floor(a/b))*b-0.5;
+	}
+	float getd(vec3 p){
+		float d = sample1( p + 0.5 );
+		return smoothstep( threshold - range, threshold + range, d ) * opacity;
 	}
 	mat3 rotateX(float angle) {
 		float c = cos(angle);
@@ -275,21 +334,11 @@ export class fs{
 		);
 	}
 	void setPosition(inout Smoke s,vec3 p){//输入一个位置
-		// s.position0=vec3(p.x/sizex,p.y/sizey,p.z/sizez);
 		float xi=floor(p.x+.5);
 		float yi=floor(p.y+.5);
 		float zi=floor(p.z+.5);
-		if(p.y>0.){
-			s.id=0.;
-			s.position=vec3(p.x/sizex,p.y/sizey,p.z/sizez);
-		}else{
-			s.id=xi*sizey*sizez+yi*sizez+zi;
-			s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
-		}
-	}
-	float getd(vec3 p){
-		float d = sample1( p + 0.5 );
-		return smoothstep( threshold - range, threshold + range, d ) * opacity;
+		s.id=xi*sizey*sizez+yi*sizez+zi;
+		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
 	}
 	void setDensity(inout Smoke s){
 		float time=frame+99.001*s.id;
@@ -298,18 +347,24 @@ export class fs{
 		float a3=0.5+0.5*sin(time*1.7+3.14);
 		vec3 p2=s.position;
 		// s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-		// s.density= QueryVolumetricDistanceField(p2)+ sample1( p2 + 0.5 );;
-		s.density = getd(p2);//a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-		// if(s.density>0.)s.density=0.;
-		// else s.density=1.;
+		s.density= QueryVolumetricDistanceField(p2)+ sample1( p2 + 0.5 );;
+		if(s.density>0.)s.density=0.;
+		else s.density=1.;
 	}
 	void setGrad(inout Smoke s){
-		vec3 p=s.position;
-		s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
-		// s.grad=0.;
+		// vec3 p=s.position;
+		// s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
+		s.grad=0.;
 	}
 
 	void main(){
+		// vec3 volumetricColor=Render();
+		// color.r=volumetricColor.r;
+		// color.g=volumetricColor.g;
+		// color.b=volumetricColor.b;
+		// color.a=1.;
+		// return;
+
 		vec3 rayDir = normalize( vDirection );   //将像素点对应的光线方向进行单位化
 		vec2 bounds = hitBox( vOrigin, rayDir ); //计算光线的入射方向和出射方向
 
@@ -329,29 +384,54 @@ export class fs{
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		for ( float t = bounds.x; t < bounds.y; t += delta ) {//从入射时间到出射时间之间等距离取多个点
 			setPosition(s,p);
-			setDensity(s);
-			setGrad(s);
-			/////////////////////////////////////////////////////////////////////////////////////////////
-			// vec3 position=s.position;
-			// float signedDistance = QueryVolumetricDistanceField2(position,s.id);//查询SDF的值
-			// if(signedDistance < 0.0f)//如果在物体内
-			// {
-				ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
-				ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
-			// }
-			/////////////////////////////////////////////////////////////////////////////////////////////
+			// setDensity(s);
+			// setGrad(s);
 
-			if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
+			// ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
+
+			// ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
+
+			// if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
 			
-
 			p += rayDir * delta;//更新光线位置
+
+			/////////////////////////////////////////////////////////////////////////////////////////////
+			vec3 position=s.position;
+			
+			// volumeDepth += max(marchSize, signedDistance);//计算前进后的距离，marchSize是前进距离的最小步长
+			// // if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;
+			// if(volumeDepth > depth || opaqueVisiblity < 0.005) break;//超出最远距离 或 透明度过低
+			
+			// vec3 position = rayOrigin + volumeDepth*rayDirection;//计算前进后的位置
+
+			float signedDistance = QueryVolumetricDistanceField2(position,s.id);//查询SDF的值
+			if(signedDistance < 0.0f)//如果在物体内
+			{
+				distanceInVolume += marchSize;//叠加穿透距离
+				float previousOpaqueVisiblity = opaqueVisiblity;//记录透明度
+				opaqueVisiblity *= BeerLambert(10.5 * GetFogDensity(position, signedDistance), marchSize);
+				// 啤酒兰伯特定律描述了穿透光的衰减    烟雾边缘的浓度为SDF距离
+				float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;//透明度的变化情况
+				//暂时注释掉了光照
+				volumetricColor+= absorptionFromMarch * vec3(0.8) ;//+=vec3(0.02);// 计算由于不透明反射回来的光
+			}
+			
+			/////////////////////////////////////////////////////////////////////////////////////////////
 
 		}
 
-		color = ac;
-		color.a=color.a*color.a*color.a*color.a*color.a;//color.a*=0.5;
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		color=2.*vec4(volumetricColor.r);//白烟    vec4(1.-volumetricColor.r);//黑烟
+		// color.a=40.*pow(color.a,3.);
+		color.a*=20.;
+		// if(color.a==0.)color.a=0.;
+		
+		// else color.a=1.;//0.5;
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		// color = ac;
+		// color.a=color.a*color.a*color.a*color.a*color.a;//color.a*=0.5;
 
-		if ( color.a == 0.0 ) discard;//如果不透明就不处理这个像素
+		// if ( color.a == 0.0 ) discard;//如果不透明就不处理这个像素
 
 	}
 `;
