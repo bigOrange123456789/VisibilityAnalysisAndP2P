@@ -174,7 +174,7 @@ export class fs{
 		// 	.5f 
 		// );	
 		// return  sdfValue+ 0.1*fract(pow(pos[0]*pos[0],pos[0]*pos[0]));//10.5*texture( map, 0.01*pos ).r;
-		return  sdfValue+ 0.1*fbm_4(pos*10.);
+		return  sdfValue;//+ 0.1*fbm_4(pos*10.);
 		// float s=.0;
 		// float iTime=frame+id*100.;
 		// vec3 fbmCoord = (pos + 2.0 * vec3(iTime, 0.0, iTime)) / 1.5f;
@@ -245,24 +245,18 @@ export class fs{
 		float a3=0.5+0.5*sin(time*1.7+3.14);
 		vec3 p2=s.position;
 		// s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-		s.density= QueryVolumetricDistanceField(p2)+ sample1( p2 + 0.5 );;
-		if(s.density>0.)s.density=0.;
-		else s.density=1.;
+		// s.density= QueryVolumetricDistanceField(p2)+ sample1( p2 + 0.5 );;
+		s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
+		// if(s.density>0.)s.density=0.;
+		// else s.density=1.;
 	}
 	void setGrad(inout Smoke s){
-		// vec3 p=s.position;
-		// s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
-		s.grad=0.;
+		vec3 p=s.position;
+		s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
+		// s.grad=0.;
 	}
 
 	void main(){
-		// vec3 volumetricColor=Render();
-		// color.r=volumetricColor.r;
-		// color.g=volumetricColor.g;
-		// color.b=volumetricColor.b;
-		// color.a=1.;
-		// return;
-
 		vec3 rayDir = normalize( vDirection );   //将像素点对应的光线方向进行单位化
 		vec2 bounds = hitBox( vOrigin, rayDir ); //计算光线的入射方向和出射方向
 
@@ -282,57 +276,32 @@ export class fs{
 		/////////////////////////////////////////////////////////////////////////////////////////////
 		for ( float t = bounds.x; t < bounds.y; t += delta ) {//从入射时间到出射时间之间等距离取多个点
 			setPosition(s,p);
-			// setDensity(s);
-			// setGrad(s);
-
-			// ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
-
-			// ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
-
-			// if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
-			
-			p += rayDir * delta;//更新光线位置
-
+			setDensity(s);
+			setGrad(s);
 			/////////////////////////////////////////////////////////////////////////////////////////////
 			vec3 position=s.position;
-			
-			// volumeDepth += max(marchSize, signedDistance);//计算前进后的距离，marchSize是前进距离的最小步长
-			// // if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;
-			// if(volumeDepth > depth || opaqueVisiblity < 0.005) break;//超出最远距离 或 透明度过低
-			
-			// vec3 position = rayOrigin + volumeDepth*rayDirection;//计算前进后的位置
-
 			float signedDistance = QueryVolumetricDistanceField2(position,s.id);//查询SDF的值
 			if(signedDistance < 0.0f)//如果在物体内
 			{
-				distanceInVolume += marchSize;//叠加穿透距离
-				float previousOpaqueVisiblity = opaqueVisiblity;//记录透明度
-				opaqueVisiblity *= BeerLambert(10.5 * GetFogDensity(position, signedDistance), marchSize);
-				// 啤酒兰伯特定律描述了穿透光的衰减    烟雾边缘的浓度为SDF距离
-				float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;//透明度的变化情况
-				//暂时注释掉了光照
-				volumetricColor+= absorptionFromMarch * vec3(0.8) ;//+=vec3(0.02);// 计算由于不透明反射回来的光
+				ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
+				ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
 			}
 			
 			/////////////////////////////////////////////////////////////////////////////////////////////
 
+			
+
+			if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
+			
+
+			p += rayDir * delta;//更新光线位置
+
 		}
 
-		/////////////////////////////////////////////////////////////////////////////////////////////
-		color=2.*vec4(volumetricColor.r);//白烟    vec4(1.-volumetricColor.r);//黑烟
-		// color.a=40.*pow(color.a,3.);
-		color.a*=20.;
+		color = ac;
+		color.a=color.a*color.a*color.a*color.a*color.a;//color.a*=0.5;
 
-		// color=vec4(texture( map, s.position).r,1.,1.,1.);//color=vec4(texture( map, vec3(0.5)).r,1.,1.,1.);
-		// color.a=1.;
-		// if(color.a==0.)color.a=0.;
-		
-		// else color.a=1.;//0.5;
-		/////////////////////////////////////////////////////////////////////////////////////////////
-		// color = ac;
-		// color.a=color.a*color.a*color.a*color.a*color.a;//color.a*=0.5;
-
-		// if ( color.a == 0.0 ) discard;//如果不透明就不处理这个像素
+		if ( color.a == 0.0 ) discard;//如果不透明就不处理这个像素
 
 	}
 `;

@@ -71,9 +71,9 @@ export class fs{
 		);
 	}
 	void setPosition(inout Smoke s,vec3 p){//输入一个位置
-		float xi=floor(p.x);
-		float yi=floor(p.y);
-		float zi=floor(p.z);
+		float xi=floor(p.x+.5);
+		float yi=floor(p.y+.5);
+		float zi=floor(p.z+.5);
 		s.id=xi*sizey*sizez+yi*sizez+zi;
 		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
 	}

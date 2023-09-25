@@ -71,7 +71,6 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // if(false)
                     new AvatarManager(self.scene,self.camera,data,this.Engine3D)
                 // self.TreeManager.init(data) 
             // }
@@ -79,7 +78,7 @@ export class Start{
         // self.TreeManager = new TreeManager(self.scene,data) 
           
         // this.initCSM();
-        // if(false)
+
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
             this.ui=new UI(this)
         },false,this.Engine3D)

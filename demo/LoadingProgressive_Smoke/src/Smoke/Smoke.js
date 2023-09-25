@@ -91,7 +91,7 @@ export class Smoke{
 			},
 			vertexShader:vs.shader,
 			fragmentShader:fs.shader,
-			side: THREE.BackSide,
+			side: 2,//THREE.BackSide,
 			transparent: true
 		} );			
         const mesh=new THREE.Mesh( geometry, material )

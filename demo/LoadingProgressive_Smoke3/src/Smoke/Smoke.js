@@ -88,7 +88,7 @@ export class Smoke{
 		return texture
 	}
 	#initTexture(){ // Texture
-		const size = 8//128//8//128//256//512//
+		const size = 128//8//128//256//512//
 		const data = new Uint8Array( size * size * size );//new Uint16Array( size * size * size );//
 		let i = 0;
 		const scale = 0.05;
