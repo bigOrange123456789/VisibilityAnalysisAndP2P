@@ -47,7 +47,7 @@ export class fs{
 	}
 	
 	/////////////////////////////////////////////////////////////////////////////////////////////////
-	//               噪声函数
+	//               Noise Functions
 	// --------------------------------------------//
 	// Taken from Inigo Quilez's Rainforest ShaderToy:
 	float hash1( float n )
@@ -94,10 +94,26 @@ export class fs{
 			-0.60, -0.48,  0.64 );
 		for( int i=0; i<4; i++ )//for( int i=min(0, iFrame); i<4; i++ )
 		{//把不同比例位置的一张噪声合并在一起
-			float n =noise(x);//2.*texture( map, x ).r-1.;// 
+			float n = noise(x);
 			a += b*n;
 			b *= s;
 			x = f*m3*x;
+		}
+		return a;
+	}
+
+	float fbm_4_old( in vec3 x )
+	{
+		float f = 2.0;
+		float s = 0.5;
+		float a = 0.0;
+		float b = 0.5;
+		for( int i=min(0, int(frame)); i<4; i++ )
+		{
+			float n = texture( map, x ).r;//noise(x);
+			a += b*n;
+			b *= s;
+			x = f*x;
 		}
 		return a;
 	}
@@ -115,6 +131,50 @@ export class fs{
 		float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
 		return mix( d2, d1, h ) - k*h*(1.0-h); 
 	}
+	// float QueryVolumetricDistanceField( in vec3 pos)//两个静态水滴
+	// {    
+	// 	float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+	// 	sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+	// 	// float d = sample1( p + 0.5 );
+	// 	// return smoothstep( threshold - range, threshold + range, d ) * opacity;
+	// 	return  sdfValue;
+	// }
+	// float QueryVolumetricDistanceField( in vec3 pos)//两个动态水滴
+	// {    
+	// 	// float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+	// 	// sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+	// 	float sdfValue = sdSphere(pos, vec3(-0.1,-0.1,-0.1*sin(frame)), .3);
+	// 	sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.3*sin(frame*1.41)), .1), .5f);
+	
+	// 	return  sdfValue;
+	// }
+	// float QueryVolumetricDistanceField( in vec3 pos)//效果像是液体
+	// {    
+	// 	vec3 p1=vec3(-0.1,-0.1,-0.1*sin(frame));
+	// 	float r1=.2;
+	// 	vec3 p2=vec3(0.2*sin(frame*1.41));
+	// 	float r2=.15;
+	// 	vec3 p3=vec3(-0.2*sin(frame*1.41)-0.05);
+	// 	float r3=.1;
+	// 	vec3 p4=vec3(0.4*sin(frame*2.5),-0.4*sin(frame*2.6),0.4*sin(frame*2.7));
+	// 	float r4=.01;
+
+	// 	float sdfValue = sdSphere(pos,p1, r1);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p2, r2), .5f
+	// 	);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p3, r3), .5f
+	// 	);
+	// 	sdfValue = sdSmoothUnion(
+	// 		sdfValue,
+	// 		sdSphere(pos, p4, r4), .5f
+	// 	);
+	
+	// 	return  sdfValue;
+	// }
 	float QueryVolumetricDistanceField( in vec3 pos)//效果像是液体
 	{    
 		vec3 p1=vec3(-0.1,-0.1,-0.1*sin(frame));
@@ -199,6 +259,55 @@ export class fs{
 	float GetFogDensity(vec3 position, float sdfDistance)
 	{//有简化
 		return sdfDistance < 0.0 ? min(abs(sdfDistance), 1.) : 0.0;
+	}
+	vec3 Render()
+	{
+		vec3 rayOrigin = vOrigin;
+		vec3 rayDirection = normalize( vDirection );
+		float depth = 5.0f;//LARGE_NUMBER;
+		vec3 opaqueColor = vec3(0.0f);
+		
+		vec3 normal;
+		float t;
+		int materialID = 0;//INVALID_MATERIAL_ID;
+		// t = IntersectOpaqueScene(rayOrigin, rayDirection, materialID, normal);//会更新materialID
+		// if( materialID != INVALID_MATERIAL_ID )
+		// {//在体积照明之后推迟照明计算，这样我们就可以避免对无论如何都不可见的不透明对象进行阴影跟踪
+		// 	depth = t;//跳过背景区域？
+		// }
+		
+		float volumeDepth = IntersectVolumetric(rayOrigin, rayDirection, depth);//尽可能跳过空白区域
+		float opaqueVisiblity = 1.0f;//可见度的初始值，随着不断步进会不断降低
+		vec3 volumetricColor = vec3(0.0f);//反射光的初始值，随着不断步进会不断增加
+		// return vec3(.1f)*QueryVolumetricDistanceField(rayOrigin);
+		if(1. > 0.0)//if(volumeDepth > 0.0)
+		{
+			const float marchSize = 0.06f;//最小步进单位 const float marchSize = 0.6f * MARCH_MULTIPLIER;
+			float distanceInVolume = 0.0f;//记录设置的穿透长度
+			float signedDistance = 0.0;//记录步进点的符号距离
+			for(int i = 0; i < 30 ; i++)//for(int i = 0; i < MAX_VOLUME_MARCH_STEPS; i++)//光线步近的次数
+			{
+				volumeDepth += max(marchSize, signedDistance);//计算前进后的距离，marchSize是前进距离的最小步长
+				// if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;
+				if(volumeDepth > depth || opaqueVisiblity < 0.005) break;//超出最远距离 或 透明度过低
+				
+				vec3 position = rayOrigin + volumeDepth*rayDirection;//计算前进后的位置
+
+				signedDistance = QueryVolumetricDistanceField(position);//查询SDF的值
+				if(signedDistance < 0.0f)//如果在物体内
+				{
+					distanceInVolume += marchSize;//叠加穿透距离
+					float previousOpaqueVisiblity = opaqueVisiblity;//记录透明度
+					opaqueVisiblity *= BeerLambert(0.5 * GetFogDensity(position, signedDistance), marchSize);
+					// 啤酒兰伯特定律描述了穿透光的衰减    烟雾边缘的浓度为SDF距离
+					float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;//透明度的变化情况
+					//暂时注释掉了光照
+					volumetricColor += absorptionFromMarch * vec3(0.8) * GetAmbientLight();//计算由于不透明反射回来的光
+				}
+			}
+		}
+		//注释掉了背景渲染
+		return min(volumetricColor, 1.0f) + opaqueVisiblity * opaqueColor;
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	struct Smoke{//pixel
@@ -315,9 +424,6 @@ export class fs{
 		color=2.*vec4(volumetricColor.r);//白烟    vec4(1.-volumetricColor.r);//黑烟
 		// color.a=40.*pow(color.a,3.);
 		color.a*=20.;
-
-		// color=vec4(texture( map, s.position).r,1.,1.,1.);//color=vec4(texture( map, vec3(0.5)).r,1.,1.,1.);
-		// color.a=1.;
 		// if(color.a==0.)color.a=0.;
 		
 		// else color.a=1.;//0.5;

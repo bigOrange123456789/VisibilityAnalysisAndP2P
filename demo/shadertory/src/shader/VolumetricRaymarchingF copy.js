@@ -1,6 +1,4 @@
-export class fs{
-    static shader=/* glsl */`
-    // Created by Christopher Wallis
+const VolumetricRaymarchingF=/* glsl */`
 #define PI 3.14
 
 #define NUM_LIGHTS 3
@@ -121,7 +119,7 @@ float noise( in vec3 x )
     float c = hash1(n+317.0);
     float d = hash1(n+318.0);
     float e = hash1(n+157.0);
-	float f = hash1(n+158.0);
+    float f = hash1(n+158.0);
     float g = hash1(n+474.0);
     float h = hash1(n+475.0);
 
@@ -156,19 +154,19 @@ float fbm_4( in vec3 x )
         b *= s;
         x = f*m3*x;
     }
-	return a;
+    return a;
 }
 
 // Taken from https://iquilezles.org/articles/distfunctions
 float sdPlane( vec3 p )
 {
-	return p.y;
+    return p.y;
 }
 
 // Taken from https://iquilezles.org/articles/distfunctions
 vec2 opU( vec2 d1, vec2 d2 )
 {
-	return (d1.x<d2.x) ? d1 : d2;
+    return (d1.x<d2.x) ? d1 : d2;
 }
 
 // Taken from https://iquilezles.org/articles/distfunctions
@@ -210,7 +208,7 @@ bool IsLightSource(in Material m)
 Material GetMaterial(int materialID, vec3 position)
 {
     Material materials[NUM_MATERIALS];
-	materials[CHECKER_FLOOR_MATERIAL_ID] = NormalMaterial(vec3(0.6, 0.6, 0.7), 0);
+    materials[CHECKER_FLOOR_MATERIAL_ID] = NormalMaterial(vec3(0.6, 0.6, 0.7), 0);
     for(int lightIndex = 0; lightIndex < NUM_LIGHTS; lightIndex++)
     {
         materials[LIGHT_BASE_MATERIAL_ID + lightIndex] = NormalMaterial(GetLight(lightIndex).LightColor, MATERIAL_IS_LIGHT_SOURCE);
@@ -224,7 +222,7 @@ Material GetMaterial(int materialID, vec3 position)
     else
     {
         // Should never get hit
-   		return materials[0];
+           return materials[0];
     }
     
     if(materialID == CHECKER_FLOOR_MATERIAL_ID)
@@ -287,11 +285,11 @@ void UpdateIfIntersected(
     in int intersectionMaterialID,
     out vec3 normal,
     out int materialID
-	)
+    )
 {    
     if(intersectionT > EPSILON && intersectionT < t)
     {
-		normal = intersectionNormal;
+        normal = intersectionNormal;
         materialID = intersectionMaterialID;
         t = intersectionT;
     }
@@ -347,11 +345,11 @@ float IntersectVolumetric(in vec3 rayOrigin, in vec3 rayDirection, float maxT)
 {
     // Precision isn't super important, just want a decent starting point before 
     // ray marching with fixed steps
-	float precis = 0.5; 
+    float precis = 0.5; 
     float t = 0.0f;
     for(int i=0; i<MAX_SDF_SPHERE_STEPS; i++ )
     {
-	    float result = QueryVolumetricDistanceField( rayOrigin+rayDirection*t);
+        float result = QueryVolumetricDistanceField( rayOrigin+rayDirection*t);
         if( result < (precis) || t>maxT ) break;
         t += result;
     }
@@ -366,7 +364,7 @@ vec3 Diffuse(in vec3 normal, in vec3 lightVec, in vec3 diffuse)
 
 vec3 GetAmbientLight()
 {
-	return 1.2 * vec3(0.03, 0.018, 0.018);
+    return 1.2 * vec3(0.03, 0.018, 0.018);
 }
 
 float GetFogDensity(vec3 position, float sdfDistance)
@@ -479,7 +477,7 @@ vec3 Render( in vec3 rayOrigin, in vec3 rayDirection)
             vec3 position = rayOrigin + volumeDepth*rayDirection;
 
             signedDistance = QueryVolumetricDistanceField(position);
-			if(signedDistance < 0.0f)
+            if(signedDistance < 0.0f)
             {
                 distanceInVolume += marchSize;
                 float previousOpaqueVisiblity = opaqueVisiblity;
@@ -487,7 +485,7 @@ vec3 Render( in vec3 rayOrigin, in vec3 rayDirection)
                 float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;
                 
                 for(int lightIndex = 0; lightIndex < NUM_LIGHTS; lightIndex++)
-    			{
+                {
                     float lightVolumeDepth = 0.0f;
                     vec3 lightDirection = (GetLight(lightIndex).Position - position);
                     float lightDistance = length(lightDirection);
@@ -509,14 +507,14 @@ vec3 Render( in vec3 rayOrigin, in vec3 rayDirection)
     {
         vec3 position = rayOrigin + t*rayDirection;
         Material material = GetMaterial(materialID, position);
-		if(IsLightSource(material))
+        if(IsLightSource(material))
         {
             opaqueColor = min(material.albedo, vec3(1.0));
         }       
         else
         {
-    	    vec3 reflectionDirection = reflect( rayDirection, normal);
-	        CalculateLighting(position, normal, reflectionDirection, material, opaqueColor);
+            vec3 reflectionDirection = reflect( rayDirection, normal);
+            CalculateLighting(position, normal, reflectionDirection, material, opaqueColor);
         }
     }
     
@@ -584,5 +582,5 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
     vec3 color = Render(rayOrigin, rayDirection);
     fragColor=vec4( GammaCorrect(clamp(color, 0.0, 1.0)), 1.0 );
 }
-    `;
-}
+`
+export {VolumetricRaymarchingF}

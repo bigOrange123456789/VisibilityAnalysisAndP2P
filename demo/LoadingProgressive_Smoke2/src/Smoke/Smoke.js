@@ -5,51 +5,37 @@ import {fs} from "./shader/fs.js"
 import {vs} from "./shader/vs.js"
 
 export class Smoke{
-	//f(0)=f(1)
-	//g(x)+g(1-x)
-	sizex=40
-	sizey=1
-	sizez=12
     constructor(scene,camera){
-        const mesh=this.#initMesh()
-        mesh.position.set(
-            camera.position.x,
-            camera.position.y,
-            camera.position.z
-        )
-        // const mesh=this.mesh
-		window.smoke=mesh
+		const sizex=40, sizey=1, sizez=12
+		// const sizex=1, sizey=1, sizez=1
+        let mesh=this.#initMesh(sizex, sizey, sizez)
 		mesh.scale.set(2.5,2.5,2.5)
 		mesh.position.set(11.036844703233468,  55,  24.360768880533755)
         scene.add( mesh );
+
+		// const mesh2=this.#initMesh(1, 1, 1)
+		// mesh2.scale.set(2.5*sizex,2.5,2.5*sizez)
+		// mesh2.position.set(11.036844703233468,  55+5,  24.360768880533755)
+        // scene.add( mesh2 );
         
-		const material=mesh.material
 		let time=0
         function animate() {
             time+=0.01
-			// if(time>1)time=0;
-			// if(time<1)material.uniforms.frame.value=time
-			// else material.uniforms.frame.value=time//2-time
 
-			material.uniforms.frame.value=time
-			// console.log(material.uniforms.frame.value)
-			material.uniforms.cameraPos.value.copy( camera.position )
-            // mesh.rotation.y = - performance.now() / 7500
-            // material.uniforms.frame.value ++
-
-			// material.uniforms.frame.value+=0.001
-			// if(material.uniforms.frame.value>1)material.uniforms.frame.value=0
-            // console.log(material.uniforms.frame)
+			mesh.material.uniforms.frame.value=time
+			mesh.material.uniforms.cameraPos.value.copy( camera.position )
+			// mesh2.material.uniforms.frame.value=time
+			// mesh2.material.uniforms.cameraPos.value.copy( camera.position )
 			requestAnimationFrame( animate )
         }
         animate()
     }
-	#initTexture(){
+	#initTextureOld(){
 		const size = 128;
 		const data = new Uint8Array( size * size * size );
 
 		let i = 0;
-		const scale = 0.05;
+		const scale =0.1// 0.05;
 		const perlin = new ImprovedNoise();
 		const vector = new THREE.Vector3();
 
@@ -57,12 +43,15 @@ export class Smoke{
 			for ( let y = 0; y < size; y ++ ) {
 				for ( let x = 0; x < size; x ++ ) {
 					const d = 1.0 - vector.set( x, y, z ).subScalar( size / 2 ).divideScalar( size ).length();
-					data[ i ] = ( 128 + 128 * perlin.noise( x * scale / 1.5, y * scale, z * scale / 1.5 ) ) * d * d;
-					// data[ i ] = ( 128 + 128 * 1. ) * d * d;
+					// console.log(d)
+					// data[ i ] = ( 128 + 128 * perlin.noise( x * scale / 1.5, y * scale, z * scale / 1.5 ) ) * d * d;
+					// data[ i ] = Math.floor(Math.random()*255);//( 128 + 128 * 1. ) * d * d;
+					data[i]=this.noise(  x/size,y/size,z/size )*255
 					i ++;
 				}
 			}
 		}
+		console.log("data",data)
 
 		const texture = new THREE.Data3DTexture( data, size, size, size );
 		texture.format = THREE.RedFormat;
@@ -72,12 +61,75 @@ export class Smoke{
 		texture.needsUpdate = true;
 		return texture
 	}
-    #initMesh(){
-        const geometry = new THREE.BoxGeometry( this.sizex, this.sizey, this.sizez );
+	#initTextureold2(){
+		const size = 128;
+		const data = new Uint8Array( size * size * size );
+
+		let i = 0;
+
+		for ( let z = 0; z < size; z ++ ) {
+			for ( let y = 0; y < size; y ++ ) {
+				for ( let x = 0; x < size; x ++ ) {
+					data[i]=90//9999*this.noise(  x/size,y/size,z/size )*255+9999
+					i ++;
+				}
+			}
+		}
+		console.log("data .",data)
+
+		const texture = new THREE.Data3DTexture( data, size, size, size );
+		// let map2 = new THREE.DataTexture()
+		// texture.type = THREE.HalfFloatType
+		texture.format = THREE.RedFormat;
+		texture.minFilter = THREE.LinearFilter;
+		texture.magFilter = THREE.LinearFilter;
+		texture.unpackAlignment = 1;
+		texture.needsUpdate = true;
+		return texture
+	}
+	#initTexture(){
+		// Texture
+
+		const size = 128//256//512//
+		const data = new Uint8Array( size * size * size );
+
+		let i = 0;
+		const scale = 0.05;
+		const perlin = new ImprovedNoise();
+		const vector = new THREE.Vector3();
+
+		for ( let z = 0; z < size; z ++ ) {
+
+			for ( let y = 0; y < size; y ++ ) {
+
+				for ( let x = 0; x < size; x ++ ) {
+
+					const d = 1.0 - vector.set( x, y, z ).subScalar( size / 2 ).divideScalar( size ).length();
+					data[ i ] = this.noise(  x/size,y/size,z/size )*255//( 128 + 128 * perlin.noise( x * scale / 1.5, y * scale, z * scale / 1.5 ) ) * d * d;
+					i ++;
+
+				}
+
+			}
+
+		}
+		console.log("data .",data)
+
+		const texture = new THREE.Data3DTexture( data, size, size, size );
+		texture.format = THREE.RedFormat;
+		texture.minFilter = THREE.LinearFilter;
+		texture.magFilter = THREE.LinearFilter;
+		texture.unpackAlignment = 1;
+		texture.needsUpdate = true;
+		return texture
+	}
+
+    #initMesh(sizex, sizey, sizez){
+        const geometry = new THREE.BoxGeometry( sizex, sizey, sizez );
 		const material = new THREE.RawShaderMaterial( {
 			glslVersion: THREE.GLSL3,
 			uniforms: {
-				base: { value: new THREE.Color( 0x798aa0 ) },
+				// base: { value: new THREE.Color( 0x798aa0 ) },
 				map: { value: this.#initTexture() },
 				cameraPos: { value: new THREE.Vector3() },
 				threshold: { value: 0.25 },
@@ -85,9 +137,9 @@ export class Smoke{
 				range: { value: 0.1 },
 				steps: { value: 100 },
 				frame: { value: 0 },
-				sizex: { value: this.sizex },
-				sizey: { value: this.sizey },
-				sizez: { value: this.sizez },
+				sizex: { value: sizex },
+				sizey: { value: sizey },
+				sizez: { value: sizez },
 			},
 			vertexShader:vs.shader,
 			fragmentShader:fs.shader,
@@ -108,4 +160,53 @@ export class Smoke{
 		// }
 		return mesh
     }
+	noise(  x,y,z )//0-1?
+	{// https://www.shadertoy.com/view/4ttSWf
+		function fract( i ){
+			return i-Math.floor(i)
+		}
+		
+		var p = {
+			x:Math.floor(x),
+			y:Math.floor(y),
+			z:Math.floor(z),
+		};
+		var w = {
+			x:fract(x),
+			y:fract(y),
+			z:fract(z),
+		};
+		
+		var u = {
+			x:w.x*w.x*w.x*(w.x*(w.x*6.0-15.0)+10.0),
+			y:w.y*w.y*w.y*(w.y*(w.y*6.0-15.0)+10.0),
+			z:w.z*w.z*w.z*(w.z*(w.z*6.0-15.0)+10.0)
+		}
+		
+		var n = p.x + 317.0*p.y + 157.0*p.z;
+
+		function hash1( i )
+		{// https://www.shadertoy.com/view/4ttSWf
+			return fract( i*17.0*fract( i*0.3183099 ) );
+		}
+		var a = hash1(n+0.0);
+		var b = hash1(n+1.0);
+		var c = hash1(n+317.0);
+		var d = hash1(n+318.0);
+		var e = hash1(n+157.0);
+		var f = hash1(n+158.0);
+		var g = hash1(n+474.0);
+		var h = hash1(n+475.0);
+
+		var k0 =   a;
+		var k1 =   b - a;
+		var k2 =   c - a;
+		var k3 =   e - a;
+		var k4 =   a - b - c + d;
+		var k5 =   a - c - e + g;
+		var k6 =   a - b - e + f;
+		var k7 = - a + b + c - d + e - f - g + h;
+		return (k0 + k1*u.x + k2*u.y + k3*u.z + k4*u.x*u.y + k5*u.y*u.z + k6*u.z*u.x + k7*u.x*u.y*u.z);
+		// return -1.0+2.0*(k0 + k1*u.x + k2*u.y + k3*u.z + k4*u.x*u.y + k5*u.y*u.z + k6*u.z*u.x + k7*u.x*u.y*u.z);
+	}
 }

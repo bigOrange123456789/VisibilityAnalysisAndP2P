@@ -97,16 +97,12 @@ float GetLightAttenuation(float distanceToLight)
 //               Noise Functions
 // --------------------------------------------//
 // Taken from Inigo Quilez's Rainforest ShaderToy:
-// https://www.shadertoy.com/view/4ttSWf
 float hash1( float n )
-{
+{// https://www.shadertoy.com/view/4ttSWf
     return fract( n*17.0*fract( n*0.3183099 ) );
 }
-
-// Taken from Inigo Quilez's Rainforest ShaderToy:
-// https://www.shadertoy.com/view/4ttSWf
 float noise( in vec3 x )
-{
+{// https://www.shadertoy.com/view/4ttSWf
     vec3 p = floor(x);
     vec3 w = fract(x);
     
@@ -134,21 +130,17 @@ float noise( in vec3 x )
 
     return -1.0+2.0*(k0 + k1*u.x + k2*u.y + k3*u.z + k4*u.x*u.y + k5*u.y*u.z + k6*u.z*u.x + k7*u.x*u.y*u.z);
 }
-
-const mat3 m3  = mat3( 0.00,  0.80,  0.60,
-                      -0.80,  0.36, -0.48,
-                      -0.60, -0.48,  0.64 );
-
-// Taken from Inigo Quilez's Rainforest ShaderToy:
-// https://www.shadertoy.com/view/4ttSWf
-float fbm_4( in vec3 x )
-{
+float fbm_4( in vec3 x )//分形布朗运动
+{//不是噪声，但是可以让噪声有更多的细节。
     float f = 2.0;
     float s = 0.5;
     float a = 0.0;
     float b = 0.5;
-    for( int i=min(0, iFrame); i<4; i++ )
-    {
+    const mat3 m3  = mat3( 0.00,  0.80,  0.60,
+        -0.80,  0.36, -0.48,
+        -0.60, -0.48,  0.64 );
+    for( int i=0; i<4; i++ )//for( int i=min(0, iFrame); i<4; i++ )
+    {//把不同比例位置的一张噪声合并在一起
         float n = noise(x);
         a += b*n;
         b *= s;
@@ -302,21 +294,10 @@ float IntersectOpaqueScene(in vec3 rayOrigin, in vec3 rayDirection, out int mate
 
     float t = LARGE_NUMBER;
     normal = vec3(0, 0, 0);
-    materialID = INVALID_MATERIAL_ID;
-
-    for(int lightIndex = 0; lightIndex < NUM_LIGHTS; lightIndex++)
-    {
-        UpdateIfIntersected(
-            t,
-            SphereIntersection(rayOrigin, rayDirection, GetLight(lightIndex).Position, GetLight(lightIndex).Radius, intersectionNormal),
-            intersectionNormal,
-            LIGHT_BASE_MATERIAL_ID + lightIndex,
-            normal,
-            materialID);
-    }
-
+    materialID = 0;//INVALID_MATERIAL_ID;
+    //注释掉了光照的代码
     
-    UpdateIfIntersected(
+    UpdateIfIntersected(//如果相交就更新？
         t,
         PlaneIntersection(rayOrigin, rayDirection, vec3(0, 0, 0), vec3(0, 1, 0), intersectionNormal),
         intersectionNormal,
@@ -333,27 +314,26 @@ float QueryVolumetricDistanceField( in vec3 pos)
     // Fuse a bunch of spheres, slap on some fbm noise, 
     // merge it with ground plane to get some ground fog 
     // and viola! Big cloudy thingy!
+    float s=2.;
     vec3 fbmCoord = (pos + 2.0 * vec3(iTime, 0.0, iTime)) / 1.5f;
-    float sdfValue = sdSphere(pos, vec3(-8.0, 2.0 + 20.0 * sin(iTime), -1), 5.6);
-    sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(8.0, 8.0 + 12.0 * cos(iTime), 3), 5.6), 3.0f);
-    sdfValue = sdSmoothUnion(sdfValue, sdSphere(pos, vec3(5.0 * sin(iTime), 3.0, 0), 8.0), 3.0) + 7.0 * fbm_4(fbmCoord / 3.2);
-    sdfValue = sdSmoothUnion(sdfValue, sdPlane(pos + vec3(0, 0.4, 0)), 22.0);
-    return sdfValue;
+    float sdfValue = sdSphere(pos, s*vec3(-8.0, 2.0 + 20.0 * sin(iTime), -1), s*5.6);
+    sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, s*vec3(8.0, 8.0 + 12.0 * cos(iTime), 3), s*5.6), 3.0f);
+    sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, s*vec3(5.0 * sin(iTime), 3.0, 0), s*8.0), 3.0) ;
+    // sdfValue = sdSmoothUnion(sdfValue, sdPlane(pos + vec3(0, 0.4, 0)), 22.0);
+    return sdfValue+ 7.0 * fbm_4(fbmCoord / 3.2);
 }
 
 float IntersectVolumetric(in vec3 rayOrigin, in vec3 rayDirection, float maxT)
-{
-    // Precision isn't super important, just want a decent starting point before 
-    // ray marching with fixed steps
+{// 精度不是很重要，只需要在之前有一个不错的起点
     float precis = 0.5; 
-    float t = 0.0f;
+    float t = 0.0f;//用来记录前进的距离
     for(int i=0; i<MAX_SDF_SPHERE_STEPS; i++ )
     {
-        float result = QueryVolumetricDistanceField( rayOrigin+rayDirection*t);
-        if( result < (precis) || t>maxT ) break;
-        t += result;
+        float result = QueryVolumetricDistanceField( rayOrigin+rayDirection*t);//查询SDF的值
+        if( result < (precis) || t>maxT ) break;//到边缘比较近 或 前进的比较远
+        t += result;//更新需要前进的距离
     }
-    return ( t>=maxT ) ? -1.0 : t;
+    return ( t>=maxT ) ? -1.0 : t;//视点距离物体较近的时候谨慎一些
 }
 
 vec3 Diffuse(in vec3 normal, in vec3 lightVec, in vec3 diffuse)
@@ -368,20 +348,12 @@ vec3 GetAmbientLight()
 }
 
 float GetFogDensity(vec3 position, float sdfDistance)
-{
-    const float maxSDFMultiplier = 1.0;
-    bool insideSDF = sdfDistance < 0.0;
-    float sdfMultiplier = insideSDF ? min(abs(sdfDistance), maxSDFMultiplier) : 0.0;
- 
-#if UNIFORM_FOG_DENSITY
-    return sdfMultiplier;
-#else
-   return sdfMultiplier * abs(fbm_4(position / 6.0) + 0.5);
-#endif
+{//有简化
+    return sdfDistance < 0.0 ? min(abs(sdfDistance), 1.) : 0.0;
 }
 
-float BeerLambert(float absorption, float dist)
-{
+float BeerLambert(float absorption, float dist)// 啤酒兰伯特定律描述了穿透光的衰减
+{//absorption是一个浓度系数，dist是穿透距离
     return exp(-absorption * dist);
 }
 
@@ -451,72 +423,42 @@ vec3 Render( in vec3 rayOrigin, in vec3 rayDirection)
     
     vec3 normal;
     float t;
-    int materialID = INVALID_MATERIAL_ID;
-    t = IntersectOpaqueScene(rayOrigin, rayDirection, materialID, normal);
+    int materialID = 0;//INVALID_MATERIAL_ID;
+    t = IntersectOpaqueScene(rayOrigin, rayDirection, materialID, normal);//会更新materialID
     if( materialID != INVALID_MATERIAL_ID )
-    {
-        // Defer lighting calculations after volume lighting so we can 
-        // avoid doing shadow tracing on opaque objects that aren't visible anyways
-        depth = t;
+    {//在体积照明之后推迟照明计算，这样我们就可以避免对无论如何都不可见的不透明对象进行阴影跟踪
+        depth = t;//跳过背景区域？
     }
     
-    float volumeDepth = IntersectVolumetric(rayOrigin, rayDirection, depth);
-    float opaqueVisiblity = 1.0f;
-    vec3 volumetricColor = vec3(0.0f);
+    float volumeDepth = IntersectVolumetric(rayOrigin, rayDirection, depth);//尽可能跳过空白区域
+    float opaqueVisiblity = 1.0f;//可见度的初始值，随着不断步进会不断降低
+    vec3 volumetricColor = vec3(0.0f);//反射光的初始值，随着不断步进会不断增加
     if(volumeDepth > 0.0)
     {
-        const vec3 volumeAlbedo = vec3(0.8);
-        const float marchSize = 0.6f * MARCH_MULTIPLIER;
-        float distanceInVolume = 0.0f;
-        float signedDistance = 0.0;
-        for(int i = 0; i < MAX_VOLUME_MARCH_STEPS; i++)
+        const float marchSize = 0.6f * MARCH_MULTIPLIER;//最小步进单位
+        float distanceInVolume = 0.0f;//记录设置的穿透长度
+        float signedDistance = 0.0;//记录步进点的符号距离
+        for(int i = 0; i < MAX_VOLUME_MARCH_STEPS; i++)//光线步近的次数
         {
-            volumeDepth += max(marchSize, signedDistance);
-            if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;
+            volumeDepth += max(marchSize, signedDistance);//计算前进后的距离，marchSize是前进距离的最小步长
+            if(volumeDepth > depth || opaqueVisiblity < ABSORPTION_CUTOFF) break;//超出最远距离 或 透明度过低
             
-            vec3 position = rayOrigin + volumeDepth*rayDirection;
+            vec3 position = rayOrigin + volumeDepth*rayDirection;//计算前进后的位置
 
-            signedDistance = QueryVolumetricDistanceField(position);
-            if(signedDistance < 0.0f)
+            signedDistance = QueryVolumetricDistanceField(position);//查询SDF的值
+            if(signedDistance < 0.0f)//如果在物体内
             {
-                distanceInVolume += marchSize;
-                float previousOpaqueVisiblity = opaqueVisiblity;
+                distanceInVolume += marchSize;//叠加穿透距离
+                float previousOpaqueVisiblity = opaqueVisiblity;//记录透明度
                 opaqueVisiblity *= BeerLambert(ABSORPTION_COEFFICIENT * GetFogDensity(position, signedDistance), marchSize);
-                float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;
-                
-                for(int lightIndex = 0; lightIndex < NUM_LIGHTS; lightIndex++)
-                {
-                    float lightVolumeDepth = 0.0f;
-                    vec3 lightDirection = (GetLight(lightIndex).Position - position);
-                    float lightDistance = length(lightDirection);
-                    lightDirection /= lightDistance;
-                    
-                    vec3 lightColor = GetLight(lightIndex).LightColor * GetLightAttenuation(lightDistance); 
-                    if(IsColorInsignificant(lightColor)) continue;
-                    
-                    const float lightMarchSize = 0.65f * MARCH_MULTIPLIER;
-                    float lightVisiblity = GetLightVisiblity(position, lightDirection, lightDistance, MAX_VOLUME_LIGHT_MARCH_STEPS, lightMarchSize); 
-                    volumetricColor += absorptionFromMarch * lightVisiblity * volumeAlbedo * lightColor;
-                }
-                volumetricColor += absorptionFromMarch * volumeAlbedo * GetAmbientLight();
+                // 啤酒兰伯特定律描述了穿透光的衰减    烟雾边缘的浓度为SDF距离
+                float absorptionFromMarch = previousOpaqueVisiblity - opaqueVisiblity;//透明度的变化情况
+                //暂时注释掉了光照
+                volumetricColor += absorptionFromMarch * vec3(0.8) * GetAmbientLight();//计算由于不透明反射回来的光
             }
         }
     }
-    
-    if( materialID != INVALID_MATERIAL_ID && opaqueVisiblity > ABSORPTION_CUTOFF)
-    {
-        vec3 position = rayOrigin + t*rayDirection;
-        Material material = GetMaterial(materialID, position);
-        if(IsLightSource(material))
-        {
-            opaqueColor = min(material.albedo, vec3(1.0));
-        }       
-        else
-        {
-            vec3 reflectionDirection = reflect( rayDirection, normal);
-            CalculateLighting(position, normal, reflectionDirection, material, opaqueColor);
-        }
-    }
+    //注释掉了背景渲染
     
     return min(volumetricColor, 1.0f) + opaqueVisiblity * opaqueColor;
 }

@@ -46,49 +46,6 @@ export class fs{
 		return sample1( coord + vec3( - step ) ) - sample1( coord + vec3( step ) );//map在对角线方向的变化速度
 	}
 	
-	
-	struct Smoke{//pixel
-		float id;//每一团云对应一个id
-		vec3 position;
-		float density;
-		float grad;
-	};
-	float r(float a,float b){
-		a+=0.5;
-		return (a/b-floor(a/b))*b-0.5;
-	}
-	float getd(vec3 p){
-		float d = sample1( p + 0.5 );
-		return smoothstep( threshold - range, threshold + range, d ) * opacity;
-	}
-	mat3 rotateX(float angle) {
-		float c = cos(angle);
-		float s = sin(angle);
-		return mat3(
-			1.0, 0.0, 0.0,
-			0.0, c,   -s,
-			0.0, s,    c
-		);
-	}
-	void setPosition(inout Smoke s,vec3 p){//输入一个位置
-		float xi=floor(p.x);
-		float yi=floor(p.y);
-		float zi=floor(p.z);
-		s.id=xi*sizey*sizez+yi*sizez+zi;
-		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
-	}
-	void setDensity(inout Smoke s){
-		float time=frame+99.001*s.id;
-		float a1=0.5+0.5*sin(time);
-		float a2=1.-a1;
-		float a3=0.5+0.5*sin(time*1.7+3.14);
-		vec3 p2=s.position;
-		s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-	}
-	void setGrad(inout Smoke s){
-		vec3 p=s.position;
-		s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
-	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
 	vec3 Translate(vec3 pos, vec3 translate)
 	{
@@ -99,9 +56,26 @@ export class fs{
 		p = Translate(p, origin);
 		return length(p)-radius;
 	}
+	float sdSmoothUnion( float d1, float d2, float k ) 
+	{
+		float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
+		return mix( d2, d1, h ) - k*h*(1.0-h); 
+	}
+	// float QueryVolumetricDistanceField( in vec3 pos)
+	// {    
+	// 	float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+	// 	sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+	// 	// float d = sample1( p + 0.5 );
+	// 	// return smoothstep( threshold - range, threshold + range, d ) * opacity;
+	// 	return  sdfValue;
+	// }
 	float QueryVolumetricDistanceField( in vec3 pos)
 	{    
-		return  sdSphere(pos, vec3(0.), .3);
+		float sdfValue = sdSphere(pos, vec3(-0.1), .3);
+		sdfValue = sdSmoothUnion(sdfValue,sdSphere(pos, vec3(0.2), .1), .5f);
+		// float d = sample1( pos + 0.5 );
+		// return smoothstep( threshold - range, threshold + range, d ) * opacity;
+		return  sdfValue;
 	}
 	float IntersectVolumetric(in vec3 rayOrigin, in vec3 rayDirection, float maxT)
 	{// 精度不是很重要，只需要在之前有一个不错的起点
@@ -146,6 +120,7 @@ export class fs{
 		float volumeDepth = IntersectVolumetric(rayOrigin, rayDirection, depth);//尽可能跳过空白区域
 		float opaqueVisiblity = 1.0f;//可见度的初始值，随着不断步进会不断降低
 		vec3 volumetricColor = vec3(0.0f);//反射光的初始值，随着不断步进会不断增加
+		// return vec3(.1f)*QueryVolumetricDistanceField(rayOrigin);
 		if(volumeDepth > 0.0)
 		{
 			const float marchSize = 0.06f;//最小步进单位 const float marchSize = 0.6f * MARCH_MULTIPLIER;
@@ -176,8 +151,60 @@ export class fs{
 		return min(volumetricColor, 1.0f) + opaqueVisiblity * opaqueColor;
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////
+	struct Smoke{//pixel
+		float id;//每一团云对应一个id
+		vec3 position;
+		float density;
+		float grad;
+	};
+	float r(float a,float b){
+		a+=0.5;
+		return (a/b-floor(a/b))*b-0.5;
+	}
+	float getd(vec3 p){
+		float d = sample1( p + 0.5 );
+		return smoothstep( threshold - range, threshold + range, d ) * opacity;
+	}
+	mat3 rotateX(float angle) {
+		float c = cos(angle);
+		float s = sin(angle);
+		return mat3(
+			1.0, 0.0, 0.0,
+			0.0, c,   -s,
+			0.0, s,    c
+		);
+	}
+	void setPosition(inout Smoke s,vec3 p){//输入一个位置
+		float xi=floor(p.x);
+		float yi=floor(p.y);
+		float zi=floor(p.z);
+		s.id=xi*sizey*sizez+yi*sizez+zi;
+		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
+	}
+	void setDensity(inout Smoke s){
+		float time=frame+99.001*s.id;
+		float a1=0.5+0.5*sin(time);
+		float a2=1.-a1;
+		float a3=0.5+0.5*sin(time*1.7+3.14);
+		vec3 p2=s.position;
+		// s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
+		s.density= QueryVolumetricDistanceField(p2)+ sample1( p2 + 0.5 );;
+		if(s.density>0.)s.density=0.;
+		else s.density=1.;
+	}
+	void setGrad(inout Smoke s){
+		// vec3 p=s.position;
+		// s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
+		s.grad=0.;
+	}
 
 	void main(){
+		// vec3 volumetricColor=Render();
+		// color.r=volumetricColor.r;
+		// color.g=volumetricColor.g;
+		// color.b=volumetricColor.b;
+		// color.a=1.;
+
 		vec3 rayDir = normalize( vDirection );   //将像素点对应的光线方向进行单位化
 		vec2 bounds = hitBox( vOrigin, rayDir ); //计算光线的入射方向和出射方向
 

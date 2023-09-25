@@ -48,9 +48,6 @@ export class fs{
 	
 	
 	struct Smoke{//pixel
-		// float xid;
-		// float yid;
-		// float zid;
 		float id;//每一团云对应一个id
 		vec3 position;
 		float density;
@@ -73,27 +70,24 @@ export class fs{
 			0.0, s,    c
 		);
 	}
-	Smoke setPosition(Smoke s,vec3 p){//输入一个位置
+	void setPosition(inout Smoke s,vec3 p){//输入一个位置
 		float xi=floor(p.x);
 		float yi=floor(p.y);
 		float zi=floor(p.z);
 		s.id=xi*sizey*sizez+yi*sizez+zi;
 		s.position=vec3(r(p.x,1.),r(p.y,1.),r(p.z,1.));
-		return s;
 	}
-	Smoke setDensity(Smoke s){
+	void setDensity(inout Smoke s){
 		float time=frame+99.001*s.id;
 		float a1=0.5+0.5*sin(time);
 		float a2=1.-a1;
 		float a3=0.5+0.5*sin(time*1.7+3.14);
 		vec3 p2=s.position;
 		s.density = a1*getd(p2)+(0.9+0.1*a2)*getd(rotateX(time)*p2)+a3*getd(vec3(p2.y,p2.x,0.1));
-		return s;
 	}
-	Smoke setGrad(Smoke s){
+	void setGrad(inout Smoke s){
 		vec3 p=s.position;
 		s.grad=shading( p + 0.5 ) * 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
-		return s;
 	}
 
 	void main(){
@@ -109,9 +103,9 @@ export class fs{
 
 		Smoke s;
 		for ( float t = bounds.x; t < bounds.y; t += delta ) {//从入射时间到出射时间之间等距离取多个点
-			s=setPosition(s,p);
-			s=setDensity(s);
-			s=setGrad(s);
+			setPosition(s,p);
+			setDensity(s);
+			setGrad(s);
 
 			ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
 
