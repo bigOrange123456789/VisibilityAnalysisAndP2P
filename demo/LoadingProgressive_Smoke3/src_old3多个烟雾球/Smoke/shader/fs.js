@@ -66,43 +66,22 @@ export class fs{
 		float density;
 		float grad;
 	};
-// 	float QueryVolumetricDistanceField( in vec3 pos)
-// {    
-//     // Fuse a bunch of spheres, slap on some fbm noise, 
-//     // merge it with ground plane to get some ground fog 
-//     // and viola! Big cloudy thingy!
-//     vec3 fbmCoord = (pos + 2.0 * vec3(iTime, 0.0, iTime)) / 1.5f;
-//     float sdfValue = sdSmoothUnion(
-// 		sdSphere(pos, vec3(-8.0, 2.0 + 20.0 * sin(iTime), -1), 5.6),
-// 		sdSphere(pos, vec3(8.0, 8.0 + 12.0 * cos(iTime), 3), 5.6), 3.0f);
-//     sdfValue = sdSmoothUnion(sdfValue, 
-// 		sdSphere(pos, vec3(5.0 * sin(iTime), 3.0, 0), 8.0), 3.0) + 7.0 * fbm_4(fbmCoord / 3.2);
-//     return sdfValue;
-// }
-
 	float QueryVolumetricDistanceField0( in vec3 pos,float id)//pos -0.5~0.5
 	{ //0为底层烟雾   
 		float f=frame*2.4+id*100.;
-		float sdfValue=sdSphere(pos, 
-				-0.3*vec3(0.,-.3,.5), 
-				.5);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
+		float sdfValue = sdSmoothUnion(
 			sdSphere(pos, 
-				0.3*vec3(0.,.5,.5), 
+				-0.3*vec3(0.,.5,sin(f)-.5), 
+				.5),
+			sdSphere(pos, 
+				0.2*vec3(sin(f*1.41)-.5)-0.2, 
 				.3), .5f
 		);
 		sdfValue = sdSmoothUnion(
 			sdfValue,
 			sdSphere(pos, 
-				0.2*vec3(sin(f*1.41)-.5,sin(f*1.41)-.5,sin(f*1.41)-.5)-0.2, 
+				-0.2*vec3(sin(f*1.31)-.5,0.1,0.1)-0.05, 
 				.3), .5f
-		);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
-			sdSphere(pos, 
-				-0.2*vec3(sin(f*2.31)-.5,2.*sin(f*3.51),0.1+0.1*sin(f*3.5))-0.05, 
-				.2), .5f
 		);
 		sdfValue = sdSmoothUnion(
 			sdfValue,
@@ -110,9 +89,8 @@ export class fs{
 				0.25*vec3(sin(f*2.5)-.5,-0.01-1.*sin(f*2.6),sin(f*2.7)-.5), 
 				.5), .5f 
 		);	
-		sdfValue+=.3*noise(  pos*.3+0.5+0.1*sin(0.1*f) );
-		
-		sdfValue*=0.9;
+		sdfValue+=0.1*noise(  pos*.3+0.5+0.1*sin(0.1*f) );
+		//sdfValue*=0.9;
 		return sdfValue;//return 1.;//
 	}
 	float QueryVolumetricDistanceField1( in vec3 pos)//0~1.
@@ -157,7 +135,7 @@ export class fs{
 		else return d*-1.;
 	}
 	void setPosition(inout Smoke s,vec3 p){
-		if(p.y<0.4){//if(1.>0.5){//底层烟雾
+		if(1.>0.5){//if(p.y<0.){//底层烟雾
 			s.type=0;
 			float xi=floor(p.x+.5);
 			float yi=floor(p.y+.5);
@@ -206,7 +184,7 @@ export class fs{
 
 			ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
 			ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
-			if ( ac.a >= 0.9 ) break;//阻光度过高就可以暂停了
+			if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
 			p += rayDir * delta;//更新光线位置
 		}
 		color = ac;

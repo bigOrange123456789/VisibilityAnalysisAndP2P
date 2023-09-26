@@ -23,7 +23,6 @@ export class fs{
 	uniform float sizex;
 	uniform float sizey;
 	uniform float sizez;
-	uniform float res;
 
 	vec2 hitBox( vec3 orig, vec3 dir ) {   //计算光线与方盒的交点
 		vec3 box_min = vec3( sizex,sizey,sizez )* - .5;//vec3( - 0.5 );//一个轴对称包围盒 Axis-Aligned Bounding Box
@@ -56,9 +55,7 @@ export class fs{
 		float h = clamp( 0.5 + 0.5*(d2-d1)/k, 0.0, 1.0 );
 		return mix( d2, d1, h ) - k*h*(1.0-h); 
 	}
-	float noise(vec3 pos){//0-1
-		return texture( map, pos*64./res ).r;
-	}
+	
 	struct Smoke{//pixel
 		int type;//0为底层烟雾，1为顶层烟雾
 		float id;//每一团云对应一个id
@@ -66,43 +63,22 @@ export class fs{
 		float density;
 		float grad;
 	};
-// 	float QueryVolumetricDistanceField( in vec3 pos)
-// {    
-//     // Fuse a bunch of spheres, slap on some fbm noise, 
-//     // merge it with ground plane to get some ground fog 
-//     // and viola! Big cloudy thingy!
-//     vec3 fbmCoord = (pos + 2.0 * vec3(iTime, 0.0, iTime)) / 1.5f;
-//     float sdfValue = sdSmoothUnion(
-// 		sdSphere(pos, vec3(-8.0, 2.0 + 20.0 * sin(iTime), -1), 5.6),
-// 		sdSphere(pos, vec3(8.0, 8.0 + 12.0 * cos(iTime), 3), 5.6), 3.0f);
-//     sdfValue = sdSmoothUnion(sdfValue, 
-// 		sdSphere(pos, vec3(5.0 * sin(iTime), 3.0, 0), 8.0), 3.0) + 7.0 * fbm_4(fbmCoord / 3.2);
-//     return sdfValue;
-// }
-
-	float QueryVolumetricDistanceField0( in vec3 pos,float id)//pos -0.5~0.5
+	float QueryVolumetricDistanceField0( in vec3 pos,float id)
 	{ //0为底层烟雾   
-		float f=frame*2.4+id*100.;
-		float sdfValue=sdSphere(pos, 
-				-0.3*vec3(0.,-.3,.5), 
-				.5);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
+		float f=frame+id*100.;
+		float sdfValue = sdSmoothUnion(
 			sdSphere(pos, 
-				0.3*vec3(0.,.5,.5), 
+				-0.3*vec3(0.,0.,sin(f)-.5), 
+				.5),
+			sdSphere(pos, 
+				0.2*vec3(sin(f*1.41)-.5)-0.2, 
 				.3), .5f
 		);
 		sdfValue = sdSmoothUnion(
 			sdfValue,
 			sdSphere(pos, 
-				0.2*vec3(sin(f*1.41)-.5,sin(f*1.41)-.5,sin(f*1.41)-.5)-0.2, 
+				-0.2*vec3(sin(f*1.31)-.5)-0.05, 
 				.3), .5f
-		);
-		sdfValue = sdSmoothUnion(
-			sdfValue,
-			sdSphere(pos, 
-				-0.2*vec3(sin(f*2.31)-.5,2.*sin(f*3.51),0.1+0.1*sin(f*3.5))-0.05, 
-				.2), .5f
 		);
 		sdfValue = sdSmoothUnion(
 			sdfValue,
@@ -110,14 +86,12 @@ export class fs{
 				0.25*vec3(sin(f*2.5)-.5,-0.01-1.*sin(f*2.6),sin(f*2.7)-.5), 
 				.5), .5f 
 		);	
-		sdfValue+=.3*noise(  pos*.3+0.5+0.1*sin(0.1*f) );
-		
-		sdfValue*=0.9;
-		return sdfValue;//return 1.;//
+		sdfValue+=0.5*texture( map, (pos+0.5)/2. ).r;
+		return 1.;//sdfValue;//return 1.;//
 	}
 	float QueryVolumetricDistanceField1( in vec3 pos)//0~1.
 	{   //1为顶层烟雾 
-		float f=frame*0.03;
+		float f=frame*0.05;
 		float sdfValue = 2.*(0.4-pos.y);//0.5~1
 		// if(pos.y0.75)sdfValue=1.;
 		vec3 pos2=vec3(
@@ -142,22 +116,22 @@ export class fs{
 		if(pos3.y>1.)pos3.y=2.-pos3.y;
 		if(pos3.z>1.)pos3.z=2.-pos3.z;
 
-		sdfValue=sdfValue-.9*(noise( pos2 )-0.5)+0.1*(noise( pos3 )-0.5);
+		sdfValue=sdfValue-.9*(texture( map, pos2 ).r-0.5)+0.1*(texture( map, pos3 ).r-0.5);
 		
-		sdfValue*=.4;
+		if(pos.y<0.75)sdfValue/=2.;
 		return sdfValue;
 	}
 	float sample1( vec3 p ,Smoke s) {//获取位置p的烟雾浓度
 		float d;
 		if(s.type==0)//0为底层烟雾
-			d=QueryVolumetricDistanceField0( p-0.5,s.id);//-0.5~0.5
+			d=QueryVolumetricDistanceField0( p-0.5,s.id);
 		else 		 //1为顶层烟雾
-			d=QueryVolumetricDistanceField1( p);//0~1
+			d=QueryVolumetricDistanceField1( p);
 		if(d>0.)return 0.;
 		else return d*-1.;
 	}
 	void setPosition(inout Smoke s,vec3 p){
-		if(p.y<0.4){//if(1.>0.5){//底层烟雾
+		if(p.y<0.){//底层烟雾
 			s.type=0;
 			float xi=floor(p.x+.5);
 			float yi=floor(p.y+.5);
@@ -179,11 +153,11 @@ export class fs{
 		vec3 coord =p + 0.5;
 		if(s.type==0){//底层烟雾
 			float step = 0.01;//一个极小值
-			s.grad=sample1( coord + vec3( - step ) ,s) - sample1( coord + vec3( step ) ,s);//在对角线方向的变化速度
+			s.grad=sample1( coord + vec3( - step ) ,s) - sample1( coord + vec3( step ) ,s);//map在对角线方向的变化速度
 			s.grad=s.grad* 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
 		}else{//顶层烟雾
 			float step = 0.02/max(sizex,sizez);//一个极小值
-			s.grad=sample1( coord + vec3( - step ) ,s) - sample1( coord + vec3( step ) ,s);//在对角线方向的变化速度
+			s.grad=sample1( coord + vec3( - step ) ,s) - sample1( coord + vec3( step ) ,s);//map在对角线方向的变化速度
 			s.grad=s.grad* 3.0 + ( ( p.x + p.y ) * 0.25 ) + 0.2;
 		}
 	}
@@ -206,7 +180,7 @@ export class fs{
 
 			ac.rgb += ( 1.0 - ac.a ) * s.density * s.grad;//反射的光线变多
 			ac.a += ( 1.0 - ac.a ) * s.density;//阻光度增加
-			if ( ac.a >= 0.9 ) break;//阻光度过高就可以暂停了
+			if ( ac.a >= 0.95 ) break;//阻光度过高就可以暂停了
 			p += rayDir * delta;//更新光线位置
 		}
 		color = ac;

@@ -6,14 +6,12 @@ import {vs} from "./shader/vs.js"
 
 export class Smoke{
     constructor(scene,camera){
-		const sizex=20, sizey=1, sizez=10
+		const sizex=40, sizey=1, sizez=12
 		// const sizex=1, sizey=1, sizez=1
         let mesh=this.#initMesh(sizex, sizey, sizez)
 		mesh.scale.set(2.5,2.5,2.5)
-		mesh.position.set(11.036844703233468,  54,  24.360768880533755)
-		mesh.rotation.y=-0.5
+		mesh.position.set(11.036844703233468,  55,  24.360768880533755)
         scene.add( mesh );
-		window.smoke=mesh;
         
 		let time=0
         function animate() {
@@ -25,8 +23,8 @@ export class Smoke{
         }
         animate()
     }
-	#initTexture(res){ // Texture
-		const size = res//32//8//128//256//512//
+	#initTexture(){ // Texture
+		const size = 64//32//8//128//256//512//
 		const data = new Uint8Array( size * size * size );//new Uint16Array( size * size * size );//
 		let i = 0;
 		const perlin = new ImprovedNoise();
@@ -51,23 +49,21 @@ export class Smoke{
 	}
 
     #initMesh(sizex, sizey, sizez){
-		const res=64
         const geometry = new THREE.BoxGeometry( sizex, sizey, sizez );
 		const material = new THREE.RawShaderMaterial( {
 			glslVersion: THREE.GLSL3,
 			uniforms: {
 				base: { value: new THREE.Color( 0x798aa0 ) },
-				map: { value: this.#initTexture(res) },
+				map: { value: this.#initTexture() },
 				cameraPos: { value: new THREE.Vector3() },
 				threshold: { value: 0.25 },
-				opacity: { value: 0.5 },
+				opacity: { value: 0.25 },
 				range: { value: 0.1 },
-				steps: { value: 50 },
+				steps: { value: 100 },
 				frame: { value: 0 },
 				sizex: { value: sizex },
 				sizey: { value: sizey },
 				sizez: { value: sizez },
-				res: { value: res },
 			},
 			vertexShader:vs.shader,
 			fragmentShader:fs.shader,

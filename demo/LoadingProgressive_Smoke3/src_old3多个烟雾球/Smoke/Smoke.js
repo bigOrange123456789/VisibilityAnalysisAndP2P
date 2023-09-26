@@ -6,14 +6,12 @@ import {vs} from "./shader/vs.js"
 
 export class Smoke{
     constructor(scene,camera){
-		const sizex=20, sizey=1, sizez=10
+		const sizex=40, sizey=1, sizez=12
 		// const sizex=1, sizey=1, sizez=1
         let mesh=this.#initMesh(sizex, sizey, sizez)
 		mesh.scale.set(2.5,2.5,2.5)
-		mesh.position.set(11.036844703233468,  54,  24.360768880533755)
-		mesh.rotation.y=-0.5
+		mesh.position.set(11.036844703233468,  55,  24.360768880533755)
         scene.add( mesh );
-		window.smoke=mesh;
         
 		let time=0
         function animate() {
@@ -60,9 +58,9 @@ export class Smoke{
 				map: { value: this.#initTexture(res) },
 				cameraPos: { value: new THREE.Vector3() },
 				threshold: { value: 0.25 },
-				opacity: { value: 0.5 },
+				opacity: { value: 0.25 },
 				range: { value: 0.1 },
-				steps: { value: 50 },
+				steps: { value: 100 },
 				frame: { value: 0 },
 				sizex: { value: sizex },
 				sizey: { value: sizey },
