@@ -27,6 +27,7 @@ export class FindPath {
         window.findpath=this
     }
     #init(){
+        // this.map.updateWeight()
         this.#statusPre =this.#statusNext
         this.#statusNext=[]
         let countNull=0
