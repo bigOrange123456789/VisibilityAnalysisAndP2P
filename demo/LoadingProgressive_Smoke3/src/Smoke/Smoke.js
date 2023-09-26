@@ -6,10 +6,10 @@ import {vs} from "./shader/vs.js"
 
 export class Smoke{
     constructor(scene,camera){
-		const sizex=20, sizey=1, sizez=10
+		const sizex=7, sizey=1, sizez=4
 		// const sizex=1, sizey=1, sizez=1
         let mesh=this.#initMesh(sizex, sizey, sizez)
-		mesh.scale.set(2.5,2.5,2.5)
+		mesh.scale.set(4,2.5,4)
 		mesh.position.set(11.036844703233468,  54,  24.360768880533755)
 		mesh.rotation.y=-0.5
         scene.add( mesh );

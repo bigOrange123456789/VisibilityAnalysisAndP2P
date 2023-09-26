@@ -74,10 +74,10 @@ export class Map {
         // console.log(x,z)
         const i=this.#xz2ij(x,z)[0]
         const j=this.#xz2ij(x,z)[1]
-        // const last=[
-        //     [15,70],
-        // ]
-        // for(let k=0;k<20;k++)last.push([19+4*k,69])
+        const last=[
+            [15,70],
+        ]
+        for(let k=0;k<20;k++)last.push([19+4*k,69])
 
         if(i==19&&j==28){
             return {
@@ -85,18 +85,18 @@ export class Map {
                 "rot":0
             }
         } 
-        // for(let k=0;k<last.length;k++)
-        //     if(i==this.#xz2ij(last[k][0],last[k][1])[0]&&j==this.#xz2ij(last[k][0],last[k][1])[1])
-        //         if(k==last.length-1){
-        //             // console.log("finish")
-        //             return null
-        //         }else {
-        //             // console.log(k,[19+4*1,69],this.#xz2ij(19+4*1,69))//k=2
-        //             return {
-        //                 "pos":last[k+1],
-        //                 "rot":0
-        //             }
-        //         }
+        for(let k=0;k<last.length;k++)
+            if(i==this.#xz2ij(last[k][0],last[k][1])[0]&&j==this.#xz2ij(last[k][0],last[k][1])[1])
+                if(k==last.length-1){
+                    // console.log("finish")
+                    return null
+                }else {
+                    // console.log(k,[19+4*1,69],this.#xz2ij(19+4*1,69))//k=2
+                    return {
+                        "pos":last[k+1],
+                        "rot":0
+                    }
+                }
         const directionNext=this.#nextstep(i,j)
         if(directionNext==null){
             //14.862568724779067, y: 47.99051400000003, z: 69.44020109461212

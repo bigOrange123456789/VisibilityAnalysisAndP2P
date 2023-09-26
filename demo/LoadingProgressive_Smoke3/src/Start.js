@@ -71,7 +71,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // if(false)
+                    if(false)
                     new AvatarManager(self.scene,self.camera,data,this.Engine3D)
                 // self.TreeManager.init(data) 
             // }
