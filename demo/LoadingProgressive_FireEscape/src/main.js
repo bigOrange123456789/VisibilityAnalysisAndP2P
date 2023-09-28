@@ -64,3 +64,4 @@ import { Engine3D } from '../../../lib/Engine3D.js'
 
 // })
 console.log(config)
+export {Engine3D}

@@ -1,7 +1,7 @@
 // import{MyUI} from "../../../lib/ui/MyUI_sim.js"
+import { Engine3D } from './main.js'
 export class Panel{
-  constructor(main,Engine3D){
-      this.Engine3D=Engine3D
+  constructor(main){
       this.main=main
       this.prePathId=-1
       this.addMyUI_Follow()
@@ -16,7 +16,7 @@ export class Panel{
     var width=window.innerWidth
     var height=window.innerHeight
     var self=this;
-    var ui=new this.Engine3D.MyUI()
+    var ui=new Engine3D.MyUI()
     ui.init()
     // for(let id=0;id<self.main.wanderList.length;id++)
       new ui.Button('视点跟随',//'漫游路径'+(id+1), 
@@ -42,8 +42,7 @@ export class Panel{
     //完成设置个数
     var width=window.innerWidth
     var height=window.innerHeight
-    var self=this;
-    var ui=new this.Engine3D.MyUI()
+    var ui=new Engine3D.MyUI()
     ui.init()
     // for(let id=0;id<self.main.wanderList.length;id++)
       new ui.Button('开始逃生',//'漫游路径'+(id+1), 
@@ -70,7 +69,7 @@ export class Panel{
     var width=window.innerWidth
     var height=window.innerHeight
     var self=this;
-    var ui=new this.Engine3D.MyUI()
+    var ui=new Engine3D.MyUI()
     ui.init()
     for(let id=0;id<self.main.wanderList.length;id++)
       new ui.Button('自动漫游',//'漫游路径'+(id+1), 

@@ -1,5 +1,4 @@
-export class vs_anim_sim{
-    static shader=/* glsl */`
+export default /* glsl */`
 	in vec3 instanceColorIn;
 	out vec3 instanceColorOut;
 	//////////////////////////////////////
@@ -96,4 +95,3 @@ export class vs_anim_sim{
 	}
 	//////////////////////////////////////
 	`
-}

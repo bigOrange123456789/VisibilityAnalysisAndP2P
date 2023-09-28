@@ -65,3 +65,5 @@ import { Start } from './Start.js'
 
 // })
 console.log(config)
+import { Engine3D } from '../../../lib/Engine3D.js'
+export {Engine3D}

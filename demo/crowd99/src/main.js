@@ -52,3 +52,5 @@ import { Start } from './Start.js'
     // new StartGPU(document.body,config.useGPU)
     new Start(document.body)
 // })
+import { Engine3D } from '../../../lib/Engine3D.js'
+export {Engine3D}

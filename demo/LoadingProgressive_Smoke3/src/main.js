@@ -63,4 +63,5 @@ import { Engine3D } from '../../../lib/Engine3D.js'
     // new Engine3D.StartSampling(document.body,config,Building)
 
 // })
-console.log(config)
+// console.log(config)
+export {Engine3D}

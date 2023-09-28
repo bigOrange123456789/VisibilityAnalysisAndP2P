@@ -1,5 +1,4 @@
-export class vs_anim{
-    static shader=/* glsl */`
+export default /* glsl */`
 	in vec3 instanceColorIn;
 	out vec3 instanceColorOut;
 	//////////////////////////////////////
@@ -171,5 +170,4 @@ export class vs_anim{
 		return vertex;
 	}
 	//////////////////////////////////////
-	`;
-}
+	`

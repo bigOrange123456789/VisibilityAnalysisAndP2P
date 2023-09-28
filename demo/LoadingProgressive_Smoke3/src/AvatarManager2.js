@@ -11,9 +11,9 @@ import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 import { FindPath } from './FindPath/FindPath.js'
 import * as THREE from "three"
+import { Engine3D } from './main.js'
 export class AvatarManager {
-    constructor(scene, camera,posConfig,Engine3D) {
-        this.Engine3D=Engine3D
+    constructor(scene, camera,posConfig) {
         // CrowdManager=Engine3D.Template_sim2
         this.posConfig=posConfig
         // return
@@ -129,7 +129,7 @@ export class AvatarManager {
             crowd.update()
             window.fp=new FindPath(crowd)
         },
-        this.Engine3D
+        Engine3D
         )
     }
     initPos_avatarTest(){

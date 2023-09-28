@@ -1,5 +1,4 @@
-export class fs_lights_physical_pars_fragment_Scattering{
-    static shader=/* glsl */`
+export default /* glsl */`
 	float thicknessDistortion = 0.1;
 	float thicknessPower = 2.0;
 	float thicknessScale = 2.0;
@@ -20,4 +19,3 @@ export class fs_lights_physical_pars_fragment_Scattering{
 	}
 	#define  RE_Direct_Physical  RE_Direct_Physical_Scattering
 	`
-}

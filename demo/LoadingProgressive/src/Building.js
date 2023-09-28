@@ -1,12 +1,6 @@
 import * as THREE from "three"
-import { Visibility } from '../../../lib/loading/Visibility.js'
-import { P2P } from       '../../../lib/loading/P2P/P2P.js'
-import { Detection } from '../../../lib/loading/P2P/Detection.js'
-import { BuildMaterial } from './Building/BuildMaterial.js'
-// import { Pretreatment } from './Building/Pretreatment.js'
-import { Tool } from './Building/Tool.js'
-import { Loader } from '../../../lib/loading/Loader.js'
-import { IndirectMaterial } from '../../../lib/threejs/IndirectMaterial'
+import { Engine3D } from './main.js'//Engine3D.Building.
+
 export class Building{
     constructor(scene,camera,csm,cb,sampling){
         this.sampling=sampling
@@ -72,21 +66,21 @@ export class Building{
 
         
 
-        this.detection=new Detection(this.meshes)
+        this.detection=new Engine3D.Detection(this.meshes)
         
-        this.p2p=new P2P(camera,this.detection)
+        this.p2p=new Engine3D.P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         // console.log(self.config.path)
-        this.loader=new Loader(self.config.path,self.config.crossOriginSocket,true)
+        this.loader=new Engine3D.Loader(self.config.path,self.config.crossOriginSocket,true)
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
                 self.start(camera)
                 if(cb)cb()
             })
         })
-        // new Pretreatment(this)
+        // new Engine3D.Building.Pretreatment(this)
         if(self.config.needTool)
-            new Tool({
+            new Engine3D.Building.Tool({
                 instance_info:this.instance_info,
                 meshes:this.meshes,
                 parentGroup:this.parentGroup
@@ -120,7 +114,7 @@ export class Building{
     }
     loadConfigIndirect(cb){
         if(this.config.useIndirectMaterial){
-            IndirectMaterial.pre(()=>{
+            Engine3D.IndirectMaterial.pre(()=>{
                 cb()
             })
         }else cb()
@@ -156,7 +150,7 @@ export class Building{
 
         // console.log(camera)W
         
-        this.buildMaterial=new BuildMaterial({
+        this.buildMaterial=new Engine3D.Building.BuildMaterial({
             path:this.config.path,
             meshes:this.meshes,
             // instance_info:this.instance_info
@@ -169,7 +163,7 @@ export class Building{
             }
         })
         // this.load0()
-        // IndirectMaterial.pre(()=>{
+        // Engine3D.IndirectMaterial.pre(()=>{
         //     camera.position.set(0,0,0)
         //     self.load("sponza")
         // })
@@ -196,7 +190,7 @@ export class Building{
         
         
         
-        this.visibiity=new Visibility(
+        this.visibiity=new Engine3D.Visibility(
             camera,
             list=>self.loading(list),
             this.meshes,
@@ -279,9 +273,9 @@ export class Building{
         }
         m.envMapIntensity=0.1+m.metalness
 
-        // meshOld.material=Tool.getSampleMaterial(id)
-        if(this.sampling)meshOld.material=Tool.getSampleMaterial(id)
-        // if(this.sampling)meshOld.material=Tool.getSampleMaterial(136)
+        // meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
+        if(this.sampling)meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
+        // if(this.sampling)meshOld.material=Engine3D.Building.Tool.getSampleMaterial(136)
 
         // mesh.material.shininess = 10;
         const mesh=new THREE.Object3D()
@@ -314,7 +308,7 @@ export class Building{
                 mesh1.material1=mesh1.material
                 mesh2.material1=mesh2.material
                 mesh1.material2=
-                mesh2.material2=new IndirectMaterial(mesh.material)
+                mesh2.material2=new Engine3D.IndirectMaterial(mesh.material)
             }
             // mesh2.material=mesh.material=mesh.material2
             

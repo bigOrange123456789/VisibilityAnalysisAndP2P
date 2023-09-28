@@ -25,10 +25,9 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
 import {CSM} from "three/examples/jsm/csm/CSM.js";//import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
-
+import { Engine3D } from './main.js'
 export class Start{
-    constructor(body,Engine3D){
-        this.Engine3D=Engine3D
+    constructor(body){
         PlayerControl=Engine3D.PlayerControl
         MoveManager=Engine3D.MoveManager
         SkyController=Engine3D.SkyController
@@ -59,7 +58,7 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        this.panel = new Panel(this,this.Engine3D)
+        this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
         //     "LoadingProgressive/pos.json",
@@ -71,8 +70,8 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    if(false)
-                    new AvatarManager(self.scene,self.camera,data,this.Engine3D)
+                    // if(false)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -82,7 +81,7 @@ export class Start{
         // if(false)
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
             this.ui=new UI(this)
-        },false,this.Engine3D)
+        },false)
 
         new Smoke(this.scene,this.camera)
         

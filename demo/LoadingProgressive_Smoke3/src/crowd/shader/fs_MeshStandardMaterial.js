@@ -1,5 +1,4 @@
-export class fs_MeshStandardMaterial{
-    static shader=/* glsl */`
+export default /* glsl */`
 	#define STANDARD
 
 	#ifdef PHYSICAL
@@ -141,6 +140,4 @@ export class fs_MeshStandardMaterial{
 		#include <premultiplied_alpha_fragment>
 		#include <dithering_fragment>
 	
-	}
-	`
-}
+	}`
