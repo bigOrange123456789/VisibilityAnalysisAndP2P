@@ -59,9 +59,6 @@ classdef Group < handle
         end
 
         function simplify_save(this,surplus,number,downFlagList)
-            
-                
-            
             nf0=this.nf();
             step=round( (nf0-surplus)/(number-1) );
             disp(strcat("三角面个数:",num2str(nf0) ));

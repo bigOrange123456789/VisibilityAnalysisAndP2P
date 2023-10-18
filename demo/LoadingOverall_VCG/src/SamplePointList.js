@@ -3,9 +3,9 @@ import * as dat from "dat.gui";
 import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
 export class SamplePointList{
     constructor(createSphere,parentGroup,meshes,entropy){
-        this.config=window.configALL.src.SamplePointList
+        this.config=window.configALL.SamplePointList
+        if(typeof this.config=="undefined")this.config={}
         this.createSphere=createSphere
-        // console.log("visibleArea",visibleArea)
         window.showVDbyColor="evd"
         const self=this
         function load1(cb){
@@ -67,10 +67,6 @@ export class SamplePointList{
         let min =areaInf.min
         let step=areaInf.step
         let max =areaInf.max
-        // const c=this.camera
-        // var x=c.position.x
-        // var y=c.position.y
-        // var z=c.position.z
         if(x>max[0]||y>max[1]||z>max[2]||x<min[0]||y<min[1]||z<min[2]){
             if(x>max[0])x=max[0]
             if(y>max[1])y=max[1]
@@ -112,11 +108,8 @@ export class SamplePointList{
         console.log("a12")
         console.log(visibleArea)
     }
-    // getVisible(code,vid){
-    //     vid_num=this.getPosIndex(vid.split(","))
-    //     return 1==parseInt(code)&(1>>vid_num)
-    // }
     loadConfig(path,cb){
+        if(typeof path=="undefined")return
         var xhr = new XMLHttpRequest();// 创建 XMLHttpRequest 对象
         xhr.open('GET', path, true);// 指定请求的方法和 URL
         xhr.send();// 发送请求

@@ -7,9 +7,9 @@ import { Building } from './Building.js'
 import { LightProducer } from './LightProducer.js'
 import config from '../config/config.json'
 import {Panel } from './Panel.js'
-export class Loader{
+export class Main{
     constructor(body){
-        this.config=window.configALL.src.main
+        this.config=window.configALL.main
         this.body = body
         this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
@@ -34,7 +34,6 @@ export class Loader{
         this.renderer.setPixelRatio(window.devicePixelRatio)
         window.renderer=this.renderer
         this.body.appendChild(this.renderer.domElement)
-
 
         this.stats = new Stats();
         this.stats.domElement.style.position = 'absolute'
@@ -64,10 +63,8 @@ export class Loader{
             this.config.camera.rotation.z
         )
 
-        window.camera=this.camera
-        
+        window.camera=this.camera        
         this.scene.add(this.camera)
-
         this.resize()
 
         // this.playerControl=new PlayerControl(this.camera)
@@ -96,7 +93,7 @@ export class Loader{
     resize(){
         this.canvas.width = this.body.clientWidth//window.innerWidth;//
         this.canvas.height = window.innerHeight;//this.body.clientHeight//
-        this.camera.aspect = this.canvas.width/this.canvas.height;//clientWidth / clientHeight
+        this.camera.aspect = this.canvas.width/this.canvas.height
         this.camera.updateProjectionMatrix()
         this.renderer.setSize(this.canvas.width, this.canvas.height)
     }
@@ -106,7 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
     //         "window.innerHeight:",window.innerHeight,
     //         "document.body.clientHeight:",document.body.clientHeight)
     window.configALL=config
-    new Loader(document.body)
+    new Main(document.body)
+    console.log(config)
 })
 import { Engine3D } from '../../../lib/Engine3D.js'
 export {Engine3D}

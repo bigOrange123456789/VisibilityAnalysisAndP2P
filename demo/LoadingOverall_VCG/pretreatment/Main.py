@@ -6,21 +6,20 @@ class Main: #所有视点,每个视点的可见特征
         id=config["id"]
         vf0=ViewpointList(
             config,
-            True,
+            True,#获取墙构件
             "F:/gitHubRepositories/vk-precompute-main/output"+str(id),
             config['featureCoef']
-        )#不获取墙构件
+        )
         vf0.saveEntropy()
         # vf0.blocking(config["blocking"]["k"])
-        
         self.featureAllA=vf0.feature_all0_1
 
         vf1=ViewpointList(
             config,
-            False,
+            False,#不获取墙构件
             "F:/gitHubRepositories/vk-precompute-main/output"+str(id)+"_wall",
             config['featureCoef']
-        )#不获取墙构件
+        )
         self.featureAllB=vf1.feature_all0
 
         # vf0.c["blocking"]=self.blocking()
@@ -85,7 +84,6 @@ class Main: #所有视点,每个视点的可见特征
         # self.c["blocking"]=result
         return result   
         
-        
     def blocking2(self,k):
         v_feature_list=[]
         v_feature_list_tag={}
@@ -95,11 +93,6 @@ class Main: #所有视点,每个视点的可见特征
             feature=[]
             featureA=self.featureAllA[vid]
             featureB=self.featureAllB[vid]
-            # for j in range(len(featureA)):
-            #     a=featureA[j]
-            #     b=featureB[j]
-            #     if not b==0:b=1
-            #     feature.append(a+b)
             for j in range(len(featureA)):
                 a=featureA[j]
                 feature.append(a)

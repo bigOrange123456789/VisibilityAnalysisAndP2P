@@ -1,3 +1,4 @@
+import { Engine3D } from '../../../lib/Engine3D.js'
 // import config_haiNing0 from '../config/configOP6.json';
 // import config_haiNing from '../config/configOP7.json';
 // import config_gkd from '../config/configOP8.json';
@@ -61,9 +62,9 @@ import { Start } from './Start.js'
     // new StartGPU(document.body,config.useGPU)
     new Start(document.body)
     // import { Building } from './Building.js'
-    // new StartSampling(document.body,config,Building)
+    // new Engine3D.StartSampling(document.body,config,Building)
 
 // })
 console.log(config)
-import { Engine3D } from '../../../lib/Engine3D.js'
+
 export {Engine3D}

@@ -1,16 +1,17 @@
 import * as THREE from "three";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
-import {OBJExporter} from "three/examples/jsm/exporters/OBJExporter"
+import { GLTFLoader }   from "three/examples/jsm/loaders/GLTFLoader"
+import { OBJExporter }  from "three/examples/jsm/exporters/OBJExporter"
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter';
 // import { GLTFExporter } from "./three/examples/jsm/exporters/GLTFExporter.js";
 import { saveAs } from 'file-saver';
 import { Array3D } from './Array3D.js'
 import { SamplePointList } from './SamplePointList.js'
+import { Engine3D } from "./main.js";
 export class Building{
     constructor(scene){
         this.scene=scene
         
-        this.config=window.configALL.src.Building_new
+        this.config=window.configALL.Building_new
         window.config0=this.config
         this.parentGroup = new THREE.Group()
 
@@ -52,7 +53,8 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        if(false){
+        // if(false)
+        {
             new SamplePointList(
                 this.config.createSphere,
                 this.parentGroup,
@@ -60,10 +62,10 @@ export class Building{
                 this.config.entropy
             )
             
-            // this.createCube2(this.config.createSphere)
-            // this.createKernel(this.config.block2Kernel)
+            // this.createCube2(this.config.createSphere)//展示分区结果
+            this.createKernel(this.config.block2Kernel)//展示核视点？
 
-            this.createSphere1(this.config.createSphere)
+            // this.createSphere1(this.config.createSphere)//展示可见熵
             // this.createSphere2(this.config.createSphere)//展示凸局域分布情况 //不显示核视点 每一块视点使用不同颜色
             // this.wallShow()
             // this.doorTwinkle()  
@@ -83,6 +85,7 @@ export class Building{
         },500)
     }
     createKernel(kernel){
+        console.log(kernel,"--kernel--")
         for(let blockId in kernel){
             let k=kernel[blockId]
             let a=k.split(",")
@@ -92,7 +95,7 @@ export class Building{
             let material = new THREE.MeshBasicMaterial( {color:0xff0000} );
                 
             const sphere = new THREE.Mesh( geometry, material );
-            if(a[0]+","+a[1]+","+a[2]!=="190,85,20")sphere.visible=false
+            // if(a[0]+","+a[1]+","+a[2]!=="190,85,20")sphere.visible=false
             sphere.position.set(a[0],a[1],a[2])
             this.parentGroup.add( sphere )
         }
@@ -391,7 +394,6 @@ export class Building{
                         })
                         // mesh.geometry.computeVertexNormals()
                     }
-
                     // console.log(mesh.material.color)
                     self.meshes.push(mesh)
                     // self.parentGroup.add(mesh)
@@ -399,14 +401,16 @@ export class Building{
                     matrices_all=matrices_all+"[], "
                 }
             })
-            let meshes2=Array.from(Array(self.meshes.length))
-            for(let mesh of self.meshes){
-                const id=mesh.name.split("_")[2]
-                // console.log(mesh.name,id)
-                meshes2[id]=mesh                
-            }
-            self.meshes=meshes2
-            
+            if(false){
+                let meshes2=Array.from(Array(self.meshes.length))
+                for(let mesh of self.meshes){
+                    const id=mesh.name.split("_")[2]
+                    console.log(mesh.name)
+                    console.log(mesh,mesh.name,id)
+                    meshes2[id]=mesh                
+                }
+                self.meshes=meshes2
+            }            
 
             console.log("colorList",colorList)
             // self.saveJson(colorList,"colorList.json")
@@ -427,7 +431,12 @@ export class Building{
             
             // console.log("matrices_all",matrices_all)
             self.parentGroup.add(gltf.scene)
-            window.test=new Test(self)
+            Engine3D.Building.Tool.rayCaster(
+                window.camera,
+                self.meshes,
+                mesh=>{
+                    console.log(mesh)
+                })
             window.meshes=self.meshes
             window.initBox=()=>{
                 window.downBox= new THREE.Mesh( 
@@ -460,7 +469,6 @@ export class Building{
             }
             // self.wallShow()
             // self.modelShow()
-            //test(450,3400);//test(50,3400);// test(50,3400);
 
             const save = function(index){
                 console.log(index,index+".obj")
@@ -521,9 +529,7 @@ export class Building{
             }
         }, undefined, function (error) {
             console.error(error);
-        });
-
-        
+        })
     }
     saveMesh(mesh,name){
         const scene=new THREE.Scene()
@@ -733,32 +739,7 @@ export class Building{
         if(mesh.material.map){
             let canvas=new PicHandle().getCanvas( mesh.material.map.image);
             return this.getColor(canvas)
-        }else return 0xFFFFFF
-        
-    }
-}
-class Test{
-    constructor(building){
-        this.ray(building.meshes,window.camera)
-    }
-    ray(objects,camera){
-        function screenToWorld(offsetX, offsetY) {
-            let x = (offsetX / window.innerWidth) * 2 - 1,
-              y = -(offsetY / window.innerHeight) * 2 + 1;
-            let raycaster = new THREE.Raycaster();
-            raycaster.setFromCamera(new THREE.Vector2(x, y), camera);
-            return raycaster;
-        }
-        window.addEventListener('mousedown', function (e) {
-            // mousePre=[e.clientX, e.clientY]
-            //鼠标落点处创建射线
-            let raycaster = screenToWorld(e.clientX, e.clientY);
-            //获取射线经过的在指定范围内的物体集合
-            let intersect = raycaster.intersectObjects(objects);
-            if (intersect.length > 0) {
-              console.log(intersect[0])              
-            }
-          });
+        }else return 0xFFFFFF  
     }
 }
 function PicHandle() {//只服务于MaterialHandle对象
@@ -799,5 +780,4 @@ PicHandle.prototype={
         }*/
         return canvas;
     },
-
 }

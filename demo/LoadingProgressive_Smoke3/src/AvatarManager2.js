@@ -11,7 +11,7 @@ import conifg_woman     from '../../../config/avatar/sceneConifg_woman0.json'
 // import conifg_tree     from '../../config/avatar/tree.json'
 import { FindPath } from './FindPath/FindPath.js'
 import * as THREE from "three"
-import { Engine3D } from './main.js'
+import  Engine3D  from './main.js'
 export class AvatarManager {
     constructor(scene, camera,posConfig) {
         // CrowdManager=Engine3D.Template_sim2
