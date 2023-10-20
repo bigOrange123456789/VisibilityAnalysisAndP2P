@@ -116,7 +116,40 @@ export class Start{
             }
         )
 
-        new Engine3D.PathPlanning()
+        // setTimeout(()=>{
+            new Engine3D.PathPlanning()
+        // },3000)
+        
+        const center=new THREE.Object3D()
+        center.position.set( 126.06182686202473,  21,  161.6807662956592)
+        const scene=new THREE.Scene()
+        // for(let i=0;i<this.scene.children.length;i++){
+        //    scene.add(this.scene.children[i]) 
+        // }
+        scene.add(this.scene)
+        this.miniMap = new Engine3D.MiniMap({
+            target: this.camera,//center,//this.player,
+            scene: scene,//this.scene,
+            mapSize: 100*12,
+            mapRenderSize: 160,
+          });
+
+
+          const l=new Engine3D.PathLine({
+            path:[],
+            camera:this.camera,
+            delayTime:500
+          })
+          this.scene.add(l)
+        
+        // this.miniMap = new Engine3D.MiniMap({
+        //     target: this.camera,//this.player,
+        //     scene: this.scene,
+        //     mapSize: 12,
+        //     mapRenderSize: 160,
+        //   });
+          
+        
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -365,6 +398,7 @@ export class Start{
                     //this.godrays.render()
                 }                  
         }
+        if(this.miniMap)this.miniMap.update()
         requestAnimationFrame(this.animate)
     }
     resize(){
