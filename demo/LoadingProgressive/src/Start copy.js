@@ -53,7 +53,7 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        // this.panel = new Panel(this)
+        this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
         //     "LoadingProgressive/pos.json",
@@ -65,7 +65,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -116,12 +116,7 @@ export class Start{
             }
         )
 
-        // setTimeout(()=>{
-            new Engine3D.PathPlanning()
-        // },3000)
-        
-        // const center=new THREE.Object3D()
-        // center.position.set( 126.06182686202473,  21,  161.6807662956592)
+        // new Engine3D.PathPlanning()
         const scene=new THREE.Scene()
         scene.add(
             new Engine3D.PathLine({
@@ -137,18 +132,6 @@ export class Start{
             mapSize: 100*12,
             mapRenderSize: 160,
           });
-
-
-          
-        
-        // this.miniMap = new Engine3D.MiniMap({
-        //     target: this.camera,//this.player,
-        //     scene: this.scene,
-        //     mapSize: 12,
-        //     mapRenderSize: 160,
-        //   });
-          
-        
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -397,7 +380,6 @@ export class Start{
                     //this.godrays.render()
                 }                  
         }
-        if(this.miniMap)this.miniMap.update()
         requestAnimationFrame(this.animate)
     }
     resize(){

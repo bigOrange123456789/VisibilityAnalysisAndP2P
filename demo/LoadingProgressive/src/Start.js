@@ -65,7 +65,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data)
+                    // new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -91,7 +91,7 @@ export class Start{
         //       self.scene.backgroundIntensity=0.8
         //     }
         //   )
-        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
             ({ envMap }) => {
               self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
@@ -104,7 +104,7 @@ export class Start{
             //   self.scene.backgroundIntensity=0//=0.1
             }
         )
-        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
                 // envMap.flipY=true 
@@ -116,7 +116,39 @@ export class Start{
             }
         )
 
-        // new Engine3D.PathPlanning()
+        // setTimeout(()=>{
+            // new Engine3D.PathPlanning()
+        // },3000)
+        
+        // const center=new THREE.Object3D()
+        // center.position.set( 126.06182686202473,  21,  161.6807662956592)
+        const scene=new THREE.Scene()
+        scene.add(
+            new Engine3D.PathLine({
+                path:[],
+                camera:this.camera,
+                delayTime:500
+              })
+          )
+        scene.add(this.scene)
+        this.miniMap = new Engine3D.MiniMap({
+            target: this.camera,//center,//this.player,
+            scene: scene,//this.scene,
+            mapSize: 100*12,
+            mapRenderSize: 160,
+          });
+
+
+          
+        
+        // this.miniMap = new Engine3D.MiniMap({
+        //     target: this.camera,//this.player,
+        //     scene: this.scene,
+        //     mapSize: 12,
+        //     mapRenderSize: 160,
+        //   });
+          
+        
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -286,28 +318,6 @@ export class Start{
             )
         })
     }
-    getCubeMapTexture(path) {
-        var scope = this
-        return new Promise((resolve, reject) => {//'.exr'
-            new THREE.TextureLoader()
-            //.setDataType(THREE.FloatType)
-            .load(
-                path,
-                texture => {
-                const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
-                pmremGenerator.compileEquirectangularShader()
-
-                const envMap =//texture
-                    pmremGenerator.fromEquirectangular(texture).texture
-                pmremGenerator.dispose()
-
-                resolve({ envMap })
-                },
-                undefined,
-                reject
-            )
-        })
-    }
     getCubeMapHDR(path) {
         var scope = this
         return new Promise((resolve, reject) => {//'.exr'
@@ -365,6 +375,7 @@ export class Start{
                     //this.godrays.render()
                 }                  
         }
+        if(this.miniMap)this.miniMap.update()
         requestAnimationFrame(this.animate)
     }
     resize(){

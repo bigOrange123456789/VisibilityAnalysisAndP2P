@@ -63,8 +63,9 @@ export class Building{
             )
             
             // this.createCube2(this.config.createSphere)//展示分区结果
-            this.createKernel(this.config.block2Kernel)//展示核视点？
+            // this.createKernel(this.config.block2Kernel)//展示核视点？
 
+            // this.createSphere3(this.config.createSphere)//展示所有采样点
             // this.createSphere1(this.config.createSphere)//展示可见熵
             // this.createSphere2(this.config.createSphere)//展示凸局域分布情况 //不显示核视点 每一块视点使用不同颜色
             // this.wallShow()
@@ -199,6 +200,46 @@ export class Building{
                     const sphere = new THREE.Mesh( geometry, material );
                     sphere.position.set(x,y,z)
                     self.parentGroup.add( sphere )
+                }
+    }
+    createSphere3(c){
+        let self=this
+        let entropyMax=0.001
+        for(let name in self.config.entropy){
+            if(self.config.entropy[name]>entropyMax)entropyMax=self.config.entropy[name]
+        }
+        let test=[]
+        for(let x=c.x[0];x<=c.x[1];x=x+c.x[2])
+            for(let y=c.y[0];y<=c.y[1];y=y+c.y[2])
+                for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
+                    test.push([x,y,z])
+                    let geometry,material
+                    let name=(x+","+y+","+z)
+                    let flag=false
+                    for(let i=0;i<self.kernelPosition.length;i++){
+                        const p=self.kernelPosition[i]
+                        if( (p[0]+","+p[1]+",-10")==name)flag=true
+                    }
+                    if(true){
+                    //if(flag){//
+                    // if(name==self.config["kernelPosition"]){
+                        geometry = new THREE.SphereGeometry( c.r, 32, 16 );
+                        // material = new THREE.MeshBasicMaterial( {color:0xff0000} );
+                        material = new THREE.MeshBasicMaterial( {color:0x00ff00} );
+                    }else{
+                        geometry = new THREE.SphereGeometry( 
+                            c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
+                            32, 16 );
+                        material = new THREE.MeshBasicMaterial( );
+                        material.color.r=material.color.g=material.color.b=
+                            (-0.1+1.1*self.config.entropy[name]/entropyMax)
+                        material.color.g-=0.2
+                        material.color.b-=0.2
+                    }
+                    const sphere = new THREE.Mesh( geometry, material );
+                    sphere.position.set(x,y,z)
+                    self.parentGroup.add( sphere )
+                    if( name==self.config["kernelPosition"] )window.sphere=sphere
                 }
     }
     createCube2(c){//展示凸区域

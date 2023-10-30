@@ -67,14 +67,15 @@ export class Building{
         
 
         this.detection=new Engine3D.Detection(this.meshes)
-        
-        this.p2p=new Engine3D.P2P(camera,this.detection)
-        this.p2p.parse=message=>{self.p2pParse(message)}
+        if(this.config.useP2P){
+            this.p2p=new Engine3D.P2P(camera,this.detection)
+            this.p2p.parse=message=>{self.p2pParse(message)}
+        }
         // console.log(self.config.path)
         this.loader=new Engine3D.Loader(self.config.path,self.config.crossOriginSocket,true)
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
-                self.start(camera)
+                if(!this.config.onlyP2P)self.start(camera)
                 if(cb)cb()
             })
         })
