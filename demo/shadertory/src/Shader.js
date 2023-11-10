@@ -1,5 +1,6 @@
 import{MushroomCloud,MushroomCloud3,MushroomCloud4}from"./shader/MushroomCloud.js"
-import{VolumetricRaymarchingF}from"./shader/VolumetricRaymarchingF.js"
+import{VolumetricRaymarchingF}from"./shader/VolumetricRaymarchingF copy.js"
+import{VolumetricIntegration}from"./shader/VolumetricIntegration.js"
 import{Map,Test,Test1}from"./shader/Test.js"
 
 export class Shader{
@@ -7,7 +8,8 @@ export class Shader{
         this.fragmentShader=
             this.shader_prefix()+
             //MushroomCloud+
-            VolumetricRaymarchingF+
+            VolumetricIntegration+
+            //VolumetricRaymarchingF+
             //fragmentShader.test16+//
             this.shader_suffix()
 
