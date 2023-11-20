@@ -117,7 +117,7 @@ export class Start{
         )
 
         // setTimeout(()=>{
-            new Engine3D.PathPlanning()
+            // new Engine3D.PathPlanning()
         // },3000)
         
         // const center=new THREE.Object3D()

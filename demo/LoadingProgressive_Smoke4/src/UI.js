@@ -53,7 +53,7 @@ export class UI{
             this.control_godrays(postprocessing.godrays, main.postprocessing, main.postprocessing.GodRayShader)
             
         }
-        console.log(main.unrealBloom,unrealBloom)
+        // console.log(main.unrealBloom,unrealBloom)
         if(unrealBloom){
             this.control_ssao(unrealBloom.ssaoPass)
             this.control_bloomPass(unrealBloom.bloomPass)
@@ -72,8 +72,47 @@ export class UI{
             this.control_visibility(main.building.visibiity)
         }
         
+        if(main.smoke){
+            this.control_smoke(main.smoke)
+        }
         
-        
+    }
+    control_smoke(smoke){
+
+        const material=smoke.mesh.material
+        const uniforms=smoke.mesh.material.uniforms
+        console.log(smoke,uniforms)
+
+        const parameters = {
+            threshold: 0.25,
+            opacity: 0.25,
+            range: 0.1,
+            steps: 100
+        };
+
+        function update() {
+
+            material.uniforms.threshold.value = parameters.threshold;
+            material.uniforms.opacity.value = parameters.opacity;
+            material.uniforms.range.value = parameters.range;
+            material.uniforms.steps.value = parameters.steps;
+
+        }
+
+        const gui=this.gui
+        gui.add( parameters, 'threshold', 0.1, .5, 0.001 ).onChange( update );
+        gui.add( parameters, 'opacity', 0, 1, 0.01 ).onChange( update );
+        gui.add( parameters, 'range', 0, .25, 0.001 ).onChange( update );
+        gui.add( parameters, 'steps', 50, 200, 1 ).onChange( update );
+
+        parameters['颜色'] = uniforms.base.value//new THREE.Color(0xffffff)
+        gui.addColor(parameters, '颜色')
+        .onChange(function(e)
+        {
+            //directionalLight.color = new THREE.Color(e);
+            uniforms.base.value=e
+        });
+
     }
     control_visibility(v){
         console.log(v)

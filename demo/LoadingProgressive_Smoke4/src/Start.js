@@ -47,6 +47,8 @@ export class Start{
         // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
+        console.log(this.smoke,this.smoke)
+        this.ui=new UI(this)
 
     }
     init(){
@@ -58,20 +60,20 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        this.panel = new Panel(this)
+        // this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         
-        new Smoke(this.scene,this.camera)
+        this.smoke=new Smoke(this.scene,this.camera)
         
-        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
-            ({ envMap }) => {
-              self.scene.background = envMap
-              self.scene.backgroundIntensity=0.8
-              self.scene.backgroundIntensity=0.4
-              if(self.unrealBloom)if(self.unrealBloom.bloomPass)
-              self.unrealBloom.bloomPass.strength=0.55
-            }
-        )
+        // this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
+        //     ({ envMap }) => {
+        //       self.scene.background = envMap
+        //       self.scene.backgroundIntensity=0.8
+        //       self.scene.backgroundIntensity=0.4
+        //       if(self.unrealBloom)if(self.unrealBloom.bloomPass)
+        //       self.unrealBloom.bloomPass.strength=0.55
+        //     }
+        // )
         this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.jpg').then(
             ({ envMap }) => {
               self.scene.environment = envMap
@@ -151,13 +153,19 @@ export class Start{
             this.config.camera.rotation.y,
             this.config.camera.rotation.z
         )
+        this.camera.position.set(
+            -18.36748530467004, -8.700000000000456, 87.33370102853829
+        )
+        this.camera.rotation.set(
+            0.7720583066839323,  -0.3323201003306298,  0.3075672671566293
+        )
 
         window.camera=this.camera
         
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
+        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],false)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
