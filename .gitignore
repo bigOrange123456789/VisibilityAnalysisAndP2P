@@ -20,6 +20,7 @@
 
 # 忽略 /dist/ 目录及其下的所有文件
 dist
+/dist/index.html
 
 # 不忽略 
 ! /dist/config_sim/

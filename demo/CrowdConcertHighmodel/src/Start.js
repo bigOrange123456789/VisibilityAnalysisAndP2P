@@ -5,18 +5,18 @@ import Stats from "three/examples/jsm/libs/stats.module.js";
 // import { PlayerControl } from '../../lib/playerControl/PlayerControl.js'
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
-// import { Building } from './Building.js'
+import { Building } from './Building_new.js'
 import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
 import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
 import { SkyController  } from '../../../lib/threejs/SkyController'
-
+import {MyUI} from "./MyUI.js"
 // import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"./postprocessing/PostprocessingNew"
 // const Postprocessing=PostprocessingNew
-import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
+// import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
@@ -24,7 +24,7 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
 // import { TreeBuilder } from "./TreeBuilder";
-// import { Engine3D } from './main.js'//Engine3D.Building.
+import { Engine3D } from './main.js'
 
 export class Start{
     constructor(body){
@@ -40,11 +40,62 @@ export class Start{
         
         
         // this.postprocessing=new Postprocessing(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new Engine3D.UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
+        this.addMyUI()
 
         
+    }
+    addMyUI()
+    {
+      var ui=new MyUI()
+      var height=window.innerHeight
+  
+      var camera_pos = [
+        new THREE.Vector3(48.55640273290092-2,  1.9142025592268763+1,  -7.314690567468844),
+        new THREE.Vector3(47.298827892375-2,  1.7232932395224025+1,  -7.348360792773678),
+        new THREE.Vector3( -58.92759054201366, 39.57529059951184,  -130.21318894586796),
+        new THREE.Vector3(-1.0911605157232827,  0.7075214699744158+1,  -99.90313103529786-0.5),
+        new THREE.Vector3( -64.39189399430883,  8.99856114154391+1,  -74.3016535116766),
+        new THREE.Vector3( -1.5994877198648538,  1.4997407676957795+0.5,  -77.1512219063800),
+        new THREE.Vector3( -54.63874349381954,  18.532468360185952,  46.071540822),
+        
+        
+      ]
+      var camera_tar = [
+        new THREE.Vector3( 51.03516532171532-2,  2.290497364346837+1,  -7.248324342451475),
+        new THREE.Vector3( 51.03516532171532-2,  2.290497364346837+1,  -7.248324342451475),
+        new THREE.Vector3(0,0,0),
+        new THREE.Vector3(-0.9868855788301696,  0.7075214699744165+1,  -99.03513139079297-0.5),
+        new THREE.Vector3( -65.34712509322323,  9.472649100434154+1,  -69.41033714095124),
+        new THREE.Vector3(-1.9992580266994615,  1.6314769709077197+0.5,  -59.25814512545),
+        new THREE.Vector3( -66.03747192556759,  9.679838586814231,  41.845030134054),
+        
+      ]
+      var inf = {
+        '视点7':6,
+        '视点6':5,
+        '视点5':4,
+        '视点4':3,
+        '视点3':2,
+        '视点2':1,
+        '视点1':0,
+      }
+  
+      var self = this;
+      var names=Object.keys(inf)
+      for(let i=0; i<names.length; i++){
+        new ui.Button(names[i], "#D4D80B", '#DAA520', '#FFFACD',
+            30, 10,
+            150, 45,
+            10,height-60*(i+1.5),()=>{
+              var id = inf[names[i]]
+              self.camera.position.copy(camera_pos[id])
+              self.camera.lookAt(camera_tar[id])
+              self.orbitControl.target = camera_tar[id].clone()
+            });
+      }
     }
     init(){
         const self=this
@@ -75,7 +126,7 @@ export class Start{
           
         this.initCSM();
 
-        // this.building = new Building(this.scene, this.camera)
+        this.building = new Building(this.scene, this.camera)
         this.ui=new UI(this)
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
@@ -100,13 +151,13 @@ export class Start{
         //       self.unrealBloom.bloomPass.strength=0.55
         //     }
         // )
-        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
               self.scene.environment = envMap
               self.scene.background = envMap//test
               self.scene.backgroundIntensity=0.1
-              self.unrealBloom.bloomPass.strength=1.5
+              if(self.unrealBloom)self.unrealBloom.bloomPass.strength=1.5
               window.scene=self.scene
             }
         )
@@ -216,16 +267,18 @@ export class Start{
 
         this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         window.orbitControl=this.orbitControl
-        this.orbitControl.target.set(
-            -340.67888298324596, 
-            8.573750000000038,  
-            199.38166396137652
-        )
-        this.camera.lookAt(
-            -340.67888298324596, 
-            8.573750000000038,  
-            199.38166396137652
-        )
+        // this.orbitControl.target.set(
+        //     -340.67888298324596, 
+        //     8.573750000000038,  
+        //     199.38166396137652
+        // )
+        // this.camera.lookAt(
+        //     -340.67888298324596, 
+        //     8.573750000000038,  
+        //     199.38166396137652
+        // )
+        this.camera.position.set(-43.486343682038736,  2.127206120237504,  -8.698678933445201)
+        this.camera.lookAt(0,0,0)
 
         // this.playerControl.target.set(
         //     this.config.camera.target.x,
@@ -251,7 +304,7 @@ export class Start{
             camera: this.camera,
             parent: this.scene,
             lightIntensity: 2.9,
-            lightColor: new THREE.Color(0xf7f2d9),
+            // lightColor: new THREE.Color(0xf7f2d9),
             shadowBias: -0.0004,
             mode: 'practical',
             lightMargin: 200
@@ -355,6 +408,7 @@ export class Start{
                     //renderer.render(this.scene,this.camera)
                     if(this.unrealBloom)this.unrealBloom.render()//this.composer.render()//
                     else if(this.postprocessing) this.postprocessing.render()
+                    else if(this.postprocessingNew) this.postprocessingNew.render()
                     else this.renderer.render(this.scene,this.camera)
                     //this.godrays.render()
                 }                  
