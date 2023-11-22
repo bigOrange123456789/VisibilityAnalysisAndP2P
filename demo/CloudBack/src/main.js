@@ -6,13 +6,15 @@ import * as THREE from '../three.module'
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
-import {Control} from "./Control"
+import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {Communication} from "./Communication"
 import {Light} from "./Light"
 class Loader{
     constructor(){
 		this.initScene()
-		this.controls = new Control(this.camera, this.renderer)
+		
+		this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
+
 		this.models = []
 		const self=this
 		const ui=new UI()
@@ -116,7 +118,6 @@ class Loader{
 		this.camera.position.x = rtxgiNetwork.cameraPosition.x;
 		this.camera.position.y = rtxgiNetwork.cameraPosition.y;
 		this.camera.position.z = rtxgiNetwork.cameraPosition.z;
-		this.controls = new Control(this.camera, this.renderer)
 	}
 	render(){
 		const models=this.models
@@ -142,7 +143,6 @@ class Loader{
 	}
     animate(){
 		if(this.rtxgiNetwork.isDescTouch)this.render()
-		this.controls.run()
         requestAnimationFrame(this.animate)
     }
     resize(){
