@@ -9,7 +9,6 @@ import {UI} from "./UI"
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {Communication} from "./Communication"
 import {Light} from "./Light"
-
 class Loader{
     constructor(){
 		this.initScene()

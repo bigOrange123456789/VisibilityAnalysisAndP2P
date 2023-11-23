@@ -104,7 +104,7 @@ export class RTXGINetwork
 									 texture.wrapT = THREE.RepeatWrapping;
 								}
 					);
-					this.IrradianceTex = irradianceLoader;
+					this.IrradianceTex = irradianceLoader;console.log(1.107)
 				}else if(dataJson.type == StateCode.C2S_RTXGI_ProbePng)
 				{
 					/*irradiance*/
@@ -123,7 +123,7 @@ export class RTXGINetwork
 									 texture.wrapT = THREE.RepeatWrapping;
 								}
 					);
-					this.IrradianceTex = irradianceLoader;
+					this.IrradianceTex = irradianceLoader;console.log(2.126)
 				}else if(dataJson.type == StateCode.C2S_RTXGI_VolumeDesc){
 					if(!this.isDescTouch)
 					{
@@ -179,6 +179,7 @@ export class RTXGINetwork
 						/*irradiance*/
 						let irradianceData = base64.toByteArray(dataJson.irradiance);
 						/*update loader*/
+						console.log("irradianceData",irradianceData)
 						let irradianceBlob = new Blob([irradianceData],{ type: "image/hdr"});
 						let irradianceUrl = URL.createObjectURL(irradianceBlob);
 						/*irradiance loader*/
@@ -190,9 +191,11 @@ export class RTXGINetwork
 									 texture.magFilter = THREE.LinearFilter;
 									 texture.wrapS = THREE.RepeatWrapping;
 									 texture.wrapT = THREE.RepeatWrapping;
+									 console.log(texture.image.data)
 								}
 						);
-						this.IrradianceTex = irradianceLoader;
+						this.IrradianceTex = irradianceLoader;console.log(3.195)
+						// console.log("irradianceLoader",irradianceLoader)
 						
 						this.viewBias = dataJson.viewB;
 						this.normalBias = dataJson.normalB;
@@ -201,7 +204,7 @@ export class RTXGINetwork
 						this.exposure = dataJson.exposure;
 						this.tonemapping = dataJson.tonemapping;
 						this.gamma = dataJson.gamma;
-						console.log(this.exposure);
+						// console.log(this.exposure);
 						
 						this.origin = new THREE.Vector3();
 						this.origin.x = dataJson.originX;
@@ -266,7 +269,7 @@ export class RTXGINetwork
 	/*set irradiance and distance probe*/
 	ConstructorProbe(irradiance, distance)
 	{
-		this.IrradianceTex = irradiance;
+		this.IrradianceTex = irradiance;console.log(4.269)
 		this.DistanceTex = distance;
 	}
 }

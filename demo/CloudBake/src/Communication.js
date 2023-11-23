@@ -70,10 +70,12 @@ export class Communication extends RTXGINetwork{
                 this.stopUpdate = true;
               }
         }
+        const irradianceLoader = rtxgiNetwork.IrradianceTex;
+        const probeDistanceLoader = rtxgiNetwork.DistanceTex;
+        // if(rtxgiNetwork.IrradianceTex.image)
+        //     console.log(rtxgiNetwork.IrradianceTex.image.data)
         for (var i = 0; i < models.length; i++) {
-            const irradianceLoader = rtxgiNetwork.IrradianceTex;
             models[i].indirectMaterial.probeIrradianceUpdate(irradianceLoader) ;
-            const probeDistanceLoader = rtxgiNetwork.DistanceTex;
             models[i].indirectMaterial.uniforms.probeDistance.value = probeDistanceLoader;
         }
               
