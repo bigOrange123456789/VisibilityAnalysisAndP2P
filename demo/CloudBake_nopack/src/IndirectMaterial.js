@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from '../three.module'
 import{indirectFS}from"../shader/indirectFS.js"
 import{indirectVS}from"../shader/indirectVS.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {

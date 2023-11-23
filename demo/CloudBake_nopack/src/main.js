@@ -4,18 +4,18 @@ import * as THREE from '../three.module'
 // import * as THREE from 'three'
 //import { GLTFLoader } from '../GLTFLoader'
 // import { GLTFLoader } from 'three/jsm/loaders/GLTFLoader'
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from '../GLTFLoader'
 // import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
-import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+// import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {Communication} from "./Communication"
 import {Light} from "./Light"
 class Loader{
     constructor(){
 		this.initScene()
 		
-		this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
+		// this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
 
 		this.models = []
 		const self=this
