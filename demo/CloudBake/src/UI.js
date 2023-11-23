@@ -1,5 +1,5 @@
 import * as dat from 'dat.gui'
-import * as THREE from 'three'
+import * as THREE from '../three.module'//import * as THREE from 'three'
 export class UI{
     constructor(){
         this.dlightChange = false;

@@ -1,17 +1,28 @@
-import {
-	DataTextureLoader,
-	DataUtils,
-	FloatType,
-	HalfFloatType,
-	LinearEncoding,
-	LinearFilter,
-	NearestFilter,
-	RGBEEncoding,
-	RGBEFormat,
-	RGBFormat,
-	UnsignedByteType
-} from 'three'
-
+// import {
+// 	DataTextureLoader,
+// 	DataUtils,
+// 	FloatType,
+// 	HalfFloatType,
+// 	LinearEncoding,
+// 	LinearFilter,
+// 	NearestFilter,
+// 	RGBEEncoding,
+// 	RGBEFormat,
+// 	RGBFormat,
+// 	UnsignedByteType
+// } from 'three'
+import * as THREE from '../../three.module'
+let DataTextureLoader=THREE.DataTextureLoader,
+	DataUtils		=THREE.DataUtils,
+	FloatType		=THREE.FloatType,
+	HalfFloatType	=THREE.HalfFloatType,
+	LinearEncoding	=THREE.LinearEncoding,
+	LinearFilter	=THREE.LinearFilter,
+	NearestFilter	=THREE.NearestFilter,
+	RGBEEncoding	=THREE.RGBEEncoding,
+	RGBEFormat		=THREE.RGBEFormat,
+	RGBFormat		=THREE.RGBFormat,
+	UnsignedByteType=THREE.UnsignedByteType
 // https://github.com/mrdoob/three.js/issues/5552
 // http://en.wikipedia.org/wiki/RGBE_image_format
 

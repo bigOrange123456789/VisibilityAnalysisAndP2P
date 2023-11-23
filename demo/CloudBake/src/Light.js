@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from '../three.module'//import * as THREE from 'three'
 export class Light{
     constructor(){
       // this.object=new THREE.Object3D()

@@ -1,4 +1,4 @@
-import * as THREE from 'three'
+import * as THREE from '../three.module'//import * as THREE from 'three'
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static loadGLSL(name){
 		return new Promise((resolve, reject) => {
@@ -13,7 +13,7 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 	static async Json2Texture(){
 		return new Promise( (resolve, reject) => { 
 			new THREE.FileLoader().load(
-				'./CloudBack/probeIrradiance.json',
+				'./CloudBake/probeIrradiance.json',
 				data => {
 					const J=JSON.parse( data )
 					const texture=array2Texture(J.data, J.width,J.height)

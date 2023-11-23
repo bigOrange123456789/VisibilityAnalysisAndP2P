@@ -1,7 +1,7 @@
 import { StateCode } from "./StateCode"
 import { RGBELoader } from './RGBELoader'
 import  base64  from  './base64'
-import * as THREE from 'three'
+import * as THREE from '../../three.module'//import * as THREE from 'three'
 export class RTXGINetwork
 {
 	/*Client 2 Server*/

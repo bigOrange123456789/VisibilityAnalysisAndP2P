@@ -8,9 +8,10 @@
 
 # 忽略 /node_modules/ 目录及其下的所有文件
 /node_modules/
-/tool3/node_modules/
-/tool3/public/Models/
-
+/*/*/node_modules/
+/新建文件夹/
+/*/新建文件夹/
+/*/*/新建文件夹/
 # 忽略/.cache/目录及其下的所有文件
 /.cache/
 
