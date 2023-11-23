@@ -1,3 +1,4 @@
+const indirectFS =/* glsl */`
 //precision highp float;
 
       //#extension GL_EXT_shader_texture_lod : enable
@@ -569,3 +570,5 @@
 			
 		gl_FragColor = vec4(result,1.0f);
     }
+`
+export {indirectFS}

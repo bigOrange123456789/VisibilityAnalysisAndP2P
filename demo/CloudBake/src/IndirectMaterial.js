@@ -1,4 +1,6 @@
 import * as THREE from '../three.module'//import * as THREE from 'three'
+import{indirectFS}from"../shader/indirectFS.js"
+import{indirectVS}from"../shader/indirectVS.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static loadGLSL(name){
 		return new Promise((resolve, reject) => {
@@ -67,8 +69,8 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		} )
 	}
 	static async pre(cb){
-		IndirectMaterial.prototype.vertexShader  = await IndirectMaterial.loadGLSL('indirectVS')//document.getElementById('indirectVS').innerHTML
-		IndirectMaterial.prototype.fragmentShader= await IndirectMaterial.loadGLSL('indirectFS')//document.getElementById('indirectFS').innerHTML
+		IndirectMaterial.prototype.vertexShader  = indirectVS//await IndirectMaterial.loadGLSL('indirectVS')//document.getElementById('indirectVS').innerHTML
+		IndirectMaterial.prototype.fragmentShader= indirectFS//await IndirectMaterial.loadGLSL('indirectFS')//document.getElementById('indirectFS').innerHTML
 		IndirectMaterial.prototype.probeIrradiance0=await IndirectMaterial.Json2Texture()
 		if(cb)cb()
 	}
