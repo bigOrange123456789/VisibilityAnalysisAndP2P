@@ -1,7 +1,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+// let PlayerControl//import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
@@ -9,22 +9,22 @@ import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
-import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
-import { SkyController  } from '../../../lib/threejs/SkyController'
+// import {AvatarManager } from './AvatarManager2.js'
+// import {Car } from './Car.ts'
+// window.car=new Car()
+// let MoveManager//import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+// let SkyController//import { SkyController  } from '../../../lib/threejs/SkyController'
 
-// import{Postprocessing}from"../../../lib/postprocessing/Postprocessing.js"
-// import{PostprocessingNew}from"../../../lib/postprocessing/PostprocessingNew"
-// import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
+// import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
+// import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
+// import{UnrealBloom}from"../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
-import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
-
-import { Engine3D } from './main.js'//Engine3D.Building.
-
+import {CSM} from "three/examples/jsm/csm/CSM.js";//import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
-
+import { Engine3D } from './main.js'//Engine3D.Building.
 export class Start{
     constructor(body){
         this.addTool(window)
@@ -241,7 +241,7 @@ export class Start{
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
+        this.playerControl=new Engine3D.PlayerControl(this.camera,this.config["FlipY"],true)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
@@ -300,45 +300,6 @@ export class Start{
         //mesh.receiveShadow = true;
 
         //this.scene.add(mesh);();
-    }
-    getCubeMapTexture_old(path) {
-        return new Promise((resolve, reject) => {//'.exr'
-            new THREE.TextureLoader()
-            //.setDataType(THREE.FloatType)
-            .load(
-                path,
-                texture => {
-
-                const envMap =texture
-
-                resolve({ envMap })
-                },
-                undefined,
-                reject
-            )
-        })
-    }
-    getCubeMapHDR(path) {
-        var scope = this
-        return new Promise((resolve, reject) => {//'.exr'
-            new RGBELoader()
-                .setDataType(THREE.FloatType)
-                .load(
-                    path,
-                    texture => {
-                        const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
-                        pmremGenerator.compileEquirectangularShader()
-
-                        const envMap = 
-                            pmremGenerator.fromEquirectangular(texture).texture
-                        pmremGenerator.dispose()
-
-                        resolve({ envMap })
-                    },
-                    undefined,
-                    reject
-                )
-        })
     }
     animate() {
         if(this.csm)this.csm.update(this.camera.matrix);
@@ -406,7 +367,7 @@ export class Start{
                 a[j][6]*=2//速度减慢
             }
             this.wanderList.push(
-                new MoveManager(this.camera, this.config.pathList[i])
+                new Engine3D.MoveManager(this.camera, this.config.pathList[i])
             )
         }
         const self=this

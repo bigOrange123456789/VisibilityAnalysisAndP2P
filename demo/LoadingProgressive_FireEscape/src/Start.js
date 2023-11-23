@@ -1,7 +1,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-let PlayerControl//import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+// let PlayerControl//import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
@@ -12,8 +12,8 @@ import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager2.js'
 // import {Car } from './Car.ts'
 // window.car=new Car()
-let MoveManager//import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
-let SkyController//import { SkyController  } from '../../../lib/threejs/SkyController'
+// let MoveManager//import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+// let SkyController//import { SkyController  } from '../../../lib/threejs/SkyController'
 
 // import{Postprocessing}from"../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"../../lib/postprocessing/PostprocessingNew"
@@ -24,13 +24,12 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
 import {CSM} from "three/examples/jsm/csm/CSM.js";//import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
-
+import { Engine3D } from './main.js'//Engine3D.Building.
 export class Start{
-    constructor(body,Engine3D){
-        this.Engine3D=Engine3D
-        PlayerControl=Engine3D.PlayerControl
-        MoveManager=Engine3D.MoveManager
-        SkyController=Engine3D.SkyController
+    constructor(body){
+        // PlayerControl=Engine3D.PlayerControl
+        // MoveManager=Engine3D.MoveManager
+        // SkyController=Engine3D.SkyController
 
         this.addTool(window)
         this.speed=1
@@ -58,7 +57,7 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        this.panel = new Panel(this,this.Engine3D)
+        this.panel = new Panel(this,Engine3D)
         this.lightProducer=new LightProducer(this.scene,this.camera)
         // this.loadJson(
         //     "LoadingProgressive/pos.json",
@@ -70,7 +69,7 @@ export class Start{
                 // })
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data,this.Engine3D)
+                    new AvatarManager(self.scene,self.camera,data,Engine3D)
                 // self.TreeManager.init(data) 
             // }
         // )
@@ -80,7 +79,7 @@ export class Start{
 
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
             this.ui=new UI(this)
-        },false,this.Engine3D)
+        },false,Engine3D)
         
         // console.log(this.csm)
         // console.log(this.lightProducer.ambient)
@@ -96,7 +95,7 @@ export class Start{
         //       self.scene.backgroundIntensity=0.8
         //     }
         //   )
-        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
             ({ envMap }) => {
               self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
@@ -109,7 +108,7 @@ export class Start{
             //   self.scene.backgroundIntensity=0//=0.1
             }
         )
-        this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/footprint_court_2k.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
                 // envMap.flipY=true 
@@ -212,7 +211,7 @@ export class Start{
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
+        this.playerControl=new Engine3D.PlayerControl(this.camera,this.config["FlipY"],true)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
@@ -379,7 +378,7 @@ export class Start{
     }
     initSky() {
         if(this.config.render=="false")return
-        new SkyController(this.scene,this.camera,this.renderer)
+        new Engine3D.SkyController(this.scene,this.camera,this.renderer)
     }
     setSpeed(){
         if(this.config.pathList)
@@ -398,7 +397,7 @@ export class Start{
                 a[j][6]*=2//速度减慢
             }
             this.wanderList.push(
-                new MoveManager(this.camera, this.config.pathList[i])
+                new Engine3D.MoveManager(this.camera, this.config.pathList[i])
             )
         }
         const self=this

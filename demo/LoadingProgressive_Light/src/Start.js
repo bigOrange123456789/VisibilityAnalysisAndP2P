@@ -19,7 +19,7 @@ import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
-import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
+import {CSM} from "three/examples/jsm/csm/CSM.js";
 
 import { Engine3D } from './main.js'//Engine3D.Building.
 

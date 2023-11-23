@@ -5,16 +5,18 @@ import * as THREE from "three"
 // import { IndirectMaterial } from '../../../lib/threejs/IndirectMaterial'
 // import { Loader } from '../../../lib/loading/Loader.js'
 
-import { BuildMaterial } from './Building/BuildMaterial.js'
+// import { BuildMaterial } from './Building/BuildMaterial.js'
 // import { Pretreatment } from './Building/Pretreatment.js'
-import { Tool } from './Building/Tool.js'
 
 
+
+import { Engine3D } from './main.js'
 
 export class Building{
-    constructor(scene,camera,csm,cb,sampling,Engine3D){
+    constructor(scene,camera,csm,cb,sampling){
+        // console.log(Engine3D)
+        // return
         this.shell=[3465, 2500, 2504, 2488, 3576, 2949, 2816, 2795, 3533, 2803, 2951, 3475, 3474, 3480, 3097, 2543, 2515, 3489, 3476, 2396, 2950, 2957, 2952, 2113, 2963, 2529, 2520, 2894, 2892, 2896, 2397, 2506, 2590, 3485, 3132, 2895, 2893, 2565, 3575, 3014, 3539, 2518, 2964, 2498, 2519, 3498, 2959, 2840, 2930, 2486, 3134, 2903, 2904, 3013, 2905, 3486, 2897, 2107, 3133, 2538, 2494, 3112, 2342, 2576, 3574, 2962, 3537, 2091, 3120, 3544, 3490, 2263, 3497, 2899, 2801, 2415, 2411, 2502, 3534, 2341, 2398, 3541, 2447, 2115, 2496, 3131, 2340, 2898, 2900, 3527, 3492, 2484, 2264, 3098, 2558, 2796, 2907, 2100, 2921, 2902]
-        this.Engine3D=Engine3D
 
         this.sampling=sampling
         // this.config.path="http://"+this.config.path 
@@ -80,12 +82,12 @@ export class Building{
 
         
 
-        this.detection=new this.Engine3D.Detection(this.meshes)
+        this.detection=new Engine3D.Detection(this.meshes)
         
-        this.p2p=new this.Engine3D.P2P(camera,this.detection)
+        this.p2p=new Engine3D.P2P(camera,this.detection)
         this.p2p.parse=message=>{self.p2pParse(message)}
         // console.log(self.config.path)
-        this.loader=new this.Engine3D.Loader(self.config.path,self.config.crossOriginSocket,true)
+        this.loader=new Engine3D.Loader(self.config.path,self.config.crossOriginSocket,true)
         self.loadConfigInstance(()=>{
             self.loadConfigIndirect(()=>{
                 self.start(camera)
@@ -94,7 +96,7 @@ export class Building{
         })
         // new Pretreatment(this)
         if(self.config.needTool){
-            const tool=new Tool({
+            const tool=new Engine3D.Building.Tool({
                 instance_info:this.instance_info,
                 meshes:this.meshes,
                 parentGroup:this.parentGroup
@@ -131,7 +133,7 @@ export class Building{
     }
     loadConfigIndirect(cb){
         if(this.config.useIndirectMaterial){
-            this.Engine3D.IndirectMaterial.pre(()=>{
+            Engine3D.IndirectMaterial.pre(()=>{
                 cb()
             })
         }else cb()
@@ -167,7 +169,7 @@ export class Building{
 
         // console.log(camera)
         
-        this.buildMaterial=new BuildMaterial({
+        this.buildMaterial=new Engine3D.Building.BuildMaterial({
             path:this.config.path,
             meshes:this.meshes,
             // instance_info:this.instance_info
@@ -207,7 +209,7 @@ export class Building{
         
         
         
-        this.visibiity=new this.Engine3D.Visibility(
+        this.visibiity=new Engine3D.Visibility(
             camera,
             list=>self.loading(list),
             this.meshes,
@@ -294,7 +296,7 @@ export class Building{
         m.transparent=false
 
         // meshOld.material=Tool.getSampleMaterial(id)
-        if(this.sampling)meshOld.material=Tool.getSampleMaterial(id)
+        if(this.sampling)meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
         // if(this.sampling)meshOld.material=Tool.getSampleMaterial(136)
 
         // mesh.material.shininess = 10;
@@ -328,7 +330,7 @@ export class Building{
                 mesh1.material1=mesh1.material
                 mesh2.material1=mesh2.material
                 mesh1.material2=
-                mesh2.material2=new this.Engine3D.IndirectMaterial(mesh.material)
+                mesh2.material2=new Engine3D.IndirectMaterial(mesh.material)
             }
             // mesh2.material=mesh.material=mesh.material2
             

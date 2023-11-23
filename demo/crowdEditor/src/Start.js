@@ -21,7 +21,7 @@ import{Building}from"./Building.js"
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 
-import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
+import {CSM} from "three/examples/jsm/csm/CSM.js";
 THREE.CSM = CSM;
 
 

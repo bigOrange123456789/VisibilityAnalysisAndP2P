@@ -1,7 +1,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+// import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
@@ -9,17 +9,17 @@ import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
-import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
-import { SkyController  } from '../../../lib/threejs/SkyController'
+// import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+// import { SkyController  } from '../../../lib/threejs/SkyController'
 
 // import{Postprocessing}from"../../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"../../../lib/postprocessing/PostprocessingNew"
 // import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 // import { TreeManager } from "./TreeManager";
-import {CSM} from "../../../lib/three/examples/jsm/csm/CSM.js";
+import {CSM} from "three/examples/jsm/csm/CSM.js";
 
 import { Engine3D } from './main.js'//Engine3D.Building.
 
@@ -91,7 +91,7 @@ export class Start{
         //       self.scene.backgroundIntensity=0.8
         //     }
         //   )
-        this.getCubeMapTexture('assets/textures/environment/skybox.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
             ({ envMap }) => {
               self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
@@ -104,7 +104,7 @@ export class Start{
             //   self.scene.backgroundIntensity=0//=0.1
             }
         )
-        this.getCubeMapTexture('assets/textures/environment/evn.jpg').then(
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
             ({ envMap }) => {
                 // envMap.flipY=true 
@@ -241,7 +241,7 @@ export class Start{
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
+        this.playerControl=new Engine3D.PlayerControl(this.camera,this.config["FlipY"],true)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
@@ -301,67 +301,6 @@ export class Start{
 
         //this.scene.add(mesh);();
     }
-    getCubeMapTexture_old(path) {
-        return new Promise((resolve, reject) => {//'.exr'
-            new THREE.TextureLoader()
-            //.setDataType(THREE.FloatType)
-            .load(
-                path,
-                texture => {
-
-                const envMap =texture
-
-                resolve({ envMap })
-                },
-                undefined,
-                reject
-            )
-        })
-    }
-    getCubeMapTexture(path) {
-        var scope = this
-        return new Promise((resolve, reject) => {//'.exr'
-            new THREE.TextureLoader()
-            //.setDataType(THREE.FloatType)
-            .load(
-                path,
-                texture => {
-                const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
-                pmremGenerator.compileEquirectangularShader()
-
-                const envMap =//texture
-                    pmremGenerator.fromEquirectangular(texture).texture
-                pmremGenerator.dispose()
-
-                resolve({ envMap })
-                },
-                undefined,
-                reject
-            )
-        })
-    }
-    getCubeMapHDR(path) {
-        var scope = this
-        return new Promise((resolve, reject) => {//'.exr'
-            new RGBELoader()
-                .setDataType(THREE.FloatType)
-                .load(
-                    path,
-                    texture => {
-                        const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
-                        pmremGenerator.compileEquirectangularShader()
-
-                        const envMap = 
-                            pmremGenerator.fromEquirectangular(texture).texture
-                        pmremGenerator.dispose()
-
-                        resolve({ envMap })
-                    },
-                    undefined,
-                    reject
-                )
-        })
-    }
     animate() {
         if(this.csm)this.csm.update(this.camera.matrix);
         if(this.stats)this.stats.update()
@@ -409,7 +348,7 @@ export class Start{
     }
     initSky() {
         if(this.config.render=="false")return
-        new SkyController(this.scene,this.camera,this.renderer)
+        new Engine3D.SkyController(this.scene,this.camera,this.renderer)
     }
     setSpeed(){
         if(this.config.pathList)
@@ -428,7 +367,7 @@ export class Start{
                 a[j][6]*=2//速度减慢
             }
             this.wanderList.push(
-                new MoveManager(this.camera, this.config.pathList[i])
+                new Engine3D.MoveManager(this.camera, this.config.pathList[i])
             )
         }
         const self=this
