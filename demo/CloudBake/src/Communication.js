@@ -1,4 +1,4 @@
-import * as THREE from '../three.module'//import * as THREE from 'three'
+import * as THREE from 'three'
 import { StateCode } from "./network/StateCode"
 import { RTXGINetwork } from './network/RTXGINetwork';
 export class Communication extends RTXGINetwork{
