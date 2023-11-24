@@ -4,6 +4,8 @@ export const DDGIGetVolumeIrradiance =
 DDGIGetOctahedralCoordinates+
 DDGIGetProbeUV+
 /* glsl */`
+    uniform sampler2D probeIrradiance;
+
 	/**
 	* DDGIGetBaseProbeGridCoords
 	* Computes the 3D grid coordinates of the base probe (i.e. floor of xyz) of the 8-probe

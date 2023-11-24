@@ -4,10 +4,28 @@ import {DDGIGetVolumeBlendWeight} from"./DDGIGetVolumeBlendWeight.js"
 
 export const getIrradianceColor =
 GetBaseColor+
+/* glsl */`
+	#define PI 3.1415926535897932f
+	struct DDGIVolumeDescGPU
+	{
+          vec3 origin;
+          vec3 probeGridSpacing;
+          ivec3 probeGridCounts;
+          float probeIrradianceEncodingGamma;
+          int probeNumIrradianceTexels;
+          int probeNumDistanceTexels;
+          float normalBias;
+          float viewBias;
+    };
+`+
 DDGIGetVolumeIrradiance+
 DDGIGetVolumeBlendWeight+
 /* glsl */`
 	uniform DDGIVolumeDescGPU DDGIVolume;
+	
+	varying vec4 vPosition;
+    varying vec3 vNormal;
+
 	/**
 	* DDGIGetSurfaceBias
 	*/

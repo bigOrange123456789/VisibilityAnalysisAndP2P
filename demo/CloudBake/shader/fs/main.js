@@ -1,15 +1,23 @@
 console.log("indirect fs version:2023.11.24_17:03")
-import {globalVariable} from"./globalVariable.js"
 import {getIrradianceColor} from"./getIrradianceColor.js"
 export const main =
-globalVariable+
+/* glsl */`
+    vec3 lerp(vec3 a, vec3 b, vec3 c)
+    {
+        float lerpx = a.x + (b.x - a.x) * c.x;
+        float lerpy = a.y + (b.y - a.y) * c.y;
+        float lerpz = a.z + (b.z - a.z) * c.z;
+        return vec3(lerpx, lerpy, lerpz);
+    }
+
+`+
 getIrradianceColor+
 /* glsl */`
     uniform bool dGI;
     uniform float exposure;
     uniform bool tonemapping;
     uniform bool gamma;
-    
+
 	vec3 saturate(vec3 rgb)
 	{
 		return clamp(rgb,0.f,1.f);
@@ -42,6 +50,12 @@ getIrradianceColor+
         );
     }
 
+    uniform float screenWidth;
+    uniform float screenHeight;
+    uniform vec3 emissiveColor;
+
+    uniform sampler2D GBufferd;
+    
     const float sigma = 2.0f;
 	void main(void)
     {

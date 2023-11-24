@@ -5,6 +5,9 @@ export const GetBaseColor =/* glsl */`
     uniform sampler2D colorMap;
     uniform bool useEmissiveMap;
     uniform sampler2D emissiveMap;
+
+    varying vec2 vuv;
+    
 	vec4 GetBaseColor()
     {
         vec4 baseColor = vec4(originColor,0.);
