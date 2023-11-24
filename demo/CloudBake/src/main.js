@@ -22,8 +22,6 @@ class Loader{
 		const ui=new UI()
 		const light=new Light()
 		
-		
-		
 		this.resize  = this.resize.bind(self)
 		this.animate = this.animate.bind(self)
 		

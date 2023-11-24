@@ -179,7 +179,7 @@ export class RTXGINetwork
 						/*irradiance*/
 						let irradianceData = base64.toByteArray(dataJson.irradiance);
 						/*update loader*/
-						console.log("irradianceData",irradianceData)
+						// console.log("irradianceData",irradianceData)
 						let irradianceBlob = new Blob([irradianceData],{ type: "image/hdr"});
 						let irradianceUrl = URL.createObjectURL(irradianceBlob);
 						/*irradiance loader*/
@@ -191,7 +191,7 @@ export class RTXGINetwork
 									 texture.magFilter = THREE.LinearFilter;
 									 texture.wrapS = THREE.RepeatWrapping;
 									 texture.wrapT = THREE.RepeatWrapping;
-									 console.log(texture.image.data)
+									//  console.log(texture.image.data)
 								}
 						);
 						this.IrradianceTex = irradianceLoader;console.log(3.195)
