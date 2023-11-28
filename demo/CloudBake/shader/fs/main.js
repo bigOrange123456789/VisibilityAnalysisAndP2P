@@ -1,4 +1,6 @@
 console.log("indirect fs version:2023.11.24_17:03")
+//因此对于点P只需要单独在对他进行一次MVP矩阵变化（注意这里的投影矩阵和视角矩阵都是光源视角下），
+//然后用它的xy分量作为uv坐标去深度纹理中采样即可获得点C（注意由于变化之后的顶点一定是
 import {getIrradianceColor} from"./getIrradianceColor.js"
 export const main =
 /* glsl */`
@@ -75,3 +77,4 @@ getIrradianceColor+
 		gl_FragColor = vec4(result,1.0f);
     }
 `
+// console.log("main",main)

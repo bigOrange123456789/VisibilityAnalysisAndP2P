@@ -5,6 +5,7 @@ DDGIGetOctahedralCoordinates+
 DDGIGetProbeUV+
 /* glsl */`
     uniform sampler2D probeIrradiance;
+    uniform sampler2D probeDistance;
 
 	/**
 	* DDGIGetBaseProbeGridCoords
@@ -124,7 +125,7 @@ DDGIGetProbeUV+
 
             vec2 probeTextureCoords = DDGIGetProbeUV(adjacentProbeIndex, octantCoords, volume.probeGridCounts, volume.probeNumDistanceTexels);
             probeTextureCoords.y = 1.0f- probeTextureCoords.y;
-            vec2 filteredDistance = vec2(0.001,0.);//2.f * texture2DLodEXT(probeDistance,probeTextureCoords, 0.f).rg;
+            vec2 filteredDistance = 2.f * texture2DLodEXT(probeDistance,probeTextureCoords, 0.f).rg;//vec2(0.001,0.);//
 
             float meanDistanceToSurface = filteredDistance.x;
             float variance = abs((filteredDistance.x * filteredDistance.x) - filteredDistance.y);//|x*x-y|

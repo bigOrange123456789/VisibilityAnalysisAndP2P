@@ -1,11 +1,6 @@
-//import * as THREE from 'three'
-import * as THREE from '../three.module'
-// import * as THREE from 'three'
-// import * as THREE from 'three'
-//import { GLTFLoader } from '../GLTFLoader'
-// import { GLTFLoader } from 'three/jsm/loaders/GLTFLoader'
+import * as THREE from 'three'
+// import * as THREE from '../three.module'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
-// import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader"
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
@@ -164,3 +159,4 @@ class Loader{
 document.addEventListener('DOMContentLoaded', () => {
     new Loader(document.body)
 })
+export{THREE}
