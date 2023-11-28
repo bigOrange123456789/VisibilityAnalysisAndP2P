@@ -10,8 +10,8 @@ varying vec2 vuv;
 void main()
 {
 
-   vPosition = modelMatrix * vec4( position, 1.0 );
-   vNormal = (modelMatrix*vec4(normal,1.0f)).xyz;
+   vPosition = modelMatrix * vec4( position, 1.0 );//模型的局部坐标->世界坐标
+   vNormal = (modelMatrix*vec4(normal,1.0f)).xyz;  //模型的局部法线->世界法线
    vNormal = normalize(vNormal);
    vuv = uv;
 

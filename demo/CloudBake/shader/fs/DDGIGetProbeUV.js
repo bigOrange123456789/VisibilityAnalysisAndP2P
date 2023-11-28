@@ -8,11 +8,10 @@ export const DDGIGetProbeUV =/* glsl */`
         return (probeGridCounts.x * probeGridCounts.z);//这是针对y是竖轴的情况，所以x乘与z为总数量
     }
 
-	/**
-	* DDGIGetProbeUV
-	* Computes the normalized texture coordinates of the given probe,
-	* using the probe index, octant coordinates, probe grid counts,
-	* and the number of texels used by a probe.
+	/** DDGIGetProbeUV
+	* 计算给定探针的归一化纹理坐标，         * Computes the normalized texture coordinates of the given probe,
+	* 使用探针索引、八进制坐标、探针网格计数，* using the probe index, octant coordinates, probe grid counts,
+	* 以及探针所使用的纹素的数量。           * and the number of texels used by a probe.
 	*/
     vec2 DDGIGetProbeUV(int probeIndex, vec2 octantCoordinates, ivec3 probeGridCounts, int numTexels)
     {

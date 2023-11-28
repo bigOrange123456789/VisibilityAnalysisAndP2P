@@ -1,4 +1,3 @@
-console.log("indirect fs version:2023.11.24_16:38")
 export const GetBaseColor =/* glsl */`
     uniform vec3 originColor;
     uniform bool useMap;

@@ -65,14 +65,11 @@ DDGIGetProbeUV+
         vec3 direction,
         DDGIVolumeDescGPU volume)
     {
-        //初始irradiance和累计权重皆为0
         vec3 irradiance = vec3(0.f, 0.f, 0.f);
         float  accumulatedWeights = 0.f;
 
-        //偏移世界坐标
         // Bias the world space position
         vec3 biasedWorldPosition = (worldPosition + surfaceBias);
-
 
         //获得最近的基础Probe的3d网格坐标，世界坐标取整转换到网格坐标（也包含由[-2/n,2/n]转换到[0,n]坐标）
         // Get the 3D grid coordinates of the base probe (near the biased world position)
@@ -86,54 +83,43 @@ DDGIGetProbeUV+
         // Clamp the distance between the given point and the base probe's world position (on each axis) to [0, 1]
         vec3 alpha = clamp(((biasedWorldPosition - baseProbeWorldPosition) / volume.probeGridSpacing), vec3(0.f, 0.f, 0.f), vec3(1.f, 1.f, 1.f));
 
-        //在周围八个Probe中循环，并累计他们的贡献
-        // Iterate over the 8 closest probes and accumulate their contributions
+        //在周围八个Probe中循环，并累计他们的贡献 // Iterate over the 8 closest probes and accumulate their contributions
         for(int probeIndex = 0; probeIndex < 8; probeIndex++)
         {
 
-            //得到相邻的Probe的offset
             // Compute the offset to the adjacent probe in grid coordinates by
             // sourcing the offsets from the bits of the loop index: x = bit 0, y = bit 1, z = bit 2
             ivec3 adjacentProbeOffset = ivec3(probeIndex, probeIndex >> 1, probeIndex >> 2) & ivec3(1, 1, 1);
 
-            //将计算得到的基础probe附近的probe转换范围到[0,n],结果是3d网格坐标
             // Get the 3D grid coordinates of the adjacent probe by adding the offset to the base probe
             // Clamp to the grid boundaries
             ivec3 adjacentProbeCoords = clamp(baseProbeCoords + adjacentProbeOffset, ivec3(0, 0, 0), volume.probeGridCounts - ivec3(1, 1, 1));
 
-            //获得相邻Probe的世界坐标位置（包含减去半轴还原到偏移之前的坐标）
-            // Get the adjacent probe's world position
+            //获得Probe的世界坐标位置（包含减去半轴还原到偏移之前的坐标）// Get the adjacent probe's world position
             vec3 adjacentProbeWorldPosition = DDGIGetProbeWorldPosition(adjacentProbeCoords, volume.origin, volume.probeGridCounts, volume.probeGridSpacing);
 
-            //得到相邻的Probe的索引（用于贴图采样）
-            // Get the adjacent probe's index (used for texture lookups)
+            //得到Probe的索引（用于贴图采样）// Get the adjacent probe's index (used for texture lookups)
             int adjacentProbeIndex = DDGIGetProbeIndex(adjacentProbeCoords, volume.probeGridCounts);
 
             //计算偏移后和未偏移的渲染点到相邻Probe的距离
             // Compute the distance and direction from the (biased and non-biased) shading point and the adjacent probe
-            vec3 worldPosToAdjProbe = normalize(adjacentProbeWorldPosition - worldPosition);//当前点到附近probe的向量
-            vec3 biasedPosToAdjProbe = normalize(adjacentProbeWorldPosition - biasedWorldPosition);//偏移后的当前点到probe的向量
-            float  biasedPosToAdjProbeDist = length(adjacentProbeWorldPosition - biasedWorldPosition);//偏移后的当前点到相邻probe的距离
+            vec3 worldPosToAdjProbe = normalize(adjacentProbeWorldPosition - worldPosition);//当前点到probe的方向
+            vec3 biasedPosToAdjProbe = normalize(adjacentProbeWorldPosition - biasedWorldPosition);//偏移点到probe的方向
+            float  biasedPosToAdjProbeDist = length(adjacentProbeWorldPosition - biasedWorldPosition);//偏移点到probe的距离
 
-            //计算基于到每个相邻probe的距离用于平滑在probe间平滑转换，根据偏移后世界坐标和计算得到的基础probe的偏差计算三线性平滑系数
-            // Compute trilinear weights based on the distance to each adjacent probe
-            // to smoothly transition between probes. adjacentProbeOffset is binary, so we're
-            // using a 1-alpha when adjacentProbeOffset = 0 and alpha when adjacentProbeOffset = 1.
-            vec3 trilinear = max(vec3(0.001f,0.001f,0.001f), lerp(vec3(1.f,1.f,1.f) - alpha, alpha, vec3(adjacentProbeOffset)));
+            //基于到每个相邻探针的距离计算三线性权重，以便在探针之间平滑过渡。// Compute trilinear weights based on the distance to each adjacent probe to smoothly transition between probes.
+            //当adjacentobeOffset=0时，我们使用1-alpha，而当adjacentrobeOffset=1时，使用alpha。// adjacentProbeOffset is binary, so we're using a 1-alpha when adjacentProbeOffset = 0 and alpha when adjacentProbeOffset = 1.
+            vec3 trilinear = max(vec3(0.001f), lerp(vec3(1.f - alpha), alpha, vec3(adjacentProbeOffset)));
             float  trilinearWeight = (trilinear.x * trilinear.y * trilinear.z);
-            float  weight = 1.f;
-
-            // A naive soft backface weight would ignore a probe when
-            // it is behind the surface. That's good for walls, but for
-            // small details inside of a room, the normals on the details
-            // might rule out all of the probes that have mutual visibility
-            // to the point. We instead use a "wrap shading" test. The small
-            // offset at the end reduces the "going to zero" impact.
+            
+            //当探针在表面后时，一个自然的软背面权重会忽略它。// A naive soft backface weight would ignore a probe when it is behind the surface. 
+            //这对墙壁来说很好，但对于房间内的小细节，细节上的法线可能会排除所有对该点具有相互可见性的探测器。// That's good for walls, but for small details inside of a room, the normals on the details might rule out all of the probes that have mutual visibility to the point. 
+            //相反，我们使用“包裹着色”测试。// We instead use a "wrap shading" test. 
+            //末端的小偏移减少了“归零”的影响。// The small offset at the end reduces the "going to zero" impact.
             float wrapShading = (dot(worldPosToAdjProbe, direction) + 1.f) * 0.5f;//将偏移前的点世界坐标到相邻probe的方向向量与当前点的向量点乘
-            weight *= (wrapShading * wrapShading) + 0.2f;
+            float weight = (wrapShading * wrapShading) + 0.2f;
 
-            //计算相邻probe的纹理坐标，以及用纹理坐标采样出滤波后距离
-            // Compute the texture coordinates of this adjacent probe and sample the probe's filtered distance
+            // 计算该相邻探针的纹理坐标，并对探针的过滤距离进行采样// Compute the texture coordinates of this adjacent probe and sample the probe's filtered distance
             vec2 octantCoords = DDGIGetOctahedralCoordinates(-biasedPosToAdjProbe);
 
             vec2 probeTextureCoords = DDGIGetProbeUV(adjacentProbeIndex, octantCoords, volume.probeGridCounts, volume.probeNumDistanceTexels);
@@ -171,12 +157,10 @@ DDGIGetProbeUV+
                 weight *= (weight * weight) * (1.f / (crushThreshold * crushThreshold));
             }
 
-            //应用三线性权重
-            // Apply the trilinear weights
+            //应用三线性权重// Apply the trilinear weights
             weight *= trilinearWeight;
 
-            //采样probe irradiance
-            // Sample the probe irradiance
+            //采样probe irradiance // Sample the probe irradiance
             octantCoords = DDGIGetOctahedralCoordinates(direction);
 
             probeTextureCoords = DDGIGetProbeUV(adjacentProbeIndex, octantCoords, volume.probeGridCounts, volume.probeNumIrradianceTexels);
@@ -190,7 +174,6 @@ DDGIGetProbeUV+
             probeIrradiance = pow(probeIrradiance, exponent);
 
             // Accumulate the weighted irradiance
-
             irradiance += (weight * probeIrradiance);
 
             accumulatedWeights += weight;

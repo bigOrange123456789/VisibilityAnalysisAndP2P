@@ -1,7 +1,6 @@
 import {GetBaseColor} from"./GetBaseColor.js"
-import {DDGIGetVolumeIrradiance} from"./DDGIGetVolumeIrradiance.js"
 import {DDGIGetVolumeBlendWeight} from"./DDGIGetVolumeBlendWeight.js"
-
+import {DDGIGetVolumeIrradiance} from"./DDGIGetVolumeIrradiance.js"
 export const getIrradianceColor =
 GetBaseColor+
 /* glsl */`
@@ -18,49 +17,38 @@ GetBaseColor+
           float viewBias;
     };
 `+
-DDGIGetVolumeIrradiance+
 DDGIGetVolumeBlendWeight+
+DDGIGetVolumeIrradiance+
 /* glsl */`
-	uniform DDGIVolumeDescGPU DDGIVolume;
-	
+	uniform DDGIVolumeDescGPU DDGIVolume;//输入调控光照效果的参数
 	varying vec4 vPosition;
     varying vec3 vNormal;
-
-	/**
-	* DDGIGetSurfaceBias
-	*/
     vec3 DDGIGetSurfaceBias(vec3 surfaceNormal, vec3 cameraDirection, DDGIVolumeDescGPU DDGIVolume)
-    {
+    {//视线 与 法线 中间的某个方向
         return (surfaceNormal * DDGIVolume.normalBias) + (-cameraDirection * DDGIVolume.viewBias);
     }
     vec3 getIrradianceColor(){
-            //加载sRGB反照率并在照明前将其转换为线性// load the sRGB albedo and convert it to linear before lighting
-		    vec4 albedo = GetBaseColor();//获取基本???的颜色
-            if(albedo.w > 0.f)//如果这个片层是透明的
+            vec4 albedo = GetBaseColor();//获取纹理颜色
+            if(albedo.w > 0.f)//如果该像素不对应全透明纹理
 			{
 				vec4 worldPos = vPosition;//texture(GBufferb,_screenPosition);
 				vec3 normal = vNormal;//texture(GBufferc,_screenPosition).xyz;
-
-				// Indirect Lighting
-				vec3 irradiance = vec3(0.f,0.f,0.f);
-
-				vec3 cameraDirection = normalize(worldPos.xyz - cameraPosition);
-				vec3 surfaceBias = DDGIGetSurfaceBias(normal, cameraDirection, DDGIVolume);
-
-				// Get the blend weight for this volume's contribution to the surface
+				
+				//获取对表面体积贡献的混合权重 //Get the blend weight for this volume's contribution to the surface
 				float weight = DDGIGetVolumeBlendWeight(worldPos.xyz, DDGIVolume);
 				if(weight > 0.f)
 				{
-					irradiance += DDGIGetVolumeIrradiance(
+					vec3 cameraDirection = normalize(worldPos.xyz - cameraPosition);//-视线方向
+					vec3 surfaceBias = DDGIGetSurfaceBias(normal, cameraDirection, DDGIVolume);//视线 与 法线 中间的某个方向
+					vec3 irradiance = DDGIGetVolumeIrradiance(
 						worldPos.xyz,
 						surfaceBias,
 						normal,
 						DDGIVolume);
-					irradiance *= weight;
+					return (albedo.rgb / PI) * irradiance * weight;//irradianceColor = (albedo.rgb / PI) * irradiance;
 				}
-				return (albedo.rgb / PI) * irradiance;//irradianceColor = (albedo.rgb / PI) * irradiance;
-			}else{
-                return vec3(.0);
-            }
+			}
+            return vec3(.0);
+            
     }
 `

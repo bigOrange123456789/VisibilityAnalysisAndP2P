@@ -52,8 +52,6 @@ getIrradianceColor+
 
     uniform float screenWidth;
     uniform float screenHeight;
-    uniform vec3 emissiveColor;
-
     uniform sampler2D GBufferd;
     
     const float sigma = 2.0f;
