@@ -41,9 +41,9 @@ DDGIGetVolumeIrradiance+
 					vec3 cameraDirection = normalize(worldPos.xyz - cameraPosition);//-视线方向
 					vec3 surfaceBias = DDGIGetSurfaceBias(normal, cameraDirection, DDGIVolume);//视线 与 法线 中间的某个方向
 					vec3 irradiance = DDGIGetVolumeIrradiance(
-						worldPos.xyz,
-						surfaceBias,
-						normal,
+						worldPos.xyz,//着色点坐标
+						surfaceBias,//?
+						normal,//着色点法线
 						DDGIVolume);
 					return (albedo.rgb / PI) * irradiance * weight;//irradianceColor = (albedo.rgb / PI) * irradiance;
 				}
