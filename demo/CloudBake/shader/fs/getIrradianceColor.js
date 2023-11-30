@@ -49,6 +49,5 @@ DDGIGetVolumeIrradiance+
 				}
 			}
             return vec3(.0);
-            
     }
 `

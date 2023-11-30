@@ -1,5 +1,5 @@
-import * as THREE from 'three'
-// import * as THREE from '../three.module'
+// import * as THREE from 'three'
+import * as THREE from '../three.module'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
