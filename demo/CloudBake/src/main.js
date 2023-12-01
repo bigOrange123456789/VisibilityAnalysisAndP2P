@@ -50,20 +50,22 @@ class Loader{
 		
 		modelLoader.load(sUrl, function(gltf) {
 			gltf.scene.traverse(function(node) {
-			if (node.isMesh) {
-				// console.log(node.material)
-				node.geometry.computeVertexNormals()
-				node.castShadow = true
-				node.receiveShadow = true
-				let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
-				node.litMaterial = node.material
-				window.material=indirectMaterial
-				node.diffuseMaterial = node.material
-				node.indirectMaterial = indirectMaterial
-				// node.material=node.indirectMaterial
-				models.push(node)
-			}
+				if (node.isMesh) {
+					// console.log(node.material)
+					node.geometry.computeVertexNormals()
+					node.castShadow = true
+					node.receiveShadow = true
+					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
+					node.litMaterial = node.material
+					window.material=indirectMaterial
+					node.diffuseMaterial = node.material
+					node.indirectMaterial = indirectMaterial
+					// node.material=node.indirectMaterial
+					models.push(node)
+					
+				}
 			})
+			console.log(models)
 			self.scene.add(gltf.scene)
 			/*reset shadowMap and directionalLight*/
 			if(rtxgiNetwork.directionalLightCt == 1){
