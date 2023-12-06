@@ -21,6 +21,7 @@ export class UI{
           平行光阴影: true,
           平行光启用: true,
           dirlightRadius:1,
+          dirlightSamples:1,
           
           /*Point Light*/
           pLightSite:{
@@ -109,6 +110,11 @@ export class UI{
           directionFolder
           .add( gui, 'dirlightRadius' ).name( 'radius' ).min( 0 ).max( 25 ).onChange( function ( value ) {
             directionalLightGroup[0].shadow.radius = value;
+          } );
+          directionFolder
+          .add( gui, 'dirlightSamples', 1, 25, 1 ).name( 'samples' ).onChange( function ( value ) {
+            directionalLightGroup[0].shadow.blurSamples = value;
+
           } );
           /*visible*/
           directionFolder

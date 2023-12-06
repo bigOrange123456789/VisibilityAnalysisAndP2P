@@ -66,7 +66,7 @@ getIrradianceColor+
             result += getIrradianceColor();
         
 		result *= sigma;
-		result *= exposure;
+		result *= exposure;//2.
 		
 		if(tonemapping)
 			result = ACESFilm(result);

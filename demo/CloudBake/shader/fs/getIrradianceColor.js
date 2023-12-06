@@ -29,6 +29,7 @@ DDGIGetVolumeIrradiance+
     }
     vec3 getIrradianceColor(){
             vec4 albedo = GetBaseColor();//获取纹理颜色
+			// return albedo.xyz;
             if(albedo.w > 0.f)//如果该像素不对应全透明纹理
 			{
 				vec4 worldPos = vPosition;//texture(GBufferb,_screenPosition);
