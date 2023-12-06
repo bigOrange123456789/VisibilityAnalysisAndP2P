@@ -31,7 +31,7 @@ export class Start{
         this.speed=1
         this.config=window.configALL.main
         this.body = body
-        this.canvas = document.getElementById('myCanvas')
+        // this.canvas = document.getElementById('myCanvas')
         window.addEventListener('resize', this.resize.bind(this), false)
 
         const self=this
@@ -167,8 +167,10 @@ export class Start{
         this.renderer = new THREE.WebGLRenderer({ 
             antialias: true,//抗锯齿
             alpha:true,
-            canvas:this.canvas
+            // canvas:this.canvas
         })
+        document.body.appendChild( this.renderer.domElement );
+        this.canvas=this.renderer.domElement
         // this.renderer.flag=11102
         // this.renderer = new WebGPURenderer({ 
         //     antialias: true,//抗锯齿

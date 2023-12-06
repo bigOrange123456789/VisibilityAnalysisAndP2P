@@ -51,6 +51,11 @@ class Loader{
 		modelLoader.load(sUrl, function(gltf) {
 			gltf.scene.traverse(function(node) {
 				if (node.isMesh) {
+					
+					node.material.onBeforeCompile = function ( shader ) {
+						console.log(shader)
+					}
+					
 					// console.log(node.material)
 					node.geometry.computeVertexNormals()
 					node.castShadow = true
@@ -127,17 +132,17 @@ class Loader{
 		for (var i = 0; i < models.length; i++) {
 			models[i].material = models[i].diffuseMaterial
 		}
-		renderer.setRenderTarget(litRenderTarget)
+		// renderer.setRenderTarget(litRenderTarget)
 		renderer.render(scene, camera)
 		
-		for (var i = 0; i < models.length; i++) {
-			models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
-			models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
-			models[i].indirectMaterial.uniforms.GBufferd.value = litRenderTarget.texture;
-			models[i].material = models[i].indirectMaterial//models[i].indirectShader;
-		}
-		renderer.setRenderTarget(null)
-		renderer.render(scene, camera)
+		// for (var i = 0; i < models.length; i++) {
+		// 	models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
+		// 	models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
+		// 	models[i].indirectMaterial.uniforms.GBufferd.value = litRenderTarget.texture;
+		// 	models[i].material = models[i].indirectMaterial//models[i].indirectShader;
+		// }
+		// renderer.setRenderTarget(null)
+		// renderer.render(scene, camera)
 	}
     animate(){
 		if(this.rtxgiNetwork.isDescTouch)this.render()
