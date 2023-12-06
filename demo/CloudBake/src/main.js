@@ -1,5 +1,5 @@
-// import * as THREE from 'three'
-import * as THREE from '../three.module'
+import * as THREE from 'three'
+// import * as THREE from '../three.module'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
@@ -86,7 +86,7 @@ class Loader{
 		this.renderer.shadowMapSoft = true;
 		this.renderer.setClearColor(0xcccccc)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
-		// this.renderer.shadowMap.type = THREE.VSMShadowMap;
+		this.renderer.shadowMap.type = THREE.VSMShadowMap;
 		this.renderer.shadowMap.autoUpdate = true;
 		this.renderer.tonemapping = THREE.NoToneMapping;
 		this.renderer.setScissorTest = true;

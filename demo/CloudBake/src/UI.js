@@ -20,8 +20,8 @@ export class UI{
           平行光方向Z: 0.309,
           平行光阴影: true,
           平行光启用: true,
-          dirlightRadius:1,
-          dirlightSamples:1,
+          dirlightRadius:3.5,
+          dirlightSamples:25,
           
           /*Point Light*/
           pLightSite:{
@@ -107,15 +107,6 @@ export class UI{
           .onChange(function(e) {
               directionalLightGroup[0].castShadow = e
           });
-          directionFolder
-          .add( gui, 'dirlightRadius' ).name( 'radius' ).min( 0 ).max( 25 ).onChange( function ( value ) {
-            directionalLightGroup[0].shadow.radius = value;
-          } );
-          directionFolder
-          .add( gui, 'dirlightSamples', 1, 25, 1 ).name( 'samples' ).onChange( function ( value ) {
-            directionalLightGroup[0].shadow.blurSamples = value;
-
-          } );
           /*visible*/
           directionFolder
           .add(gui, '平行光启用')
@@ -213,6 +204,22 @@ export class UI{
           });
         }
         
+        let shadowFolder = datGui.addFolder('软阴影');
+        shadowFolder
+        .add( gui, 'dirlightRadius' ,0,20,0.1).name( 'radius' ).onChange( function ( value ) {
+            for(let i=0;i<directionalLightGroup.length;i++)
+                directionalLightGroup[i].shadow.radius = value;
+            for(let i=0;i<pointLightGroup.length;i++)
+                pointLightGroup[i].shadow.radius = value;
+        } );
+        shadowFolder
+        .add( gui, 'dirlightSamples', 5, 30, 1 ).name( 'samples' ).onChange( function ( value ) {
+            for(let i=0;i<directionalLightGroup.length;i++)
+                directionalLightGroup[i].shadow.blurSamples = value;
+            for(let i=0;i<pointLightGroup.length;i++)
+                pointLightGroup[i].shadow.blurSamples = value;
+        } );
+
         /*spot light*/
         if(rtxgiNetwork.spotLightCt > 0){
           let slightHistory = {};

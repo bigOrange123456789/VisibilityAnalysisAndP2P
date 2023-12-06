@@ -21,10 +21,12 @@ export class Light{
           directionalLight.shadow.camera.top = 100 //最上边
           directionalLight.shadow.camera.bottom = -100 //最下面
           //这两个值决定使用多少像素生成阴影 默认512
-          directionalLight.shadow.mapSize.height = 1024;
-          directionalLight.shadow.mapSize.width = 1024;
+          directionalLight.shadow.mapSize.height = 8*1024;
+          directionalLight.shadow.mapSize.width = 8*1024;
           directionalLight.intensity = 4
           directionalLight.shadow.bias = -0.0005;
+          directionalLight.shadow.radius=3.5,
+          directionalLight.shadow.blurSamples=25,
           //告诉平行光需要开启阴影投射
           directionalLight.castShadow = true
         
@@ -50,6 +52,9 @@ export class Light{
               pointLight.power = 4.0;
               pointLight.distance = 10.0;
               pointLight.castShadow = true;
+              pointLight.shadow.radius=3.5,
+              pointLight.shadow.blurSamples=25,
+
               scene.add(pointLight);
               var ptHelpder = new THREE.PointLightHelper(pointLight,2.5,0xffffff);
               scene.add(ptHelpder);
