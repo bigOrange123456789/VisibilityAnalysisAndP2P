@@ -38,7 +38,7 @@ import {
     Raycaster,Vector2
 } from "three/build/three";
 import { ZipLoader } from "./ziploader";
-import { GLTFLoaderEx } from "three/examples/jsm/loaders/GLTFLoaderEx";
+import { GLTFLoaderEx } from "./GLTFLoaderEx";
 import $ from "jquery";
 import {CoderDecoder}from"./CoderDecoder"
 export class SceneManager {
