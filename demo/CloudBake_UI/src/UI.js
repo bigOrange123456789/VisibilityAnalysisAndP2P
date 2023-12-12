@@ -10,43 +10,73 @@ export class UI{
 
     }
     test(param){
+        const materialTest=new THREE.MeshBasicMaterial({ color: 0xffffff ,transparent:true,opacity:0.1})
         const camera=param.camera
         const renderer=param.renderer
         const scene=param.scene
         const orbitControl=param.orbitControl
         const boxlist=[]
-        this.flag_directionalLight = new THREE.Mesh( 
-            new THREE.BoxGeometry( 1, 2.35 ), 
-            new THREE.MeshStandardMaterial({
-                color:0,
-                // transparent:true,
-                // opacity:0
-            })
+        
+        const flag_pointLight = new THREE.Mesh( 
+            new THREE.SphereGeometry( 0.5, 16, 8 ), 
+            materialTest
         )
-        const flag_directionalLight=this.flag_directionalLight
+        flag_pointLight.castShadow = false;
+        flag_pointLight.receiveShadow = false;
+        this.flag_pointLight=flag_pointLight
+        this.flag_pointLight.toFlag=()=>{
+            const l=flag_pointLight.l
+            const f=flag_pointLight
+            console.log(l,f)
+            if(l){
+                f.position.set(l.position.x,l.position.z,l.position.z)
+                // f.postion.set(l.rotation.x,l.rotation.z,l.rotation.z)
+            }
+        }
+        this.flag_pointLight.toLight=()=>{
+            const l=flag_pointLight.l
+            const f=flag_pointLight
+            if(l){
+                l.position.set(f.position.x,f.position.z,f.position.z)
+                // l.postion.set(f.rotation.x,f.rotation.z,f.rotation.z)
+            }
+        }
+        window.flag_pointLight=flag_pointLight
+        boxlist.push(this.flag_pointLight)
+
+        const flag_directionalLight = new THREE.Mesh( 
+            new THREE.BoxGeometry( 0.5,0.5,0.5 ), 
+            materialTest
+        )
+        flag_directionalLight.castShadow = false;
+        flag_directionalLight.receiveShadow = false;
+        this.flag_directionalLight=flag_directionalLight
         this.flag_directionalLight.toFlag=()=>{
             const l=flag_directionalLight.l
             const f=flag_directionalLight
             if(l){
-                f.postion.set(l.position.x,l.position.z,l.position.z)
-                f.postion.set(l.rotation.x,l.rotation.z,l.rotation.z)
+                f.position.set(l.position.x,l.position.z,l.position.z)
+                f.rotation.set(l.rotation.x,l.rotation.z,l.rotation.z)
             }
         }
         this.flag_directionalLight.toLight=()=>{
             const l=flag_directionalLight.l
             const f=flag_directionalLight
             if(l){
-                l.postion.set(f.position.x,f.position.z,f.position.z)
-                l.postion.set(f.rotation.x,f.rotation.z,f.rotation.z)
+                l.position.set(f.position.x,f.position.z,f.position.z)
+                l.rotation.set(f.rotation.x,f.rotation.z,f.rotation.z)
             }
         }
         window.flag_directionalLight=flag_directionalLight
+        // flag_directionalLight.visible=false
         boxlist.push(this.flag_directionalLight)
+
         for(let i=0;i<boxlist.length;i++){
             scene.add(boxlist[i])
         }
         
-        if(true)new ControlEdit(
+        const self=this
+        if(true)this.controlEditor=new ControlEdit(
             camera,
             renderer,
             boxlist,
@@ -56,6 +86,11 @@ export class UI{
             },
             obj=>{
                 // console.log(2,obj)
+                self.flag_pointLight.toLight()
+                self.plightChange = true;
+                // self.flag_directionalLight.toLight()
+                // self.dlightChange = true;
+                
             },
         )
     }
@@ -75,10 +110,10 @@ export class UI{
           平行光启用: true,
           dirlightRadius:3.5,
           dirlightSamples:25,
+          '控制方式':{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"},
           
           /*Point Light*/
           pLightSite:{
-
           },
           点光源颜色: '#ffffff',
           点光源强度: 4,
@@ -109,12 +144,26 @@ export class UI{
         }
       
         var datGui = new dat.GUI();
+        /*control*/
+        datGui.addFolder('可视化控制')
+        .add(gui,'控制方式',{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"})
+        .onChange(function(e){//{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"}
+          // console.log(e)
+          const c=self.controlEditor
+          c.type=e
+          //type="horizontal"//"rotation"//"vertical" 
+        });
         /*directional light*/
         if(rtxgiNetwork.directionalLightCt == 1)
         {
           
           setTimeout(()=>{
             self.flag_directionalLight.l=directionalLightGroup[0]
+            self.flag_directionalLight.toFlag()
+            console.log(self.flag_directionalLight)
+            self.flag_pointLight.l      =pointLightGroup[0]
+            self.flag_pointLight.toFlag()
+            console.log("启动完成")
           },1000)
           var directionFolder = datGui.addFolder('平行光');
           /*color*/
@@ -164,6 +213,15 @@ export class UI{
           .onChange(function(e) {
               directionalLightGroup[0].castShadow = e
           });
+        //   /*control*/
+        //   directionFolder
+        //   .add(gui,'可视化控制',{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"})
+        //   .onChange(function(e){//{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"}
+        //     // console.log(e)
+        //     const c=self.controlEditor
+        //     c.type=e
+        //     //type="horizontal"//"rotation"//"vertical" 
+        //   });
           /*visible*/
           directionFolder
           .add(gui, '平行光启用')
