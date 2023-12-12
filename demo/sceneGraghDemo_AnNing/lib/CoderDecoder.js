@@ -116,7 +116,7 @@ export class CoderDecoder{
     }
 }
 
-import CylinderParam0 from './json/CylinderParam0.json'
+// import CylinderParam0 from './json/CylinderParam0.json'
 if(false){
     // var m=new CoderDecoder.decoder(CylinderParam0)
     var m=new CoderDecoder.decoder(Object.values(CylinderParam0))

@@ -1,9 +1,9 @@
-import CylinderParam0 from './json/CylinderParam0.json'
-import CylinderParam1 from './json/CylinderParam1.json'
-import CylinderParam2 from './json/CylinderParam2.json'
-import CylinderParam3 from './json/CylinderParam3.json'
-import CylinderParam4 from './json/CylinderParam4.json'
-import CylinderParam5 from './json/CylinderParam5.json'
+import CylinderParam0 from '../config/CylinderParam0.json'
+import CylinderParam1 from '../config/CylinderParam1.json'
+import CylinderParam2 from '../config/CylinderParam2.json'
+import CylinderParam3 from '../config/CylinderParam3.json'
+import CylinderParam4 from '../config/CylinderParam4.json'
+import CylinderParam5 from '../config/CylinderParam5.json'
 let CylinderParam={}
 for(let i in CylinderParam0)CylinderParam[i]=CylinderParam0[i]
 for(let i in CylinderParam1)CylinderParam[i]=CylinderParam1[i]
