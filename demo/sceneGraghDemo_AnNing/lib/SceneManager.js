@@ -36,9 +36,10 @@ import {
     Vector3, WebGLRenderTarget,
     MeshBasicMaterial,
     Raycaster,Vector2
-} from "three/build/three";
+} from "./threeEx/three";
 import { ZipLoader } from "./ziploader";
-import { GLTFLoaderEx } from "./GLTFLoaderEx";
+// import { GLTFLoaderEx } from "./three/examples/jsm/loaders/GLTFLoaderEx";
+import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
 import $ from "jquery";
 import {CoderDecoder}from"./CoderDecoder"
 export class SceneManager {

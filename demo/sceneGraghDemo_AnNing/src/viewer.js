@@ -9,7 +9,7 @@ import {
   sRGBEncoding,
   Vector3,
   WebGLRendererEx,
-} from "three";
+} from "../lib/threeEx/three";//"three";
 import { GUI } from "dat.gui";
 import { MyUI } from "../lib/MyUI.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
