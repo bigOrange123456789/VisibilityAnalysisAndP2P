@@ -5,23 +5,26 @@ import CylinderParam3 from '../config/CylinderParam3.json'
 import CylinderParam4 from '../config/CylinderParam4.json'
 import CylinderParam5 from '../config/CylinderParam5.json'
 let CylinderParam={}
-for(let i in CylinderParam0)CylinderParam[i]=CylinderParam0[i]
-for(let i in CylinderParam1)CylinderParam[i]=CylinderParam1[i]
-for(let i in CylinderParam2)CylinderParam[i]=CylinderParam2[i]
-for(let i in CylinderParam3)CylinderParam[i]=CylinderParam3[i]
-for(let i in CylinderParam4)CylinderParam[i]=CylinderParam4[i]
-for(let i in CylinderParam5)CylinderParam[i]=CylinderParam5[i]
-window.CylinderParam=CylinderParam
-const cylinderIdList=Object.keys(CylinderParam)
-const cylinderParam=[]
-for(let i=0;i<cylinderIdList.length;i++){
-    const id=cylinderIdList[i]
-    const list=CylinderParam[id]
-    for(let j=0;j<list.length;j++){
-        cylinderParam.push(list[j])
+if(true){
+   for(let i in CylinderParam0)CylinderParam[i]=CylinderParam0[i]
+    for(let i in CylinderParam1)CylinderParam[i]=CylinderParam1[i]
+    for(let i in CylinderParam2)CylinderParam[i]=CylinderParam2[i]
+    for(let i in CylinderParam3)CylinderParam[i]=CylinderParam3[i]
+    for(let i in CylinderParam4)CylinderParam[i]=CylinderParam4[i]
+    for(let i in CylinderParam5)CylinderParam[i]=CylinderParam5[i]
+    window.CylinderParam=CylinderParam
+    const cylinderIdList=Object.keys(CylinderParam)
+    const cylinderParam=[]
+    for(let i=0;i<cylinderIdList.length;i++){
+        const id=cylinderIdList[i]
+        const list=CylinderParam[id]
+        for(let j=0;j<list.length;j++){
+            cylinderParam.push(list[j])
+        }
     }
+    window.cylinderParam=cylinderParam 
 }
-window.cylinderParam=cylinderParam
+import {CoderDecoder}from"./parametric/CoderDecoder"
 
 import {
     AmbientLight,
@@ -41,7 +44,7 @@ import { ZipLoader } from "./ziploader";
 // import { GLTFLoaderEx } from "./three/examples/jsm/loaders/GLTFLoaderEx";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
 import $ from "jquery";
-import {CoderDecoder}from"./CoderDecoder"
+
 export class SceneManager {
     constructor() {
         this.projectName = window.projectName;
@@ -517,11 +520,11 @@ function disposeInsMesh(instanceMesh) {
 window.count1=0
 window.count2=0
 
-import{Cylinder}from"./Cylinder"
+import{Classification}from"./parametric/Classification"
 function processMesh(mesh, matrixList) {
     mesh.material=new MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
     if(true){
-        var tool=new Cylinder(mesh, matrixList)
+        var tool=new Classification(mesh, matrixList)
         mesh.material.cflag=tool.isCube
         console.log(tool.isCube)
         if(mesh.material.cflag){

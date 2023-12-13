@@ -1,6 +1,6 @@
 import {CoderDecoder}from"./CoderDecoder"
 window.CylinderParam={}
-export class Cylinder{
+export class Classification{
     param={
         pos:{x:null,y:null,z:null},
         direction:null,
