@@ -5,25 +5,23 @@ import CylinderParam3 from '../config/CylinderParam3.json'
 import CylinderParam4 from '../config/CylinderParam4.json'
 import CylinderParam5 from '../config/CylinderParam5.json'
 let CylinderParam={}
-if(true){
-   for(let i in CylinderParam0)CylinderParam[i]=CylinderParam0[i]
-    for(let i in CylinderParam1)CylinderParam[i]=CylinderParam1[i]
-    for(let i in CylinderParam2)CylinderParam[i]=CylinderParam2[i]
-    for(let i in CylinderParam3)CylinderParam[i]=CylinderParam3[i]
-    for(let i in CylinderParam4)CylinderParam[i]=CylinderParam4[i]
-    for(let i in CylinderParam5)CylinderParam[i]=CylinderParam5[i]
-    window.CylinderParam=CylinderParam
-    const cylinderIdList=Object.keys(CylinderParam)
-    const cylinderParam=[]
-    for(let i=0;i<cylinderIdList.length;i++){
-        const id=cylinderIdList[i]
-        const list=CylinderParam[id]
-        for(let j=0;j<list.length;j++){
-            cylinderParam.push(list[j])
-        }
+for(let i in CylinderParam0)CylinderParam[i]=CylinderParam0[i]
+for(let i in CylinderParam1)CylinderParam[i]=CylinderParam1[i]
+for(let i in CylinderParam2)CylinderParam[i]=CylinderParam2[i]
+for(let i in CylinderParam3)CylinderParam[i]=CylinderParam3[i]
+for(let i in CylinderParam4)CylinderParam[i]=CylinderParam4[i]
+for(let i in CylinderParam5)CylinderParam[i]=CylinderParam5[i]
+window.CylinderParam=CylinderParam
+const cylinderIdList=Object.keys(CylinderParam)
+const cylinderParam=[]
+for(let i=0;i<cylinderIdList.length;i++){
+    const id=cylinderIdList[i]
+    const list=CylinderParam[id]
+    for(let j=0;j<list.length;j++){
+        cylinderParam.push(list[j])
     }
-    window.cylinderParam=cylinderParam 
 }
+window.cylinderParam=cylinderParam 
 import {CoderDecoder}from"./parametric/CoderDecoder"
 
 import {

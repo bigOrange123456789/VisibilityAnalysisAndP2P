@@ -194,6 +194,6 @@ export class Classification{
         this.mesh2=new CoderDecoder.decoder(this.param)//mesh
     }
 }
-window.downloadJson=Cylinder.downloadParam
+window.downloadJson=Classification.downloadParam
 //无法处理的构件：700
 //典范构件:740
