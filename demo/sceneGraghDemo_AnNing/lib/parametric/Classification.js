@@ -6,6 +6,7 @@ window.numeric=numeric
 window.CylinderParam={}
 export class Classification{
     param={
+        type:'else',//cube、cylinder、else
         pos:{x:null,y:null,z:null},
         scale:[null,null,null],
 
@@ -13,6 +14,9 @@ export class Classification{
         direction:null,
         h_half:null,
         r:null,
+
+        //cylinder param：[pos-xyx,d,h,r]
+        //cube param:[pos_xyz,sca_xyz]
 
         
 
@@ -26,13 +30,16 @@ export class Classification{
         // this.pca=
             // new PCA(mesh)
         this._init()
-        this._judgeCylinder()
-        if(this.isCylinder)this.param=this.getParam()
-        if(this.isCylinder)this.test()
+        this.param.type=this._judge()
+        this.getParam()  
     }
-    test(){
-        this._parse()
+    getParam(){
+        if(this.param.type=='else')return
+        const code=new CoderDecoder.encoder(this.matrixList,this.param)
+        window.CylinderParam[this.mesh.name]=code
+        this.mesh2=new CoderDecoder.decoder(code)//mesh
     }
+
     _init(){
         const mesh=this.mesh
         const geometry=mesh.geometry
@@ -90,9 +97,8 @@ export class Classification{
         }
     }
 
-    threshold1=0.2//70//100//50
-    _hasAxis(){
-        console.log("positions",this.positions)
+    _atCube(){
+        // console.log("positions",this.positions)
         let distanceX=0
         let distanceY=0
         let distanceZ=0
@@ -123,6 +129,11 @@ export class Classification{
             this.param.h_half=this.param.scale[2]
             this.param.r=(this.param.scale[0]+this.param.scale[1])/2
         }
+        return [
+            distanceX/this.positions.length,
+            distanceY/this.positions.length,
+            distanceZ/this.positions.length
+        ]
         this.isCube=
             (distanceX+distanceY+distanceZ)/(this.positions.length*3)<this.threshold1
         let distance=
@@ -155,7 +166,6 @@ export class Classification{
         this.radius=radius
         return radius
     }
-    threshold2=1.8/100//4//4//0.2
     _atSphere(){
         const radius=this._getRadius()
         let errorSum=0
@@ -177,20 +187,32 @@ export class Classification{
         }
         // console.log(errorSum/this.positions.length,"radius:",radius)
         const errorSumPercentage=(errorSum/this.positions.length)/radius
+        return errorSumPercentage
         const flag=errorSumPercentage<this.threshold2
         // console.log(errorSumPercentage<this.threshold2,errorSumPercentage,this.threshold2)
         return flag
     }
 
-    _judgeCylinder(){
-        this.isCylinder=this.positions.length>0&&this._hasAxis()&&this._atSphere()
+    threshold1=0.2
+    threshold2=1.8/100//4//4//0.2
+    _judge(){
+        if(this.positions.length<=0){
+            return 'else'
+        }
+
+        const disCube=this._atCube()
+        const atCube3=
+            (disCube[0]+disCube[1]+disCube[2])/3<this.threshold1
+        const atCube1=
+            Math.min(disCube[0],disCube[1],disCube[2])<this.threshold1
+        const atSphere=this._atSphere()<this.threshold2
+        
+        if(atCube3&&atSphere)return'cube'
+        else if(atCube1&&atSphere)return'cylinder'
+        else return'else'
     }
 
-    getParam(){
-        const p=new CoderDecoder.encoder(this.matrixList,this.param)
-        window.CylinderParam[this.mesh.name]=p
-        return p
-    }
+    
     static downloadParam(){
         // const str=JSON.stringify(window.CylinderParam , null, "\t")
         const str=JSON.stringify(window.CylinderParam)
@@ -201,10 +223,8 @@ export class Classification{
         link.download ="CylinderParam"+window.iii+".json";
         link.click();
     }
-    _parse(){//将参数解析为圆柱
-        this.mesh2=new CoderDecoder.decoder(this.param)//mesh
-    }
 }
 window.downloadJson=Classification.downloadParam
 //无法处理的构件：700
 //典范构件:740
+//需要PCA对齐的构件：3074

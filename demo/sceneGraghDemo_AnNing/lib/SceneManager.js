@@ -91,13 +91,14 @@ export class SceneManager {
         this.instanceGroup.applyMatrix4(matrix)
         
         //this.instanceGroup.add(new CoderDecoder.decoder(cylinderParam))
-        this.loadModelZip(3074)
+        // this.loadModelZip(3074)//需要PCA对齐的构件
+        // this.loadModelZip(cylinderIdList[100])
         if(false){
             for(let i=0;i<1;i++){
                 this.loadModelZip(cylinderIdList[i+725])
             }
         }
-        if(false){
+        if(true){
             for(let i=0;i<1000;i++){
                 this.loadModelZip(cylinderIdList[i+0])
             }
@@ -524,8 +525,7 @@ function processMesh(mesh, matrixList) {
     mesh.material=new MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
     if(true){
         var tool=new Classification(mesh, matrixList)
-        mesh.material.cflag=tool.isCube
-        console.log(tool.isCube)
+        mesh.material.cflag=tool.param.type=="else"
         if(mesh.material.cflag){
             mesh.material= new MeshBasicMaterial( {color: 0xff0000} ); 
             window.count1++
@@ -543,10 +543,9 @@ function processMesh(mesh, matrixList) {
         false
     );
     // instancedMesh.visible=false//mesh.material.cflag
-    // if(tool.flag){
-    //     instancedMesh.mesh=tool.mesh2
-    //     console.log(instancedMesh.mesh)
-    // }
+    if(tool.mesh2){
+        return tool.mesh2
+    }
     // instancedMesh.scale.set(5,5,5)
     instancedMesh.geometry.clearGroups();
     instancedMesh.geometry.addGroupInstanced(
