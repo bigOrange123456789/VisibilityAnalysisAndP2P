@@ -31,9 +31,9 @@ export class Classification{
         this.param=new Parameter(this.mesh,type).param
         if(this.param.type=='else')return
         // console.log("this.param",this.param)
-        const code=new CoderDecoder.encoderParam(this.matrixList,this.param)
+        const code=new CoderDecoder.encoder(this.matrixList,this.param)
         window.CylinderParam[this.mesh.name]=code
-        this.mesh2=new CoderDecoder.decoderParam(code)//mesh
+        this.mesh2=new CoderDecoder.decoder(code)//mesh
     }
 
     _init(){

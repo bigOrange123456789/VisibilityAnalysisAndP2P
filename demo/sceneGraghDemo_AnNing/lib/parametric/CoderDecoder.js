@@ -15,10 +15,10 @@ const materialTest = new MeshBasicMaterial( {color: 0xff0000} )
 export class CoderDecoder{
     constructor(){}
     static encoder(matrixList_,param){
-        return CoderDecoder.encoder12(matrixList_,param)
+        return CoderDecoder.encoderParam2(matrixList_,param)
     }
     static decoder(list2){
-        return CoderDecoder.decoder12(list2)
+        return CoderDecoder.decoderParam2(list2)
     }
     static encoder12(matrixList_,param){
         const list16=CoderDecoder.encoder16(matrixList_,param)
@@ -123,6 +123,7 @@ export class CoderDecoder{
         ])
         return list2
     }
+
     static decoder16(list2){
         const geometry = new CylinderGeometry( 1, 1, 2, 4 )
         const mesh = new InstancedMesh( geometry, materialTest ,list2.length);
@@ -159,6 +160,7 @@ export class CoderDecoder{
         obj.updateMatrix ()
         return obj.matrix
     }
+
     static encoderParam(matrixList_,param){
         const listParam=[]
         const list=CoderDecoder.encoder16(matrixList_,param)
@@ -195,17 +197,64 @@ export class CoderDecoder{
         return listParam
     }
     static decoderParam(listParam){
-        const group=new Group()
-        for(let d=0;d<listParam.length;d++){
-            const param=listParam[d]
+        const useInstanced=true
+        if(useInstanced){
             const geometry = new CylinderGeometry( 1, 1, 2, 4 )
-            const mesh = new Mesh( geometry, materialTest);
-            const matrix=CoderDecoder.paramToMat(param)//.elements
-            mesh.applyMatrix4(matrix)
-            group.add(mesh)
+            const mesh = new InstancedMesh( geometry, materialTest ,listParam.length);
+            for(let i=0;i<listParam.length;i++){
+                const param=listParam[i]
+                const matrix=CoderDecoder.paramToMat(param)//.elements
+                mesh.setMatrixAt(i,matrix)
+            }
+            return mesh
+        }else{
+            const group=new Group()
+            for(let d=0;d<listParam.length;d++){
+                const param=listParam[d]
+                const geometry = new CylinderGeometry( 1, 1, 2, 4 )
+                const mesh = new Mesh( geometry, materialTest);
+                const matrix=CoderDecoder.paramToMat(param)//.elements
+                mesh.applyMatrix4(matrix)
+                group.add(mesh)
+            }
+            return group
+        }        
+    }
+
+    static encoderParam2(matrixList_,param){
+        const list=CoderDecoder.encoderParam(matrixList_,param)
+        const list2=[]
+        for(let i=0;i<list.length;i++){
+            const code=list[i]
+            const code2=[
+                code.pos.x,
+                code.pos.y,
+                code.pos.z,
+                code.direction,
+                code.h_half,
+                code.r
+            ]
+            for(let j=0;j<6;j++)
+                list2.push(code2[j])
         }
-        return group
-        //geometry.attributes.position.array
+        return list2
+    }
+    static decoderParam2(list2){
+        const list=[]
+        for(let i=0;i<list2.length/6;i++){
+            const code={
+                pos:{
+                    x:list2[i*6+0],
+                    y:list2[i*6+1],
+                    z:list2[i*6+2],
+                },
+                direction:list2[i*6+3],
+                h_half:   list2[i*6+4],
+                r:        list2[i*6+5],
+            }
+            list.push(code)
+        }
+        return CoderDecoder.decoderParam(list)
     }
 }
 
