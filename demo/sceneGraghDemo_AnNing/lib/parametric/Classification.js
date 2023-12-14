@@ -1,28 +1,22 @@
+import {Parameter}from"./Parameter"
 import {CoderDecoder}from"./CoderDecoder"
+
 import {PCA}from"./PCA"
 import numeric from 'numeric'
 window.numeric=numeric
 
 window.CylinderParam={}
+window.downloadJson=()=>{
+    // const str=JSON.stringify(window.CylinderParam , null, "\t")
+    const str=JSON.stringify(window.CylinderParam)
+    var link = document.createElement('a');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
+    link.download ="CylinderParam"+window.iii+".json";
+    link.click();
+}
 export class Classification{
-    param={
-        type:'else',//cube、cylinder、else
-        pos:{x:null,y:null,z:null},
-        scale:[null,null,null],
-
-        //圆柱
-        direction:null,
-        h_half:null,
-        r:null,
-
-        //cylinder param：[pos-xyx,d,h,r]
-        //cube param:[pos_xyz,sca_xyz]
-
-        
-
-    }//x,y,z,forward,h/2,r
-    isCylinder=false
-    isCube=false
     constructor(mesh, matrixList){//(x,y,z)、方向(012)、h/2、r
         
         this.mesh=mesh
@@ -30,14 +24,16 @@ export class Classification{
         // this.pca=
             // new PCA(mesh)
         this._init()
-        this.param.type=this._judge()
-        this.getParam()  
+        const type=this._judge()
+        this.getParam(type)  
     }
-    getParam(){
+    getParam(type){
+        this.param=new Parameter(this.mesh,type).param
         if(this.param.type=='else')return
-        const code=new CoderDecoder.encoder(this.matrixList,this.param)
+        // console.log("this.param",this.param)
+        const code=new CoderDecoder.encoderParam(this.matrixList,this.param)
         window.CylinderParam[this.mesh.name]=code
-        this.mesh2=new CoderDecoder.decoder(code)//mesh
+        this.mesh2=new CoderDecoder.decoderParam(code)//mesh
     }
 
     _init(){
@@ -72,7 +68,7 @@ export class Classification{
             y:(box_max[1]-box_min[1])/2,
             z:(box_max[2]-box_min[2])/2,
         }
-        this.param.scale=[scale.x,scale.y,scale.z]
+        this.scale=[scale.x,scale.y,scale.z]
         if(scale.x==0)scale.x=1
         if(scale.y==0)scale.y=1
         if(scale.z==0)scale.z=1
@@ -82,7 +78,6 @@ export class Classification{
             y:(box_max[1]+box_min[1])/2,
             z:(box_max[2]+box_min[2])/2,
         }
-        this.param.pos=center
         
         this.positions=[]
         for(let i=0;i<count;i++){
@@ -109,45 +104,18 @@ export class Classification{
             let xd=Math.min(Math.abs(1-x),Math.abs(-1-x))
             let yd=Math.min(Math.abs(1-y),Math.abs(-1-y))
             let zd=Math.min(Math.abs(1-z),Math.abs(-1-z))
-            if(this.param.scale[0]==0)xd=0;
-            if(this.param.scale[1]==0)yd=0;
-            if(this.param.scale[2]==0)zd=0;
+            if(this.scale[0]==0)xd=0;
+            if(this.scale[1]==0)yd=0;
+            if(this.scale[2]==0)zd=0;
             distanceX+=xd
             distanceY+=yd
             distanceZ+=zd
-        }
-        if(Math.min(distanceX,distanceY,distanceZ)==distanceX){
-            this.param.direction=0
-            this.param.h_half=this.param.scale[0]
-            this.param.r=(this.param.scale[1]+this.param.scale[2])/2
-        }else if(Math.min(distanceX,distanceY,distanceZ)==distanceY){
-            this.param.direction=1
-            this.param.h_half=this.param.scale[1]
-            this.param.r=(this.param.scale[0]+this.param.scale[2])/2
-        }else if(Math.min(distanceX,distanceY,distanceZ)==distanceZ){
-            this.param.direction=2
-            this.param.h_half=this.param.scale[2]
-            this.param.r=(this.param.scale[0]+this.param.scale[1])/2
         }
         return [
             distanceX/this.positions.length,
             distanceY/this.positions.length,
             distanceZ/this.positions.length
         ]
-        this.isCube=
-            (distanceX+distanceY+distanceZ)/(this.positions.length*3)<this.threshold1
-        let distance=
-            Math.min(distanceX,distanceY,distanceZ)/this.positions.length
-        // console.log(
-        //     distanceX/this.positions.length,
-        //     distanceY/this.positions.length,
-        //     distanceZ/this.positions.length,
-        // )
-            // console.log(Math.round(distance*1000))
-        // if(distance>=this.threshold1)alert(this.mesh.name+":"+distance+"错误")
-        const flag=distance<this.threshold1
-        // console.log(distance<this.threshold1,distance,this.threshold1)
-        return flag
     }
 
     _getRadius(){
@@ -211,20 +179,7 @@ export class Classification{
         else if(atCube1&&atSphere)return'cylinder'
         else return'else'
     }
-
-    
-    static downloadParam(){
-        // const str=JSON.stringify(window.CylinderParam , null, "\t")
-        const str=JSON.stringify(window.CylinderParam)
-        var link = document.createElement('a');
-        link.style.display = 'none';
-        document.body.appendChild(link);
-        link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
-        link.download ="CylinderParam"+window.iii+".json";
-        link.click();
-    }
 }
-window.downloadJson=Classification.downloadParam
 //无法处理的构件：700
 //典范构件:740
 //需要PCA对齐的构件：3074
