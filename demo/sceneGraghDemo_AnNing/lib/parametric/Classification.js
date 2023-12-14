@@ -1,17 +1,30 @@
 import {CoderDecoder}from"./CoderDecoder"
+import {PCA}from"./PCA"
+import numeric from 'numeric'
+window.numeric=numeric
+
 window.CylinderParam={}
 export class Classification{
     param={
         pos:{x:null,y:null,z:null},
+        scale:[null,null,null],
+
+        //圆柱
         direction:null,
         h_half:null,
-        r:null
+        r:null,
+
+        
+
     }//x,y,z,forward,h/2,r
     isCylinder=false
     isCube=false
     constructor(mesh, matrixList){//(x,y,z)、方向(012)、h/2、r
+        
         this.mesh=mesh
         this.matrixList=matrixList
+        // this.pca=
+            // new PCA(mesh)
         this._init()
         this._judgeCylinder()
         if(this.isCylinder)this.param=this.getParam()
@@ -25,7 +38,7 @@ export class Classification{
         const geometry=mesh.geometry
         geometry.computeVertexNormals()
         geometry.computeBoundingBox()
-        const pos   =geometry.attributes.position.array
+        const pos   =geometry.attributes.position.array//PCA
         const count =geometry.attributes.position.count
 
         const box_max=[
@@ -56,14 +69,13 @@ export class Classification{
         if(scale.x==0)scale.x=1
         if(scale.y==0)scale.y=1
         if(scale.z==0)scale.z=1
-        if(scale.x==0||scale.y==0||scale.z==0)alert("圆柱检测异常")
+        // if(scale.x==0||scale.y==0||scale.z==0)alert("圆柱检测异常")
         const center={
             x:(box_max[0]+box_min[0])/2,
             y:(box_max[1]+box_min[1])/2,
             z:(box_max[2]+box_min[2])/2,
         }
         this.param.pos=center
-        
         
         this.positions=[]
         for(let i=0;i<count;i++){
@@ -80,7 +92,7 @@ export class Classification{
 
     threshold1=0.2//70//100//50
     _hasAxis(){
-        let distance=0
+        console.log("positions",this.positions)
         let distanceX=0
         let distanceY=0
         let distanceZ=0
@@ -91,10 +103,9 @@ export class Classification{
             let xd=Math.min(Math.abs(1-x),Math.abs(-1-x))
             let yd=Math.min(Math.abs(1-y),Math.abs(-1-y))
             let zd=Math.min(Math.abs(1-z),Math.abs(-1-z))
-                // Math.pow(1-x,2)+
-                // Math.pow(1-y,2)+
-                // Math.pow(1-z,2)
-            distance+=Math.min(xd,yd,zd)
+            if(this.param.scale[0]==0)xd=0;
+            if(this.param.scale[1]==0)yd=0;
+            if(this.param.scale[2]==0)zd=0;
             distanceX+=xd
             distanceY+=yd
             distanceZ+=zd
@@ -114,15 +125,15 @@ export class Classification{
         }
         this.isCube=
             (distanceX+distanceY+distanceZ)/(this.positions.length*3)<this.threshold1
-        
-        // console.log((distanceX+distanceY+distanceZ)/this.positions.length<this.threshold1,this.cube)
+        let distance=
+            Math.min(distanceX,distanceY,distanceZ)/this.positions.length
         // console.log(
-        //     (distanceX+distanceY+distanceZ)/this.positions.length<this.threshold1
+        //     distanceX/this.positions.length,
+        //     distanceY/this.positions.length,
+        //     distanceZ/this.positions.length,
         // )
-        // this.axis=//判断出来轴的方向
-        distance/=this.positions.length
-        // console.log(Math.round(distance*1000))
-        // if(distance>=this.threshold1)alert("错误")
+            // console.log(Math.round(distance*1000))
+        // if(distance>=this.threshold1)alert(this.mesh.name+":"+distance+"错误")
         const flag=distance<this.threshold1
         // console.log(distance<this.threshold1,distance,this.threshold1)
         return flag

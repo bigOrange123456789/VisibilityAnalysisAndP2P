@@ -91,12 +91,13 @@ export class SceneManager {
         this.instanceGroup.applyMatrix4(matrix)
         
         //this.instanceGroup.add(new CoderDecoder.decoder(cylinderParam))
+        this.loadModelZip(3074)
         if(false){
             for(let i=0;i<1;i++){
                 this.loadModelZip(cylinderIdList[i+725])
             }
         }
-        if(true){
+        if(false){
             for(let i=0;i<1000;i++){
                 this.loadModelZip(cylinderIdList[i+0])
             }

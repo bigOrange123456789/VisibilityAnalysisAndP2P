@@ -40,6 +40,7 @@
     "lib": "^5.0.1",
     "node-geolocation": "^1.15.14",
     "node-static": "^0.7.11",
+    "numeric": "^1.2.6",
     "obj2gltf": "^3.1.6",
     "pako": "1.0.11",
     "postprocessing": "^6.33.0",
