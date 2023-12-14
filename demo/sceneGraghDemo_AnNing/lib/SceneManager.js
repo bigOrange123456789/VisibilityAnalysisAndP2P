@@ -522,7 +522,7 @@ window.count2=0
 
 import{Classification}from"./parametric/Classification"
 function processMesh(mesh, matrixList) {
-    mesh.material=new MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
+    // mesh.material=new MeshBasicMaterial( { color: 0x000000, wireframe: true, transparent: true } );
     if(true){
         var tool=new Classification(mesh, matrixList)
         mesh.material.cflag=tool.param.type=="else"
@@ -543,9 +543,7 @@ function processMesh(mesh, matrixList) {
         false
     );
     // instancedMesh.visible=false//mesh.material.cflag
-    if(tool.mesh2){
-        return tool.mesh2
-    }
+    
     // instancedMesh.scale.set(5,5,5)
     instancedMesh.geometry.clearGroups();
     instancedMesh.geometry.addGroupInstanced(
@@ -560,6 +558,11 @@ function processMesh(mesh, matrixList) {
         instancedMesh.setInstanceMatrixAt(0, i, instanceMatrix);
     }
     // console.log("instancedMesh",instancedMesh)
+    if(tool.mesh2){
+        // instancedMesh.visible=
+        // tool.mesh2.visible=tool.param.type=="cube"
+        return tool.mesh2//return instancedMesh;//
+    }
     return instancedMesh;
 }
 

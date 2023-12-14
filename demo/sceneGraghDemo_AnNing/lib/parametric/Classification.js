@@ -1,24 +1,32 @@
 import {Parameter}from"./Parameter"
 import {CoderDecoder}from"./CoderDecoder"
 
-import {PCA}from"./PCA"
+// import {PCA}from"./PCA"
 import numeric from 'numeric'
 window.numeric=numeric
 
 window.CylinderParam={}
+window.CubeParam={}
 window.downloadJson=()=>{
     // const str=JSON.stringify(window.CylinderParam , null, "\t")
-    const str=JSON.stringify(window.CylinderParam)
+    let str=JSON.stringify(window.CylinderParam)
     var link = document.createElement('a');
     link.style.display = 'none';
     document.body.appendChild(link);
     link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
     link.download ="CylinderParam"+window.iii+".json";
     link.click();
+
+    str=JSON.stringify(window.CubeParam)
+    link = document.createElement('a');
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
+    link.download ="CubeParam"+window.iii+".json";
+    link.click();
 }
 export class Classification{
     constructor(mesh, matrixList){//(x,y,z)、方向(012)、h/2、r
-        
         this.mesh=mesh
         this.matrixList=matrixList
         // this.pca=
@@ -29,10 +37,13 @@ export class Classification{
     }
     getParam(type){
         this.param=new Parameter(this.mesh,type).param
-        if(this.param.type=='else')return
+        if(type=='else')return
         // console.log("this.param",this.param)
         const code=new CoderDecoder.encoder(this.matrixList,this.param)
-        window.CylinderParam[this.mesh.name]=code
+        if(type=='cylinder')
+            window.CylinderParam[this.mesh.name]=code
+        if(type=='cube')
+            window.CubeParam[this.mesh.name]=code
         this.mesh2=new CoderDecoder.decoder(code)//mesh
     }
 

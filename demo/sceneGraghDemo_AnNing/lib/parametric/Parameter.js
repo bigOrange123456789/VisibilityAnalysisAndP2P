@@ -1,7 +1,9 @@
-import {PCA}from"./PCA"
+// import {PCA}from"./PCA"
 window.CylinderParam={}
 export class Parameter{
     param={
+        color:[null,null,null],
+
         type:'else',//cube、cylinder、else
         pos:{x:null,y:null,z:null},
         scale:[null,null,null],
@@ -20,6 +22,8 @@ export class Parameter{
         this.mesh=mesh
 
         this.param.type=type
+        this.param.color=[mesh.material.color.r,mesh.material.color.g,mesh.material.color.b]
+        
         this._init()//位置、放缩
         this._atCube()//其它参数信息
     }

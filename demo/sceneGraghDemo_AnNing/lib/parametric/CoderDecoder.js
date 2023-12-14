@@ -6,19 +6,22 @@ import {
     MeshBasicMaterial,
     Raycaster,Vector2,
     CylinderGeometry,
+    BoxGeometry,
     Object3D,
     Group
 } from "three";
 import{Parameter}from"./Parameter"
 const materialTest = new MeshBasicMaterial( {color: 0xff0000} ) 
+const geometryCylinder=new CylinderGeometry( 1, 1, 2, 4 )
+const geometryCube=new BoxGeometry( 1, 1, 1 );
 // import{CoderDecoder1}from"./CoderDecoder1"
 export class CoderDecoder{
     constructor(){}
     static encoder(matrixList_,param){
-        return CoderDecoder.encoderParam2(matrixList_,param)
+        return CoderDecoder.encoder12(matrixList_,param)
     }
     static decoder(list2){
-        return CoderDecoder.decoderParam2(list2)
+        return CoderDecoder.decoder12(list2)
     }
     static encoder12(matrixList_,param){
         const list16=CoderDecoder.encoder16(matrixList_,param)
@@ -32,11 +35,22 @@ export class CoderDecoder{
                 e[12],e[13],e[14],//1,//e[15],
             ])
         }
-        return list12
+        return {
+            matrix:list12,
+            color:param.color,
+            type:param.type}
     }
-    static decoder12(list2){
-        const geometry = new CylinderGeometry( 1, 1, 2, 4 )
-        const mesh = new InstancedMesh( geometry, materialTest ,list2.length);
+    static decoder12(code){
+        const list2=code.matrix
+        const type=code.type
+        const color=code.color
+        const geometry = type=='cube'?geometryCube:geometryCylinder
+        const material = new MeshBasicMaterial() 
+        material.color.r=color[0]
+        material.color.g=color[1]
+        material.color.b=color[2]
+        //type=='cube'?materialTest:new MeshBasicMaterial( {color: 0x00ff00} ) 
+        const mesh = new InstancedMesh( geometry, material ,list2.length);
         for(let i=0;i<list2.length;i++){
             const e=list2[i]
             const matrix = new Matrix4(); 
@@ -149,14 +163,21 @@ export class CoderDecoder{
     }
     static paramToMat(param){
         const obj=new Object3D()
-        if(param.direction==0)
-            obj.rotation.set(0,0,Math.PI/2) 
-        else if(param.direction==1)
-            obj.rotation.set(0,0,0)
-        else
-            obj.rotation.set(Math.PI/2,0,0) 
         obj.position.set(param.pos.x,param.pos.y,param.pos.z)
-        obj.scale.set(param.r,param.h_half,param.r)
+        if(param.type=="cylinder"){
+            if(param.direction==0)
+                obj.rotation.set(0,0,Math.PI/2) 
+            else if(param.direction==1)
+                obj.rotation.set(0,0,0)
+            else
+                obj.rotation.set(Math.PI/2,0,0) 
+            obj.scale.set(param.r,param.h_half,param.r)
+        }else{//cube
+            obj.scale.set(
+                2*param.scale[0],
+                2*param.scale[1],
+                2*param.scale[2])
+        }
         obj.updateMatrix ()
         return obj.matrix
     }
