@@ -3,17 +3,21 @@ import * as THREE from 'three'
 import { ControlEdit } from '../../../lib/playerControl/ControlEdit.js';
 export class UI{
     constructor(param){
-        this.dlightChange = false;
-        this.plightChange = false;
-        this.slightChange = false;
+        this.dlightChange = true//false;
+        this.plightChange = true//false;
+        // this.slightChange = true//false;
         this.test(param)
 
     }
     test(param){
-        const materialTest=new THREE.MeshBasicMaterial({ color: 0xffffff ,transparent:true,opacity:0.1})
+        const controlTool=new THREE.Group()
+        this.controlTool=controlTool
+
+        const materialTest=new THREE.MeshBasicMaterial({color: 0xffffff})//({ color: 0xffffff ,transparent:true,opacity:0.1})
         const camera=param.camera
         const renderer=param.renderer
         const scene=param.scene
+        scene.add(controlTool)
         const orbitControl=param.orbitControl
         const boxlist=[]
         
@@ -21,15 +25,15 @@ export class UI{
             new THREE.SphereGeometry( 0.5, 16, 8 ), 
             materialTest
         )
+        flag_pointLight.position.set(-0.2697829635108193,  3.6968538642054622,  0.27596807740972007)
         flag_pointLight.castShadow = false;
         flag_pointLight.receiveShadow = false;
         this.flag_pointLight=flag_pointLight
         this.flag_pointLight.toFlag=()=>{
             const l=flag_pointLight.l
             const f=flag_pointLight
-            console.log(l,f)
             if(l){
-                f.position.set(l.position.x,l.position.z,l.position.z)
+                f.position.set(l.position.x,l.position.y,l.position.z)
                 // f.postion.set(l.rotation.x,l.rotation.z,l.rotation.z)
             }
         }
@@ -37,7 +41,7 @@ export class UI{
             const l=flag_pointLight.l
             const f=flag_pointLight
             if(l){
-                l.position.set(f.position.x,f.position.z,f.position.z)
+                l.position.set(f.position.x,f.position.y,f.position.z)
                 // l.postion.set(f.rotation.x,f.rotation.z,f.rotation.z)
             }
         }
@@ -45,7 +49,7 @@ export class UI{
         boxlist.push(this.flag_pointLight)
 
         const flag_directionalLight = new THREE.Mesh( 
-            new THREE.BoxGeometry( 0.5,0.5,0.5 ), 
+            new THREE.BoxGeometry( 4.5,2.5,4.5 ), 
             materialTest
         )
         flag_directionalLight.castShadow = false;
@@ -55,16 +59,16 @@ export class UI{
             const l=flag_directionalLight.l
             const f=flag_directionalLight
             if(l){
-                f.position.set(l.position.x,l.position.z,l.position.z)
-                f.rotation.set(l.rotation.x,l.rotation.z,l.rotation.z)
+                f.position.set(l.position.x,l.position.y,l.position.z)
+                f.rotation.set(l.rotation.x,l.rotation.y,l.rotation.z)
             }
         }
         this.flag_directionalLight.toLight=()=>{
             const l=flag_directionalLight.l
             const f=flag_directionalLight
             if(l){
-                l.position.set(f.position.x,f.position.z,f.position.z)
-                l.rotation.set(f.rotation.x,f.rotation.z,f.rotation.z)
+                l.position.set(f.position.x,f.position.y,f.position.z)
+                l.rotation.set(f.rotation.x,f.rotation.y,f.rotation.z)
             }
         }
         window.flag_directionalLight=flag_directionalLight
@@ -72,7 +76,7 @@ export class UI{
         boxlist.push(this.flag_directionalLight)
 
         for(let i=0;i<boxlist.length;i++){
-            scene.add(boxlist[i])
+            controlTool.add(boxlist[i])
         }
         
         const self=this
@@ -110,7 +114,7 @@ export class UI{
           平行光启用: true,
           dirlightRadius:3.5,
           dirlightSamples:25,
-          '控制方式':{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"},
+          '控制方式':{"关闭":"off","水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"},
           
           /*Point Light*/
           pLightSite:{
@@ -146,11 +150,14 @@ export class UI{
         var datGui = new dat.GUI();
         /*control*/
         datGui.addFolder('可视化控制')
-        .add(gui,'控制方式',{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"})
+        .add(gui,'控制方式',{"关闭":"off","水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"})
         .onChange(function(e){//{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"}
           // console.log(e)
-          const c=self.controlEditor
-          c.type=e
+          if(e=="off")self.controlTool.visible=false
+          else{
+            self.controlTool.visible=true
+            self.controlEditor.type=e
+          }
           //type="horizontal"//"rotation"//"vertical" 
         });
         /*directional light*/
@@ -213,15 +220,6 @@ export class UI{
           .onChange(function(e) {
               directionalLightGroup[0].castShadow = e
           });
-        //   /*control*/
-        //   directionFolder
-        //   .add(gui,'可视化控制',{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"})
-        //   .onChange(function(e){//{"水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"}
-        //     // console.log(e)
-        //     const c=self.controlEditor
-        //     c.type=e
-        //     //type="horizontal"//"rotation"//"vertical" 
-        //   });
           /*visible*/
           directionFolder
           .add(gui, '平行光启用')

@@ -37,6 +37,9 @@ class Loader{
 					window.onresize = self.resize;
 					self.rtxgiNetwork=rtxgiNetwork
 					self.animate()
+
+					self.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
+					self.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
 			}
 			rtxgiNetwork.init(self.camera,ui,light,self.models)
 		})
@@ -92,7 +95,7 @@ class Loader{
 		this.renderer.shadowMapSoft = true;
 		this.renderer.setClearColor(0xcccccc)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
-		this.renderer.shadowMap.type = THREE.VSMShadowMap;
+		// this.renderer.shadowMap.type = THREE.VSMShadowMap;
 		this.renderer.shadowMap.autoUpdate = true;
 		this.renderer.tonemapping = THREE.NoToneMapping;
 		this.renderer.setScissorTest = true;

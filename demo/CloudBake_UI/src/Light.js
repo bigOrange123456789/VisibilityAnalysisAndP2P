@@ -30,9 +30,15 @@ export class Light{
           //告诉平行光需要开启阴影投射
           directionalLight.castShadow = true
         
-          directionalLight.target.position.x = directionalLight.position.x + rtxgiNetwork.dLightDirection.x;
-          directionalLight.target.position.y = directionalLight.position.y + rtxgiNetwork.dLightDirection.y;
-          directionalLight.target.position.z = directionalLight.position.z + rtxgiNetwork.dLightDirection.z;
+          if(false){
+            directionalLight.target.position.x = directionalLight.position.x + rtxgiNetwork.dLightDirection.x;
+            directionalLight.target.position.y = directionalLight.position.y + rtxgiNetwork.dLightDirection.y;
+            directionalLight.target.position.z = directionalLight.position.z + rtxgiNetwork.dLightDirection.z;
+          }
+          window.directionalLight=directionalLight
+          directionalLight.position.set( -0.484151390183456,  26.43546636346798,  -0.3095244287641208)
+          directionalLight.intensity=1.8
+          
           scene.add(directionalLight)
           scene.add(directionalLight.target)
         
@@ -54,6 +60,12 @@ export class Light{
               pointLight.castShadow = true;
               pointLight.shadow.radius=3.5,
               pointLight.shadow.blurSamples=25,
+
+              window.pointLight=pointLight
+              pointLight.position.set(
+                -0.2697829635108193,  3.6968538642054622,  0.27596807740972007
+              )
+              pointLight.intensity=2.3873241463784303
 
               scene.add(pointLight);
               var ptHelpder = new THREE.PointLightHelper(pointLight,2.5,0xffffff);
