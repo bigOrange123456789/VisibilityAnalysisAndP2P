@@ -133,7 +133,10 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		}
 		if (materialOld.map) {
 			this.uniforms.useMap.value = true
-			materialOld.map.encoding = THREE.sRGBEncoding
+			materialOld.map.encoding = //THREE.sRGBEncoding
+				// THREE.SRGBColorSpace
+				THREE.LinearSRGBColorSpace
+				// THREE.NoColorSpace
 			this.uniforms.colorMap.value = materialOld.map
 		}
 		if (materialOld.emissive) {
@@ -141,7 +144,10 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		}
 		if (materialOld.emissiveMap ) {
 			this.uniforms.useEmissiveMap.value = true;
-			materialOld.emissiveMap.encoding = THREE.sRGBEncoding
+			materialOld.emissiveMap.encoding = //THREE.sRGBEncoding
+				// THREE.SRGBColorSpace
+				THREE.LinearSRGBColorSpace
+				// THREE.NoColorSpace
 			this.uniforms.emissiveMap.value = node.material.emissiveMap;
 		}
 		this.param=param
