@@ -59,8 +59,6 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		} )
 	}
 	static async pre(cb){
-		IndirectMaterial.prototype.vertexShader  = indirectVS
-		IndirectMaterial.prototype.fragmentShader= indirectFS
 		IndirectMaterial.prototype.probeIrradiance0=await IndirectMaterial.Json2Texture()
 		if(cb)cb()
 	}
@@ -77,14 +75,15 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		// 	probeGridCounts:[11, 11, 11],
 		// 	probeGridSpacing:new THREE.Vector3( 2.0399999618530273,  1,  0.8999999761581421)
 		// }
-		IndirectMaterial.prototype.probeIrradiance0.needsUpdate = true;
+		if(IndirectMaterial.prototype.probeIrradiance0)
+			IndirectMaterial.prototype.probeIrradiance0.needsUpdate = true;
 		super({//new THREE.ShaderMaterial({//
 			uniforms: {
 				//Declare texture uniform in shader
 				GBufferd: { type: 't', value: null },
 				probeIrradiance: { 
 					type: 't', 
-					value: IndirectMaterial.prototype.probeIrradiance0//null 
+					value: null//IndirectMaterial.prototype.probeIrradiance0//null 
 				},
 				probeDistance:{ 
 					type: 't', 
@@ -118,8 +117,8 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 				originColor: { value: new THREE.Vector3(0, 0, 0) },
 		
 			  },
-			vertexShader: IndirectMaterial.prototype.vertexShader,
-			fragmentShader: IndirectMaterial.prototype.fragmentShader
+			vertexShader: indirectVS,
+			fragmentShader: indirectFS
 		})
 		window.indirectMaterial=this
 		this.uniforms.GBufferd.value = this._initLitRenderTarget().texture

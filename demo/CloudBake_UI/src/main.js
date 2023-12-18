@@ -1,5 +1,4 @@
 import * as THREE from 'three'
-// import * as THREE from '../three.module'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {IndirectMaterial} from "./IndirectMaterial"
 import {UI} from "./UI"
@@ -25,24 +24,24 @@ class Loader{
 		
 		this.resize  = this.resize.bind(self)
 		this.animate = this.animate.bind(self)
-		
-		IndirectMaterial.pre(()=>{
-			const rtxgiNetwork = new Communication();
-			rtxgiNetwork.onready=()=>{
-					ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,self.models)//initGui(rtxgiNetwork);//
-					self.updateCamera(rtxgiNetwork)
-					self.loadRoom(rtxgiNetwork,light,self.models)
-					light.init(rtxgiNetwork,self.scene)//initLight();
-					
-					window.onresize = self.resize;
-					self.rtxgiNetwork=rtxgiNetwork
-					self.animate()
 
-					self.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
-					self.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
-			}
-			rtxgiNetwork.init(self.camera,ui,light,self.models)
-		})
+		
+		
+		const rtxgiNetwork = new Communication();
+		rtxgiNetwork.onready=()=>{
+				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,self.models)//initGui(rtxgiNetwork);//
+				self.updateCamera(rtxgiNetwork)
+				self.loadRoom(rtxgiNetwork,light,self.models)
+				light.init(rtxgiNetwork,self.scene)//initLight();
+					
+				window.onresize = self.resize;
+				self.rtxgiNetwork=rtxgiNetwork
+				self.animate()
+
+				self.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
+				self.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
+		}
+		rtxgiNetwork.init(self.camera,ui,light,self.models)
     }
 	loadRoom(rtxgiNetwork,light,models){
 		/*Directional Light y offset*/
@@ -75,7 +74,6 @@ class Loader{
 					
 				}
 			})
-			console.log(models)
 			self.scene.add(gltf.scene)
 			/*reset shadowMap and directionalLight*/
 			if(rtxgiNetwork.directionalLightCt == 1){

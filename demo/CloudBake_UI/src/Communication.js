@@ -133,7 +133,10 @@ export class Communication extends RTXGINetwork{
             
             rtx: cameraForward.x,
             rty: cameraForward.y,
-            rtz: cameraForward.z
+            rtz: cameraForward.z,
+
+            width: window.innerWidth,//新版新增
+            height: window.innerHeight//新版新增
         };
         this.lastCameraPos = camera.position;
         this.lastCameraRot = cameraForward;
@@ -177,7 +180,11 @@ export class Communication extends RTXGINetwork{
         if(!ui.plightChange)
             return;
   
-        for(let plightIndex=0;plightIndex<2;plightIndex++){
+        for(
+            let plightIndex=0;
+            plightIndex<light.pointLightGroup.length;
+            plightIndex++
+            ){
             let lightColor = light.pointLightGroup[plightIndex].color;
             let lightPower = light.pointLightGroup[plightIndex].power;
             let lightPosition = light.pointLightGroup[plightIndex].position;
@@ -196,8 +203,7 @@ export class Communication extends RTXGINetwork{
                 colorg:lightColor.g,
                 colorb:lightColor.b,
                 distance: lightDistance
-            };
-            console.log(lightJson)
+            }
             this.send(lightJson)
         }
         
