@@ -1,7 +1,4 @@
-export default {
-    toByteArray
-}
-
+export default toByteArray
 var lookup = []
 var revLookup = []
 var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array

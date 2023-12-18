@@ -1,7 +1,6 @@
 import { StateCode } from "./StateCode"
-// import { RGBELoader } from './RGBELoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
-import  base64  from  './base64'
+import  toByteArray  from  './base64'//import  base64  from  './base64'
 import * as THREE from 'three'
 export class RTXGINetwork
 {
@@ -19,6 +18,10 @@ export class RTXGINetwork
 	IrradianceTex = {};
 	/*distance*/
 	DistanceTex = {};
+	/*rtao used*/
+	usedRtao = false;
+	/*rtao*/
+	RtaoTex = {};
 	/*volume desc update*/
 	isDescTouch = false;
 	/*scene name*/
@@ -32,6 +35,9 @@ export class RTXGINetwork
 	directionalLightCt = 0;
 	/*directionalLight direction*/
 	dLightDirection = new THREE.Vector3();
+	/*Scene min/max*/
+	SceneMin = new THREE.Vector3();
+	SceneMax = new THREE.Vector3();
 	/*point light count*/
 	pointLightCt = 0;
 	/*point lights array*/
@@ -89,28 +95,51 @@ export class RTXGINetwork
 				/*RTXGI probe irr and dis texture*/
 				if(dataJson.type == StateCode.C2S_RTXGI_ProbeHdr)
 				{
-					/*irradiance*/
-					let irradianceData = base64.toByteArray(dataJson.irradiance);
-					/*update loader*/
-					let irradianceBlob = new Blob([irradianceData],{ type: "image/hdr"});
-					let irradianceUrl = URL.createObjectURL(irradianceBlob);
-					/*irradiance loader*/
-					let irradianceLoader = new RGBELoader()
-							.setDataType(THREE.FloatType)
-							.load(irradianceUrl,
-								function (texture) {
-									 texture.minFilter = THREE.LinearFilter;
-									 texture.magFilter = THREE.LinearFilter;
-									 texture.wrapS = THREE.RepeatWrapping;
-									 texture.wrapT = THREE.RepeatWrapping;
-								}
-					);
-					this.IrradianceTex = irradianceLoader;console.log(1.107)
+					if(dataJson.irradiance){
+						/*irradiance*/
+						let irradianceData = toByteArray(dataJson.irradiance);
+						/*update loader*/
+						let irradianceBlob = new Blob([irradianceData],{ type: "image/hdr"});
+						let irradianceUrl = URL.createObjectURL(irradianceBlob);
+						/*irradiance loader*/
+						let irradianceLoader = new RGBELoader()
+								.setDataType(THREE.FloatType)
+								.load(irradianceUrl,
+									function (texture) {
+										texture.minFilter = THREE.LinearFilter;
+										texture.magFilter = THREE.LinearFilter;
+										texture.wrapS = THREE.RepeatWrapping;
+										texture.wrapT = THREE.RepeatWrapping;
+									}
+						);
+						this.IrradianceTex = irradianceLoader;
+					}
+					/*rtao texture*/
+					if(dataJson.rtao)
+					{
+						//console.log("rtao:"+ rtaoData);
+						let rtaoData = toByteArray(dataJson.rtao);
+						/*update loader*/
+						let rtaoBlob = new Blob([rtaoData],{ type: "image/png"});
+						let rtaoUrl = URL.createObjectURL(rtaoBlob);
+						/*irradiance loader*/
+						let rtaoLoader = new THREE.TextureLoader()
+								.load(rtaoUrl,
+									function (texture) {
+										texture.minFilter = THREE.LinearFilter;
+										texture.magFilter = THREE.LinearFilter;
+										texture.wrapS = THREE.RepeatWrapping;
+										texture.wrapT = THREE.RepeatWrapping;
+									}
+						);
+						this.RtaoTex = rtaoLoader;
+						this.usedRtao = true;
+					}
+					
 				}else if(dataJson.type == StateCode.C2S_RTXGI_ProbePng)
 				{
 					/*irradiance*/
-					let irradianceData = base64.toByteArray(dataJson.irradiance);
-					console.log(irradianceData);
+					let irradianceData = toByteArray(dataJson.irradiance);
 					/*update loader*/
 					let irradianceBlob = new Blob([irradianceData],{ type: "image/png"});
 					let irradianceUrl = URL.createObjectURL(irradianceBlob);
@@ -124,7 +153,7 @@ export class RTXGINetwork
 									 texture.wrapT = THREE.RepeatWrapping;
 								}
 					);
-					this.IrradianceTex = irradianceLoader;console.log(2.126)
+					this.IrradianceTex = irradianceLoader;
 				}else if(dataJson.type == StateCode.C2S_RTXGI_VolumeDesc){
 					if(!this.isDescTouch)
 					{
@@ -145,6 +174,14 @@ export class RTXGINetwork
 							this.dLightDirection.z = dataJson.direction.z;
 						}
 						
+						this.SceneMin.x = dataJson.minx;
+						this.SceneMin.y = dataJson.miny;
+						this.SceneMin.z = dataJson.minz;
+						
+						this.SceneMax.x = dataJson.maxx;
+						this.SceneMax.y = dataJson.maxy;
+						this.SceneMax.z = dataJson.maxz;
+						
 						/*point light*/
 						this.pointLightCt = dataJson.plightCount;
 						if(this.pointLightCt > 0){
@@ -161,7 +198,7 @@ export class RTXGINetwork
 						
 						/*distance texture*/
 						/*irradiance*/
-						let distanceData = base64.toByteArray(dataJson.distance);
+						let distanceData = toByteArray(dataJson.distance);
 						/*distance loader*/
 						let distanceBlob = new Blob([distanceData],{ type: "image/hdr"});
 						let distanceUrl = URL.createObjectURL(distanceBlob);
@@ -178,9 +215,8 @@ export class RTXGINetwork
 						this.DistanceTex = distanceLoader;
 						
 						/*irradiance*/
-						let irradianceData = base64.toByteArray(dataJson.irradiance);
+						let irradianceData = toByteArray(dataJson.irradiance);
 						/*update loader*/
-						// console.log("irradianceData",irradianceData)
 						let irradianceBlob = new Blob([irradianceData],{ type: "image/hdr"});
 						let irradianceUrl = URL.createObjectURL(irradianceBlob);
 						/*irradiance loader*/
@@ -192,11 +228,31 @@ export class RTXGINetwork
 									 texture.magFilter = THREE.LinearFilter;
 									 texture.wrapS = THREE.RepeatWrapping;
 									 texture.wrapT = THREE.RepeatWrapping;
-									//  console.log(texture.image.data)
 								}
 						);
-						this.IrradianceTex = irradianceLoader;console.log(3.195)
-						// console.log("irradianceLoader",irradianceLoader)
+						this.IrradianceTex = irradianceLoader;
+						
+						/*rtao texture*/
+						if(dataJson.rtao)
+						{
+							//console.log("rtao:"+ dataJson.rtao);
+							let rtaoData = toByteArray(dataJson.rtao);
+							/*update loader*/
+							let rtaoBlob = new Blob([rtaoData],{ type: "image/png"});
+							let rtaoUrl = URL.createObjectURL(rtaoBlob);
+							/*irradiance loader*/
+							let rtaoLoader = new THREE.TextureLoader()
+									.load(rtaoUrl,
+										function (texture) {
+											texture.minFilter = THREE.LinearFilter;
+											texture.magFilter = THREE.LinearFilter;
+											texture.wrapS = THREE.RepeatWrapping;
+											texture.wrapT = THREE.RepeatWrapping;
+										}
+							);
+							this.RtaoTex = rtaoLoader;
+							this.usedRtao = true;
+						}
 						
 						this.viewBias = dataJson.viewB;
 						this.normalBias = dataJson.normalB;
@@ -205,7 +261,6 @@ export class RTXGINetwork
 						this.exposure = dataJson.exposure;
 						this.tonemapping = dataJson.tonemapping;
 						this.gamma = dataJson.gamma;
-						// console.log(this.exposure);
 						
 						this.origin = new THREE.Vector3();
 						this.origin.x = dataJson.originX;
@@ -270,7 +325,7 @@ export class RTXGINetwork
 	/*set irradiance and distance probe*/
 	ConstructorProbe(irradiance, distance)
 	{
-		this.IrradianceTex = irradiance;console.log(4.269)
+		this.IrradianceTex = irradiance;
 		this.DistanceTex = distance;
 	}
 }
