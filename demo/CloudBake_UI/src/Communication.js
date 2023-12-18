@@ -176,27 +176,31 @@ export class Communication extends RTXGINetwork{
         const light=this.light
         if(!ui.plightChange)
             return;
+  
+        for(let plightIndex=0;plightIndex<2;plightIndex++){
+            let lightColor = light.pointLightGroup[plightIndex].color;
+            let lightPower = light.pointLightGroup[plightIndex].power;
+            let lightPosition = light.pointLightGroup[plightIndex].position;
+            let lightDistance = light.pointLightGroup[plightIndex].distance;
+            /*data json str*/
+            let lightJson = 
+            {
+                type: StateCode.C2S_RTXGI_PointLight,
+                sceneId: rtxgiNetwork.sceneId,
+                index: plightIndex,
+                x: lightPosition.x,
+                y: lightPosition.y,
+                z: lightPosition.z,
+                power: lightPower,
+                colorr: lightColor.r,
+                colorg:lightColor.g,
+                colorb:lightColor.b,
+                distance: lightDistance
+            };
+            console.log(lightJson)
+            this.send(lightJson)
+        }
         
-        let lightColor = light.pointLightGroup[this.plightIndex].color;
-        let lightPower = light.pointLightGroup[this.plightIndex].power;
-        let lightPosition = light.pointLightGroup[this.plightIndex].position;
-        let lightDistance = light.pointLightGroup[this.plightIndex].distance;
-        /*data json str*/
-        let lightJson = 
-        {
-            type: StateCode.C2S_RTXGI_PointLight,
-            sceneId: rtxgiNetwork.sceneId,
-            index: this.plightIndex,
-            x: lightPosition.x,
-            y: lightPosition.y,
-            z: lightPosition.z,
-            power: lightPower,
-            colorr: lightColor.r,
-            colorg:lightColor.g,
-            colorb:lightColor.b,
-            distance: lightDistance
-        };
-        this.send(lightJson)
     }
     syncClientSpotLightToServer(){
         const rtxgiNetwork=this

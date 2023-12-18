@@ -51,6 +51,7 @@ export class Light{
         if(rtxgiNetwork.pointLightCt > 0)
         {
             /*point light param set*/
+            console.log(rtxgiNetwork.pointLightCt,"rtxgiNetwork.pointLightCt")
           for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
               let pointLight = new THREE.PointLight('#ffffff');
               let position = rtxgiNetwork.pointLightParams[i].position;
@@ -63,15 +64,16 @@ export class Light{
 
               window.pointLight=pointLight
               pointLight.position.set(
-                -0.2697829635108193,  3.6968538642054622,  0.27596807740972007
+                -0.2697829635108193+i*2,  3.6968538642054622,  0.27596807740972007
               )
               pointLight.intensity=2.3873241463784303
 
               scene.add(pointLight);
-              var ptHelpder = new THREE.PointLightHelper(pointLight,2.5,0xffffff);
-              scene.add(ptHelpder);
+              // var ptHelpder = new THREE.PointLightHelper(pointLight,2.5,0xffffff);
+              // scene.add(ptHelpder);
               this.pointLightGroup.push(pointLight);
           }
+          window.pointLightGroup=this.pointLightGroup
         }
         
         /*spot light*/

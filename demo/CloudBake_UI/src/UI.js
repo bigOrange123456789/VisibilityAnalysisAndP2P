@@ -1,6 +1,32 @@
 import * as dat from 'dat.gui'
 import * as THREE from 'three'
 import { ControlEdit } from '../../../lib/playerControl/ControlEdit.js';
+class Control extends THREE.Mesh{
+    constructor(opt){
+        super(
+            opt.geometry,
+            opt.material,
+        )
+        this.castShadow = false;
+        this.receiveShadow = false;
+    }
+    toFlag(){
+        const l=this.l
+        const f=this
+        if(l){
+            f.position.set(l.position.x,l.position.y,l.position.z)
+            // f.rotation.set(l.rotation.x,l.rotation.z,l.rotation.z)
+        }
+    }
+    toLight(){
+        const l=this.l
+        const f=this
+        if(l){
+            l.position.set(f.position.x,f.position.y,f.position.z)
+            // l.rotation.set(f.rotation.x,f.rotation.z,f.rotation.z)
+        }
+    }
+}
 export class UI{
     constructor(param){
         this.dlightChange = true//false;
@@ -21,58 +47,27 @@ export class UI{
         const orbitControl=param.orbitControl
         const boxlist=[]
         
-        const flag_pointLight = new THREE.Mesh( 
-            new THREE.SphereGeometry( 0.5, 16, 8 ), 
-            materialTest
-        )
+        const flag_pointLight = new Control( {
+            geometry:new THREE.SphereGeometry( 0.3, 16, 8 ), 
+            material:materialTest
+        })
         flag_pointLight.position.set(-0.2697829635108193,  3.6968538642054622,  0.27596807740972007)
-        flag_pointLight.castShadow = false;
-        flag_pointLight.receiveShadow = false;
         this.flag_pointLight=flag_pointLight
-        this.flag_pointLight.toFlag=()=>{
-            const l=flag_pointLight.l
-            const f=flag_pointLight
-            if(l){
-                f.position.set(l.position.x,l.position.y,l.position.z)
-                // f.postion.set(l.rotation.x,l.rotation.z,l.rotation.z)
-            }
-        }
-        this.flag_pointLight.toLight=()=>{
-            const l=flag_pointLight.l
-            const f=flag_pointLight
-            if(l){
-                l.position.set(f.position.x,f.position.y,f.position.z)
-                // l.postion.set(f.rotation.x,f.rotation.z,f.rotation.z)
-            }
-        }
-        window.flag_pointLight=flag_pointLight
         boxlist.push(this.flag_pointLight)
 
-        const flag_directionalLight = new THREE.Mesh( 
-            new THREE.BoxGeometry( 4.5,2.5,4.5 ), 
-            materialTest
-        )
-        flag_directionalLight.castShadow = false;
-        flag_directionalLight.receiveShadow = false;
+        const flag_pointLight1 = new Control( {
+            geometry:new THREE.SphereGeometry( 0.3, 16, 8 ), 
+            material:materialTest
+        })
+        flag_pointLight1.position.set(-0.2697829635108193,  3.6968538642054622,  0.27596807740972007)
+        this.flag_pointLight1=flag_pointLight1
+        boxlist.push(this.flag_pointLight1)
+
+        const flag_directionalLight = new Control( {
+            geometry:new THREE.BoxGeometry( 4.5,2.5,4.5 ), 
+            material:materialTest
+        })
         this.flag_directionalLight=flag_directionalLight
-        this.flag_directionalLight.toFlag=()=>{
-            const l=flag_directionalLight.l
-            const f=flag_directionalLight
-            if(l){
-                f.position.set(l.position.x,l.position.y,l.position.z)
-                f.rotation.set(l.rotation.x,l.rotation.y,l.rotation.z)
-            }
-        }
-        this.flag_directionalLight.toLight=()=>{
-            const l=flag_directionalLight.l
-            const f=flag_directionalLight
-            if(l){
-                l.position.set(f.position.x,f.position.y,f.position.z)
-                l.rotation.set(f.rotation.x,f.rotation.y,f.rotation.z)
-            }
-        }
-        window.flag_directionalLight=flag_directionalLight
-        // flag_directionalLight.visible=false
         boxlist.push(this.flag_directionalLight)
 
         for(let i=0;i<boxlist.length;i++){
@@ -80,7 +75,7 @@ export class UI{
         }
         
         const self=this
-        if(true)this.controlEditor=new ControlEdit(
+        if(true)new ControlEdit(
             camera,
             renderer,
             boxlist,
@@ -91,6 +86,7 @@ export class UI{
             obj=>{
                 // console.log(2,obj)
                 self.flag_pointLight.toLight()
+                self.flag_pointLight1.toLight()
                 self.plightChange = true;
                 // self.flag_directionalLight.toLight()
                 // self.dlightChange = true;
@@ -167,9 +163,12 @@ export class UI{
           setTimeout(()=>{
             self.flag_directionalLight.l=directionalLightGroup[0]
             self.flag_directionalLight.toFlag()
-            console.log(self.flag_directionalLight)
+            
             self.flag_pointLight.l      =pointLightGroup[0]
             self.flag_pointLight.toFlag()
+
+            self.flag_pointLight1.l      =pointLightGroup[1]
+            self.flag_pointLight1.toFlag()
             console.log("启动完成")
           },1000)
           var directionFolder = datGui.addFolder('平行光');
