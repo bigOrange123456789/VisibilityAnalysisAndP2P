@@ -93,7 +93,7 @@ class Loader{
 		this.renderer.shadowMapSoft = true;
 		this.renderer.setClearColor(0xcccccc)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
-		// this.renderer.shadowMap.type = THREE.VSMShadowMap;
+		this.renderer.shadowMap.type = THREE.VSMShadowMap;
 		this.renderer.shadowMap.autoUpdate = true;
 		this.renderer.tonemapping = THREE.NoToneMapping;
 		this.renderer.setScissorTest = true;

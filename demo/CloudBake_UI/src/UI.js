@@ -29,13 +29,13 @@ class Control extends THREE.Mesh{
 }
 export class UI{
     constructor(param){
-        this.dlightChange = true//false;
-        this.plightChange = true//false;
-        // this.slightChange = true//false;
-        this.test(param)
+        this.dlightChange = false//true//false;
+        this.plightChange = false//true//false;
+        this.slightChange = false//true//false;
+        //this._test(param)
 
     }
-    test(param){
+    _test(param){
         const controlTool=new THREE.Group()
         this.controlTool=controlTool
 
@@ -81,10 +81,10 @@ export class UI{
             boxlist,
             orbitControl,
             obj=>{
-                // console.log(1,obj)
+                console.log(1,obj)
             },
             obj=>{
-                // console.log(2,obj)
+                console.log(2,obj)
                 self.flag_pointLight.toLight()
                 self.flag_pointLight1.toLight()
                 self.plightChange = true;
@@ -161,14 +161,19 @@ export class UI{
         {
           
           setTimeout(()=>{
-            self.flag_directionalLight.l=directionalLightGroup[0]
-            self.flag_directionalLight.toFlag()
+            if(self.flag_directionalLight){
+                self.flag_directionalLight.l=directionalLightGroup[0]
+                self.flag_directionalLight.toFlag()
+            }
             
-            self.flag_pointLight.l      =pointLightGroup[0]
-            self.flag_pointLight.toFlag()
+            if(self.flag_pointLight){
+                self.flag_pointLight.l      =pointLightGroup[0]
+                self.flag_pointLight.toFlag()
 
-            self.flag_pointLight1.l      =pointLightGroup[1]
-            self.flag_pointLight1.toFlag()
+                self.flag_pointLight1.l      =pointLightGroup[1]
+                self.flag_pointLight1.toFlag()
+            }
+            
             console.log("启动完成")
           },1000)
           var directionFolder = datGui.addFolder('平行光');
