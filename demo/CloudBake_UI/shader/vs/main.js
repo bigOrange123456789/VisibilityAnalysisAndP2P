@@ -1,4 +1,4 @@
-const indirectVS =/* glsl */`
+export const main =/* glsl */`
 
 precision highp float;
       
@@ -20,4 +20,3 @@ void main()
 }
 
 `
-export {indirectVS}
