@@ -64,7 +64,7 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		IndirectMaterial.prototype.probeIrradiance0=await IndirectMaterial.Json2Texture()
 		if(cb)cb()
 	}
-    constructor(materialOld,param) {
+    constructor(materialOld,param,uniforms) {
 		// const param={
 		// 	exposure:2,
 		// 	tonemapping:true,
@@ -82,29 +82,26 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		super({//new THREE.ShaderMaterial({//
 			uniforms: {
 				//Declare texture uniform in shader
-				GBufferd: { type: 't', value: null },
-				probeIrradiance: { 
-					type: 't', 
-					value: null//IndirectMaterial.prototype.probeIrradiance0//null 
-				},
-				probeDistance:{ 
-					type: 't', 
-					value: null // probeDistance: { type: 't', value: null },
-				},
-				rtaoBufferd: { value: null },
-				screenWidth: { value: window.innerWidth },
-				screenHeight: { value: window.innerHeight },
+				GBufferd: uniforms.GBufferd,//IndirectMaterial.initLitRenderTarget(),
+				probeIrradiance: uniforms.probeIrradiance,//{value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
+				probeDistance:uniforms.probeDistance,//{value: null}, // probeDistance: { type: 't', value: null },
+				rtaoBufferd: uniforms.rtaoBufferd,//{ value: null },
+				useRtao: uniforms.useRtao,//{ value: true },
+
+				screenWidth: uniforms.screenWidth,//{ value: window.innerWidth },
+				screenHeight: uniforms.screenHeight,//{ value: window.innerHeight },
+
 				notCompareFlag: { value: false },
 				dGI: { value: true },
-				useRtao: { value: true },
+				
 				exposure: { value : param.exposure },
 				tonemapping: { value: param.tonemapping },
 				gamma: { value: param.gamma },
 				DDGIVolume: {
 				  value: {
-					origin: new THREE.Vector3(0, 0, 0),
-					probeGridCounts: new Int32Array(3),
-					probeGridSpacing: new THREE.Vector3(0, 0, 0),
+					origin: param.origin,//new THREE.Vector3(0, 0, 0),
+					probeGridCounts: param.probeGridCounts,//new Int32Array(3),
+					probeGridSpacing: param.probeGridSpacing,//new THREE.Vector3(0, 0, 0),
 					viewBias: param.viewBias,
 					normalBias: param.normalBias,
 					probeNumIrradianceTexels: param.numIrradianceTexels,
@@ -124,11 +121,6 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		})
 		this.vertexShader=vs
 		this.fragmentShader=fs
-		window.indirectMaterial=this
-		this.uniforms.GBufferd.value = this._initLitRenderTarget().texture
-		this.uniforms.DDGIVolume.value.origin = param.origin
-		this.uniforms.DDGIVolume.value.probeGridCounts = param.probeGridCounts
-		this.uniforms.DDGIVolume.value.probeGridSpacing = param.probeGridSpacing
 		this.needsUpdate = true
 
 		if (materialOld.color) {
@@ -152,30 +144,6 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		}
 		this.param=param
     }
-	_initLitRenderTarget(){
-		const litRenderTarget = new THREE.WebGLRenderTarget(
-			window.innerWidth,
-			window.innerHeight,
-			{
-			  minFilter: THREE.NearestFilter,
-			  magFilter: THREE.NearestFilter,
-			  format: THREE.RGBAFormat,
-			  type: THREE.FloatType
-			}
-		)
-		litRenderTarget.texture.type = 1015
-		litRenderTarget.texture.format = 1023
-
-		function onWindowResize() {
-			litRenderTarget.setSize(window.innerWidth, window.innerHeight)
-			requestAnimationFrame(onWindowResize);
-		}
-		onWindowResize() 
-		return litRenderTarget 
-	}
-	probeIrradianceUpdate(irradianceLoader){
-		this.uniforms.probeIrradiance.value = irradianceLoader
-	}
 	DataTexture2Json(){
 		const image=this.uniforms.probeIrradiance.value.image
 		let k0=0

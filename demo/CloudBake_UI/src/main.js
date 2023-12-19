@@ -6,6 +6,16 @@ import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitContro
 import {Communication} from "./Communication"
 import {Light} from "./Light"
 class Loader{
+	uniforms={
+		probeIrradiance: {value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
+		probeDistance:{value: null}, // probeDistance: { type: 't', value: null },
+		rtaoBufferd: { value: null },
+		useRtao: { value: true },
+
+		GBufferd: { value: true },
+		screenWidth: { value: window.innerWidth },
+		screenHeight: { value: window.innerHeight },
+	}
     constructor(){
 		this.initScene()
 		window.camera=this.camera
@@ -25,9 +35,7 @@ class Loader{
 		this.resize  = this.resize.bind(self)
 		this.animate = this.animate.bind(self)
 
-		
-		
-		const rtxgiNetwork = new Communication();
+		const rtxgiNetwork = new Communication(self.camera,ui,light,this.uniforms);
 		rtxgiNetwork.onready=()=>{
 				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,self.models)//initGui(rtxgiNetwork);//
 				self.updateCamera(rtxgiNetwork)
@@ -37,11 +45,7 @@ class Loader{
 				window.onresize = self.resize;
 				self.rtxgiNetwork=rtxgiNetwork
 				self.animate()
-
-				self.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
-				self.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
 		}
-		rtxgiNetwork.init(self.camera,ui,light,self.models)
     }
 	loadRoom(rtxgiNetwork,light,models){
 		/*Directional Light y offset*/
@@ -63,7 +67,7 @@ class Loader{
 					node.geometry.computeVertexNormals()
 					node.castShadow = true
 					node.receiveShadow = true
-					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
+					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork,self.uniforms)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
 					node.litMaterial = node.material
 					// console.log(node.material.map)
 					window.material=indirectMaterial
@@ -127,6 +131,7 @@ class Loader{
 			type: THREE.FloatType
 			}
 		)
+		this.uniforms.GBufferd.value = this.litRenderTarget.texture;
     }
 	updateCamera(rtxgiNetwork){
 		this.camera.fov=rtxgiNetwork.cameraFov
@@ -134,6 +139,9 @@ class Loader{
 		this.camera.position.x = rtxgiNetwork.cameraPosition.x;
 		this.camera.position.y = rtxgiNetwork.cameraPosition.y;
 		this.camera.position.z = rtxgiNetwork.cameraPosition.z;
+
+		this.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
+		this.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
 	}
 	render(){
 		const models=this.models
@@ -148,10 +156,9 @@ class Loader{
 		renderer.setRenderTarget(litRenderTarget)
 		renderer.render(scene, camera)
 		
+		this.uniforms.screenWidth.value = renderer.domElement.width;
+		this.uniforms.screenHeight.value = renderer.domElement.height;
 		for (var i = 0; i < models.length; i++) {
-			models[i].indirectMaterial.uniforms.screenWidth.value = renderer.domElement.width;
-			models[i].indirectMaterial.uniforms.screenHeight.value = renderer.domElement.height;
-			models[i].indirectMaterial.uniforms.GBufferd.value = litRenderTarget.texture;
 			models[i].material = models[i].indirectMaterial//models[i].indirectShader;
 		}
 		renderer.setRenderTarget(null)
@@ -162,14 +169,11 @@ class Loader{
         requestAnimationFrame(this.animate)
     }
     resize(){
-		const models=this.models
 		const renderer=this.renderer
 		const camera=this.camera
 		
-        for (var i = 0; i < models.length; i++) {
-			models[i].indirectMaterial.uniforms.screenWidth.value = window.innerWidth
-			models[i].indirectMaterial.uniforms.screenHeight.value = window.innerHeight
-		}
+        this.uniforms.screenWidth.value = renderer.domElement.width;
+		this.uniforms.screenHeight.value = renderer.domElement.height;
 		camera.aspect = window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()
 		renderer.setSize(window.innerWidth, window.innerHeight)
