@@ -1,8 +1,8 @@
-import {GetBaseColor} from"./GetBaseColor.js"
+import {GetAlbedo} from"./GetAlbedo.js"
 import {DDGIGetVolumeBlendWeight} from"./DDGIGetVolumeBlendWeight.js"
 import {DDGIGetVolumeIrradiance} from"./DDGIGetVolumeIrradiance.js"
-export const getIrradianceColor =
-GetBaseColor+
+export const GetIndirectRadiance =
+GetAlbedo+
 /* glsl */`
 	#define PI 3.1415926535897932f
 	struct DDGIVolumeDescGPU
@@ -27,8 +27,11 @@ DDGIGetVolumeIrradiance+
     {//视线 与 法线 中间的某个方向
         return (surfaceNormal * DDGIVolume.normalBias) + (-cameraDirection * DDGIVolume.viewBias);
     }
-    vec3 getIrradianceColor(){
-            vec4 albedo = GetBaseColor();//获取纹理颜色
+	
+	uniform bool dGI; 
+    vec3 GetIndirectRadiance(){
+		if(dGI){
+			vec4 albedo = GetAlbedo();//获取纹理颜色
 			// return albedo.xyz;
             if(albedo.w > 0.f)//如果该像素不对应全透明纹理
 			{
@@ -49,6 +52,7 @@ DDGIGetVolumeIrradiance+
 					return (albedo.rgb / PI) * irradiance * weight;//irradianceColor = (albedo.rgb / PI) * irradiance;
 				}
 			}
-            return vec3(.0);
+		}
+        return vec3(.0);	
     }
 `

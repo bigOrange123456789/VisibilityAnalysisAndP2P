@@ -1,4 +1,4 @@
-export const GetBaseColor =/* glsl */`
+export const GetAlbedo =/* glsl */`
     uniform vec3 originColor;
     uniform bool useMap;
     uniform sampler2D colorMap;
@@ -7,7 +7,7 @@ export const GetBaseColor =/* glsl */`
 
     varying vec2 vuv;
     
-	vec4 GetBaseColor()
+	vec4 GetAlbedo()
     {
         vec4 baseColor = vec4(originColor,0.);
         if(useMap)
