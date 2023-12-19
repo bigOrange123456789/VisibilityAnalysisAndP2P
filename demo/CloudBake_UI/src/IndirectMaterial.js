@@ -117,12 +117,13 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 				emissiveMap: { type: "t", value: null },
 				useMap: { value: false },
 				useEmissiveMap: { value: false },
-				originColor: { value: new THREE.Vector3(0, 0, 0) },
-		
+				originColor: { value: new THREE.Vector3(0, 0, 0) },	
 			  },
 			vertexShader: vs,//indirectVS,
 			fragmentShader: fs,//indirectFS
 		})
+		this.vertexShader=vs
+		this.fragmentShader=fs
 		window.indirectMaterial=this
 		this.uniforms.GBufferd.value = this._initLitRenderTarget().texture
 		this.uniforms.DDGIVolume.value.origin = param.origin

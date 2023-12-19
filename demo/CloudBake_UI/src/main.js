@@ -68,8 +68,16 @@ class Loader{
 					// console.log(node.material.map)
 					window.material=indirectMaterial
 					node.diffuseMaterial = node.material
-					node.indirectMaterial = indirectMaterial
-					console.log(node.diffuseMaterial,"node.diffuseMaterial")
+					node.indirectMaterial = indirectMaterial//node.material//
+					// console.log(node.diffuseMaterial,"node.diffuseMaterial")
+					// node.diffuseMaterial.onBeforeCompile = function ( shader ) {
+					// 	for(let tag in indirectMaterial.uniforms){
+					// 		shader.uniforms[tag]=indirectMaterial.uniforms[tag]
+					// 	}
+					// 	shader.vertexShader=indirectMaterial.vertexShader
+					// 	shader.fragmentShader=indirectMaterial.fragmentShader
+						
+					// }
 					// node.material=node.indirectMaterial
 					models.push(node)
 					  

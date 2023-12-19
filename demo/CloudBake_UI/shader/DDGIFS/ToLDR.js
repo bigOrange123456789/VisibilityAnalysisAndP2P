@@ -1,6 +1,6 @@
 export const ToLDR =/* glsl */`
     
-vec3 saturate(vec3 rgb)
+vec3 saturate0(vec3 rgb)
 {
     return clamp(rgb,0.f,1.f);
 }
@@ -11,7 +11,7 @@ vec3 ACESFilm(vec3 x)
     float c = 2.43f;
     float d = 0.59f;
     float e = 0.14f;
-    return saturate((x*(a*x + b)) / (x*(c*x + d) + e));
+    return saturate0((x*(a*x + b)) / (x*(c*x + d) + e));
 }
 
 vec3 LessThan(vec3 f, float value)
