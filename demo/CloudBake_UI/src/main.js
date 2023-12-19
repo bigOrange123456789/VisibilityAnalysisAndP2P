@@ -71,7 +71,7 @@ class Loader{
 					node.indirectMaterial = indirectMaterial
 					// node.material=node.indirectMaterial
 					models.push(node)
-					
+					  
 				}
 			})
 			self.scene.add(gltf.scene)

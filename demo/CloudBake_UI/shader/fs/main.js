@@ -57,6 +57,9 @@ getIrradianceColor+
     uniform sampler2D GBufferd;
     
     const float sigma = 2.0f;
+
+    uniform bool useRtao;
+    uniform sampler2D rtaoBufferd;
 	void main(void)
     {
 		vec2 _screenPosition = gl_FragCoord.xy/vec2(screenWidth,screenHeight);//当前像素的位置
@@ -64,7 +67,10 @@ getIrradianceColor+
 
         if(dGI)
             result += getIrradianceColor();
-        
+        if(useRtao){
+            float ambientOcclusion = texture(rtaoBufferd,_screenPosition).r;
+            result *= ambientOcclusion;
+        }
 		result *= sigma;
 		result *= exposure;//2.
 		

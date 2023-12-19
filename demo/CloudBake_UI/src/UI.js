@@ -32,7 +32,7 @@ export class UI{
         this.dlightChange = false//true//false;
         this.plightChange = false//true//false;
         this.slightChange = false//true//false;
-        //this._test(param)
+        this._test(param)
 
     }
     _test(param){

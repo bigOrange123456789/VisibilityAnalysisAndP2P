@@ -7,6 +7,7 @@ export class Communication extends RTXGINetwork{
         this.sceneId = window.location.href.split('/').pop()
 
         this.updateProbe = false;
+        this.askRtxAo = false;//当前视锥无变化、不需要更新AO
 
         //syncClientCameraToServer
         this.lastCameraPos = new THREE.Vector3();
@@ -16,6 +17,7 @@ export class Communication extends RTXGINetwork{
         //updateIndirectMaterial
         this.waitFrame=150.0;
         this.totalTime = 0.0;
+        this.askAoTime = 0.0;
         this.stopUpdate = false;
 
         //syncClientPointLightToServer
@@ -31,7 +33,7 @@ export class Communication extends RTXGINetwork{
         let asyncScene=false
         const animate=()=>{
             if(self.ready() &&!self.isDescTouch){
-                self.syncClientVolumeDescToServer();
+                self.syncClientVolumeDescToServer();//与服务器建立连接
             }
             // /*init threejs evi*/
             if(self.isDescTouch && !asyncScene)
@@ -40,13 +42,13 @@ export class Communication extends RTXGINetwork{
                 asyncScene = true;
             }
 
-            if(self.isDescTouch && asyncScene&&self.ready()){
+            if(self.isDescTouch && asyncScene&&self.ready()){//将当前状态告知服务器
                 self.syncClientCameraToServer()
                 self.syncClientDirectionalLightToServer()
                 self.syncClientPointLightToServer()
                 self.syncClientSpotLightToServer()
             }
-            this.updateIndirectMaterial(models)
+            this.updateIndirectMaterial(models)//获取服务器的光追结果
             requestAnimationFrame(animate); 
         };animate()
     }
@@ -75,13 +77,39 @@ export class Communication extends RTXGINetwork{
         // if(rtxgiNetwork.IrradianceTex.image)
         //     console.log(rtxgiNetwork.IrradianceTex.image.data)
         for (var i = 0; i < models.length; i++) {
+            if(irradianceLoader != null)
             models[i].indirectMaterial.probeIrradianceUpdate(irradianceLoader) ;
+            if(probeDistanceLoader)
             models[i].indirectMaterial.uniforms.probeDistance.value = probeDistanceLoader;
         }
               
         this.updateProbe = false;//探针更新完成
         this.stopUpdate = false;
-          
+        
+        // update rtxao
+        if(this.askRtxAo){
+            this.askAoTime = 0.0;
+            for (var i = 0; i < models.length; i++) {
+                    models[i].indirectMaterial.uniforms.useRtao.value = false;
+                }
+            this.askRtxAo = false;
+        }else{
+            this.askAoTime += 1.0;
+            if(this.askAoTime > 5.0){
+                for (var i = 0; i < models.length; i++) {
+                    models[i].indirectMaterial.uniforms.useRtao.value = true;
+                }
+            }
+        }
+        // rtao
+        if(rtxgiNetwork.RtaoTex != null)
+        {
+            for (var i = 0; i < models.length; i++) {
+            if(rtxgiNetwork.usedRtao){
+                    models[i].indirectMaterial.uniforms.rtaoBufferd.value = rtxgiNetwork.RtaoTex;
+                }
+            }
+        }
     }
     syncClientAttachServerStop()//让服务器停止发送信息
     {
@@ -143,6 +171,7 @@ export class Communication extends RTXGINetwork{
         this.lastCameraUp = cameraUp;
         
         this.send(cameraJson);
+        this.askRtxAo = true;//相机状态有变化，需要获取新的AO数据
     }
     syncClientDirectionalLightToServer(){
         const rtxgiNetwork=this

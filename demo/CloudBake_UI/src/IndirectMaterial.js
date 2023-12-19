@@ -87,13 +87,14 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 				},
 				probeDistance:{ 
 					type: 't', 
-					value: null 
+					value: null // probeDistance: { type: 't', value: null },
 				},
-				// probeDistance: { type: 't', value: null },
+				rtaoBufferd: { value: null },
 				screenWidth: { value: window.innerWidth },
 				screenHeight: { value: window.innerHeight },
 				notCompareFlag: { value: false },
 				dGI: { value: true },
+				useRtao: { value: true },
 				exposure: { value : param.exposure },
 				tonemapping: { value: param.tonemapping },
 				gamma: { value: param.gamma },
@@ -171,11 +172,6 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 	}
 	probeIrradianceUpdate(irradianceLoader){
 		this.uniforms.probeIrradiance.value = irradianceLoader
-		window.irradianceLoader=irradianceLoader
-		// if(!window.flag00){
-		// 	window.flag00=true
-		// 	this.DataTexture2Json()
-		// }
 	}
 	DataTexture2Json(){
 		const image=this.uniforms.probeIrradiance.value.image

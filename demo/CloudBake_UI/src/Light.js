@@ -1,7 +1,6 @@
 import * as THREE from 'three'
 export class Light{
     constructor(){
-      // this.object=new THREE.Object3D()
       this.directionalLightGroup= []
       this.pointLightGroup=[]
       this.spotLightGroup=[]
@@ -30,7 +29,7 @@ export class Light{
           //告诉平行光需要开启阴影投射
           directionalLight.castShadow = true
         
-          if(false){
+          if(true){
             directionalLight.target.position.x = directionalLight.position.x + rtxgiNetwork.dLightDirection.x;
             directionalLight.target.position.y = directionalLight.position.y + rtxgiNetwork.dLightDirection.y;
             directionalLight.target.position.z = directionalLight.position.z + rtxgiNetwork.dLightDirection.z;
@@ -40,7 +39,7 @@ export class Light{
           directionalLight.intensity=1.8
           
           scene.add(directionalLight)
-          scene.add(directionalLight.target)
+          // scene.add(directionalLight.target)
         
         //   const directionalLightHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
         //   scene.add(directionalLightHelper);
@@ -48,10 +47,6 @@ export class Light{
         }
         
         /*point light*/
-        if(rtxgiNetwork.pointLightCt > 0)
-        {
-            /*point light param set*/
-            console.log(rtxgiNetwork.pointLightCt,"rtxgiNetwork.pointLightCt")
           for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
               let pointLight = new THREE.PointLight('#ffffff');
               let position = rtxgiNetwork.pointLightParams[i].position;
@@ -74,11 +69,8 @@ export class Light{
               this.pointLightGroup.push(pointLight);
           }
           window.pointLightGroup=this.pointLightGroup
-        }
         
         /*spot light*/
-        if(rtxgiNetwork.spotLightCt > 0){
-          /*spot light param set*/
           for(let i = 0; i < rtxgiNetwork.spotLightCt; i++){
               let spotLight = new THREE.SpotLight('#ffffff');
               let position = rtxgiNetwork.spotLightParams[i].position;
@@ -90,7 +82,7 @@ export class Light{
               let targetObj = new THREE.Object3D();
               targetObj.position.set(position.x + direction.x, position.y + direction.y,
               position.z + direction.z);
-              scene.add(targetObj);
+              // scene.add(targetObj);???
               spotLight.target = targetObj;
               spotLight.angle = angle;
               spotLight.penumbra = penumbra;
@@ -99,6 +91,5 @@ export class Light{
               scene.add(spotLight);
               this.spotLightGroup.push(spotLight);
           }
-        }
       }
 }
