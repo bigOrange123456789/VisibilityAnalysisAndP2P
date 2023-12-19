@@ -69,6 +69,7 @@ class Loader{
 					window.material=indirectMaterial
 					node.diffuseMaterial = node.material
 					node.indirectMaterial = indirectMaterial
+					console.log(node.diffuseMaterial,"node.diffuseMaterial")
 					// node.material=node.indirectMaterial
 					models.push(node)
 					  

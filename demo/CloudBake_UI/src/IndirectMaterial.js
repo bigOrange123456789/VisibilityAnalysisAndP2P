@@ -1,6 +1,8 @@
 import * as THREE from 'three'
-import{indirectFS}from"../shader/indirectFS.js"
-import{indirectVS}from"../shader/indirectVS.js"
+// import{indirectFS}from"../shader/indirectFS.js"
+// import{indirectVS}from"../shader/indirectVS.js"
+import{fs}from"../shader/DDGIFS/main.js"
+import{vs}from"../shader/DDGIVS/main.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static async Json2Texture(){
 		return new Promise( (resolve, reject) => { 
@@ -118,8 +120,8 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 				originColor: { value: new THREE.Vector3(0, 0, 0) },
 		
 			  },
-			vertexShader: indirectVS,
-			fragmentShader: indirectFS
+			vertexShader: vs,//indirectVS,
+			fragmentShader: fs,//indirectFS
 		})
 		window.indirectMaterial=this
 		this.uniforms.GBufferd.value = this._initLitRenderTarget().texture

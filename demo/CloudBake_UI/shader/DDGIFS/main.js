@@ -2,7 +2,7 @@ console.log("indirect fs version:2023.11.24_17:03")
 import {GetDirectRadiance} from"./GetDirectRadiance.js"
 import {GetIndirectRadiance} from"./GetIndirectRadiance.js"
 import {ToLDR} from"./ToLDR.js"
-export const main =
+export const fs =
 /* glsl */`
     vec3 lerp(vec3 a, vec3 b, vec3 c)
     {

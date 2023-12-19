@@ -1,4 +1,4 @@
-export const main =/* glsl */`
+export const vs =/* glsl */`
 
 precision highp float;
       
