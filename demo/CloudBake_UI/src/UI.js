@@ -94,7 +94,7 @@ export class UI{
             },
         )
     }
-    init(rtxgiNetwork,directionalLightGroup,pointLightGroup,spotLightGroup,models) {
+    init(rtxgiNetwork,directionalLightGroup,pointLightGroup,spotLightGroup,uniforms) {
         var plightIndex = 0;
         var slightIndex = 0;
         const self=this
@@ -141,6 +141,7 @@ export class UI{
           聚光启用: true,
           
           DDGI启用: true,
+          AO启用  : false,
         }
       
         var datGui = new dat.GUI();
@@ -470,9 +471,11 @@ export class UI{
         /*diffuse on/off*/
         var indirectFolder = datGui.addFolder('间接光');
         indirectFolder.add(gui, 'DDGI启用').onChange(function(e) {
-          for (var i = 0; i < models.length; i++) {
-              models[i].indirectMaterial.uniforms.dGI.value = e
-          }
+            uniforms.dGI.value = e
+        });
+
+        datGui.addFolder('环境光遮蔽').add(gui, 'AO启用').onChange(function(e) {
+            uniforms.useRtao.value = e
         });
        
       }

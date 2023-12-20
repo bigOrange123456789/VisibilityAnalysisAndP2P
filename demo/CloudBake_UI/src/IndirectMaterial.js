@@ -83,17 +83,18 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 			uniforms: {
 				//Declare texture uniform in shader
 				GBufferd: uniforms.GBufferd,//IndirectMaterial.initLitRenderTarget(),
-				probeIrradiance: uniforms.probeIrradiance,//{value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
-				probeDistance:uniforms.probeDistance,//{value: null}, // probeDistance: { type: 't', value: null },
-				rtaoBufferd: uniforms.rtaoBufferd,//{ value: null },
-				useRtao: uniforms.useRtao,//{ value: true },
-
 				screenWidth: uniforms.screenWidth,//{ value: window.innerWidth },
 				screenHeight: uniforms.screenHeight,//{ value: window.innerHeight },
 
-				notCompareFlag: { value: false },
-				dGI: { value: true },
+				dGI: uniforms.dGI,
+				probeIrradiance: uniforms.probeIrradiance,//{value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
+				probeDistance:uniforms.probeDistance,//{value: null}, // probeDistance: { type: 't', value: null },
 				
+				rtaoBufferd: uniforms.rtaoBufferd,//{ value: null },
+				useRtao: uniforms.useRtao,//{ value: true },
+
+				notCompareFlag: { value: false },
+								
 				exposure: { value : param.exposure },
 				tonemapping: { value: param.tonemapping },
 				gamma: { value: param.gamma },

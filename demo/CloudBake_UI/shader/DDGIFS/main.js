@@ -30,7 +30,7 @@ ToLDR+
 		vec2 _screenPosition = gl_FragCoord.xy/vec2(screenWidth,screenHeight);//当前像素的位置
 
         vec3 result = GetDirectRadiance(_screenPosition)+ GetIndirectRadiance();
-        // result*=getAO(_screenPosition);
+        result*=getAO(_screenPosition);
 			
 		gl_FragColor = ToLDR(result);
     }

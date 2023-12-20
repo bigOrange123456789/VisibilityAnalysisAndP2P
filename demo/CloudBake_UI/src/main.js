@@ -7,10 +7,12 @@ import {Communication} from "./Communication"
 import {Light} from "./Light"
 class Loader{
 	uniforms={
+		dGI: { value: true },
 		probeIrradiance: {value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
 		probeDistance:{value: null}, // probeDistance: { type: 't', value: null },
+		
 		rtaoBufferd: { value: null },
-		useRtao: { value: true },
+		useRtao: { value: false },
 
 		GBufferd: { value: true },
 		screenWidth: { value: window.innerWidth },
@@ -37,7 +39,7 @@ class Loader{
 
 		const rtxgiNetwork = new Communication(self.camera,ui,light,this.uniforms);
 		rtxgiNetwork.onready=()=>{
-				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,self.models)//initGui(rtxgiNetwork);//
+				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,this.uniforms)//initGui(rtxgiNetwork);//
 				self.updateCamera(rtxgiNetwork)
 				self.loadRoom(rtxgiNetwork,light,self.models)
 				light.init(rtxgiNetwork,self.scene)//initLight();
