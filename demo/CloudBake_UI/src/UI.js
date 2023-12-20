@@ -113,8 +113,7 @@ export class UI{
           '控制方式':{"关闭":"off","水平移动":"horizontal","竖直移动":"vertical","旋转":"rotation"},
           
           /*Point Light*/
-          pLightSite:{
-          },
+          点光源名称:0,
           点光源颜色: '#ffffff',
           点光源强度: 4,
           点光源位置X: 0,
@@ -235,91 +234,91 @@ export class UI{
         
         /*pointLight*/
         if(rtxgiNetwork.pointLightCt > 0){
-          let plightHistory = {};
-          for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
-              let plightKey = "点光源" + i;
-              plightHistory[plightKey] = i;
-          }
-          let plightFolder = datGui.addFolder('点光源');
-          /*setting*/
-          plightFolder
-          .add(gui,'pLightSite',plightHistory)
-          .onChange(function(e){
-              plightIndex = parseInt(e);
-              {
-                  gui["点光源颜色"] = pointLightGroup[plightIndex].color;
-                  gui["点光源强度"] = pointLightGroup[plightIndex].power;
-                  gui["点光源位置X"] = pointLightGroup[plightIndex].position.x;
-                  gui["点光源位置Y"] = pointLightGroup[plightIndex].position.y ;
-                  gui["点光源位置Z"] = pointLightGroup[plightIndex].position.z;
-                  gui["点光源距离"] = pointLightGroup[plightIndex].distance;
-                  datGui.updateDisplay();
-              }
-          });
-          /*color*/
-          plightFolder
-          .addColor(gui,'点光源颜色')
-          .onChange(function(e){
-              if(typeof(e) == "string")
-              {
-                  pointLightGroup[plightIndex].color = new THREE.Color(e);
-              }else if(typeof(e) == "object")
-              {
-                  var color = new THREE.Color
-                  (e.r / 255.0,e.g /255.0,e.b / 255.0);
-                  pointLightGroup[plightIndex].color = color;
-              }
-              
-              self.plightChange = true;
-          });
-          /*power*/
-          plightFolder
-          .add(gui,'点光源强度',0.0, 30.0)
-          .step(0.1)
-          .onChange(function(e){
-              pointLightGroup[plightIndex].power = e;
-              self.plightChange = true;
-          });
-          /*position*/
-          plightFolder
-          .add(gui,'点光源位置X',-100.0, 100.0)
-          .step(0.01)
-          .onChange(function(e){
-              pointLightGroup[plightIndex].position.x = e;
-              self.plightChange = true;
-          });
-          plightFolder
-          .add(gui,'点光源位置Y',-100.0, 100.0)
-          .step(0.01)
-          .onChange(function(e){
-              pointLightGroup[plightIndex].position.y = e;
-              self.plightChange = true;
-          });
-          plightFolder
-          .add(gui,'点光源位置Z',-100.0, 100.0)
-          .step(0.01)
-          .onChange(function(e){
-              pointLightGroup[plightIndex].position.z = e;
-              self.plightChange = true;
-          });
-          /*radius or distance*/
-          plightFolder
-          .add(gui,'点光源距离',0.0, 20.0)
-          .step(0.1)
-          .onChange(function(e){
-              pointLightGroup[plightIndex].distance = e;
-              self.plightChange = true;
-          });
-          plightFolder
-          .add(gui, '点光源阴影')
-          .onChange(function(e) {
-              pointLightGroup[plightIndex].castShadow = e;
-          });
-          plightFolder
-          .add(gui, '点光启用')
-          .onChange(function(e) {
-              pointLightGroup[plightIndex].visible = e;
-          });
+            let plightHistory = {};
+            for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
+                let plightKey = "点光源" + i;
+                plightHistory[plightKey] = i;
+            }
+            let plightFolder = datGui.addFolder('点光源');
+            /*setting*/
+            plightFolder
+            .add(gui,'点光源名称',plightHistory)
+            .onChange(function(e){
+                plightIndex = parseInt(e);
+                {
+                    gui["点光源颜色"] = pointLightGroup[plightIndex].color;
+                    gui["点光源强度"] = pointLightGroup[plightIndex].intensity;
+                    gui["点光源位置X"] = pointLightGroup[plightIndex].position.x;
+                    gui["点光源位置Y"] = pointLightGroup[plightIndex].position.y ;
+                    gui["点光源位置Z"] = pointLightGroup[plightIndex].position.z;
+                    gui["点光源距离"] = pointLightGroup[plightIndex].distance;
+                    datGui.updateDisplay();
+                }
+            });
+            /*color*/
+            plightFolder
+            .addColor(gui,'点光源颜色')
+            .onChange(function(e){
+                if(typeof(e) == "string")
+                {
+                    pointLightGroup[plightIndex].color = new THREE.Color(e);
+                }else if(typeof(e) == "object")
+                {
+                    var color = new THREE.Color
+                    (e.r / 255.0,e.g /255.0,e.b / 255.0);
+                    pointLightGroup[plightIndex].color = color;
+                }
+                
+                plightChange = true;
+            });
+            /*power*/
+            plightFolder
+            .add(gui,'点光源强度',0.0, 12.0)
+            .step(0.1)
+            .onChange(function(e){
+                pointLightGroup[plightIndex].intensity = e;
+                plightChange = true;
+            });
+            /*position*/
+            plightFolder
+            .add(gui,'点光源位置X',-10.0, 10.0)
+            .step(0.01)
+            .onChange(function(e){
+                pointLightGroup[plightIndex].position.x = e;
+                plightChange = true;
+            });
+            plightFolder
+            .add(gui,'点光源位置Y',-10.0, 10.0)
+            .step(0.01)
+            .onChange(function(e){
+                pointLightGroup[plightIndex].position.y = e;
+                plightChange = true;
+            });
+            plightFolder
+            .add(gui,'点光源位置Z',-10.0, 10.0)
+            .step(0.01)
+            .onChange(function(e){
+                pointLightGroup[plightIndex].position.z = e;
+                plightChange = true;
+            });
+            /*radius or distance*/
+            plightFolder
+            .add(gui,'点光源距离',0.0, 50.0)
+            .step(0.1)
+            .onChange(function(e){
+                pointLightGroup[plightIndex].distance = e;
+                plightChange = true;
+            });
+            plightFolder
+            .add(gui, '点光源阴影')
+            .onChange(function(e) {
+                pointLightGroup[plightIndex].castShadow = e;
+            });
+            plightFolder
+            .add(gui, '点光启用')
+            .onChange(function(e) {
+                pointLightGroup[plightIndex].visible = e;
+            });
         }
         
         let shadowFolder = datGui.addFolder('软阴影');
