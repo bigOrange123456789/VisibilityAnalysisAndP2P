@@ -49,9 +49,11 @@ export class Light{
         /*point light*/
           for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
               let pointLight = new THREE.PointLight('#ffffff');
+              if(i==0)pointLight = new THREE.PointLight('#ff0010');
+              if(i==1)pointLight = new THREE.PointLight('#00ff10');
               let position = rtxgiNetwork.pointLightParams[i].position;
               pointLight.position.set(position.x, position.y, position.z);
-              pointLight.power = 4.0;
+              pointLight.power = 3.0;
               pointLight.distance = 10.0;
               pointLight.castShadow = true;
               pointLight.shadow.radius=3.5,

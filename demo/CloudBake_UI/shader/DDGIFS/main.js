@@ -1,4 +1,4 @@
-console.log("indirect fs version:2023.11.24_17:03")
+console.log("indirect fs version:2023.12.20_15:47")
 import {GetDirectRadiance} from"./GetDirectRadiance.js"
 import {GetIndirectRadiance} from"./GetIndirectRadiance.js"
 import {ToLDR} from"./ToLDR.js"
@@ -21,6 +21,8 @@ ToLDR+
     uniform sampler2D rtaoBufferd;
     float getAO(vec2 _screenPosition){
         return useRtao?texture(rtaoBufferd,_screenPosition).r:1.;
+        // if(useRtao)return texture(rtaoBufferd,_screenPosition).r;
+        // else return 1.;
     }
     
     uniform float screenWidth;

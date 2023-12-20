@@ -63,12 +63,12 @@ export class UI{
         this.flag_pointLight1=flag_pointLight1
         boxlist.push(this.flag_pointLight1)
 
-        const flag_directionalLight = new Control( {
-            geometry:new THREE.BoxGeometry( 4.5,2.5,4.5 ), 
-            material:materialTest
-        })
-        this.flag_directionalLight=flag_directionalLight
-        boxlist.push(this.flag_directionalLight)
+        // const flag_directionalLight = new Control( {
+        //     geometry:new THREE.BoxGeometry( 4.5,2.5,4.5 ), 
+        //     material:materialTest
+        // })
+        // this.flag_directionalLight=flag_directionalLight
+        // boxlist.push(this.flag_directionalLight)
 
         for(let i=0;i<boxlist.length;i++){
             controlTool.add(boxlist[i])
@@ -141,7 +141,7 @@ export class UI{
           聚光启用: true,
           
           DDGI启用: true,
-          AO启用  : false,
+          AO启用  : true,
         }
       
         var datGui = new dat.GUI();
@@ -201,7 +201,7 @@ export class UI{
           .onChange(function(e) {
             directionalLightGroup[0].target.position.x =
             directionalLightGroup[0].position.x + e;
-            self.dlightChange = true;self.flag_directionalLight.toFlag();
+            self.dlightChange = true;
           });
           directionFolder
           .add(gui, '平行光方向Y', -1.0, -0.5)
@@ -209,7 +209,7 @@ export class UI{
           .onChange(function(e) {
             directionalLightGroup[0].target.position.y = 
             directionalLightGroup[0].position.y + e;
-            self.dlightChange = true;self.flag_directionalLight.toFlag();
+            self.dlightChange = true;
           });
           directionFolder
           .add(gui, '平行光方向Z', -1.0, 1.0)
@@ -217,7 +217,7 @@ export class UI{
           .onChange(function(e) {
             directionalLightGroup[0].target.position.z = 
             directionalLightGroup[0].position.z + e;
-            self.dlightChange = true;self.flag_directionalLight.toFlag();
+            self.dlightChange = true;
           });
           /*shadow*/
           directionFolder
@@ -473,9 +473,8 @@ export class UI{
         indirectFolder.add(gui, 'DDGI启用').onChange(function(e) {
             uniforms.dGI.value = e
         });
-
         datGui.addFolder('环境光遮蔽').add(gui, 'AO启用').onChange(function(e) {
-            uniforms.useRtao.value = e
+            uniforms.useRtao.value0 = e
         });
        
       }

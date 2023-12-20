@@ -12,7 +12,7 @@ class Loader{
 		probeDistance:{value: null}, // probeDistance: { type: 't', value: null },
 		
 		rtaoBufferd: { value: null },
-		useRtao: { value: false },
+		useRtao: { value: true ,value0:true},
 
 		GBufferd: { value: true },
 		screenWidth: { value: window.innerWidth },
@@ -146,8 +146,12 @@ class Loader{
 		this.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
 	}
 	render(){
+		this.uniforms.screenWidth.value = this.renderer.domElement.width;
+		this.uniforms.screenHeight.value = this.renderer.domElement.height;
+
 		const models=this.models
 		const renderer=this.renderer
+		window.renderer=renderer
 		const scene=this.scene
 		const camera=this.camera
 		const litRenderTarget=this.litRenderTarget
@@ -158,8 +162,6 @@ class Loader{
 		renderer.setRenderTarget(litRenderTarget)
 		renderer.render(scene, camera)
 		
-		this.uniforms.screenWidth.value = renderer.domElement.width;
-		this.uniforms.screenHeight.value = renderer.domElement.height;
 		for (var i = 0; i < models.length; i++) {
 			models[i].material = models[i].indirectMaterial//models[i].indirectShader;
 		}
@@ -174,11 +176,10 @@ class Loader{
 		const renderer=this.renderer
 		const camera=this.camera
 		
-        this.uniforms.screenWidth.value = renderer.domElement.width;
-		this.uniforms.screenHeight.value = renderer.domElement.height;
 		camera.aspect = window.innerWidth / window.innerHeight
 		camera.updateProjectionMatrix()
 		renderer.setSize(window.innerWidth, window.innerHeight)
+		this.litRenderTarget.setSize(window.innerWidth, window.innerHeight)
 		this.render()
     }
 }

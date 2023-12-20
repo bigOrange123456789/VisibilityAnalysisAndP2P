@@ -4,6 +4,7 @@ import { RTXGINetwork } from './network/RTXGINetwork';
 export class Communication extends RTXGINetwork{
     constructor(camera,ui,light,texture){
         super()
+        this.texture=texture
         this.sceneId = window.location.href.split('/').pop()
 
         this.updateProbe = false;
@@ -50,6 +51,11 @@ export class Communication extends RTXGINetwork{
             this.updateIndirectMaterial(texture)//获取服务器的光追结果
             requestAnimationFrame(animate); 
         };animate()
+        setInterval(()=>{
+            if(self.isDescTouch && asyncScene&&self.ready()){//将当前状态告知服务器
+                self.syncClientCameraToServer_test()
+            }
+        },500)
     }
     send(data){
         var jsonStr = JSON.stringify(data);
@@ -58,7 +64,7 @@ export class Communication extends RTXGINetwork{
         msg.set(jsonUint8, 0);
         if(this.ready())this.C2SSocket.send(msg);
     }
-    updateIndirectMaterial(texture){
+    updateIndirectMaterial(texture){//每一帧执行一次
         const rtxgiNetwork=this
         if(this.updateProbe){//保证光照探针的刷新频率不会过高
             this.totalTime = 0.0;
@@ -80,20 +86,20 @@ export class Communication extends RTXGINetwork{
         this.stopUpdate = false;
         
         // update rtxao
-        if(this.askRtxAo){
-            this.askAoTime = 0.0;
-            texture.useRtao.value = false;
-            this.askRtxAo = false;
-        }else{
-            this.askAoTime += 1.0;
-            if(this.askAoTime > 5.0){
-                texture.useRtao.value = true;
-            }
-        }
+        // if(this.askRtxAo){//当视锥变化的时候停用AO
+        //     this.askAoTime = 0.0;
+        //     texture.useRtao.value = false;
+        //     this.askRtxAo = false;
+        // }else{
+        //     this.askAoTime += 1.0;
+        //     if(this.askAoTime > 5.0){//当视锥固定4帧后再启动AO
+        //         texture.useRtao.value = true;
+        //     }
+        // }
         // rtao
         if(rtxgiNetwork.RtaoTex != null)
         {
-            if(rtxgiNetwork.usedRtao)
+            // if(rtxgiNetwork.usedRtao)
             texture.rtaoBufferd.value=rtxgiNetwork.RtaoTex;
         }
     }
@@ -104,7 +110,8 @@ export class Communication extends RTXGINetwork{
             sceneId: this.sceneId
         })
     }
-    syncClientCameraToServer(){
+    syncClientCameraToServer_test(){
+        console.log("update state")
         const camera=this.camera
         const rtxgiNetwork=this
         var cameraMatrix = new THREE.Matrix4();
@@ -122,11 +129,6 @@ export class Communication extends RTXGINetwork{
         cameraUp.x = cameraMatrix.elements[4];
         cameraUp.y = cameraMatrix.elements[5];
         cameraUp.z = cameraMatrix.elements[6];
-        /*check last data*/
-        if(camera.position.equals(this.lastCameraPos)
-            && cameraForward.equals(this.lastCameraRot)&&
-        cameraUp.equals(this.lastCameraUp))
-        return;
 
         /*camera update*/
         let cameraJson = 
@@ -149,15 +151,85 @@ export class Communication extends RTXGINetwork{
             rty: cameraForward.y,
             rtz: cameraForward.z,
 
-            width: window.innerWidth,//新版新增
-            height: window.innerHeight//新版新增
+            width: this.texture.screenWidth.value,//window.innerWidth,//新版新增
+            height: this.texture.screenHeight.value,//window.innerHeight//新版新增
+        };        
+        this.send(cameraJson);
+    }
+    countResidencyFrame=0//驻留的帧数
+    syncClientCameraToServer(){
+        const camera=this.camera
+        const rtxgiNetwork=this
+        var cameraMatrix = new THREE.Matrix4();
+        cameraMatrix.makeRotationFromQuaternion(camera.quaternion);
+        /*camera forward*/
+        let cameraForward = new THREE.Vector3();
+        cameraForward.x = -cameraMatrix.elements[8];
+        cameraForward.y = -cameraMatrix.elements[9];
+        cameraForward.z = -cameraMatrix.elements[10];
+        let cameraRight = new THREE.Vector3();
+        cameraRight.x = cameraMatrix.elements[0];
+        cameraRight.y = cameraMatrix.elements[1];
+        cameraRight.z = cameraMatrix.elements[2];
+        let cameraUp = new THREE.Vector3();
+        cameraUp.x = cameraMatrix.elements[4];
+        cameraUp.y = cameraMatrix.elements[5];
+        cameraUp.z = cameraMatrix.elements[6];
+        
+        /*camera update*/
+        let cameraJson = 
+        {
+            type: StateCode.C2S_RTXGI_Camera,
+            sceneId: rtxgiNetwork.sceneId,
+            x: camera.position.x,
+            y: camera.position.y,
+            z: camera.position.z,
+            
+            rightx: cameraRight.x,
+            righty: cameraRight.y,
+            rightz: cameraRight.z,
+            
+            upx: cameraUp.x,
+            upy: cameraUp.y,
+            upz: cameraUp.z,
+            
+            rtx: cameraForward.x,
+            rty: cameraForward.y,
+            rtz: cameraForward.z,
+
+            width: this.texture.screenWidth.value,//window.innerWidth,//新版新增
+            height: this.texture.screenHeight.value,//window.innerHeight//新版新增
         };
+        
+        /*check last data*/
+        if(
+            camera.position.equals(this.lastCameraPos)&& 
+            cameraForward.equals(this.lastCameraRot)&&
+            cameraUp.equals(this.lastCameraUp)&&
+            this.lastW==this.texture.screenWidth.value&&
+            this.lastH==this.texture.screenHeight.value
+        ){
+            // if(this.countResidencyFrame<1){//刚开始驻留
+            if(
+                this.countResidencyFrame==0
+                ||this.countResidencyFrame==2
+                ||this.countResidencyFrame==4
+                ||this.countResidencyFrame==8
+            ){//刚开始驻留
+                // console.log("update state 0",this.countResidencyFrame)
+                this.send(cameraJson);
+                this.askRtxAo = true;//相机状态有变化，接下来需要更新AO数据
+            }
+            this.countResidencyFrame++
+        }else{//正在移动
+            this.countResidencyFrame=0//前端时间不曾驻留
+        }
+        this.texture.useRtao.value = this.countResidencyFrame>8&&this.texture.useRtao.value0;
         this.lastCameraPos = camera.position;
         this.lastCameraRot = cameraForward;
         this.lastCameraUp = cameraUp;
-        
-        this.send(cameraJson);
-        this.askRtxAo = true;//相机状态有变化，需要获取新的AO数据
+        this.lastW=this.texture.screenWidth.value
+        this.lastH=this.texture.screenHeight.value
     }
     syncClientDirectionalLightToServer(){
         const rtxgiNetwork=this
