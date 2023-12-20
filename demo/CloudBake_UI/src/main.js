@@ -71,9 +71,11 @@ class Loader{
 					node.receiveShadow = true
 					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork,self.uniforms)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
 					node.litMaterial = node.material
-					// console.log(node.material.map)
+					// console.log(node.material)
 					window.material=indirectMaterial
-					node.diffuseMaterial = node.material
+					node.diffuseMaterial = 
+						new THREE.MeshStandardMaterial({map:node.material.map})
+						node.material
 					node.indirectMaterial = indirectMaterial//node.material//
 					// console.log(node.diffuseMaterial,"node.diffuseMaterial")
 					// node.diffuseMaterial.onBeforeCompile = function ( shader ) {
@@ -186,4 +188,4 @@ class Loader{
 document.addEventListener('DOMContentLoaded', () => {
     new Loader(document.body)
 })
-export{THREE}
+// export{THREE}

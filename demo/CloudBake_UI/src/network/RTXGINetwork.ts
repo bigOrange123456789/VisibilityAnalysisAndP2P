@@ -7,7 +7,7 @@ export class RTXGINetwork
 	/*Client 2 Server*/
 	C2SSocket: WebSocket;
 	/*Server IP*/
-	ServerIP = "127.0.0.1";
+	ServerIP = "127.0.0.1";//'114.95.45.234';//
 	/*Server Port*/
 	ServerPort = "5600";
 	/*Sync Web Service*/
@@ -292,7 +292,7 @@ export class RTXGINetwork
 		{
 			var hostAddress = "ws//" + this.ServerIP + ":" +
 			this.ServerPort + "/" + this.SyncWebService;
-			this.C2SSocket = new WebSocket('ws://127.0.0.1:5600');
+			this.C2SSocket = new WebSocket('ws://127.0.0.1:5600');//new WebSocket('ws://114.95.45.234:5600');//
 		}
 		catch(ex)
 		{
