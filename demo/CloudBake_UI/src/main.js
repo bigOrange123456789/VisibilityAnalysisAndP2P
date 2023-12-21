@@ -74,7 +74,7 @@ class Loader{
 					// console.log(node.material)
 					window.material=indirectMaterial
 					node.diffuseMaterial = 
-						new THREE.MeshStandardMaterial({map:node.material.map})
+						new THREE.MeshStandardMaterial({map:node.material.map,color:node.material.color})
 						node.material
 					node.indirectMaterial = indirectMaterial//node.material//
 					// console.log(node.diffuseMaterial,"node.diffuseMaterial")
