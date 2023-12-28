@@ -87,6 +87,19 @@ export class Building{
                 parentGroup:this.parentGroup
             })
         // new Test(this)
+        this.addWater()
+    }
+    addWater(){
+        const geometry = new THREE.PlaneGeometry( 1, 1 );
+        const material = new THREE.MeshBasicMaterial( {color: 0xAEACA3, side: 0} );
+        const mesh = new THREE.Mesh( geometry, material );
+
+        var water = new Engine3D.WaterController(mesh).water
+        window.ww=water
+        water.position.y=3
+        water.rotation.x=-Math.PI/2
+        water.scale.set(3000,3000,3000)
+        this.parentGroup2.add(water)
     }
     loadConfigInstance(cb){
         const self=this
@@ -324,7 +337,12 @@ export class Building{
             if(this.config.waterCidList){//175
                 for(let i=0;i<this.config.waterCidList.length;i++)
                     if(id==this.config.waterCidList[i]){
-                        // var water = new WaterController(meshOld).water
+                        mesh1.material.transparent=true
+                        mesh1.material.opacity=0.1
+                        mesh2.material.transparent=true
+                        mesh2.material.opacity=0.1
+                        // mesh.visible=false
+                        // var water = new Engine3D.WaterController(meshOld).water
                         // mesh.visible=mesh2.visible=false
                         // mesh.lod=[water,water]
                         // if(true)this.parentGroup2.add(water)

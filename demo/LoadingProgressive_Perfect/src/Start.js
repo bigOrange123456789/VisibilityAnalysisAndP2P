@@ -59,15 +59,14 @@ export class Start{
         this.loadJson(
             "LoadingProgressive/pos.json",
             data=>{
+                new AvatarManager(self.scene,self.camera,null)//new AvatarManager(self.scene,self.camera,data)
                 
                 // setTimeout(()=>{
                 //     console.log("data",data)
                 new TreeManager(self.scene).init(data) 
                 // })
-                data=null
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
             }
         )
