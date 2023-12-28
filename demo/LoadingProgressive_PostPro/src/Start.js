@@ -39,7 +39,7 @@ export class Start{
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new Engine3D.UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
 
