@@ -127,12 +127,26 @@ export class Viewer
           console.log(envMap)
           envMap.flipY=false
           _self.sceneEx.environment = envMap
+          // _self.sceneEx.background = envMap
           // _self.sceneEx.background = envMap//test
           // _self.sceneEx.backgroundIntensity=0//0.1
           //   self.scene.backgroundIntensity=0.1
           //   self.unrealBloom.bloomPass.strength=1.5
         }
     )
+    this.getCubeMapTexture('assets/textures/environment/skybox2.jpg',this.renderer).then(
+      //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+      ({ envMap }) => {
+        envMap.flipY=false
+        _self.sceneEx.background = envMap
+        window.ss=_self.sceneEx
+        // _self.sceneEx.backgroundIntensity=1//0.1
+        // _self.sceneEx.background = envMap//test
+        // _self.sceneEx.backgroundIntensity=0//0.1
+        //   self.scene.backgroundIntensity=0.1
+        //   self.unrealBloom.bloomPass.strength=1.5
+      }
+  )
 
     this.addGUI();
     // setTimeout(()=>{
@@ -324,7 +338,7 @@ export class Viewer
     // this.sceneEx.add(amb)
     this.directionalLight=directionalLight
 
-    // return
+    return
     this.sky = new Sky()
     this.sky.scale.setScalar(100000)
     this.sceneEx.add(this.sky)

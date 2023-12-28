@@ -7,7 +7,7 @@ import {
     MeshStandardMaterial,
     TextureLoader,RepeatWrapping
 } from "three";
-
+import { Engine3D } from '../src/main.js'
 import { ZipLoader } from "./ziploader";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
 import {Water} from "./threeEx/Water2";
@@ -324,11 +324,13 @@ export class SceneManager {
 
         mesh.material.side = 2;
         let instance_mesh = processMesh(mesh, matrix4List);
+        if(!instance_mesh)return
         instance_mesh.receiveShadow = true;
         instance_mesh.castShadow = true;
         // mesh.applyMatrix4(this.matrixWorld)
         // this.scene.add(mesh)
         // if(Number(index)<466 || Number(index)>469){
+        
         if(index===21){
             var water = new Water(mesh.geometry,{
                 textureWidth: 512,
@@ -407,6 +409,7 @@ function disposeInsMesh(instanceMesh) {
 }
 
 function processMesh(mesh, matrixList) {
+    Engine3D.Classification
     mesh.material=new MeshStandardMaterial({
         map:mesh.material.map,
         color:mesh.material.color,
@@ -454,6 +457,16 @@ function processMesh(mesh, matrixList) {
     }
     // console.log(mesh.name)
 
+    const code=new Engine3D.Classification(mesh,[]).code
+    if(code){
+        // console.log(code.type)
+        // if(code.type=="cube")
+        //     self.paramCube[o.name]=code.matrix[0]
+        // if(code.type=="cylinder")
+        //     self.paramCylinder[o.name]=code.matrix[0]
+    }
+
+    if(code&&code.type=="cylinder")
     return instancedMesh;
 }
 
