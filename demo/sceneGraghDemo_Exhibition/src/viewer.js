@@ -6,10 +6,9 @@ import {
 } from "../lib/threeEx/three";//'../lib/three/build/three';
 import {
   
-  PerspectiveCamera, 
+  PerspectiveCamera, CameraHelper,
   Raycaster,Vector3, SphereBufferGeometry,
   ACESFilmicToneMapping,
-  Color,
   DirectionalLight,  MathUtils,
   Mesh, MeshBasicMaterial,
   Object3D, PCFSoftShadowMap,
@@ -18,12 +17,7 @@ import {
 
   
 } from "three";//'../lib/three/build/three';
-import {Sky} from "../lib/threeEx/Sky";//"../lib/three/examples/jsm/objects/Sky";
-// import {Sky} from "three/examples/jsm/objects/Sky";
 
-// import {
-//   TextureLoader,
-// } from "/three";//'../lib/three/build/three';
 import {GUI} from 'dat.gui';
 import {MyUI} from "../lib/MyUI.js"
 import Stats from "three/examples/jsm/libs/stats.module.js";//'../lib/three/examples/jsm/libs/stats.module.js';
@@ -35,10 +29,8 @@ import {WanderControl} from "../lib/WanderControl";
 
 import { Engine3D } from './main.js'
 // import {MapLoader} from '../lib2/MapLoader.js'
-import { 
-  Lensflare, 
-  LensflareElement 
-} from '../lib/threeEx/Lensflare.js';//'three/examples/jsm/objects/Lensflare.js';//
+
+import {Lensflares}from"./Lensflares"
 export class Viewer
 {
   constructor (el, options)
@@ -152,11 +144,10 @@ export class Viewer
       }
   )
 
-    this.addGUI();
-    // setTimeout(()=>{
-      _self.add_lensflares(_self.sceneEx)
-    // },5000)
-    
+  this.lensflares=new Lensflares()
+  _self.sceneEx.add(this.lensflares)
+
+  this.addGUI();
   }
   getCubeMapTexture(path,renderer) {
     return new Promise((resolve, reject) => {//'.exr'
@@ -179,37 +170,6 @@ export class Viewer
           )
     })
   }
-  add_lensflares(scene){
-    const textureFlare3 = new TextureLoader().load( 'assets/textures/lensflare/lensflare0_alpha.png' );
-    // const textureFlare3 = new TextureLoader().load( 'assets/textures/environment/evn.jpg' );
-    const lensflare = new Lensflare();
-    const s0=1
-    lensflare.addElement( new LensflareElement( textureFlare3, 500*s0, 0, new Color(1,0,0) ) );
-    lensflare.addElement( new LensflareElement( textureFlare3, 60*s0, 0.6 ) );
-    lensflare.addElement( new LensflareElement( textureFlare3, 70*s0, 0.7 ) );
-    lensflare.addElement( new LensflareElement( textureFlare3, 120*s0, 0.9 ) );
-    lensflare.position.set(-2472.5,  1080,  1940)
-    scene.add(lensflare)
-    window.l=lensflare.position
-
-    const lensflare2 = new Lensflare();
-    // lensflare2.addElement( new LensflareElement( textureFlare3, 0.8*1500*s0, 0, new Color(1,1,1) ) );//蓝色
-    lensflare2.addElement( new LensflareElement( textureFlare3, 0.8*1500*s0, 0, new Color(0,0,0.2) ) );//蓝色
-    lensflare2.position.set( -467.4527321916122,38.703807963490846,-202.37470500638548)
-    scene.add(lensflare2)
-
-    //-212.5200033129467, y: -132.82417453575843, z: 275.6308365324915
-    const lensflare3 = new Lensflare();
-    lensflare3.addElement( new LensflareElement( textureFlare3, 1.2*1500*s0, 0, new Color(0.08,0,0) ) );//蓝色
-    lensflare3.position.set( -212.5200033129467,  -132.82417453575843,  275.6308365324915)
-    scene.add(lensflare3)
-
-    const lensflare4 = new Lensflare();
-    lensflare4.addElement( new LensflareElement( textureFlare3, 2.2*1500*s0, 0, new Color(0,0.08,0) ) );//蓝色
-    lensflare4.position.set(  184.6163565938977,  -138.3351997874887,  1006.8290480882454)
-    scene.add(lensflare4)
-    
-}
 
   animate()
   {
@@ -217,19 +177,8 @@ export class Viewer
 
     this.stats.update();
 
-    // this.render();
+    // this.render();//this.renderer.render(this.sceneEx, this.activeCamera);this.renderer.clear();
     this.unrealBloom.render();
-  }
-
-  render()
-  {
-    // this.slmLoader.render(this.activeCamera, this.sceneRootNodeEx ? this.sceneRootNodeEx.matrixWorld: null);
-
-    this.renderer.clear();
-
-    // this.renderer.render(this.scene, this.activeCamera);
-
-    this.renderer.render(this.sceneEx, this.activeCamera);
   }
 
   resize()
@@ -294,18 +243,6 @@ export class Viewer
 
   setCamera()
   {
-    var self = this;
-    setInterval(function(){
-      var s = "new Vector3("
-      s += self.defaultCamera.position.x.toFixed(1).toString()
-      s += ","
-      s += self.defaultCamera.position.y.toFixed(1).toString()
-      s += ","
-      s += self.defaultCamera.position.z.toFixed(1).toString()
-      s += "),"
-      // console.log(s)
-    }, 2000)
-
     this.defaultCamera.position.set(35.5,786.7,854.6),
     this.defaultCamera.lookAt(-70.0,-150,-400)
 
@@ -338,37 +275,11 @@ export class Viewer
     // console.log(directionalLight.shadow.bias)
     directionalLight.shadow.bias = -0.01;
     // directionalLight.shadow.radius = 10;
-    // const helper = new CameraHelper(directionalLight.shadow.camera)
-    // this.sceneEx.add(helper)
+    const helper = new CameraHelper(directionalLight.shadow.camera)
+    this.sceneEx.add(helper)
     // var amb = new AmbientLight(0xffffff,0.5)
     // this.sceneEx.add(amb)
     this.directionalLight=directionalLight
-
-    return
-    this.sky = new Sky()
-    this.sky.scale.setScalar(100000)
-    this.sceneEx.add(this.sky)
-
-    this.sky.material.uniforms[ 'turbidity' ].value = 0.1
-    this.sky.material.uniforms[ 'rayleigh' ].value = 0//0.01//0.03//0.175
-    this.sky.material.uniforms[ 'mieCoefficient' ].value = 0.005
-    this.sky.material.uniforms[ 'mieDirectionalG' ].value = 0.7
-
-    // this.sky.material.uniforms[ 'turbidity' ].value = 0.1
-    // this.sky.material.uniforms[ 'rayleigh' ].value = 0.05//0.175
-    // this.sky.material.uniforms[ 'mieCoefficient' ].value = 0.01//0.005
-    // this.sky.material.uniforms[ 'mieDirectionalG' ].value = 2//0.1//0.7
-
-    let elevation = 12
-    let azimuth = -45
-    let phi = MathUtils.degToRad(90-elevation)
-    let theta = MathUtils.degToRad(azimuth)
-    let sun = new Vector3().setFromSphericalCoords(1,phi,theta)
-    this.sky.material.uniforms['sunPosition'].value.copy(sun)
-    if(this.renderTarget!==undefined) this.renderTarget.dispose()
-    let pmremGenerator = new PMREMGenerator(this.renderer)
-    this.renderTarget = pmremGenerator.fromScene(this.sky)
-    // this.sceneEx.environment = this.renderTarget.texture
   }
 
   addGUI()
@@ -387,6 +298,7 @@ export class Viewer
     guiWrap.classList.add('gui-wrap');
     guiWrap.appendChild(gui.domElement);
     gui.open();
+    
     const bloomPass=window.bloomPass
     if(bloomPass){
       const params={}//this.params
@@ -411,24 +323,17 @@ export class Viewer
         bloomPass.enabled = e;
       } );
     }
-    if(false)if(this.directionalLight&&this.directionalLight.shadow){
-      const params={}//this.params
-      const directionalLight=this.directionalLight
-      params.radius=directionalLight.shadow.radius
-      params.blurSamples=directionalLight.shadow.blurSamples
-      params.bias=directionalLight.shadow.bias
-      let shadowFolder = gui.addFolder('软阴影');
-      shadowFolder.add( params, 'radius' ,0,200,0.1).onChange( function ( value ) {
-        directionalLight.shadow.radius = value;
+    if(this.lensflares){
+      const lensflares=this.lensflares
+      const params={
+        "光晕":lensflares.visible
+      }
+      const folder = gui
+      folder.add( params, '光晕').onChange(function(e) {
+        lensflares.visible = e;
       } );
-      shadowFolder.add( params, 'bias' ,-0.05,0.05,0.00001).onChange( function ( value ) {
-        directionalLight.shadow.bias= value;
-      } );
-      console.log(directionalLight.shadow)
-      // shadowFolder.add( params, 'blurSamples', 5, 30, 1 ).onChange( function ( value ) {
-      //   directionalLight.shadow.blurSamples = value;
-      // } );
     }
+    
   }
 
   addMyUI()
