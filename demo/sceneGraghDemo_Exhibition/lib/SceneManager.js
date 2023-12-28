@@ -14,7 +14,15 @@ import {Water} from "./threeEx/Water2";
 // import { Cylinder } from "./Cylinder";
 // import { CoderDecoder } from "./CoderDecoder";
 // import { Engine3D } from '../src/main.js'
+const normalMap=new TextureLoader().load('assets/textures/water/waternormals.jpg',function(texture){
+        texture.wrapS = texture.wrapT = RepeatWrapping;
+        // texture.repeat.x=200
+        // texture.repeat.y=200
+
+        console.log(texture)
+    })
 export class SceneManager {
+    
     constructor() {
         this.projectName = window.projectName;
         this.scene = window.scene;
@@ -344,9 +352,7 @@ export class SceneManager {
             var water = new Water(mesh.geometry,{
                 textureWidth: 512,
                 textureHeight: 512,
-                waterNormals: new TextureLoader().load('assets/textures/water/waternormals.jpg',function(texture){
-                    texture.wrapS = texture.wrapT = RepeatWrapping;
-                }),
+                waterNormals: normalMap,
                 alpha: 0.2,
                 // sunDirection: new Vector3(-1,1,0),
                 // sunColor: 0xffffff,
@@ -367,6 +373,7 @@ export class SceneManager {
         }else{
             this.instanceGroup.add(instance_mesh);
         }
+
         // mesh.applyMatrix4(this.matrixWorld);
         // this.scene.add(mesh);
         // }
@@ -465,10 +472,28 @@ function processMesh(mesh, matrixList) {
         mesh.material.envMapIntensity=0.//0.3//环境光
         mesh.material.metalness=0.
         mesh.material.roughness=1.
+    // }else if(mesh.name>10&&mesh.name<26){//草地和路面
+    //     mesh.material=new MeshStandardMaterial({
+    //         map:mesh.material.map,
+    //         color:mesh.material.color,
+    //         normalMap: normalMap,
+    //     })
     }else{
         mesh.material.envMapIntensity=0.4//0.3//环境光
         mesh.material.metalness=0.1
         mesh.material.roughness=0.
+    }
+    if(mesh.name>10&&mesh.name<26){//草地和路面
+        
+// var textureLoader = new THREE.TextureLoader();
+// // 加载法线贴图
+// var textureNormal = textureLoader.load('./法线贴图/3_256.jpg');
+// var material = new THREE.MeshPhongMaterial({
+//   color: 0xff0000,
+//   normalMap: textureNormal, //法线贴图
+//   //设置深浅程度，默认值(1,1)。
+//   normalScale: new THREE.Vector2(3, 3),
+// }); //材质对象Material
     }
     // mesh.material.envMapIntensity=1//5//
     // mesh.material.metalness=0//8//2
