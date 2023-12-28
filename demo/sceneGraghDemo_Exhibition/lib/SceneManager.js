@@ -4,7 +4,7 @@ import {
     LoadingManager, Object3D,
     Matrix4, 
     Vector3, CylinderGeometry, 
-    MeshStandardMaterial,
+    MeshStandardMaterial,MeshBasicMaterial,
     TextureLoader,RepeatWrapping
 } from "three";
 import { Engine3D } from '../src/main.js'
@@ -409,11 +409,26 @@ function disposeInsMesh(instanceMesh) {
 }
 
 function processMesh(mesh, matrixList) {
-    Engine3D.Classification
+    
     mesh.material=new MeshStandardMaterial({
         map:mesh.material.map,
         color:mesh.material.color,
     })
+    // const classification=new Engine3D.Classification(mesh,[])
+    // const code=classification.code
+    // if(classification.code){
+    //     console.log(classification.code.type)
+    //     console.log(mesh,classification.mesh2)
+    //     mesh=classification.mesh2//mesh.geometry=classification.mesh2.geometry
+    //     mesh.material=new MeshBasicMaterial()
+    //     mesh.material.color.r=2.0
+    //         mesh.material.color.g=0.5
+    //         mesh.material.color.b=0.0
+    // }
+    
+    // return
+        
+            
     // console.log(mesh.name,mesh.name>200)
     if(
         mesh.name<20
@@ -450,6 +465,15 @@ function processMesh(mesh, matrixList) {
     // mesh.material.metalness=0//8//2
     // mesh.material.roughness=0
 
+    const classification=new Engine3D.Classification(mesh,matrixList)
+    const code=classification.code
+    if(classification.code&&code.type=="cylinder"){
+        const s=0.5*Math.max(classification.scale[0],classification.scale[1],classification.scale[2])
+        mesh.material.map.repeat.x*=s
+        mesh.material.map.repeat.y*=s
+        return classification.mesh2
+    }
+    
     // console.log(mesh)
     var instancedMesh = new InstancedMesh(mesh.geometry, mesh.material, matrixList.length)
     for(let i=0; i<matrixList.length; i++) {
@@ -457,16 +481,7 @@ function processMesh(mesh, matrixList) {
     }
     // console.log(mesh.name)
 
-    const code=new Engine3D.Classification(mesh,[]).code
-    if(code){
-        // console.log(code.type)
-        // if(code.type=="cube")
-        //     self.paramCube[o.name]=code.matrix[0]
-        // if(code.type=="cylinder")
-        //     self.paramCylinder[o.name]=code.matrix[0]
-    }
-
-    if(code&&code.type=="cylinder")
+    // if(code&&code.type=="cylinder")
     return instancedMesh;
 }
 
