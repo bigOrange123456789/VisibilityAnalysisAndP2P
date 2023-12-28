@@ -18,7 +18,7 @@ import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-// import { TreeManager } from "./TreeManager";
+import { TreeManager } from "./TreeManager";
 import {CSM} from "three/examples/jsm/csm/CSM.js";
 
 import { Engine3D } from './main.js'//Engine3D.Building.
@@ -56,20 +56,21 @@ export class Start{
         // if(false)
         this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        // this.loadJson(
-        //     "LoadingProgressive/pos.json",
-        //     data=>{
-                let data=null
+        this.loadJson(
+            "LoadingProgressive/pos.json",
+            data=>{
+                
                 // setTimeout(()=>{
                 //     console.log("data",data)
-                // new TreeManager(self.scene).init(data) 
+                new TreeManager(self.scene).init(data) 
                 // })
+                data=null
                 // if(typeof AvatarManager!=="undefined")
                 // for(let i=0;i<2;i++)
-                    // new AvatarManager(self.scene,self.camera,data)
+                    new AvatarManager(self.scene,self.camera,data)
                 // self.TreeManager.init(data) 
-            // }
-        // )
+            }
+        )
         // self.TreeManager = new TreeManager(self.scene,data) 
           
         this.initCSM();

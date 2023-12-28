@@ -1,5 +1,5 @@
 import content from '../../../config/TreeGeneration/all.json';
-
+// import content from '../../../config/avatar/tree.json';
 import * as THREE from "three";
 import { TreeBuilder } from "./TreeBuilder";
 
@@ -36,6 +36,7 @@ export class TreeManager {
             const x=arr[2*i  ]//+(2*Math.random()-1)*25
             const y=5.5
             const z=arr[2*i+1]//+(2*Math.random()-1)*25
+            if(i%7==0)
             this.poslist.push([x,y,z])
         }
     }

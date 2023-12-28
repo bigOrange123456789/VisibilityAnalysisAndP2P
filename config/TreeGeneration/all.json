@@ -1,0 +1,1062 @@
+[
+    {
+        "name": "普通乔木",
+        "path": "resources/images/fgwt/",
+        "depth": 2,
+        "disturb": 0.01,
+        "gravity": 10,
+        "shrink": {
+            "single": 0.3,
+            "multi": 0.3,
+            "root": true
+        },
+        "tubular_segments": 10,
+        "radial_segments": 6,
+        "sample_offset": 0.005,
+        "leaf": {
+            "geometry": {
+                "style": "cross",
+                "width": 1,
+                "height": 1
+            },
+            "scale": 2,
+            "alphaTest": 0.5
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 10,
+                    "z": 0
+                },
+                "radius": 0.3,
+                "fork": [
+                    [
+                        0.4,
+                        0.05,
+                        1.2566370614359172,
+                        0.08726646259971647,
+                        4,
+                        0.5,
+                        5
+                    ],
+                    [
+                        0.5,
+                        0.04,
+                        1.0471975511965976,
+                        0,
+                        3,
+                        0.5,
+                        4
+                    ],
+                    [
+                        0.6,
+                        0.04,
+                        0.6283185307179586,
+                        0,
+                        3,
+                        0.5,
+                        4
+                    ],
+                    [
+                        0.7,
+                        0.03,
+                        0.5235987755982988,
+                        0,
+                        3,
+                        0.5,
+                        3
+                    ],
+                    [
+                        0.9,
+                        0,
+                        0,
+                        0,
+                        2,
+                        1,
+                        1
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.5,
+                        0.1,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        2,
+                        0.5,
+                        2
+                    ],
+                    [
+                        0.8,
+                        0.1,
+                        0.6283185307179586,
+                        0,
+                        1,
+                        0.5,
+                        2
+                    ]
+                ]
+            },
+            {
+                "leaves": [
+                    [
+                        0.6,
+                        0.4,
+                        0.6283185307179586,
+                        0,
+                        3
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "name": "桂花",
+        "path": "resources/images/guihua/",
+        "depth": 4,
+        "disturb": 0.02,
+        "gravity": 0,
+        "shrink": {
+            "single": 0.4,
+            "multi": 0.5,
+            "root": true
+        },
+        "tubular_segments": 5,
+        "radial_segments": 6,
+        "sample_offset": 0.01,
+        "leaf": {
+            "geometry": {
+                "style": "cross",
+                "width": 1,
+                "height": 1
+            },
+            "scale": 0.8,
+            "alphaTest": 0.5
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 8,
+                    "z": 0
+                },
+                "radius": 0.3,
+                "fork": [
+                    [
+                        0.6,
+                        0.3,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        4,
+                        0.5,
+                        5
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.5,
+                        0.4,
+                        0.5235987755982988,
+                        0,
+                        3,
+                        0.5,
+                        5
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.5,
+                        0.4,
+                        0.5235987755982988,
+                        0,
+                        2,
+                        0.5,
+                        2
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.5,
+                        0.4,
+                        0.5235987755982988,
+                        0,
+                        1,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "leaves": [
+                    [
+                        0.8,
+                        0.2,
+                        0.5235987755982988,
+                        0,
+                        5
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "name": "国槐",
+        "path": "resources/images/guohuai/",
+        "depth": 5,
+        "disturb": 0.02,
+        "gravity": 2,
+        "shrink": {
+            "single": 0.4,
+            "multi": 0.4,
+            "root": true
+        },
+        "tubular_segments": 5,
+        "radial_segments": 6,
+        "sample_offset": 0.01,
+        "leaf": {
+            "geometry": {
+                "style": "cross",
+                "width": 0.5,
+                "height": 1,
+                "foldDegree": 0.3
+            },
+            "scale": 0.6,
+            "alphaTest": 0.5
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 10,
+                    "z": 0
+                },
+                "radius": 0.5,
+                "fork": [
+                    [
+                        0.5,
+                        0.1,
+                        0.7853981633974483,
+                        0.08726646259971647,
+                        4,
+                        0.5,
+                        3
+                    ],
+                    [
+                        0.8,
+                        0.1,
+                        0.7853981633974483,
+                        0.08726646259971647,
+                        4,
+                        0.5,
+                        3
+                    ],
+                    [
+                        0.9,
+                        0,
+                        0,
+                        0,
+                        3,
+                        0.5,
+                        1
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.6,
+                        0.2,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        3,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.6,
+                        0.2,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        2,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.6,
+                        0.3,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        1,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.5,
+                        0.4,
+                        0.6283185307179586,
+                        0.08726646259971647,
+                        0.5,
+                        0.2,
+                        3
+                    ]
+                ]
+            },
+            {
+                "leaves": [
+                    [
+                        0.5,
+                        0.4,
+                        0.5235987755982988,
+                        0,
+                        5
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "name": "木芙蓉",
+        "path": "resources/images/mufurong/",
+        "depth": 4,
+        "disturb": 0.03,
+        "gravity": 10,
+        "shrink": {
+            "single": 0.2,
+            "multi": 0.45,
+            "root": false
+        },
+        "tubular_segments": 10,
+        "radial_segments": 4,
+        "sample_offset": 0,
+        "leaf": {
+            "geometry": {
+                "style": "surround",
+                "width": 1,
+                "height": 1
+            },
+            "scale": 0.15,
+            "alphaTest": 0.5
+        },
+        "flower": {
+            "scale": 0.08,
+            "alphaTest": 0.5
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": -0.1,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "radius": 0.3,
+                "fork": [
+                    [
+                        0.7,
+                        0.1,
+                        0.28559933214452665,
+                        0.08726646259971647,
+                        3,
+                        0.5,
+                        4
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.7,
+                        0.2,
+                        0.5235987755982988,
+                        0.08726646259971647,
+                        2,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.7,
+                        0.2,
+                        0.5235987755982988,
+                        0.08726646259971647,
+                        1,
+                        0.5,
+                        3
+                    ]
+                ]
+            },
+            {
+                "fork": [
+                    [
+                        0.7,
+                        0.2,
+                        0.5235987755982988,
+                        0.08726646259971647,
+                        0.8,
+                        0.2,
+                        3
+                    ]
+                ]
+            },
+            {
+                "leaves": [
+                    [
+                        0.7,
+                        0.3,
+                        1.0471975511965976,
+                        0,
+                        3
+                    ]
+                ]
+            }
+        ]
+    },
+    {
+        "name": "海棠",
+        "depth": 4,
+        "disturb": 0.15,
+        "gravity": 0,
+        "shrink": {
+            "single": 0.85,
+            "multi": 0.45,
+            "root": true
+        },
+        "segment": 10,
+        "angle": 1.5707963267948966,
+        "leaves": {
+            "total": 3240,
+            "each": 20
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 100,
+                    "z": 0
+                },
+                "radius": 3,
+                "fork": {
+                    "min": 0.2,
+                    "max": 0.8
+                }
+            },
+            {
+                "number": 6,
+                "length": {
+                    "min": 50,
+                    "max": 60
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.8
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 45,
+                    "max": 55
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 20,
+                    "max": 30
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 5,
+                    "max": 10
+                }
+            }
+        ]
+    },
+    {
+        "name": "红枫",
+        "path": "resources/images/hongfeng/",
+        "depth": 4,
+        "disturb": 0.05,
+        "gravity": -2,
+        "shrink": {
+            "single": 0.85,
+            "multi": 0.45,
+            "root": true
+        },
+        "segment": 5,
+        "angle": 0.7853981633974483,
+        "leaves": {
+            "geometry": {
+                "style": "classic",
+                "width": 1,
+                "height": 1,
+                "foldDegree": 0
+            },
+            "scale": 1,
+            "total": 3240,
+            "each": 10,
+            "alphaTest": 0.5
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 6,
+                    "z": 0
+                },
+                "radius": 0.5,
+                "fork": {
+                    "min": 0.7,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 5,
+                "length": {
+                    "min": 2,
+                    "max": 3
+                },
+                "fork": {
+                    "min": 0.8,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 1,
+                    "max": 2
+                },
+                "fork": {
+                    "min": 0.7,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 6,
+                "length": {
+                    "min": 2,
+                    "max": 3
+                },
+                "fork": {
+                    "min": 0.4,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 1,
+                    "max": 2
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "红果冬青",
+        "depth": 4,
+        "disturb": 0.1,
+        "gravity": 3,
+        "shrink": {
+            "single": 0.9,
+            "multi": 0.45,
+            "root": true
+        },
+        "segment": 10,
+        "angle": 0.7853981633974483,
+        "leaves": {
+            "total": 3240,
+            "each": 20
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 20,
+                    "z": 0
+                },
+                "radius": 1.5,
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 5,
+                "length": {
+                    "min": 5,
+                    "max": 10
+                },
+                "fork": {
+                    "min": 0.8,
+                    "max": 0.9
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 20,
+                    "max": 25
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.6
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 10,
+                    "max": 15
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.6
+                }
+            },
+            {
+                "number": 3,
+                "length": {
+                    "min": 5,
+                    "max": 10
+                }
+            }
+        ]
+    },
+    {
+        "name": "鸡蛋花",
+        "depth": 6,
+        "disturb": 0.05,
+        "gravity": -4,
+        "shrink": {
+            "single": 0.9,
+            "multi": 0.4,
+            "root": true
+        },
+        "segment": 10,
+        "angle": 1.0471975511965976,
+        "geometry": "sphere",
+        "leaves": {
+            "total": 3240,
+            "each": 20
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 10,
+                    "z": 0
+                },
+                "radius": 1,
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 6,
+                "length": {
+                    "min": 5,
+                    "max": 10
+                },
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 5,
+                    "max": 8
+                },
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 5,
+                    "max": 8
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.6
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 5,
+                    "max": 8
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.6
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 5,
+                    "max": 8
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.6
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 5,
+                    "max": 7
+                }
+            }
+        ]
+    },
+    {
+        "name": "柳树",
+        "depth": 4,
+        "disturb": 0.1,
+        "gravity": 5,
+        "shrink": {
+            "single": 0.95,
+            "multi": 0.3,
+            "root": true
+        },
+        "segment": 15,
+        "angle": 1.0471975511965976,
+        "leaves": {
+            "total": 3240,
+            "each": 20
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 20,
+                    "z": 0
+                },
+                "radius": 2,
+                "fork": {
+                    "min": 0.5,
+                    "max": 0.8
+                }
+            },
+            {
+                "number": 6,
+                "length": {
+                    "min": 10,
+                    "max": 15
+                },
+                "fork": {
+                    "min": 0.5,
+                    "max": 0.8
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 5,
+                    "max": 8
+                },
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 10,
+                    "max": 20
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 0.8
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "香樟",
+        "path": "resources/images/xiangzhang/",
+        "depth": 4,
+        "disturb": 0.1,
+        "gravity": 0,
+        "shrink": {
+            "single": 0.95,
+            "multi": 0.5,
+            "root": true
+        },
+        "segment": 10,
+        "angle": 1.5707963267948966,
+        "leaves": {
+            "geometry": {
+                "style": "cross_and_reverse",
+                "width": 1,
+                "height": 1,
+                "foldDegree": 0.3
+            },
+            "scale": 2.5,
+            "total": 1000,
+            "each": 10,
+            "alphaTest": 0.3
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 5,
+                    "z": 0
+                },
+                "radius": 0.6,
+                "fork": {
+                    "min": 0.8,
+                    "max": 1
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 5,
+                    "max": 6
+                },
+                "fork": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 3,
+                    "max": 4
+                },
+                "fork": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 2,
+                    "max": 3
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 1,
+                    "max": 2
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            }
+        ]
+    },
+    {
+        "name": "TEST",
+        "path": "resources/images/xiangzhang/",
+        "depth": 5,
+        "disturb": 0,
+        "gravity": 0,
+        "shrink": {
+            "single": 0.95,
+            "multi": 0.5,
+            "root": true
+        },
+        "segment": 10,
+        "angle": 1.0471975511965976,
+        "leaves": {
+            "geometry": {
+                "style": "cross_and_reverse",
+                "width": 1,
+                "height": 1,
+                "foldDegree": 0.3
+            },
+            "scale": 1.5,
+            "total": 1000,
+            "each": 5,
+            "alphaTest": 0.3
+        },
+        "branches": [
+            {
+                "start": {
+                    "x": 0,
+                    "y": 0,
+                    "z": 0
+                },
+                "end": {
+                    "x": 0,
+                    "y": 10,
+                    "z": 0
+                },
+                "radius": 0.6,
+                "fork": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 5,
+                    "max": 6
+                },
+                "fork": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            },
+            {
+                "number": 4,
+                "length": {
+                    "min": 3,
+                    "max": 4
+                },
+                "fork": {
+                    "min": 0.5,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 2,
+                    "max": 3
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 1,
+                    "max": 2
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            },
+            {
+                "number": 2,
+                "length": {
+                    "min": 0.5,
+                    "max": 1
+                },
+                "fork": {
+                    "min": 0.1,
+                    "max": 1
+                }
+            }
+        ]
+    }
+]
