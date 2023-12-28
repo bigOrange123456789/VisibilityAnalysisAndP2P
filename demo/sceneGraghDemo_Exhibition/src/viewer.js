@@ -94,9 +94,14 @@ export class Viewer
     //         this.config.camera.target.y,
     //         this.config.camera.target.z
     // )
-    this.playerControl.mode.set("viewpoint")
+    this.playerControl.mode.set("model")
     this.playerControl.speed.moveBoard =10//this.config.speed     //this.config.speed.moveBoard//1
     this.playerControl.speed.moveWheel0=0.03//this.config.speed*0.01//this.config.speed.moveWheel0//0.01
+    this.playerControl.speed.rotateMouse=0.005
+    this.playerControl.target.x= -123.64630374290675 
+    this.playerControl.target.y= -163.29999999999995 
+    this.playerControl.target.z= -799.796117750895
+    // alert(this.playerControl.speed.moveDrag)
 
 
     this.el.appendChild(this.renderer.domElement);
@@ -257,8 +262,8 @@ export class Viewer
     this.defaultCamera.position.set(35.5,786.7,854.6),
     this.defaultCamera.lookAt(-70.0,-150,-400)
 
-    this.defaultCamera.position.set(177.0634052345402,  336.70000000000005,  1081.1808734649335)
-    this.defaultCamera.rotation.set(-0.4552590477483137,  0.17999422024547682,  0.08741917748230953)
+    this.defaultCamera.position.set( -103.74156919209977,  222.10498628761275,  1679.7421074368945)
+    this.defaultCamera.rotation.set(-0.15420026400520798,  0.007932180982387772,  0.001232918478221312)
 
     this.activeCamera = this.defaultCamera;
     window.camera=this.activeCamera
@@ -415,8 +420,8 @@ export class Viewer
         _x: -0.3720112986105769, _y: -0.05414025575357253, _z: -0.021110927398409085,
       },
       "全景":{
-        x: 177.0634052345402, y: 336.70000000000005, z: 1081.1808734649335,
-        _x: -0.4552590477483137, _y: 0.17999422024547682, _z: 0.08741917748230953
+        x: -103.74156919209977, y: 222.10498628761275, z: 1679.7421074368945,
+        _x: -0.15420026400520798, _y: 0.007932180982387772, _z: 0.001232918478221312
       }
       
 
@@ -432,6 +437,11 @@ export class Viewer
           height/90,height-height/17*(distanceId+1.0),()=>{
             self.defaultCamera.position.set(config[id].x, config[id].y, config[id].z)
             self.defaultCamera.rotation.set(config[id]._x,config[id]._y,config[id]._z)
+            if(id=="全景"){
+              this.playerControl.mode.set("model")
+            }else{
+              this.playerControl.mode.set("viewpoint")
+            }
           });
     }
 
