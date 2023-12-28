@@ -82,11 +82,22 @@ export class Viewer
     this.unrealBloom=new Engine3D.UnrealBloom(this.defaultCamera,this.sceneEx,this.renderer)
     window.bloomPass=this.unrealBloom.bloomPass
 
-    window.orbitControl = this.orbitControl = new OrbitControls(this.defaultCamera, this.renderer.domElement);
-    this.orbitControl.autoRotate = false;
-    this.orbitControl.autoRotateSpeed = -10;
-    this.orbitControl.screenSpacePanning = true;
-    this.orbitControl.target = new Vector3(-70.0,-150,-400)
+    // window.orbitControl = this.orbitControl = new OrbitControls(this.defaultCamera, this.renderer.domElement);
+    // this.orbitControl.autoRotate = false;
+    // this.orbitControl.autoRotateSpeed = -10;
+    // this.orbitControl.screenSpacePanning = true;
+    // this.orbitControl.target = new Vector3(-70.0,-150,-400)
+
+    this.playerControl=new Engine3D.PlayerControl(this.defaultCamera,false,true)
+    // this.playerControl.target.set(
+    //         this.config.camera.target.x,
+    //         this.config.camera.target.y,
+    //         this.config.camera.target.z
+    // )
+    this.playerControl.mode.set("viewpoint")
+    this.playerControl.speed.moveBoard =10//this.config.speed     //this.config.speed.moveBoard//1
+    this.playerControl.speed.moveWheel0=0.03//this.config.speed*0.01//this.config.speed.moveWheel0//0.01
+
 
     this.el.appendChild(this.renderer.domElement);
 
@@ -95,7 +106,7 @@ export class Viewer
     //   _self.addGUI();
     // },1000)
     // this.addGUI();
-    // this.addMyUI();
+    this.addMyUI();
 
     this.animate = this.animate.bind(this);
     requestAnimationFrame(this.animate);
@@ -246,6 +257,9 @@ export class Viewer
     this.defaultCamera.position.set(35.5,786.7,854.6),
     this.defaultCamera.lookAt(-70.0,-150,-400)
 
+    this.defaultCamera.position.set(177.0634052345402,  336.70000000000005,  1081.1808734649335)
+    this.defaultCamera.rotation.set(-0.4552590477483137,  0.17999422024547682,  0.08741917748230953)
+
     this.activeCamera = this.defaultCamera;
     window.camera=this.activeCamera
 
@@ -298,7 +312,7 @@ export class Viewer
     guiWrap.classList.add('gui-wrap');
     guiWrap.appendChild(gui.domElement);
     gui.open();
-    
+
     const bloomPass=window.bloomPass
     if(bloomPass){
       const params={}//this.params
@@ -342,39 +356,82 @@ export class Viewer
     var self = this;
     var width = window.innerWidth
     var height = window.innerHeight
+    const config={
+      
 
-    var camera_pos = [
-      new Vector3(0.0,471.4,432.3),
-      new Vector3(-122.6,9.7,99.4),
-      new Vector3(368.5,8.6,161.4),
-      new Vector3(82.2,-29.7,-69.4),
-      new Vector3(-18.6,-5.0,-37.0),
-    ]
-    var camera_tar = [
-      new Vector3(0,-150,0),
-      new Vector3(-50.2,-120.1,-50.6),
-      new Vector3(183.2,-117.1,59.8),
-      new Vector3(115.7,-120.2,-197.5),
-      new Vector3(-114.1,-108.0,-195.3),
-    ]
-    var inf = {
-      '5th':4,
-      '4th':3,
-      '3rd':2,
-      '2nd':1,
-      '1st':0
+      "会议厅":{
+        x: -350.5467885943361, y: -43.299999999999955, z: -1137.3976427856273,
+        _x: -0.29696528191262844, _y: 0.8375093712015134, _z: 0.22356147002740034
+      },
+      "健身房":{
+        x: 115.91262638118077, y: -33.299999999999955, z: -484.73772526711605,
+        _x: -1.287739722761672, _y: -1.379163177039437, _z: -1.2827463554950445,
+      },
+      "展板":{
+        x: 167.86014700644088, y: -33.299999999999955, z: -758.5875607781416,
+        _x: -0.13140899519579097, _y: 0.1054272493189908, _z: 0.013907693581417224,
+      },
+      "回廊":{
+        x: -650.2986268154245, y: -43.299999999999955, z: -286.104952193114,
+        _x: -2.634168506636218, _y: -0.4472438726462172, _z: -2.90562015432945,
+      },
+      "楼梯":{
+        _x: -2.4068199246970625, _y: 0.9762746471057729, _z: 2.4990423833237645,
+        x: 160.7755119354716, y: -33.299999999999955, z: -270.1624004500886,
+      },
+
+      "走廊":{
+        x: -27.768377341623648, y: -93.29999999999995, z: -977.0445354619216,
+        _x: -1.2598171467937493, _y: 1.230553561928523, _z: 1.2422037445960972,
+      },
+
+      "盥洗室":{
+        x:112.19219530185124, y: -163.29999999999995, z: -318.1176724182865,
+        _x: -0.3461472452194621, _y: 0.5589346931393498, _z: 0.1889743670846886,
+      },
+      "休息区":{
+        x: 32.85696504093701, y: -193.29999999999995, z: -476.56192812346495,
+        _x: -0.029319437665568784, _y: 0.38355866506721825, _z: 0.010974709979953794
+      },
+      "3D沙盘":{
+        x: -346.6456757742332, y: -163.29999999999995, z: -768.8531487176922,
+        _x: -0.09956059591517652, _y: -0.10650733313967736, _z: -0.010618607145258795,
+      },
+      "大厅":{
+        x: -241.33467863091684, y: -163.29999999999995, z: -673.5686187199714,
+        _x: -0.06891166091567955, _y: -0.7492188376409682, _z: -0.04697331200981943,
+      },
+      "入口":{
+        x: -560.7812431111262, y: -163.29999999999995, z: -594.6375316162984,
+        _x: -0.9772559978539955, _y: -1.4259696869746545, _z: -0.9723669892298219,
+      },
+
+      "泳池":{
+        x: -975.6504596579695, y: -113.29999999999995, z: -298.76121432542163,
+        _x: -2.4771082121740404, _y: -1.0974014326651882, _z: -2.532767855115943,
+      },
+      "停车位":{
+        x: -219.38710349708353, y: -103.29999999999995, z: 337.5033443147026,
+        _x: -0.3720112986105769, _y: -0.05414025575357253, _z: -0.021110927398409085,
+      },
+      "全景":{
+        x: 177.0634052345402, y: 336.70000000000005, z: 1081.1808734649335,
+        _x: -0.4552590477483137, _y: 0.17999422024547682, _z: 0.08741917748230953
+      }
+      
+
+
     }
 
-    var names=Object.keys(inf)
-    for(let i=0; i<names.length; i++){
-      new ui.Button(names[i], "#888888", '#666666', '#DDDDDD',
+    let distanceId=0
+    for(let id in config){
+      distanceId++
+      new ui.Button(id, "#888888", '#666666', '#DDDDDD',
           height/36, width/150,
-          width/12, height/20,
-          height/90,height-height/15*(i+1.5),()=>{
-            var id = inf[names[i]]
-            self.defaultCamera.position.copy(camera_pos[id])
-            self.defaultCamera.lookAt(camera_tar[id])
-            self.orbitControl.target = camera_tar[id].clone()
+          2*width/12, height/20,
+          height/90,height-height/17*(distanceId+1.0),()=>{
+            self.defaultCamera.position.set(config[id].x, config[id].y, config[id].z)
+            self.defaultCamera.rotation.set(config[id]._x,config[id]._y,config[id]._z)
           });
     }
 
@@ -394,6 +451,7 @@ export class Viewer
       new Vector3(0,-1800,550),
       new Vector3(0,-1050,-100)
     ]
+    return
     this.wanderControl = new WanderControl(this.defaultCamera, route, 300)
 
     // new ui.Button("自动漫游", "#F4A460", '#666666', '#FFD700',
