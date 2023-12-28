@@ -48,10 +48,10 @@ const makeVectors = (positions) => {
 
 ////////////////////////////////
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import { LeafGeometry } from "./TreeBuilder/LeafGeometry";
-import { FlowerGeometry } from "./TreeBuilder/FlowerGeometry";
-import { TreeSkeleton } from "./TreeBuilder/TreeSkeleton";
-import { BranchTubeGeometry } from "./TreeBuilder/BranchTubeGeometry";
+import { LeafGeometry } from "./LeafGeometry";
+import { FlowerGeometry } from "./FlowerGeometry";
+import { TreeSkeleton } from "./TreeSkeleton";
+import { BranchTubeGeometry } from "./BranchTubeGeometry";
 
 /*************************************************************************************
  * CLASS NAME:  TreeBuilder

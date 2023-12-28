@@ -28,8 +28,8 @@ import {WanderControl} from "../lib/WanderControl";
 
 
 import { Engine3D } from './main.js'
-// import {MapLoader} from '../lib2/MapLoader.js'
 // import {AvatarManager } from './AvatarManager.js'
+import { TreeManager } from "./TreeBuilder/TreeManager";
 import {Lensflares}from"./Lensflares"
 export class Viewer
 {
@@ -160,8 +160,28 @@ export class Viewer
   //   },
   //   _self.playerControl//self.orbitControl
   // )
+  // this.loadJson(
+  //   "LoadingProgressive/pos2.json",
+  //   data=>{
+  //       new TreeManager(_self.sceneEx).init(data) 
+  //   }
+  // )
+  // -877.4427031689956, y: -103.29999999999995, z: 523.0552598721591
+  new TreeManager(_self.sceneEx).init({}) 
 
   this.addGUI();
+  }
+  loadJson(path,cb){
+    // console.log(path)
+    var xhr = new XMLHttpRequest()
+    xhr.open('GET', path, true)
+    xhr.send()
+    xhr.onreadystatechange = ()=> {
+        if (xhr.readyState == 4 && xhr.status == 200) {
+            var json_data = JSON.parse(xhr.responseText)
+            cb(json_data)
+        }
+    }
   }
   getCubeMapTexture(path,renderer) {
     return new Promise((resolve, reject) => {//'.exr'

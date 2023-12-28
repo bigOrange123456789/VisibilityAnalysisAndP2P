@@ -1,6 +1,6 @@
-import content from '../../../config/TreeGeneration/all.json';
+import content from '../../../../config/TreeGeneration/all.json';
 // import content from '../../../config/avatar/tree.json';
-import * as THREE from "three";
+import * as THREE from "../../lib/threeEx/three";//"three";
 import { TreeBuilder } from "./TreeBuilder";
 
 export class TreeManager {
@@ -11,7 +11,7 @@ export class TreeManager {
   }
   init(posConfig){
     this.posConfig=posConfig
-    this.pos=this.initPos()
+    this.pos=this.initPos2()
     this.content = this.getContent()
     this.param=this.getParam(content[0])
     window.param=this.param
@@ -39,6 +39,20 @@ export class TreeManager {
             if(i%7==0)
             this.poslist.push([x,y,z])
         }
+    }
+    return this.poslist
+  }
+  initPos2(){
+    this.poslist=[]
+    const x0=-877, y0= -210, z0= 523
+    for(let i=0;i<9;i++){
+      for(let j=0;j<5;j++){
+        this.poslist.push([
+          x0+(i+0.5*Math.random())*200,
+          y0,
+          z0+(j+0.5*Math.random())*200
+        ])
+      }
     }
     return this.poslist
   }
@@ -99,48 +113,6 @@ export class TreeManager {
     this.object.add(singleTree)
     this.updateLeaves()
   }
-  instance1(singleTree){
-    const meshList=[
-      singleTree.children[0],
-      singleTree.children[1]
-    ]
-    const instance_info=[]
-    for(let x=0;x<20;x++)
-    for(let z=0;z<20;z++){
-      const i=(x-10)*50+(2*Math.random()-1)*25
-      const j=5.5
-      const k=(z-10)*50+(2*Math.random()-1)*25
-      const a=0.5*Math.random()+0.5
-      const b=0.5*Math.random()+0.5
-      const c=0.5*Math.random()+0.5
-      
-        var mat4 = new THREE.Matrix4().fromArray( [
-          a,0,0,0,
-          0,b,0,0,
-          0,0,c,0,
-          i,j,k,1
-        ] )
-        instance_info.push(mat4)
-    }
-    for(let mesh0 of meshList){
-      const mesh=new THREE.InstancedMesh(
-        mesh0.geometry,
-        mesh0.material,
-        instance_info.length
-      )
-      for(let i=0;i<instance_info.length;i++){
-          mesh.setMatrixAt(
-              i,
-              instance_info[i]
-          )
-      }
-      mesh0.visible=false//position.y+=8
-      mesh.castShadow = true;
-      mesh.receiveShadow = true;
-      singleTree.add(mesh)
-    }
-    console.log(singleTree,"singleTree")
-  }
   instance(singleTree){
     const meshList=[
       singleTree.children[0],
@@ -151,9 +123,10 @@ export class TreeManager {
       const i=p[0]
       const j=p[1]
       const k=p[2]
-      const a=0.5*Math.random()+0.5
-      const b=0.5*Math.random()+0.5
-      const c=0.5*Math.random()+0.5
+      const s=10;
+      const a=s*(0.5*Math.random()+0.5)
+      const b=s*(0.5*Math.random()+0.5)
+      const c=s*(0.5*Math.random()+0.5)
       
         var mat4 = new THREE.Matrix4().fromArray( [
           a,0,0,0,
