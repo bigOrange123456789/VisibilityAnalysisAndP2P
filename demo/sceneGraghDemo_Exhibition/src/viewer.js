@@ -29,7 +29,7 @@ import {WanderControl} from "../lib/WanderControl";
 
 import { Engine3D } from './main.js'
 // import {MapLoader} from '../lib2/MapLoader.js'
-
+// import {AvatarManager } from './AvatarManager.js'
 import {Lensflares}from"./Lensflares"
 export class Viewer
 {
@@ -122,17 +122,6 @@ export class Viewer
 
     /**************************************************************/
 
-    this.onKeyDown = function (event){}
-
-    this.onKeyUp = function (event){}
-
-    this.onMouseMove = function(event){}
-
-    window.addEventListener('keydown', this.onKeyDown, false);
-    window.addEventListener('keyup', this.onKeyUp, false);
-    window.addEventListener('click', this.onMouseMove, true);
-
-
     this.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
         ({ envMap }) => {
@@ -162,6 +151,15 @@ export class Viewer
 
   this.lensflares=new Lensflares()
   _self.sceneEx.add(this.lensflares)
+  // this.avatar=new AvatarManager(
+  //   _self.sceneEx,
+  //   _self.defaultCamera,
+  //   null,
+  //   ()=>{
+  //       console.log("avatar加载完成")
+  //   },
+  //   _self.playerControl//self.orbitControl
+  // )
 
   this.addGUI();
   }
@@ -214,8 +212,6 @@ export class Viewer
 
     // if(window.projectName==="TAILUN")
     //   this.addTree();
-
-    window.content = this.content;
 
     // this.canvas = document.getElementsByTagName('canvas')[0];
     // // console.log(this.canvas)

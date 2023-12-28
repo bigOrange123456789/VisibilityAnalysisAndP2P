@@ -479,6 +479,18 @@ function processMesh(mesh, matrixList) {
     for(let i=0; i<matrixList.length; i++) {
         instancedMesh.setMatrixAt(i, matrixList[i])
     }
+    // instancedMesh.material.onBeforeCompile=function(shader,render){
+    //     console.log(
+    //     //    "onBeforeCompile",
+    //     //     shader.fragmentShader,
+    //         shader.vertexShader
+    //     );
+    //     console.log(
+    //         //    "onBeforeCompile",
+    //             shader.fragmentShader,
+    //             // shader.vertexShader
+    //         );
+    // };
     // console.log(mesh.name)
 
     // if(code&&code.type=="cylinder")
