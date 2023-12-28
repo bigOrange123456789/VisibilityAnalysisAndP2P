@@ -45,12 +45,12 @@ export class TreeManager {
   initPos2(){
     this.poslist=[]
     const x0=-877, y0= -210, z0= 523
-    for(let i=0;i<9;i++){
-      for(let j=0;j<5;j++){
+    for(let i=0;i<8;i++){
+      for(let j=2;j<5;j++){
         this.poslist.push([
-          x0+(i+0.5*Math.random())*200,
+          x0+(i+0.8*Math.random())*200,
           y0,
-          z0+(j+0.5*Math.random())*200
+          z0+(j+0.8*Math.random())*200
         ])
       }
     }

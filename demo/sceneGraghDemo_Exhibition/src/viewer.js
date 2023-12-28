@@ -208,6 +208,7 @@ export class Viewer
   animate()
   {
     requestAnimationFrame(this.animate);
+    
 
     this.stats.update();
 
@@ -288,13 +289,13 @@ export class Viewer
 
   addLights ()
   {
+    let supportMesh = new Object3D();
+    supportMesh.position.set(-100,-100,-400);
+    
     const directionalLight  = new DirectionalLight(0xFFFFFF, 3.2);//new DirectionalLight(0xFFFFFF, 1.2);
     this.sceneEx.add(directionalLight);
     directionalLight.position.set(-1000,900,400);
     // directionalLight.target = new Vector3(-100,-150,-400)
-    let supportMesh = new Object3D();
-    supportMesh.position.set(-100,-150+50,-400);
-    window.t=supportMesh.position
     this.sceneEx.add(supportMesh);
     directionalLight.target = supportMesh;
     directionalLight.castShadow = true;
@@ -310,8 +311,11 @@ export class Viewer
     // console.log(directionalLight.shadow.bias)
     directionalLight.shadow.bias = -0.01;
     // directionalLight.shadow.radius = 10;
-    const helper = new CameraHelper(directionalLight.shadow.camera)
-    this.sceneEx.add(helper)
+    // const helper = new CameraHelper(directionalLight.shadow.camera)
+    // this.sceneEx.add(helper)
+
+
+    
     // var amb = new AmbientLight(0xffffff,0.5)
     // this.sceneEx.add(amb)
     this.directionalLight=directionalLight

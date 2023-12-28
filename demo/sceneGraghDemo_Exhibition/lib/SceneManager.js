@@ -63,6 +63,13 @@ export class SceneManager {
         // }
     }
     startConnect(){
+        this.processLoadList([
+            13, 1, 1344, 15, 1187, 640, 1401, 1400, 1185, 42, 505, 41, 759, 21, 1395, 1397, 641, 25, 642, 639, 40, 1315, 1336,
+            1114, 26, 1337, 27, 754, 43, 14, 1113, 11, 12, 777, 2059, 1955, 1083, 1081, 1451, 39, 1462, 755, 1085, 1082, 1072, 
+            880, 1998, 2001, 1073, 510, 654, 879, 45, 780, 779, 1388, 1318, 1990, 795, 0, 796, 494, 1316, 758, 761, 1112, 773, 
+            // 44, 797, 1461, 756, 1410, 1086, 28, 3, 29, 1999, 1434, 662, 1408, 1405, 1317, 660, 4, 1402, 2045, 497, 2, 23, 5, 
+            // 1111, 1403, 681, 1989, 1917, 1463, 1502, 661, 1407, 385
+        ])
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
 
@@ -248,6 +255,8 @@ export class SceneManager {
             this.processLoadList(load_list)
     }
     processLoadList(load_list) {
+        // console.log(load_list)
+        // return
         if(this.loadingModelList.length>this.loadlimit) return
         // console.log("loading:",this.loadingModelList.length)
         var to_load_list = []
