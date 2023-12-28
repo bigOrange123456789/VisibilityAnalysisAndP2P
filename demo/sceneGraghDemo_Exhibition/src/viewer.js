@@ -2,6 +2,7 @@ import {
   PMREMGenerator, 
   Scene, 
   WebGLRenderer,
+  
 } from "../lib/threeEx/three";//'../lib/three/build/three';
 import {
   
@@ -13,7 +14,7 @@ import {
   Mesh, MeshBasicMaterial,
   Object3D, PCFSoftShadowMap,
   sRGBEncoding, Vector2,
-  TextureLoader,
+  TextureLoader, 
 
   
 } from "three";//'../lib/three/build/three';
@@ -34,7 +35,10 @@ import {WanderControl} from "../lib/WanderControl";
 
 import { Engine3D } from './main.js'
 // import {MapLoader} from '../lib2/MapLoader.js'
-import { Lensflare, LensflareElement } from 'three/examples/jsm/objects/Lensflare.js';
+import { 
+  Lensflare, 
+  LensflareElement 
+} from '../lib/threeEx/Lensflare.js';//'three/examples/jsm/objects/Lensflare.js';//
 export class Viewer
 {
   constructor (el, options)
@@ -150,7 +154,7 @@ export class Viewer
 
     this.addGUI();
     // setTimeout(()=>{
-    //   _self.add_lensflares(_self.sceneEx)
+      _self.add_lensflares(_self.sceneEx)
     // },5000)
     
   }
@@ -176,7 +180,8 @@ export class Viewer
     })
   }
   add_lensflares(scene){
-    const textureFlare3 = new TextureLoader().load( 'assets/environment/lensflare0_alpha.png' );
+    const textureFlare3 = new TextureLoader().load( 'assets/textures/lensflare/lensflare0_alpha.png' );
+    // const textureFlare3 = new TextureLoader().load( 'assets/textures/environment/evn.jpg' );
     const lensflare = new Lensflare();
     const s0=1
     lensflare.addElement( new LensflareElement( textureFlare3, 500*s0, 0, new Color(1,0,0) ) );
@@ -188,6 +193,7 @@ export class Viewer
     window.l=lensflare.position
 
     const lensflare2 = new Lensflare();
+    // lensflare2.addElement( new LensflareElement( textureFlare3, 0.8*1500*s0, 0, new Color(1,1,1) ) );//蓝色
     lensflare2.addElement( new LensflareElement( textureFlare3, 0.8*1500*s0, 0, new Color(0,0,0.2) ) );//蓝色
     lensflare2.position.set( -467.4527321916122,38.703807963490846,-202.37470500638548)
     scene.add(lensflare2)
