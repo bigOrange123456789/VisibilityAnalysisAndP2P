@@ -222,11 +222,13 @@ class Water extends Mesh {
 
 		scope.material = material;
 
-		scope.flag=0
+		scope.flag=-100
 		scope.onBeforeRender = function ( renderer, scene, camera ) {
 			scope.flag++
 			if(scope.flag%30!=0)return
 			if(scope.flag>150)return
+			if(scope.flag<0)return
+			console.log(scope.flag,"scope.flag")
 			mirrorWorldPosition.setFromMatrixPosition( scope.matrixWorld );
 			cameraWorldPosition.setFromMatrixPosition( camera.matrixWorld );
 

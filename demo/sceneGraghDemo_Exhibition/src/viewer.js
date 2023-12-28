@@ -376,6 +376,7 @@ export class Viewer
       params.bloomThreshold=bloomPass.threshold;
       params.bloomStrength=bloomPass.strength;
       params.bloomRadius=bloomPass.radius;
+      params.enabled=bloomPass.enabled;
       const folder = gui.addFolder("辉光")
       folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
         bloomPass.strength = Number( value );
@@ -385,6 +386,9 @@ export class Viewer
       } );
       folder.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
         bloomPass.radius = Number( value );
+      } );
+      folder.add( params, 'enabled').onChange(function(e) {
+        bloomPass.enabled = e;
       } );
     }
     if(false)if(this.directionalLight&&this.directionalLight.shadow){
