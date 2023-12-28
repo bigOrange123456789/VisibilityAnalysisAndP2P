@@ -163,7 +163,9 @@ export class TreeManager {
         ] )
         instance_info.push(mat4)
     }
-    for(let mesh0 of meshList){
+    // console.log(meshList,"meshList")
+    for(let id=0;id<meshList.length;id++){//for(let mesh0 of meshList){
+      let mesh0=meshList[id]
       const mesh=new THREE.InstancedMesh(
         mesh0.geometry,
         mesh0.material,
@@ -174,6 +176,15 @@ export class TreeManager {
               i,
               instance_info[i]
           )
+          if(id==0)
+          mesh.setColorAt ( 
+            i, 
+            new THREE.Color(
+              0.5+Math.random()*2,
+              1,
+              1
+              )   
+          ) 
       }
       mesh0.visible=false//position.y+=8
       mesh.castShadow = true;
