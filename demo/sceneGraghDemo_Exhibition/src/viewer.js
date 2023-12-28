@@ -1,9 +1,11 @@
 import {
-  PerspectiveCamera, PMREMGenerator, 
+  PMREMGenerator, 
   Scene, 
   WebGLRenderer,
 } from "../lib/threeEx/three";//'../lib/three/build/three';
 import {
+  
+  PerspectiveCamera, 
   Raycaster,Vector3, SphereBufferGeometry,
   ACESFilmicToneMapping,
   Color,
@@ -15,6 +17,9 @@ import {
 
   
 } from "three";//'../lib/three/build/three';
+import {Sky} from "../lib/threeEx/Sky";//"../lib/three/examples/jsm/objects/Sky";
+// import {Sky} from "three/examples/jsm/objects/Sky";
+
 // import {
 //   TextureLoader,
 // } from "/three";//'../lib/three/build/three';
@@ -25,8 +30,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";//'..
 import {WanderControl} from "../lib/WanderControl";
 // import {CustomizeTree} from "../lib/myTree/CustomizeTree";
 // import {TreeBuilder} from "../lib/myTree/TreeBuilder";
-import {Sky} from "../lib/threeEx/Sky";//"../lib/three/examples/jsm/objects/Sky";
-// import {Sky} from "three/examples/jsm/objects/Sky";
+
 
 import { Engine3D } from './main.js'
 // import {MapLoader} from '../lib2/MapLoader.js'

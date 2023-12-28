@@ -1,22 +1,19 @@
 import {
-    AmbientLight,
-    Box3,
-    Box3Helper, DirectionalLight,
     FileLoader,
-    Frustum,
     Group, InstancedMesh,
-    InstancedMeshEx,
     LoadingManager, Object3D,
-    Matrix4, Scene, Triangle,
-    Vector3, WebGLRenderTarget, CylinderGeometry, MeshBasicMaterial, TextureLoader, RepeatWrapping,
-    MeshStandardMaterial
-} from "./threeEx/three";
+    Matrix4, 
+    Vector3, CylinderGeometry, 
+    MeshStandardMaterial,
+    TextureLoader,RepeatWrapping
+} from "three";
+
 import { ZipLoader } from "./ziploader";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
-import {Water} from "./threeEx/Water";
+import {Water} from "./threeEx/Water2";
 // import { Cylinder } from "./Cylinder";
 // import { CoderDecoder } from "./CoderDecoder";
-
+// import { Engine3D } from '../src/main.js'
 export class SceneManager {
     constructor() {
         this.projectName = window.projectName;
@@ -349,6 +346,13 @@ export class SceneManager {
             })
             this.instanceGroup.add(water)
             this.waterList.push(water)
+
+            // var water = new Engine3D.WaterController(mesh).water
+            // window.ww=water
+            // water.position.y=3
+            // water.rotation.x=-Math.PI/2
+            // water.scale.set(3000,3000,3000)
+            // this.instanceGroup.add(water)
         }else{
             this.instanceGroup.add(instance_mesh);
         }
