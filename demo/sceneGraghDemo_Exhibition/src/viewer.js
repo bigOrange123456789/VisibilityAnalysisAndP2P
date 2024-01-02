@@ -120,7 +120,7 @@ export class Viewer
 
     /**************************************************************/
 
-    this.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
+    this.getCubeMapTexture('assets/textures/environment/env2.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
         ({ envMap }) => {
           console.log(envMap)
