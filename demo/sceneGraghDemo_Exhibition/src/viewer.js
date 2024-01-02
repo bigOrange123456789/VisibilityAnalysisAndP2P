@@ -5,7 +5,7 @@ import {
   
 } from "../lib/threeEx/three";//'../lib/three/build/three';
 import {
-  
+
   PerspectiveCamera, CameraHelper,
   Raycaster,Vector3, SphereBufferGeometry,
   ACESFilmicToneMapping,
@@ -14,8 +14,6 @@ import {
   Object3D, PCFSoftShadowMap,
   sRGBEncoding, Vector2,
   TextureLoader, 
-
-  
 } from "three";//'../lib/three/build/three';
 
 import {GUI} from 'dat.gui';
@@ -293,6 +291,7 @@ export class Viewer
     supportMesh.position.set(-100,-100,-400);
     
     const directionalLight  = new DirectionalLight(0xFFFFFF, 3.2);//new DirectionalLight(0xFFFFFF, 1.2);
+    window.ll=directionalLight
     this.sceneEx.add(directionalLight);
     directionalLight.position.set(-1000,900,400);
     // directionalLight.target = new Vector3(-100,-150,-400)
@@ -303,7 +302,7 @@ export class Viewer
     directionalLight.shadow.camera.bottom = -600;
     directionalLight.shadow.camera.left = -1200;
     directionalLight.shadow.camera.right = 800;
-    directionalLight.shadow.camera.near = 800;
+    directionalLight.shadow.camera.near = 1//800;
     directionalLight.shadow.camera.far = 3000;
     const s=2
     directionalLight.shadow.mapSize.width = 1024*s;
@@ -311,8 +310,8 @@ export class Viewer
     // console.log(directionalLight.shadow.bias)
     directionalLight.shadow.bias = -0.01;
     // directionalLight.shadow.radius = 10;
-    // const helper = new CameraHelper(directionalLight.shadow.camera)
-    // this.sceneEx.add(helper)
+    const helper = new CameraHelper(directionalLight.shadow.camera)
+    this.sceneEx.add(helper)
 
 
     
@@ -372,7 +371,14 @@ export class Viewer
         lensflares.visible = e;
       } );
     }
-    
+
+    const self=this
+    document.addEventListener("mouseup", function(){
+      self.playerControl.enable=true
+    });
+    document.getElementsByClassName("dg main")[0].addEventListener("mousedown", function(){
+      self.playerControl.enable=false
+    });
   }
 
   addMyUI()
@@ -470,6 +476,11 @@ export class Viewer
               this.playerControl.mode.set("model")
             }else{
               this.playerControl.mode.set("viewpoint")
+              this.directionalLight.position.set(
+                this.activeCamera.position.x,
+                this.activeCamera.position.y,
+                this.activeCamera.position.z,
+              )
             }
           });
     }
