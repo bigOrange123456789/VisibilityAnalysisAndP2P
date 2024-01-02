@@ -112,6 +112,7 @@ export class SceneManager {
                     m[11],
                     m[15]
                 );
+                console.log(self.matrixWorld)
                 self.instanceGroup.applyMatrix4(self.matrixWorld);
                 self.httping = false;
             }else{

@@ -31,9 +31,10 @@ export class Lensflares extends Object3D{
 
     //-212.5200033129467, y: -132.82417453575843, z: 275.6308365324915
     const lensflare3 = new Lensflare();
-    lensflare3.addElement( new LensflareElement( textureFlare3, 1.2*1500*s0, 0, new Color(0.08,0,0) ) );//蓝色
-    lensflare3.position.set( -212.5200033129467,  -132.82417453575843,  275.6308365324915)
+    lensflare3.addElement( new LensflareElement( textureFlare3, 0.7*1.2*1500*s0, 0, new Color(0.08,0,0) ) );//红色
+    lensflare3.position.set( -584.2106193340763,  -133.29999999999995,  148.51157791272203)
     this.add(lensflare3)
+    window.l3=lensflare3
 
     const lensflare4 = new Lensflare();
     lensflare4.addElement( new LensflareElement( textureFlare3, 2.2*1500*s0, 0, new Color(0,0.08,0) ) );//蓝色

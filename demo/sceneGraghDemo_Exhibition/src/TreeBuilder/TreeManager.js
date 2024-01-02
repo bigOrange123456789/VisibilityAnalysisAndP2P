@@ -25,32 +25,15 @@ export class TreeManager {
     }
     return content
   }
-  initPos(){
-    this.poslist=[]
-    const list=[
-        171
-    ]
-    for(let cid of list){
-        const arr=this.posConfig[cid+""]
-        for(let i=0;i<arr.length/2;i++){
-            const x=arr[2*i  ]//+(2*Math.random()-1)*25
-            const y=5.5
-            const z=arr[2*i+1]//+(2*Math.random()-1)*25
-            if(i%7==0)
-            this.poslist.push([x,y,z])
-        }
-    }
-    return this.poslist
-  }
   initPos2(){
     this.poslist=[]
-    const x0=-877, y0= -210, z0= 523
-    for(let i=0;i<8;i++){
-      for(let j=2;j<5;j++){
+    const x0=-877-10-550, y0= -210-30, z0= 523+200
+    for(let i=0;i<9;i++){
+      for(let j=2;j<6;j++){
         this.poslist.push([
-          x0+(i+0.8*Math.random())*200,
-          y0,
-          z0+(j+0.8*Math.random())*200
+          0.7*(x0+(i+0.8*Math.random())*200),
+          0.7*(y0),
+          0.7*(z0+(j+0.8*Math.random())*200)
         ])
       }
     }
