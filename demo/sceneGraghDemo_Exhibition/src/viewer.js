@@ -311,8 +311,8 @@ export class Viewer
     // console.log(directionalLight.shadow.bias)
     directionalLight.shadow.bias = -0.01;
     // directionalLight.shadow.radius = 10;
-    const helper = new CameraHelper(directionalLight.shadow.camera)
-    this.sceneEx.add(helper)
+    // const helper = new CameraHelper(directionalLight.shadow.camera)
+    // this.sceneEx.add(helper)
 
 
     
