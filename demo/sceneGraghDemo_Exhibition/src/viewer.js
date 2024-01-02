@@ -294,6 +294,7 @@ export class Viewer
     window.ll=directionalLight
     this.sceneEx.add(directionalLight);
     directionalLight.position.set(-1000,900,400);
+    
     // directionalLight.target = new Vector3(-100,-150,-400)
     this.sceneEx.add(supportMesh);
     directionalLight.target = supportMesh;
@@ -302,7 +303,7 @@ export class Viewer
     directionalLight.shadow.camera.bottom = -600;
     directionalLight.shadow.camera.left = -1200;
     directionalLight.shadow.camera.right = 800;
-    directionalLight.shadow.camera.near = 1//800;
+    directionalLight.shadow.camera.near = 0//0.00000001/1//800;
     directionalLight.shadow.camera.far = 3000;
     const s=2
     directionalLight.shadow.mapSize.width = 1024*s;
@@ -318,6 +319,13 @@ export class Viewer
     // var amb = new AmbientLight(0xffffff,0.5)
     // this.sceneEx.add(amb)
     this.directionalLight=directionalLight
+    directionalLight.getT=()=>{
+      const x=directionalLight.target.position.x-directionalLight.position.x
+      const y=directionalLight.target.position.y-directionalLight.position.y
+      const z=directionalLight.target.position.z-directionalLight.position.z
+      console.log("lx:"+x+",ly:"+y+",lz:"+z+",")
+    }
+    window.directionalLight=directionalLight
   }
 
   addGUI()
@@ -340,7 +348,7 @@ export class Viewer
     const bloomPass=window.bloomPass
     if(bloomPass){
       const params={}//this.params
-      bloomPass.strength=0.83
+      window.bloomPass.strength=0.83
       // bloomPass.threshold=0.;
       // bloomPass.bloomRadius=1
       params.bloomThreshold=bloomPass.threshold;
@@ -372,6 +380,27 @@ export class Viewer
       } );
     }
 
+    if(this.directionalLight){
+      const directionLight=this.directionalLight
+      const target=this.directionalLight.target
+      const params={
+        "X方向":target.position.x-directionLight.position.x,
+        "Y方向":target.position.y-directionLight.position.y,
+        "Z方向":target.position.z-directionLight.position.z,
+      }
+      const folder = gui.addFolder("方向光")
+      folder.add( params, 'X方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
+        target.position.x = value+directionLight.position.x;
+      } );
+      folder.add( params, 'Y方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
+        target.position.y = value+directionLight.position.y;
+      } );
+      folder.add( params, 'Z方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
+        target.position.z = value+directionLight.position.z;
+      } );
+    }
+
+
     const self=this
     document.addEventListener("mouseup", function(){
       self.playerControl.enable=true
@@ -393,65 +422,80 @@ export class Viewer
       "会议厅":{
         x: -611.7278997402186, y: -8.299999999999955, z: -991.8703100197723,
         _x: -0.4595177766655146, _y: 0.9351284649468279, _z: 0.37894699828256995,
+        lx:-695,ly:-179,lz:-240.9999999999999,
       },
       "健身房":{
         x: -220.40853318635703, y: -8.299999999999955, z: -446.2481895862788,
         _x: -2.879695796991123, _y: -1.3947286318204442, _z: -2.8835660728168215, 
+        lx:295,ly:-76,lz:6,
       },
       "展板":{
         x: -415.54690309966884, y: 11.700000000000045, z: -985.8859488244095,
         _x: -2.772586563236666, _y: -1.0403056132677122, _z: -2.81963008356382,
+        lx:584,ly:-468,lz:584,
       },
       "回廊":{
         x: -951.518822290356, y: 1.7000000000000455, z: -246.06212147826005,
         _x: -2.631336910247565, _y: -0.4628900581469155, _z: -2.8966858087663017,
+        lx:900,ly:-1000,lz:-800,
       },
       "楼梯":{
         _x: -2.761248661969031, _y: -1.4187110845296473, _z: -2.7652338596964983,
         x: -695.6420432481111, y: 86.70000000000005, z: -314.8606618932473,
+        lx:-138,ly:-737,lz:481,
       },
 
       "走廊":{
         x: -523.7169964224255, y: -73.29999999999995, z: -934.4046215208,
         _x: -2.38325232201822, _y: 1.2485585387315845, _z: 2.4095851860017667, 
+        lx:-572,ly:-406,lz:-406,
       },
 
       "盥洗室":{
         x: -287.564663844875, y: -133.29999999999995, z: -294.19837678647093,
         _x: -0.5977010984592044, _y: -1.076166245007891, _z: -0.5398115091406686,
+        lx:-572,ly:-406,lz:-406,
       },
       "办公室":{
         x: 34.75463528178357, y: -133.29999999999995, z: -232.47315250400808,
         _x: -1.8894438749306073, _y: 1.4249512479569035, _z: 1.8926329490071203,
+        lx:-819,ly:-530,lz:-737,
       },
       "休息区":{
         x: -287.77798524818036, y: -123.29999999999995, z: -388.4728149475557,
         _x: -0.296511175682145, _y: 0.09545404161333833, _z: 0.02911040654961064, 
+        lx:-613,ly:-241,lz:-385.99999999999994,
       },
       "3D沙盘":{
         x: -517.6401039024837, y: -123.29999999999995, z: -707.6378335253324,
         _x: -0.22895130436582797, _y: 0.661921534807753, _z: 0.1422650528360352,
+        lx:-97,ly:6,lz:-76,
       },
       "大厅":{
         x: -631.7760430042864, y: -113.29999999999995, z: -542.7510312624997,
         _x: -0.16740930972230977, _y: -0.8534364865423268, _z: -0.1266604255389059,
+        lx:378,ly:-386,lz:-200,
       },
       "入口":{
         x: -855.4164092525988, y: -123.29999999999995, z: -523.2196177322234,
         _x: -1.120200465674534, _y: -1.408038622686094, _z: -1.1149633815768025,
+        lx:481,ly:-56,lz:254,
       },
 
       "泳池":{
         x: -1263.0643619464583, y: -113.29999999999995, z: -246.01514352935746,
         _x: -2.6410167587579307, _y: -1.0909375271610826, _z: -2.689801023321253,
+        lx:900,ly:-1000,lz:-800,
       },
       "停车位":{
         x: -650.4383146958382, y: -93.29999999999995, z: 352.4810519687936,
         _x: -0.14924857580109704, _y: -0.27269335137388234, _z: -0.04047558464798968,
+        lx:900,ly:-1000,lz:-800,
       },
       "全景":{
         x: -103.74156919209977, y: 222.10498628761275, z: 1679.7421074368945,
-        _x: -0.15420026400520798, _y: 0.007932180982387772, _z: 0.001232918478221312
+        _x: -0.15420026400520798, _y: 0.007932180982387772, _z: 0.001232918478221312,
+        lx:900,ly:-1000,lz:-800,
       }
       
 
@@ -474,12 +518,21 @@ export class Viewer
             self.defaultCamera.rotation.set(config[id]._x,config[id]._y,config[id]._z)
             if(id=="全景"){
               this.playerControl.mode.set("model")
+              window.bloomPass.strength=0.83
             }else{
               this.playerControl.mode.set("viewpoint")
               this.directionalLight.position.set(
                 this.activeCamera.position.x,
                 this.activeCamera.position.y,
                 this.activeCamera.position.z,
+              )
+              window.bloomPass.strength=0.4
+            }
+            if(typeof config[id].lx!="undefined"){
+              self.directionalLight.target.position.set(
+                self.directionalLight.position.x+config[id].lx,
+                self.directionalLight.position.y+config[id].ly,
+                self.directionalLight.position.z+config[id].lz,
               )
             }
           });

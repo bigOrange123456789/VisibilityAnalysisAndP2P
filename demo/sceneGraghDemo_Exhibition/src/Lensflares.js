@@ -38,7 +38,8 @@ export class Lensflares extends Object3D{
 
     const lensflare4 = new Lensflare();
     lensflare4.addElement( new LensflareElement( textureFlare3, 2.2*1500*s0, 0, new Color(0,0.08,0) ) );//蓝色
-    lensflare4.position.set(  184.6163565938977,  -138.3351997874887,  1006.8290480882454)
+    lensflare4.position.set( -327.5,  1.7,  609)//(  184.6163565938977,  -138.3351997874887,  1006.8290480882454)
     this.add(lensflare4) 
+    
   }
 }
