@@ -6,7 +6,6 @@ import {
   
 } from "../lib/threeEx/three";//'../lib/three/build/three';
 import {
-
   PerspectiveCamera, CameraHelper,
   Raycaster,Vector3, SphereBufferGeometry,
   ACESFilmicToneMapping,
@@ -63,22 +62,22 @@ export class Viewer
     this.renderer = window.renderer = new WebGLRenderer({
       antialias: true,
       toneMapping: ACESFilmicToneMapping,
-      toneMappingExposure: 0.5
+      // toneMappingExposure: 0.5
     });
+    window.renderer=this.renderer
     this.renderer.physicallyCorrectLights = true;
     this.renderer.outputEncoding = sRGBEncoding;
     this.renderer.setClearColor(0x66ccff);
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(el.clientWidth, el.clientHeight);
     this.renderer.autoClear = false;
-    this.renderer.toneMappingExposure = 1.25		//色调映射曝光度
+    // this.renderer.toneMappingExposure = 10//1.25		//色调映射曝光度
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMapSoft = true
     // this.renderer.shadowMap.type = VSMSoftShadowMap;//PCFSoftShadowMap;//this.renderer.shadowMap.type = PCFShadowMap;
     this.renderer.shadowMap.type = PCFSoftShadowMap;
 
     this.unrealBloom=new Engine3D.UnrealBloom(this.defaultCamera,this.sceneEx,this.renderer)
-    window.bloomPass=this.unrealBloom.bloomPass
 
     // window.orbitControl = this.orbitControl = new OrbitControls(this.defaultCamera, this.renderer.domElement);
     // this.orbitControl.autoRotate = false;
@@ -169,18 +168,6 @@ export class Viewer
 
   this.addGUI();
   }
-  loadJson(path,cb){
-    // console.log(path)
-    var xhr = new XMLHttpRequest()
-    xhr.open('GET', path, true)
-    xhr.send()
-    xhr.onreadystatechange = ()=> {
-        if (xhr.readyState == 4 && xhr.status == 200) {
-            var json_data = JSON.parse(xhr.responseText)
-            cb(json_data)
-        }
-    }
-  }
   getCubeMapTexture(path,renderer) {
     return new Promise((resolve, reject) => {//'.exr'
       new TextureLoader()
@@ -211,7 +198,11 @@ export class Viewer
     this.stats.update();
 
     // this.render();//this.renderer.render(this.sceneEx, this.activeCamera);this.renderer.clear();
-    this.unrealBloom.render();
+    if(this.unrealBloom&&this.unrealBloom.bloomPass.enabled)
+      this.unrealBloom.render()
+    else {
+      this.renderer.render(this.sceneEx, this.defaultCamera);
+    }
   }
 
   resize()
@@ -345,16 +336,18 @@ export class Viewer
     guiWrap.appendChild(gui.domElement);
     gui.open();
 
-    const bloomPass=window.bloomPass
-    if(bloomPass){
-      const params={}//this.params
-      window.bloomPass.strength=0.83
+    
+    if(this.unrealBloom&&this.unrealBloom.bloomPass){
+      const bloomPass=this.unrealBloom.bloomPass
+      bloomPass.strength=0.83
       // bloomPass.threshold=0.;
       // bloomPass.bloomRadius=1
-      params.bloomThreshold=bloomPass.threshold;
-      params.bloomStrength=bloomPass.strength;
-      params.bloomRadius=bloomPass.radius;
-      params.enabled=bloomPass.enabled;
+      const params={
+        bloomThreshold:bloomPass.threshold,
+        bloomStrength:bloomPass.strength,
+        bloomRadius:bloomPass.radius,
+        enabled:bloomPass.enabled,
+      }//this.params
       const folder = gui.addFolder("辉光")
       folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
         bloomPass.strength = Number( value );
@@ -387,6 +380,8 @@ export class Viewer
         "X方向":target.position.x-directionLight.position.x,
         "Y方向":target.position.y-directionLight.position.y,
         "Z方向":target.position.z-directionLight.position.z,
+
+        "open":directionLight.visible
       }
       const folder = gui.addFolder("方向光")
       folder.add( params, 'X方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
@@ -397,6 +392,23 @@ export class Viewer
       } );
       folder.add( params, 'Z方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
         target.position.z = value+directionLight.position.z;
+      } );
+      folder.add( params, 'open').onChange(function(e) {
+        directionLight.visible = e;
+      } );
+    }
+    if(false)if(this.renderer){
+      const renderer=this.unrealBloom.composer.renderer//this.renderer
+      const params={
+        "tone":renderer.toneMappingExposure,
+        "shadowMap":renderer.shadowMap.enabled
+      }
+      const folder = gui.addFolder("渲染器")
+      folder.add( params, 'tone', 0, 2 ).step( 0.001 ).onChange( function ( value ) {
+        renderer.toneMappingExposure = value
+      } );
+      folder.add( params, 'shadowMap').onChange(function(e) {
+        renderer.shadowMap.enabled = e;
       } );
     }
 
@@ -429,7 +441,7 @@ export class Viewer
             self.defaultCamera.rotation.set(config[id]._x,config[id]._y,config[id]._z)
             if(id=="全景"){
               this.playerControl.mode.set("model")
-              window.bloomPass.strength=0.83
+              this.unrealBloom.bloomPass.strength=0.83
             }else{
               this.playerControl.mode.set("viewpoint")
               this.directionalLight.position.set(
@@ -437,7 +449,7 @@ export class Viewer
                 this.activeCamera.position.y,
                 this.activeCamera.position.z,
               )
-              window.bloomPass.strength=0.4
+              this.unrealBloom.bloomPass.strength=0.4
             }
             if(typeof config[id].lx!="undefined"){
               self.directionalLight.target.position.set(
@@ -492,48 +504,4 @@ export class Viewer
       }
     }
   }
-
-  // addTree()
-  // {
-  //   var self = this
-  //   new FileLoader().load("assets/tree_pos.json", (json)=>{
-  //     let cells = JSON.parse(json)
-  //     // console.log(cells)
-  //     for(let i=0; i<cells.length; i++){
-  //       let vec = new Vector3(cells[i].x, cells[i].y, cells[i].z)
-  //       // vec.applyMatrix4(matwor)
-  //       cells[i] = {x:vec.x, y:vec.y, z:vec.z}
-  //     }
-
-  //     const customizeTree = new CustomizeTree()
-  //     const treeObj = customizeTree.getTree("法国梧桐")
-  //     const builder = new TreeBuilder(treeObj, true)
-
-  //     let skeleton = builder.buildSkeleton()
-  //     let tree = builder.buildTree(skeleton)
-  //     // console.log(tree)
-  //     let instancedMeshGroup = new Group()
-  //     let instancedMeshes = []
-  //     tree.children.forEach((child) => {
-  //       // console.log(child.material.alphaTest)
-  //       child.material.alphaTest = 0.25
-  //       instancedMeshes.push(
-  //           new InstancedMesh(child.geometry, child.material, cells.length)
-  //       )
-  //     })
-  //     for(let i=0; i<cells.length; i++){
-  //       let matrix = new Matrix4()
-  //       matrix.makeRotationY(Math.random()*Math.PI)
-  //       matrix.multiply(new Matrix4().makeScale(0.08,0.08,0.08))
-  //       matrix.setPosition(cells[i].x, cells[i].y, cells[i].z)
-  //       instancedMeshes.forEach((instancedMesh) => {
-  //         instancedMesh.setMatrixAt(i, matrix)
-  //       })
-  //       instancedMeshes[0].setColorAt(i, new Color(0.4+Math.random()*0.1,0.3+Math.random()*0.1,0.1+Math.random()*0.1))
-  //       instancedMeshes[1].setColorAt(i, new Color(0,0.2+Math.random()*0.6,0))
-  //     }
-  //     instancedMeshGroup.add(...instancedMeshes)
-  //     self.sceneEx.add(instancedMeshGroup)
-  //   })
-  // }
 }
