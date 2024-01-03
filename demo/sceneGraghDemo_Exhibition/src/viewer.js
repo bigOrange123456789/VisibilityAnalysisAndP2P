@@ -346,7 +346,7 @@ export class Viewer
         bloomThreshold:bloomPass.threshold,
         bloomStrength:bloomPass.strength,
         bloomRadius:bloomPass.radius,
-        enabled:bloomPass.enabled,
+        open:bloomPass.enabled,
       }//this.params
       const folder = gui.addFolder("辉光")
       folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
@@ -358,7 +358,7 @@ export class Viewer
       folder.add( params, 'bloomRadius', 0.0, 1.0 ).step( 0.01 ).onChange( function ( value ) {
         bloomPass.radius = Number( value );
       } );
-      folder.add( params, 'enabled').onChange(function(e) {
+      folder.add( params, 'open').onChange(function(e) {
         bloomPass.enabled = e;
       } );
     }
@@ -380,6 +380,7 @@ export class Viewer
         "X方向":target.position.x-directionLight.position.x,
         "Y方向":target.position.y-directionLight.position.y,
         "Z方向":target.position.z-directionLight.position.z,
+        "阴影":directionLight.castShadow,// = true;
 
         "open":directionLight.visible
       }
@@ -393,12 +394,16 @@ export class Viewer
       folder.add( params, 'Z方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
         target.position.z = value+directionLight.position.z;
       } );
+      folder.add( params, '阴影').onChange(function(e) {
+        directionLight.castShadow = e;
+      } );
       folder.add( params, 'open').onChange(function(e) {
         directionLight.visible = e;
       } );
+      
     }
     if(false)if(this.renderer){
-      const renderer=this.unrealBloom.composer.renderer//this.renderer
+      const renderer=this.renderer//this.unrealBloom.composer.renderer//
       const params={
         "tone":renderer.toneMappingExposure,
         "shadowMap":renderer.shadowMap.enabled
