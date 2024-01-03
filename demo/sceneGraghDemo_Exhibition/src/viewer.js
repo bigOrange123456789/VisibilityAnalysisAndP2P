@@ -17,9 +17,8 @@ import {
 } from "three";//'../lib/three/build/three';
 
 import {GUI} from 'dat.gui';
-import {MyUI} from "../lib/MyUI.js"
 import Stats from "three/examples/jsm/libs/stats.module.js";//'../lib/three/examples/jsm/libs/stats.module.js';
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";//'../lib/three/examples/jsm/controls/OrbitControls.js';
+// import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";//'../lib/three/examples/jsm/controls/OrbitControls.js';
 import {WanderControl} from "../lib/WanderControl";
 // import {CustomizeTree} from "../lib/myTree/CustomizeTree";
 // import {TreeBuilder} from "../lib/myTree/TreeBuilder";
@@ -412,7 +411,7 @@ export class Viewer
 
   addMyUI()
   {
-    var ui = new MyUI()
+    var ui = new Engine3D.MyUI()
     var self = this;
     var width = window.innerWidth
     var height = window.innerHeight
