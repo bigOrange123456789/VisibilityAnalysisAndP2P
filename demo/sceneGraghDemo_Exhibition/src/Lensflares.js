@@ -19,7 +19,7 @@ export class Lensflares extends Object3D{
     lensflare.addElement( new LensflareElement( textureFlare3, 60*s0, 0.6 ) );
     lensflare.addElement( new LensflareElement( textureFlare3, 70*s0, 0.7 ) );
     lensflare.addElement( new LensflareElement( textureFlare3, 120*s0, 0.9 ) );
-    lensflare.position.set(-2472.5,  1080,  1940)
+    lensflare.position.set(-2472.5/2,  1080,  -1940)//lensflare.position.set(-2472.5,  1080,  1940)
     this.add(lensflare)
     window.l=lensflare.position
 
