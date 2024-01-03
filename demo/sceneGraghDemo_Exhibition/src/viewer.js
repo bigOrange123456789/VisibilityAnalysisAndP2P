@@ -304,6 +304,9 @@ export class Viewer
     // directionalLight.shadow.radius = 10;
     // const helper = new CameraHelper(directionalLight.shadow.camera)
     // this.sceneEx.add(helper)
+    directionalLight.shadow.autoUpdate=false
+    window.shadow=directionalLight.shadow
+    window.shadow.needsUpdate=true
 
 
     
@@ -380,24 +383,30 @@ export class Viewer
         "X方向":target.position.x-directionLight.position.x,
         "Y方向":target.position.y-directionLight.position.y,
         "Z方向":target.position.z-directionLight.position.z,
-        "阴影":directionLight.castShadow,// = true;
-
-        "open":directionLight.visible
+        "阴影open":directionLight.castShadow,// = true;
+        "阴影auto":directionLight.shadow.autoUpdate,
+        "方向光open":directionLight.visible
       }
       const folder = gui.addFolder("方向光")
       folder.add( params, 'X方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
         target.position.x = value+directionLight.position.x;
+        if(window.shadow)window.shadow.needsUpdate=true
       } );
       folder.add( params, 'Y方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
         target.position.y = value+directionLight.position.y;
+        if(window.shadow)window.shadow.needsUpdate=true
       } );
       folder.add( params, 'Z方向', -1000, 1000 ).step( 1 ).onChange( function ( value ) {
         target.position.z = value+directionLight.position.z;
+        if(window.shadow)window.shadow.needsUpdate=true
       } );
-      folder.add( params, '阴影').onChange(function(e) {
+      folder.add( params, '阴影open').onChange(function(e) {
         directionLight.castShadow = e;
       } );
-      folder.add( params, 'open').onChange(function(e) {
+      folder.add( params, '阴影auto').onChange(function(e) {
+        directionLight.shadow.autoUpdate = e;
+      } );
+      folder.add( params, '方向光open').onChange(function(e) {
         directionLight.visible = e;
       } );
       
@@ -463,6 +472,7 @@ export class Viewer
                 self.directionalLight.position.z+config[id].lz,
               )
             }
+            if(window.shadow)window.shadow.needsUpdate=true
           });
     }
 

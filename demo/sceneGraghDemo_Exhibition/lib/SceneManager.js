@@ -373,6 +373,7 @@ export class SceneManager {
             // this.instanceGroup.add(water)
         }else{
             this.instanceGroup.add(instance_mesh);
+            if(window.shadow)window.shadow.needsUpdate=true
         }
 
         // mesh.applyMatrix4(this.matrixWorld);
