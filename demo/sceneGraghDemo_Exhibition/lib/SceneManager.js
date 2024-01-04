@@ -26,6 +26,17 @@ export class SceneManager {
     constructor() {
         const self=this
         this.loadZip=new LoadZip((m1,meshIndex,matrixConfig,structdesc0,jsonDataAll)=>{
+            const index=meshIndex
+            let pos = self.loadingModelList.indexOf(index)
+            if(pos===-1) {
+                // alert("?:"+index);
+                // return;
+            }else{
+                self.loadingModelList.splice(pos,1)
+                if(!self.loadedModelList.includes(index))
+                    self.loadedModelList.push(index) 
+            }
+            
             // console.log(matrixConfig[0]);//console.log(m1,meshIndex,matrixConfig,structdesc0)
             self.addInsModel(jsonDataAll, m1);
             // self.addInsModel(matrix, mesh);
@@ -288,13 +299,14 @@ export class SceneManager {
         if(this.worker)this.worker.postMessage(to_load_list);
     }
     loadModelZip(index) {
+        this.toLoadModelList.splice(this.toLoadModelList.indexOf(index),1)
+        this.loadingModelList.push(index)
         if(this.loadZip){
             this.loadZip.load([index]);
             return;
         }
         
-        this.toLoadModelList.splice(this.toLoadModelList.indexOf(index),1)
-        this.loadingModelList.push(index)
+
         var self = this;
         var url = "assets/models/" + self.projectName + "/" + index + ".zip";
         var loader = new LoadingManager();
@@ -516,13 +528,15 @@ function processMesh(mesh, matrixList) {
     // mesh.material.metalness=0//8//2
     // mesh.material.roughness=0
 
-    const classification=new Engine3D.Classification(mesh,matrixList)
-    const code=classification.code
-    if(classification.code&&code.type=="cylinder"){
-        const s=0.5*Math.max(classification.scale[0],classification.scale[1],classification.scale[2])
-        mesh.material.map.repeat.x*=s
-        mesh.material.map.repeat.y*=s
-        return classification.mesh2
+    if(true){
+        const classification=new Engine3D.Classification(mesh,matrixList)
+        const code=classification.code
+        if(classification.code&&code.type=="cylinder"){
+            const s=0.5*Math.max(classification.scale[0],classification.scale[1],classification.scale[2])
+            mesh.material.map.repeat.x*=s
+            mesh.material.map.repeat.y*=s
+            return classification.mesh2
+        }
     }
     
     // console.log(mesh)

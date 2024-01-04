@@ -70,12 +70,12 @@ export class LoadZip{
         var requestOrderManager=new RequestOrderManager({
               loaded:[],
               stackSize:10000,
-              waitNumberMax:300,//100,//150,
+              waitNumberMax:9000,//300,//100,//150,
               crossDomain:crossDomain
         })
-        setTimeout(()=>{
-              requestOrderManager.waitNumberMax=600//300
-        },500)
+        // setTimeout(()=>{
+        //       requestOrderManager.waitNumberMax=600//300
+        // },500)
         this._requestOrderManager1=requestOrderManager
     
         window.loadSubZip3_worker_onmessage1=opt=>{

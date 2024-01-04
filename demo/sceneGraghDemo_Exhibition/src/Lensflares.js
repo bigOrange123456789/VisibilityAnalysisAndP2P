@@ -10,7 +10,12 @@ import {
 export class Lensflares extends Object3D{
   constructor (){
     super()
-  
+    const self=this
+    setTimeout(()=>{
+      self.init()
+    },4000)
+  }
+  init(){
     const textureFlare3 = new TextureLoader().load( 'assets/textures/lensflare/lensflare0_alpha.png' );
     // const textureFlare3 = new TextureLoader().load( 'assets/textures/environment/evn.jpg' );
     const lensflare = new Lensflare();

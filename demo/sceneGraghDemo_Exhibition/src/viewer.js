@@ -119,7 +119,21 @@ export class Viewer
 
     /**************************************************************/
 
-    this.getCubeMapTexture('assets/textures/environment/env2.jpg',this.renderer).then(
+    setTimeout(()=>{
+      _self.initBackground()
+    },2000)
+
+    this.lensflares=new Lensflares()
+    _self.sceneEx.add(this.lensflares)
+  
+    setTimeout(()=>{
+      new TreeManager(_self.sceneEx).init({}) 
+    },4000)
+    this.addGUI();
+  }
+  initBackground(){
+    const _self=this
+    _self.getCubeMapTexture('assets/textures/environment/env2.jpg',this.renderer).then(
         //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
         ({ envMap }) => {
           console.log(envMap)
@@ -132,7 +146,7 @@ export class Viewer
           //   self.unrealBloom.bloomPass.strength=1.5
         }
     )
-    this.getCubeMapTexture('assets/textures/environment/skybox2.jpg',this.renderer).then(
+    _self.getCubeMapTexture('assets/textures/environment/skybox2.jpg',this.renderer).then(
       //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
       ({ envMap }) => {
         envMap.flipY=false
@@ -144,29 +158,8 @@ export class Viewer
         //   self.scene.backgroundIntensity=0.1
         //   self.unrealBloom.bloomPass.strength=1.5
       }
-  )
+    )
 
-  this.lensflares=new Lensflares()
-  _self.sceneEx.add(this.lensflares)
-  // this.avatar=new AvatarManager(
-  //   _self.sceneEx,
-  //   _self.defaultCamera,
-  //   null,
-  //   ()=>{
-  //       console.log("avatar加载完成")
-  //   },
-  //   _self.playerControl//self.orbitControl
-  // )
-  // this.loadJson(
-  //   "LoadingProgressive/pos2.json",
-  //   data=>{
-  //       new TreeManager(_self.sceneEx).init(data) 
-  //   }
-  // )
-  // -877.4427031689956, y: -103.29999999999995, z: 523.0552598721591
-  new TreeManager(_self.sceneEx).init({}) 
-
-  this.addGUI();
   }
   getCubeMapTexture(path,renderer) {
     return new Promise((resolve, reject) => {//'.exr'
