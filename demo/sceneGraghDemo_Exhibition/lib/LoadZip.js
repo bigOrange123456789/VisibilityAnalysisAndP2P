@@ -1,17 +1,7 @@
 import {
-    FileLoader,
-    Group, InstancedMesh,
-    LoadingManager, Object3D,
-    Matrix4, 
-    Vector3, CylinderGeometry, 
-    MeshStandardMaterial,MeshBasicMaterial,
-    BufferGeometry,BufferAttribute,Color,CanvasTexture,Vector2,
-    TextureLoader,RepeatWrapping
+    LoadingManager
 } from "three";
-import { Engine3D } from '../src/main.js'
-import { ZipLoader } from "./ziploader.js";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx.js";
-import {Water} from "./threeEx/Water2.js";
 
 import {CrossDomain} from './myWorker/CrossDomain.js';
 import {RequestOrderManager} from './myWorker/RequestOrderManager.js';

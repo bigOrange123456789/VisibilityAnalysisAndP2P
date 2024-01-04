@@ -1,3 +1,4 @@
+window.time0=performance.now();
 import { Viewer } from './viewer.js';
 import {SceneManager} from "../lib/SceneManager";
 
