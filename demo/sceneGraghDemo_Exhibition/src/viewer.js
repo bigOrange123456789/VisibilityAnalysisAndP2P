@@ -196,6 +196,7 @@ export class Viewer
     
 
     this.stats.update();
+    // return
 
     // this.render();//this.renderer.render(this.sceneEx, this.activeCamera);this.renderer.clear();
     if(this.unrealBloom&&this.unrealBloom.bloomPass.enabled)

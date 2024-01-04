@@ -125,8 +125,8 @@ class LoadModel {//对一个构件的加载处理
           }
           if(typeof(window)!=="undefined"){//单线程
             // console.log("this.meshIndex",this.meshIndex)
-            if(window.loadSubZip3_worker_onmessage)
-            window.loadSubZip3_worker_onmessage({
+            if(window.loadSubZip3_worker_onmessage1)
+            window.loadSubZip3_worker_onmessage1({
               "meshIndex":this.meshIndex,
               "myArray":myArray,
               "matrixConfig":json0.matrixConfig,//matrixConfig,

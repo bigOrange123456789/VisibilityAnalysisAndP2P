@@ -21,11 +21,20 @@ onmessage=ev=>{
   // console.log(ev)
   if(ev.data.type==""){
   }else if(ev.data.type=="start"){
-    requestOrderManager.addDemand(
-      //[944,907,908,909,946]
-      Array.from(Array(1000)).map((e, i) => i),
-      ev.data.sceneName
-    )
+    // requestOrderManager.addDemand(
+    //   //[944,907,908,909,946]
+    //   Array.from(Array(1000)).map((e, i) => i),
+    //   ev.data.sceneName
+    // )
+    postMessage({
+      "first":true
+      // "meshIndex":this.meshIndex,
+      // "myArray":myArray,
+      // "matrixConfig":json0.matrixConfig,//matrixConfig,
+      // "structdesc0":json0.structdesc0,//structdesc0
+
+      // "jsonDataAll":jsonDataAll
+    }) 
   }else if(ev.data.type=="list"){
     requestOrderManager.addDemand(ev.data.list,ev.data.sceneName)
   }

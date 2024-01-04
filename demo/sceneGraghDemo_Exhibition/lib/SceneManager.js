@@ -12,9 +12,8 @@ import { ZipLoader } from "./ziploader";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
 import {Water} from "./threeEx/Water2";
 import{LoadZip}from"./LoadZip"
-// import { Cylinder } from "./Cylinder";
-// import { CoderDecoder } from "./CoderDecoder";
-// import { Engine3D } from '../src/main.js'
+import InitialVisibleList from '../config/InitialVisibleList.json'
+
 const normalMap=new TextureLoader().load('assets/textures/water/waternormals.jpg',function(texture){
         texture.wrapS = texture.wrapT = RepeatWrapping;
         // texture.repeat.x=200
@@ -73,13 +72,7 @@ export class SceneManager {
         this.server_ip = "ws://47.116.5.3:4003";
         this.startConnect();
 
-        this.processLoadList([
-            13, 640, 42, 41, 759, 25, 1397, 642, 40, 1336, 1315, 26, 27, 43, 754, 14, 12, 11, 39, 45, 1388, 780, 1318, 1990, 
-            2387, 773, 0, 660, 44, 756, 1410, 28, 29, 1317, 1408, 23, 790, 1989, 9, 460, 801, 663, 854, 1084, 410, 802, 5353, 
-            794, 791, 30, 770, 1387, 22, 2476, 10, 763, 24, 651, 843, 1436, 131, 4793, 2051, 132, 673, 860, 5352, 1406, 1396, 
-            1426, 2054, 586, 388, 833, 764, 585, 33, 48, 1930, 515, 627, 566, 36, 2388, 788, 643, 1718, 433, 2006,
-            //  4916, 1409, 228, 611, 1105, 2018, 1923, 1733, 1528, 500, 421
-        ])
+        this.processLoadList(InitialVisibleList)
         // for(let i=4000; i<4050; i++){
         //     this.loadModelZip(i);
         // }
@@ -396,6 +389,7 @@ export class SceneManager {
             this.instanceGroup.add(instance_mesh);
             if(window.shadow)window.shadow.needsUpdate=true
         }
+        // console.log(Math.round(performance.now()-window.time0))
 
         // mesh.applyMatrix4(this.matrixWorld);
         // this.scene.add(mesh);

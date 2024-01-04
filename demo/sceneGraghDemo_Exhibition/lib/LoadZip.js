@@ -5,23 +5,39 @@ import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx.js";
 
 import {CrossDomain} from './myWorker/CrossDomain.js';
 import {RequestOrderManager} from './myWorker/RequestOrderManager.js';
+// const loadSubZip3_worker0=new Worker("./myWorker/loadSubZip.js")
 export class LoadZip{
     sceneName="ExhibitionHall"
-    type=2
+    type=0//2//1//2
     constructor(back){
-        if(this.type==1)this._loadSubZip3_init_single(back)
-        else this._loadSubZip3_init_double(back)
-        //back(m1,meshIndex,matrixConfig,structdesc0)
+        if(this.type==1){//单线程
+            this._loadSubZip3_init_single(back)
+            this.load=this._loadSubZip3_single
+        }else if(this.type==2){//双线程
+            this._loadSubZip3_init_double(back)
+            this.load=this._loadSubZip3_double
+        } else if(this.type==0){//初始使用单线程 然后过渡到双线程
+            this._loadSubZip3_init_single(back)
+            this.load=this._loadSubZip3_single
+            
+            this._loadSubZip3_init_double(back)
+        } else {
+            console.log("LoadZip type错误")
+        }
     }
-    load(list){
-        if(this.type==1)this._loadSubZip3_single (list)
-        else this._loadSubZip3_double(list)
-    }
+    load(list){}
     _loadSubZip3_init_double (back){
         console.log("双线程")
-        if(window.loadSubZip3_worker0)window.loadSubZip3_worker=window.loadSubZip3_worker0
-        else window.loadSubZip3_worker=new Worker("./myWorker/loadSubZip.js")
-        window.loadSubZip3_worker.onmessage=ev=>{
+        const self=this
+        // if(typeof loadSubZip3_worker0!=undefined)this._loadSubZip3_worker1=loadSubZip3_worker0
+        // else 
+        this._loadSubZip3_worker1=new Worker("./myWorker/loadSubZip.js")
+        this._loadSubZip3_worker1.onmessage=ev=>{
+            if(ev.data.first){
+                self.load=self._loadSubZip3_double
+                console.log("double_init",Math.round(performance.now()-window.time0))
+                return
+            }
             var matrixConfig=ev.data.matrixConfig
             var structdesc0=ev.data.structdesc0
             var meshIndex=ev.data.meshIndex
@@ -32,22 +48,20 @@ export class LoadZip{
                 "./",
                 gltf=>{
                     var m1 = gltf.scene.children[0].children[0]
-                    // console.log(m1,meshIndex,matrixConfig,structdesc0,ev.data.jsonDataAll)
-                    // return
+                    // console.log("double",Math.round(performance.now()-window.time0))
                     back(m1,meshIndex,matrixConfig,structdesc0,ev.data.jsonDataAll)
             })
         }
-        const self=this
-        window.loadSubZip3_worker.postMessage({//开始请求
+        this._loadSubZip3_worker1.postMessage({//开始请求
             type:"start",
-            "sceneName":self.sceneName//:window.param.projectName
+            "sceneName":this.sceneName
         })
     }
     _loadSubZip3_double (list){
-        window.loadSubZip3_worker.postMessage({//开始请求
+        this._loadSubZip3_worker1.postMessage({//开始请求
             type:"list",
             list:list,
-            "sceneName":this.sceneName//window.param.projectName
+            "sceneName":this.sceneName
         })
     }
     _loadSubZip3_init_single (back){//单线程
@@ -62,32 +76,18 @@ export class LoadZip{
         setTimeout(()=>{
               requestOrderManager.waitNumberMax=600//300
         },500)
-        // requestOrderManager.addDemand(
-        // 	Array.from(Array(1000)).map((e, i) => i)
-        // )
-        window.requestOrderManager=requestOrderManager
+        this._requestOrderManager1=requestOrderManager
     
-        window.loadSubZip3_worker_onmessage=opt=>{
+        window.loadSubZip3_worker_onmessage1=opt=>{
             var matrixConfig=opt.matrixConfig
             var structdesc0=opt.structdesc0
             var meshIndex=opt.meshIndex
-            // const manager = new LoadingManager();
-            // var loader=new GLTFLoaderEx(manager)
-            // loader.parse( 
-            // 	opt.myArray, 
-            // 	"./",
-            // 	gltf=>{
-            // 		var m1 = gltf.scene.children[0].children[0]
-            // 		back(m1,meshIndex,matrixConfig,structdesc0)
-            // })
-            // console.log(opt.jsonDataAll,"...")
             var m1 = opt.glb.scene.children[0].children[0]
-            // console.log(m1)
+            // console.log("single",Math.round(performance.now()-window.time0))
             back(m1,meshIndex,matrixConfig,structdesc0,opt.jsonDataAll)
         }
     }
     _loadSubZip3_single (list){//单线程
-        window.requestOrderManager.addDemand(list,"ExhibitionHall")
-        // window.requestOrderManager.addDemand(list,window.param.projectName)
+        this._requestOrderManager1.addDemand(list,this.sceneName)
     }
 }
