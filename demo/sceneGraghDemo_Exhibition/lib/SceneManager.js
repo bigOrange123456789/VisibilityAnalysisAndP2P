@@ -5,12 +5,14 @@ import {
     Matrix4, 
     Vector3, CylinderGeometry, 
     MeshStandardMaterial,MeshBasicMaterial,
+    BufferGeometry,BufferAttribute,Color,CanvasTexture,Vector2,
     TextureLoader,RepeatWrapping
 } from "three";
 import { Engine3D } from '../src/main.js'
 import { ZipLoader } from "./ziploader";
 import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx";
 import {Water} from "./threeEx/Water2";
+import{LoadZip}from"./LoadZip"
 // import { Cylinder } from "./Cylinder";
 // import { CoderDecoder } from "./CoderDecoder";
 // import { Engine3D } from '../src/main.js'
@@ -24,6 +26,12 @@ const normalMap=new TextureLoader().load('assets/textures/water/waternormals.jpg
 export class SceneManager {
     
     constructor() {
+        const self=this
+        this.loadZip=new LoadZip((m1,meshIndex,matrixConfig,structdesc0,jsonDataAll)=>{
+            // console.log(matrixConfig[0]);//console.log(m1,meshIndex,matrixConfig,structdesc0)
+            self.addInsModelOld(jsonDataAll, m1);
+            // self.addInsModelOld(matrix, mesh);
+        })
         this.projectName = window.projectName;
         this.scene = window.scene;
         this.camera = window.camera;
@@ -66,11 +74,6 @@ export class SceneManager {
         this.server_ip = "ws://47.116.5.3:4003";
         this.startConnect();
 
-        // for(let i=4000; i<4050; i++){
-        //     this.loadModelZip(i);
-        // }
-    }
-    startConnect(){
         this.processLoadList([
             13, 640, 42, 41, 759, 25, 1397, 642, 40, 1336, 1315, 26, 27, 43, 754, 14, 12, 11, 39, 45, 1388, 780, 1318, 1990, 
             2387, 773, 0, 660, 44, 756, 1410, 28, 29, 1317, 1408, 23, 790, 1989, 9, 460, 801, 663, 854, 1084, 410, 802, 5353, 
@@ -78,6 +81,11 @@ export class SceneManager {
             1426, 2054, 586, 388, 833, 764, 585, 33, 48, 1930, 515, 627, 566, 36, 2388, 788, 643, 1718, 433, 2006,
             //  4916, 1409, 228, 611, 1105, 2018, 1923, 1733, 1528, 500, 421
         ])
+        // for(let i=4000; i<4050; i++){
+        //     this.loadModelZip(i);
+        // }
+    }
+    startConnect(){
         this.animate = this.animate.bind(this)
         requestAnimationFrame(this.animate)
 
@@ -157,6 +165,42 @@ export class SceneManager {
                 }
             }
         };
+
+        // worker多线程
+        // this.worker = new Worker("./worker.js");
+        // this.worker.onmessage = (e)=>{
+        //     // console.log(e.data.uvs)
+        //     // console.log(e.data);
+        //     let index = e.data.index;
+        //     let pos = this.loadingModelList.indexOf(index);
+        //     if(pos!==-1) this.loadingModelList.splice(pos,1);
+        //     if(!this.loadedModelList.includes(index))
+        //         this.loadedModelList.push(index)
+
+        //     let geometry = new BufferGeometry();
+        //     geometry.setAttribute('position', new BufferAttribute(e.data.geometry.vertices,3));
+        //     if(e.data.geometry.normals) geometry.setAttribute('normal', new BufferAttribute(e.data.geometry.normals,3))
+        //     else geometry.computeVertexNormals();
+        //     if(e.data.geometry.uvs) geometry.setAttribute('uv', new BufferAttribute(e.data.geometry.uvs,2));
+        //     if(e.data.geometry.indices) geometry.setIndex(new BufferAttribute(e.data.geometry.indices,1));
+        //     // console.log(geometry)
+        //     let material = new MeshStandardMaterial({
+        //         color: new Color(e.data.material.color.r, e.data.material.color.g, e.data.material.color.b),
+        //         // emissive: new Color(e.data.material.emissive.r, e.data.material.color.g, e.data.material.color.b),
+        //         roughness: e.data.material.roughness,
+        //         metalness: e.data.material.metalness,
+        //         transparent: e.data.material.opacity !== 1,
+        //         opacity: e.data.material.opacity
+        //     });
+        //     if(e.data.material.image){
+        //         material.map = new CanvasTexture(e.data.material.image,300,1000,1000,1006,1008,1022,1009,1)
+        //         material.map.offset = new Vector2(e.data.material.offset.x, e.data.material.offset.y);
+        //         material.map.repeat = new Vector2(e.data.material.repeat.x, e.data.material.repeat.y);
+        //         material.map.encoding = 3001;
+        //         material.map.flipY = false;
+        //     }
+        //     this.addInsModel(e.data.index, e.data.matrix, geometry, material);
+        // };
     }
     animate() {
         if (!this.camera.position.equals(this.pre_camera_position) && !this.httping) {
@@ -276,10 +320,22 @@ export class SceneManager {
             }
         }
         for(let i=0; i<to_load_list.length; i++){
-            this.loadModelZip(to_load_list[i])
+            if(this.worker){
+                let index = to_load_list[i];
+                this.toLoadModelList.splice(this.toLoadModelList.indexOf(index),1);
+                this.loadingModelList.push(index);
+            }else{
+                this.loadModelZip(to_load_list[i])
+            }
         }
+        if(this.worker)this.worker.postMessage(to_load_list);
     }
     loadModelZip(index) {
+        if(this.loadZip){
+            this.loadZip.load([index]);
+            return;
+        }
+        
         this.toLoadModelList.splice(this.toLoadModelList.indexOf(index),1)
         this.loadingModelList.push(index)
         var self = this;
@@ -320,14 +376,15 @@ export class SceneManager {
                         ".gltf",
                         (gltf) => {
                             var mesh = gltf.scene.children[0].children[0];
-                            self.addInsModel(matrix, mesh);
+                            // console.log(matrix)
+                            self.addInsModelOld(matrix, mesh);
                         }
                     );
                 }
             );
         });
     }
-    addInsModel(matrix, mesh) {
+    addInsModelOld(matrix, mesh) {
         let index = Number(mesh.name);
         matrix.push([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0]);
         let matrix4List = [];
@@ -383,6 +440,53 @@ export class SceneManager {
 
         mesh.geometry.computeBoundingBox()
         let box = mesh.geometry.boundingBox.clone().applyMatrix4(this.instanceGroup.matrixWorld)
+        let xl = box.max.x-box.min.x;
+        let yl = box.max.y-box.min.y;
+        let zl = box.max.z-box.min.z;
+        this.loaded_mesh_interest[index] = xl*yl+xl*zl+yl*zl * matrix.length
+        this.loaded_mesh_invisible_time[index] = 0
+    }
+    addInsModel(index, matrix, geometry, material){
+        // console.log(matrix)
+        return
+        matrix.push([1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0]);
+        let matrix4List = [];
+        for(let j = 0; j < matrix.length; j++) {
+            let mat = matrix[j];
+            matrix4List.push(new Matrix4().set(
+                    mat[0], mat[1], mat[2], mat[3],
+                    mat[4], mat[5], mat[6], mat[7],
+                    mat[8], mat[9], mat[10], mat[11],
+                    0, 0, 0, 1));
+        }
+
+        let instance_mesh = processMesh(geometry, material, matrix4List);
+        instance_mesh.receiveShadow = true;
+        instance_mesh.castShadow = true;
+
+        instance_mesh.name = index.toString();
+        instance_mesh.applyMatrix4(this.instanceGroup.matrixWorld);
+        this.scene.add(instance_mesh);
+
+        // if(index===21){
+        //     var water = new Water(geometry,{
+        //         textureWidth: 512,
+        //         textureHeight: 512,
+        //         waterNormals: new TextureLoader().load('assets/water/waternormals.jpg',function(texture){
+        //             texture.wrapS = texture.wrapT = RepeatWrapping;
+        //         }),
+        //         alpha: 0.2,
+        //         waterColor: 0x66ccff,
+        //     })
+        //     this.instanceGroup.add(water)
+        //     this.waterList.push(water)
+        // }else{
+        //     this.instanceGroup.add(instance_mesh);
+        // }
+        this.loaded_mesh[index] = instance_mesh;
+
+        geometry.computeBoundingBox()
+        let box = geometry.boundingBox.clone().applyMatrix4(this.instanceGroup.matrixWorld)
         let xl = box.max.x-box.min.x;
         let yl = box.max.y-box.min.y;
         let zl = box.max.z-box.min.z;
