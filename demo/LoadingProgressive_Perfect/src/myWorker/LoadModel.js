@@ -1,4 +1,6 @@
-import { GLTFLoaderEx } from "../threeEx/GLTFLoaderEx";//import { GLTFLoaderEx } from '../three/examples/jsm/loaders/GLTFLoaderEx.js';//import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
+// import { GLTFLoaderEx } from "../threeEx/GLTFLoaderEx";//import { GLTFLoaderEx } from '../three/examples/jsm/loaders/GLTFLoaderEx.js';//import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
+import { GLTFLoader } from "../threeEx/GLTFLoader2";
+const GLTFLoaderEx=GLTFLoader
 // import JSZip from 'jszip'
 import JSZip from 'jszip';
 
@@ -8,7 +10,7 @@ import {
     LoadingManager,
     } from "three";//from '../three/build/three';
 
-export class LoadModel {//对一个构件的加载处理
+class LoadModel {//对一个构件的加载处理
   constructor(params) {
     this.crossDomain=params.crossDomain
     this.url=params.url
@@ -157,3 +159,4 @@ export class LoadModel {//对一个构件的加载处理
 
   }
 }
+export{LoadModel}

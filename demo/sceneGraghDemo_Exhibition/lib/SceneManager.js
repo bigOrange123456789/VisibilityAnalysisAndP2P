@@ -36,10 +36,7 @@ export class SceneManager {
                 if(!self.loadedModelList.includes(index))
                     self.loadedModelList.push(index) 
             }
-            
-            // console.log(matrixConfig[0]);//console.log(m1,meshIndex,matrixConfig,structdesc0)
             self.addInsModel(jsonDataAll, m1);
-            // self.addInsModel(matrix, mesh);
         })
         this.projectName = window.projectName;
         this.scene = window.scene;

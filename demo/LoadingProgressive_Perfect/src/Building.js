@@ -1,12 +1,18 @@
 import * as THREE from "three"
 import { Engine3D } from './main.js'//Engine3D.Building.
 // import {Test}from"./Building/Test.js"
+import{LoadZip}from"./LoadZip"
 export class Building{
     constructor(scene,camera,csm,cb,sampling){
+        let self=this
+        // this.loadZip2=new LoadZip((m1,meshIndex,matrixConfig,structdesc0,jsonDataAll)=>{
+        //     console.log(m1,meshIndex)
+        //     // self.addInsModel(jsonDataAll, m1);
+        // })
         this.sampling=sampling
         // this.config.path="http://"+this.config.path 
         document.getElementById("LoadProgress").innerHTML=""
-        let self=this
+        
         this.scene=scene
         this.csm=csm
         window.save=(data,name)=>{
@@ -385,6 +391,10 @@ export class Building{
         this.detection.receivePack("server")
         this.detection.request("zip")
         const self=this
+        if(this.loadZip2){
+            this.loadZip2.load([id]);
+            // return;
+        }
         this.loader.loadZip(
             id,
             zipLoader=>{

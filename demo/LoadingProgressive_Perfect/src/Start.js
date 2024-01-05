@@ -248,7 +248,7 @@ export class Start{
             this.config.camera.target.y,
             this.config.camera.target.z
         )
-        this.playerControl.mode.set("viewpoint")
+        this.playerControl.mode.set("viewpoint")  // "model"  "viewpoint"
         this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
         this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
 

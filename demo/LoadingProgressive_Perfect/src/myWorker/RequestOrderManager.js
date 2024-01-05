@@ -57,7 +57,7 @@ class  Stack{
         }
     }
 }
-export class RequestOrderManager{
+class RequestOrderManager{
     constructor(opt){//{loaded:[],stackSize:1000,waitNumberMax:100,request:null,crossDomain:crossDomain}
         var scope=this
         this.loaded={}//loaded中记录了已经被预先通过其它方式完成了加载（或者已经发出了请求）的数据包编号
@@ -70,7 +70,9 @@ export class RequestOrderManager{
         this.request=(pack_id,sceneName)=>{
             // console.log("test","assets/models/"+sceneName+"/"+pack_id+".zip")
             new LoadModel({
-                url:"assets/models/"+sceneName+"/"+pack_id+".zip",
+                // url:"assets/models/"+sceneName+"/"+pack_id+".zip",
+                url:"assets/"+sceneName+"/"+pack_id+".zip",
+                //"assets/space8Zip/"
                 meshIndex:pack_id,
                 finish_cb:(packId)=>{scope.endOneWaiting(packId)},
                 crossDomain:scope.crossDomain
@@ -110,3 +112,4 @@ export class RequestOrderManager{
             this._makeOneRequest()
     }
 }
+export{RequestOrderManager}
