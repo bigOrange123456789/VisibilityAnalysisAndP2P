@@ -57,7 +57,7 @@ class  Stack{
         }
     }
 }
-class RequestOrderManager{
+export class RequestOrderManager{
     constructor(opt){//{loaded:[],stackSize:1000,waitNumberMax:100,request:null,crossDomain:crossDomain}
         var scope=this
         this.loaded={}//loaded中记录了已经被预先通过其它方式完成了加载（或者已经发出了请求）的数据包编号
@@ -112,4 +112,3 @@ class RequestOrderManager{
             this._makeOneRequest()
     }
 }
-export{RequestOrderManager}

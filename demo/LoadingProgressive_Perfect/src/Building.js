@@ -3,12 +3,39 @@ import { Engine3D } from './main.js'//Engine3D.Building.
 // import {Test}from"./Building/Test.js"
 import{LoadZip}from"./LoadZip"
 export class Building{
+    initLoadZip2(){
+        let self=this
+        this.loadZip2=new LoadZip((m1,meshIndex,matrixConfig,structdesc0,jsonDataAll)=>{
+            // console.log(m1,meshIndex)
+            const id=meshIndex
+            const o=m1
+                // self.meshes_info[id].parsed=performance.now()//解析完成
+                // gltf.scene.traverse(o=>{
+                    // if(o instanceof THREE.Mesh){  
+                        // o.delay={
+                        //     load   :self.meshes_info[id].loaded   -self.meshes_info[id].request,  //加载延迟
+                        //     forward:self.meshes_info[id].forwarded-self.meshes_info[id].loaded,   //转发延迟
+                        //     parse  :self.meshes_info[id].parsed   -self.meshes_info[id].forwarded,//解析延迟
+                            
+                        //     parsed :self.meshes_info[id].parsed,//解析完成的时刻
+                        // }
+                        
+                        // o.LoadDelay   =self.meshes_info[id].loaded   -self.meshes_info[id].request
+                        // o.originType="centerServer"
+                        // if(!o.material.map)console.log(779)
+                        self.addMesh(id,o)
+                    // }
+                // }) 
+                if(true)setTimeout(()=>{
+                    if(self.buildMaterial)
+                    self.buildMaterial.loadTexture(id)
+                },500)  
+            // self.addInsModel(jsonDataAll, m1);
+        })
+    }
     constructor(scene,camera,csm,cb,sampling){
         let self=this
-        // this.loadZip2=new LoadZip((m1,meshIndex,matrixConfig,structdesc0,jsonDataAll)=>{
-        //     console.log(m1,meshIndex)
-        //     // self.addInsModel(jsonDataAll, m1);
-        // })
+        this.initLoadZip2()
         this.sampling=sampling
         // this.config.path="http://"+this.config.path 
         document.getElementById("LoadProgress").innerHTML=""
@@ -391,10 +418,10 @@ export class Building{
         this.detection.receivePack("server")
         this.detection.request("zip")
         const self=this
-        if(this.loadZip2){
-            this.loadZip2.load([id]);
-            // return;
-        }
+        // if(this.loadZip2){
+        //     this.loadZip2.load([id]);
+        //     // return;
+        // }
         this.loader.loadZip(
             id,
             zipLoader=>{
@@ -481,31 +508,37 @@ export class Building{
         // console.log(list)
         // for(let i=0;i<30;i++)this.loadZip(i)
         // return
-        const self=this;
-        window.list=list
-        const NUMBER=this.config.NUMBER?this.config.NUMBER:30//50//350//50//50
-        const TIME=this.config.TIME?this.config.TIME:120//0//100
-        window.NUMBER=NUMBER
-        window.TIME0=TIME
         
-        for(let i=0;i<NUMBER&&i<list.length;i++){
-            // if(!this.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第1批),构件编号"+list[i])
-            this.loadZip(list[i])
-        }
-        // if(!window.flag000){
-        //     console.log("完成第一批请求")
-        //     window.flag000=true
-        // }
-        setTimeout(()=>{
-            for(let i=NUMBER;i<list.length;i++){
-                // if(!self.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第2批),构件编号"+list[i])
-                self.loadZip(list[i])
+
+        if(this.loadZip2&&this.loadZip2.initDoubleFinish){
+            this.loadZip2.load(list);
+        }else{
+            const self=this;
+            window.list=list
+            const NUMBER=this.config.NUMBER?this.config.NUMBER:30//50//350//50//50
+            const TIME=this.config.TIME?this.config.TIME:120//0//100
+            window.NUMBER=NUMBER
+            window.TIME0=TIME
+            
+            for(let i=0;i<NUMBER&&i<list.length;i++){
+                // if(!this.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第1批),构件编号"+list[i])
+                this.loadZip(list[i])
             }
-            // if(!window.flag001){
-            //     console.log("完成第二批请求")
-            //     window.flag001=true
+            // if(!window.flag000){
+            //     console.log("完成第一批请求")
+            //     window.flag000=true
             // }
-        },TIME)
+            setTimeout(()=>{
+                for(let i=NUMBER;i<list.length;i++){
+                    // if(!self.meshes_info[list[i]])console.log("第"+(i+1)+"次请求(第2批),构件编号"+list[i])
+                    self.loadZip(list[i])
+                }
+                // if(!window.flag001){
+                //     console.log("完成第二批请求")
+                //     window.flag001=true
+                // }
+            },TIME)
+        }
     }
     loadJson(path,cb){
         console.log(path)

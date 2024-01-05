@@ -1,24 +1,31 @@
 import {
-    LoadingManager
+    LoadingManager,
+    Mesh
 } from "three";
 // import { GLTFLoaderEx } from "./threeEx/GLTFLoaderEx.js";
-import { GLTFLoader } from "./threeEx/GLTFLoader2";
-const GLTFLoaderEx=GLTFLoader
-
+// import { GLTFLoader } from "./threeEx/GLTFLoader2";
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
 import {CrossDomain} from './myWorker/CrossDomain.js';
 import {RequestOrderManager} from './myWorker/RequestOrderManager.js';
 // const loadSubZip3_worker0=new Worker("./myWorker/loadSubZip.js")
+import { DRACOLoader } from './myWorker/dracoLoader/DRACOLoader.js';
+
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('assets/textures/draco/');
+dracoLoader.setDecoderConfig({ type: "js" });
+dracoLoader.preload();
+
 export class LoadZip{
     sceneName="space8Zip"
-    type=1//0//2//1//2
+    type=2//0//2//1//2
     constructor(back){
         if(this.type==1){//单线程
             this._loadSubZip3_init_single(back)
             this.load=this._loadSubZip3_single
-        }else if(this.type==2){//双线程
+        } else if (this.type==2){//双线程
             this._loadSubZip3_init_double(back)
             this.load=this._loadSubZip3_double
-        } else if(this.type==0){//初始使用单线程 然后过渡到双线程
+        } else if (this.type==0){//初始使用单线程 然后过渡到双线程
             this._loadSubZip3_init_single(back)
             this.load=this._loadSubZip3_single
             
@@ -28,6 +35,8 @@ export class LoadZip{
         }
     }
     load(list){}
+
+    initDoubleFinish=false
     _loadSubZip3_init_double (back){
         console.log("双线程")
         const self=this
@@ -36,6 +45,7 @@ export class LoadZip{
         this._loadSubZip3_worker1=new Worker("./myWorker/loadSubZip.js")
         this._loadSubZip3_worker1.onmessage=ev=>{
             if(ev.data.first){
+                self.initDoubleFinish=true
                 self.load=self._loadSubZip3_double
                 console.log("double_init",Math.round(performance.now()-window.time0))
                 return
@@ -44,12 +54,27 @@ export class LoadZip{
             var structdesc0=ev.data.structdesc0
             var meshIndex=ev.data.meshIndex
             const manager = new LoadingManager();
-            var loader=new GLTFLoaderEx(manager)
+            var loader//=new GLTFLoader(manager)
+            ///////////////////////////////////////////
+            const useDraco=true//false//true
+            if(useDraco){
+                // THREE.Cache.enabled = true;
+                
+                loader = new GLTFLoader(manager);
+                
+                loader.setDRACOLoader(dracoLoader);
+            }else{
+                loader = new GLTFLoader(manager);
+            }
+            ///////////////////////////////////////////
             loader.parse( 
                 ev.data.myArray, 
                 "./",
                 gltf=>{
-                    var m1 = gltf.scene.children[0].children[0]
+                    var m1 = null//gltf.scene.children[0].children[0]
+                    gltf.scene.traverse(o=>{
+                        if(o instanceof Mesh){ m1=o }
+                    })
                     // console.log("double",Math.round(performance.now()-window.time0))
                     back(m1,meshIndex,matrixConfig,structdesc0,ev.data.jsonDataAll)
             })
@@ -84,7 +109,10 @@ export class LoadZip{
             var matrixConfig=opt.matrixConfig
             var structdesc0=opt.structdesc0
             var meshIndex=opt.meshIndex
-            var m1 = opt.glb.scene.children[0].children[0]
+            var m1 = null//opt.glb.scene.children[0].children[0]
+            opt.glb.scene.traverse(o=>{
+                if(o instanceof Mesh){ m1=o }
+            })
             // console.log("single",Math.round(performance.now()-window.time0))
             back(m1,meshIndex,matrixConfig,structdesc0,opt.jsonDataAll)
         }

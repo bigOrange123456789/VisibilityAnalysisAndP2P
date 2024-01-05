@@ -1,14 +1,18 @@
 // import { GLTFLoaderEx } from "../threeEx/GLTFLoaderEx";//import { GLTFLoaderEx } from '../three/examples/jsm/loaders/GLTFLoaderEx.js';//import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader'
-import { GLTFLoader } from "../threeEx/GLTFLoader2";
-const GLTFLoaderEx=GLTFLoader
+// import { GLTFLoader } from "../threeEx/GLTFLoader2";
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
+// import { Engine3D } from '../main.js'
+import { GLTFLoader } from './GLTFLoader'//
 // import JSZip from 'jszip'
 import JSZip from 'jszip';
-
+// import { Engine3D } from '../main.js'
 import {
     FileLoader,
     LoaderUtils,
     LoadingManager,
+    DefaultLoadingManager
     } from "three";//from '../three/build/three';
+import { DRACOLoader } from './dracoLoader/DRACOLoader.js';
 
 class LoadModel {//对一个构件的加载处理
   constructor(params) {
@@ -25,6 +29,7 @@ class LoadModel {//对一个构件的加载处理
     await this.loadZipFile()
     await this.fileToBlob()
     this.findFile()
+    // return
     this.runLoader()
   }
   request0(socket0,cb){//跨域访问请求
@@ -59,8 +64,7 @@ class LoadModel {//对一个构件的加载处理
       })
     }else{//同源访问请求
       return new Promise(resolve => {
-        const fileLoader = new FileLoader()
-        fileLoader
+        new FileLoader(DefaultLoadingManager)
           .setResponseType("arraybuffer")
           .load(
             this.url,
@@ -96,62 +100,104 @@ class LoadModel {//对一个构件的加载处理
     this.modelUrl = modelUrl1?modelUrl1:modelUrl2
     this.jsonUrl=Object.keys(this.fileMap).find(item => /\.(json)$/.test(item));
   }
-  runLoader(){
+  runLoader(){ 
     var scope=this
     const manager = new LoadingManager();//转换处理，传入的是后台返回的路径，需找到对应blob
     manager.setURLModifier(url => {
       return this.fileMap[url] ? this.fileMap[url] : url;
     })
-    this.gltfLoader = new GLTFLoaderEx(manager)
+    /////////////////////
+        const useDraco=true//false//true
+        if(useDraco){
+            // THREE.Cache.enabled = true;
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('assets/textures/draco/');
+            dracoLoader.setDecoderConfig({ type: "js" });
+            this.glbLoader = new GLTFLoader(manager);
+            dracoLoader.preload();
+            this.glbLoader.setDRACOLoader(dracoLoader);
+        }else{
+            this.glbLoader = new GLTFLoader(manager);
+        }
+    /////////////////////
+    this.gltfLoader = this.glbLoader//new GLTFLoader(manager)
+    // console.log("this.modelUrl",this.modelUrl)
+    // return
     // this.modelUrl="blob:assets/models/" +self.projectName +"/model" +index +".gltf"
     this.gltfLoader.load(this.modelUrl, (glb)=> {
       var myArray=this.gltfLoader.myArray
-      // console.log(myArray)
+      // console.log("myArray",myArray,glb)
+      // console.log("glb",glb)
       // return
-          
-      var loadingManager2 = new LoadingManager();
-			loadingManager2.setURLModifier(url => {
-        return this.fileMap[url] ? this.fileMap[url] : url;
-      })
-			new FileLoader(loadingManager2).load(
-        scope.jsonUrl,
-        data0=>{
-          var json0=JSON.parse(data0)
-          const jsonDataAll=json0
-          if(Array.isArray(json0)){
-            var matrixConfig={'0':[[],json0]}
-            var structdesc=[{'n':'0'}]
-            json0={
-              matrixConfig:matrixConfig,
-              structdesc0:structdesc
-            }
-          }
-          if(typeof(window)!=="undefined"){//单线程
-            // console.log("this.meshIndex",this.meshIndex)
-            if(window.loadSubZip3_worker_onmessage1)
-            window.loadSubZip3_worker_onmessage1({
+      if(!scope.jsonUrl){
+        if(typeof(window)!=="undefined"){//单线程
+          // console.log("this.meshIndex",this.meshIndex)
+          if(window.loadSubZip3_worker_onmessage1)
+          window.loadSubZip3_worker_onmessage1({
+            "meshIndex":this.meshIndex,
+            "myArray":myArray,
+            // "matrixConfig":json0.matrixConfig,//matrixConfig,
+            // "structdesc0":json0.structdesc0,//structdesc0
+            "glb":glb,
+
+            // "jsonDataAll":jsonDataAll
+          }) 
+        }else{//双线程
+            postMessage({
               "meshIndex":this.meshIndex,
               "myArray":myArray,
-              "matrixConfig":json0.matrixConfig,//matrixConfig,
-              "structdesc0":json0.structdesc0,//structdesc0
-              "glb":glb,
+              // "matrixConfig":json0.matrixConfig,//matrixConfig,
+              // "structdesc0":json0.structdesc0,//structdesc0
 
-              "jsonDataAll":jsonDataAll
+              // "jsonDataAll":jsonDataAll
             }) 
-          }else{//双线程
-              postMessage({
+        }
+      } else{
+        var loadingManager2 = new LoadingManager();
+        loadingManager2.setURLModifier(url => {
+          return this.fileMap[url] ? this.fileMap[url] : url;
+        })
+        new FileLoader(loadingManager2).load(
+          scope.jsonUrl,
+          data0=>{
+            var json0=JSON.parse(data0)
+            const jsonDataAll=json0
+            if(Array.isArray(json0)){
+              var matrixConfig={'0':[[],json0]}
+              var structdesc=[{'n':'0'}]
+              json0={
+                matrixConfig:matrixConfig,
+                structdesc0:structdesc
+              }
+            }
+            if(typeof(window)!=="undefined"){//单线程
+              // console.log("this.meshIndex",this.meshIndex)
+              if(window.loadSubZip3_worker_onmessage1)
+              window.loadSubZip3_worker_onmessage1({
                 "meshIndex":this.meshIndex,
                 "myArray":myArray,
                 "matrixConfig":json0.matrixConfig,//matrixConfig,
                 "structdesc0":json0.structdesc0,//structdesc0
+                "glb":glb,
 
                 "jsonDataAll":jsonDataAll
               }) 
+            }else{//双线程
+                postMessage({
+                  "meshIndex":this.meshIndex,
+                  "myArray":myArray,
+                  "matrixConfig":json0.matrixConfig,//matrixConfig,
+                  "structdesc0":json0.structdesc0,//structdesc0
+
+                  "jsonDataAll":jsonDataAll
+                }) 
+            }
+            
+            if(scope.finish_cb)scope.finish_cb(this.meshIndex)
           }
-           
-          if(scope.finish_cb)scope.finish_cb(this.meshIndex)
-        }
-      )
+        )
+      }
+      
 
     })
 
