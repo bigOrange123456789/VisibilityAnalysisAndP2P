@@ -94,22 +94,23 @@ export class Start{
 
         setTimeout(()=>{
             self.initBackground()
+            const scene=new THREE.Scene()
+            scene.add(
+                new Engine3D.PathLine({
+                    path:[],
+                    camera:self.camera,
+                    delayTime:500
+                })
+            )
+            scene.add(this.scene)
+            this.miniMap = new Engine3D.MiniMap({
+                target: self.camera,//center,//this.player,
+                scene: scene,//this.scene,
+                mapSize: 100*12,
+                mapRenderSize: 160,
+            });
         },2000)
-        const scene=new THREE.Scene()
-        scene.add(
-            new Engine3D.PathLine({
-                path:[],
-                camera:this.camera,
-                delayTime:500
-              })
-          )
-        scene.add(this.scene)
-        this.miniMap = new Engine3D.MiniMap({
-            target: this.camera,//center,//this.player,
-            scene: scene,//this.scene,
-            mapSize: 100*12,
-            mapRenderSize: 160,
-          });
+        
 
 
           
