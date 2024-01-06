@@ -70,6 +70,9 @@ export class Start{
                     // if(typeof AvatarManager!=="undefined")
                     // for(let i=0;i<2;i++)
                     // self.TreeManager.init(data) 
+                    setTimeout(()=>{
+                        if(window.csm)window.csm.MyUpdate()
+                    },6000)
                 }
             )
         },4000)
@@ -255,7 +258,7 @@ export class Start{
         this.csm = new THREE.CSM({
             fade: true,
             maxFar: this.camera.far,
-            cascades: 4,//4,
+            cascades: 3,//4,//4,
             shadowMapSize: 1024,//1024,
             lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
@@ -266,6 +269,17 @@ export class Start{
             mode: 'practical',
             lightMargin: 200
         });
+        for(let i=0;i<this.csm.lights.length;i++){
+            const light=this.csm.lights[i]
+            light.shadow.autoUpdate=false
+        }
+        const csm=this.csm
+        csm.MyUpdate=()=>{
+            for(let i=0;i<csm.lights.length;i++){
+                const light=csm.lights[i]
+                light.shadow.needsUpdate=true
+            }
+        }
         window.csm=this.csm
         //this.csm.lightIntensity = 1000;
         //let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);

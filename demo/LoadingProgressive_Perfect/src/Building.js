@@ -411,6 +411,7 @@ export class Building{
         mesh.name=meshOld.name
         this.detection.receiveMesh(mesh)   
         // console.log(mesh,id)
+        if(window.csm)window.csm.MyUpdate()
     }
     loadZip(id,cb){
         // this.loadGLB(id,cb)

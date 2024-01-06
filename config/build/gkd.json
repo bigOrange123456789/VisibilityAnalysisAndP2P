@@ -39,7 +39,7 @@
         "updateColor":false,
         "instanceUse":true,
         "useIndirectMaterial":false,
-        "waterCidList":[175,180],
+        "waterCidList":[175],
         "crossOriginSocket":[
         ]
     },
