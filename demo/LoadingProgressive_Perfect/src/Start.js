@@ -40,7 +40,7 @@ export class Start{
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
         this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
-        console.log(this.unrealBloom)
+        // console.log(this.unrealBloom)
 
         self.init()
 
@@ -56,20 +56,24 @@ export class Start{
         // if(false)
         this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        this.loadJson(
-            "LoadingProgressive/pos.json",
-            data=>{
-                new AvatarManager(self.scene,self.camera,null)//new AvatarManager(self.scene,self.camera,data)
-                
-                // setTimeout(()=>{
-                //     console.log("data",data)
-                new TreeManager(self.scene).init(data) 
-                // })
-                // if(typeof AvatarManager!=="undefined")
-                // for(let i=0;i<2;i++)
-                // self.TreeManager.init(data) 
-            }
-        )
+        setTimeout(()=>{
+            // new TreeManager(_self.sceneEx).init({}) 
+            self.loadJson(
+                "LoadingProgressive/pos.json",
+                data=>{
+                    new AvatarManager(self.scene,self.camera,null)//new AvatarManager(self.scene,self.camera,data)
+                    
+                    // setTimeout(()=>{
+                    //     console.log("data",data)
+                    new TreeManager(self.scene).init(data) 
+                    // })
+                    // if(typeof AvatarManager!=="undefined")
+                    // for(let i=0;i<2;i++)
+                    // self.TreeManager.init(data) 
+                }
+            )
+        },4000)
+        
         // self.TreeManager = new TreeManager(self.scene,data) 
           
         this.initCSM();
@@ -85,44 +89,9 @@ export class Start{
         // }
         // new Test2(this.scene)
 
-        
-        // this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
-        //     ({ envMap }) => {
-        //       self.scene.background = envMap
-        //       self.scene.backgroundIntensity=0.8
-        //     }
-        //   )
-        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
-            ({ envMap }) => {
-              self.scene.background = envMap
-              self.scene.backgroundIntensity=0.8
-
-              self.scene.backgroundIntensity=0.4
-              if(self.unrealBloom)if(self.unrealBloom.bloomPass)
-              self.unrealBloom.bloomPass.strength=0.55
-
-            //   self.scene.environment = envMap
-            //   self.scene.backgroundIntensity=0//=0.1
-            }
-        )
-        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
-        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
-            ({ envMap }) => {
-                // envMap.flipY=true 
-              self.scene.environment = envMap
-            //   self.scene.background = envMap//test
-            //   self.scene.backgroundIntensity=0.1
-            //   self.unrealBloom.bloomPass.strength=1.5
-              window.scene=self.scene
-            }
-        )
-
-        // setTimeout(()=>{
-            // new Engine3D.PathPlanning()
-        // },3000)
-        
-        // const center=new THREE.Object3D()
-        // center.position.set( 126.06182686202473,  21,  161.6807662956592)
+        setTimeout(()=>{
+            self.initBackground()
+        },2000)
         const scene=new THREE.Scene()
         scene.add(
             new Engine3D.PathLine({
@@ -150,6 +119,33 @@ export class Start{
         //   });
           
         
+    }
+    initBackground(){
+        const self=this
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
+            ({ envMap }) => {
+              self.scene.background = envMap
+              self.scene.backgroundIntensity=0.8
+
+              self.scene.backgroundIntensity=0.4
+              if(self.unrealBloom)if(self.unrealBloom.bloomPass)
+              self.unrealBloom.bloomPass.strength=0.55
+
+            //   self.scene.environment = envMap
+            //   self.scene.backgroundIntensity=0//=0.1
+            }
+        )
+        Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/evn.jpg',this.renderer).then(
+        //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
+            ({ envMap }) => {
+                // envMap.flipY=true 
+              self.scene.environment = envMap
+            //   self.scene.background = envMap//test
+            //   self.scene.backgroundIntensity=0.1
+            //   self.unrealBloom.bloomPass.strength=1.5
+              window.scene=self.scene
+            }
+        )
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -251,30 +247,6 @@ export class Start{
         this.playerControl.mode.set("viewpoint")  // "model"  "viewpoint"
         this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
         this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
-
-        // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
-        // window.orbitControl=this.orbitControl
-        // this.orbitControl.target.set(
-        //     -340.67888298324596, 
-        //     8.573750000000038,  
-        //     199.38166396137652
-        // )
-        // this.camera.lookAt(
-        //     -340.67888298324596, 
-        //     8.573750000000038,  
-        //     199.38166396137652
-        // )
-
-        // this.playerControl.target.set(
-        //     this.config.camera.target.x,
-        //     this.config.camera.target.y,
-        //     this.config.camera.target.z
-        // )
-        // this.orbitControl.target = camera_tar[id].clone()
-
-        
-
-
     }
 
     initCSM() {
@@ -301,23 +273,6 @@ export class Start{
         //mesh.receiveShadow = true;
 
         //this.scene.add(mesh);();
-    }
-    getCubeMapTexture_old(path) {
-        return new Promise((resolve, reject) => {//'.exr'
-            new THREE.TextureLoader()
-            //.setDataType(THREE.FloatType)
-            .load(
-                path,
-                texture => {
-
-                const envMap =texture
-
-                resolve({ envMap })
-                },
-                undefined,
-                reject
-            )
-        })
     }
     getCubeMapHDR(path) {
         var scope = this

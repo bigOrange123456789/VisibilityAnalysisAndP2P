@@ -120,7 +120,9 @@ export class Building{
                 parentGroup:this.parentGroup
             })
         // new Test(this)
-        this.addWater()
+        setTimeout(() => {
+            self.addWater()
+        },6000);
     }
     addWater(){
         const geometry = new THREE.PlaneGeometry( 1, 1 );

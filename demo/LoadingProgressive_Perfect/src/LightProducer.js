@@ -9,7 +9,11 @@ class LightProducer{
         this.object.add(this.objectMove)
         this.targetList=[]
         this.init(scene)//this.test()
-        this.add_lensflares()
+        const self=this
+        setTimeout(()=>{
+            self.add_lensflares()
+        },4000)
+        
 
         // this.setPos(-319.59561744433125,  16,  323.70333357412926)
         // this.objectMove.position.set(-319.59561744433125,  16,  323.70333357412926)
