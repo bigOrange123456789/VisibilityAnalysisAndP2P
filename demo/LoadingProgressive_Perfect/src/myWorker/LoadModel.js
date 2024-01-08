@@ -2,7 +2,7 @@
 // import { GLTFLoader } from "../threeEx/GLTFLoader2";
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
 // import { Engine3D } from '../main.js'
-import { GLTFLoader } from './GLTFLoaderSim'//
+import { GLTFLoader } from './GLTFLoaderSim'//import { GLTFLoader } from './GLTFLoader'// 
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
 import { CoderDecoder } from './CoderDecoder.js';
 // import JSZip from 'jszip'

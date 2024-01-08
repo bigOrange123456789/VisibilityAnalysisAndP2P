@@ -383,6 +383,7 @@ class GLTFLoader extends Loader {
 			extensions[ plugin.name ] = true;
 
 		}
+		
 
 		const myFlag=true
 		if ( json.extensionsUsed&&myFlag ) {
@@ -423,6 +424,7 @@ class GLTFLoader extends Loader {
 			}
 
 		}
+		
 
 		if(myFlag)parser.setExtensions( extensions );
 		parser.setPlugins( plugins );
@@ -2535,10 +2537,11 @@ class GLTFParser {
 
 		Promise.all( this._invokeAll( function ( ext ) {
 
+			
 			return ext.beforeRoot && ext.beforeRoot();
 
 		} ) ).then( function () {
-
+			
 			return Promise.all( [
 
 				parser.getDependencies( 'scene' ),
@@ -2563,12 +2566,13 @@ class GLTFParser {
 
 			assignExtrasToUserData( result, json );
 
+			
 			return Promise.all( parser._invokeAll( function ( ext ) {
 
 				return ext.afterRoot && ext.afterRoot( result );
 
 			} ) ).then( function () {
-
+				
 				onLoad( result );
 
 			} );
@@ -2731,7 +2735,7 @@ class GLTFParser {
 	 * @return {Promise<Object3D|Material|THREE.Texture|AnimationClip|ArrayBuffer|Object>}
 	 */
 	getDependency( type, index ) {
-
+		// console.log("type",type)
 		const cacheKey = type + ':' + index;
 		let dependency = this.cache.get( cacheKey );
 
@@ -2746,6 +2750,11 @@ class GLTFParser {
 				case 'node':
 					dependency = this._invokeOne( function ( ext ) {
 
+						// console.log(ext.loadNode && ext.loadNode( index ),ext.loadNode )
+						// if(ext.loadNode)return ext.loadNode( index );//123456
+						// else 
+						// 	return true//undefined
+						console.log("ext",ext)
 						return ext.loadNode && ext.loadNode( index );
 
 					} );
@@ -4230,6 +4239,7 @@ class GLTFParser {
 
 		const pending = [];
 
+		
 		for ( let i = 0, il = nodeIds.length; i < il; i ++ ) {
 
 			pending.push( parser.getDependency( 'node', nodeIds[ i ] ) );
@@ -4238,6 +4248,7 @@ class GLTFParser {
 
 		return Promise.all( pending ).then( function ( nodes ) {
 
+			// return;//123456
 			for ( let i = 0, il = nodes.length; i < il; i ++ ) {
 
 				scene.add( nodes[ i ] );
