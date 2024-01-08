@@ -2,7 +2,9 @@
 // import { GLTFLoader } from "../threeEx/GLTFLoader2";
 // import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
 // import { Engine3D } from '../main.js'
-import { GLTFLoader } from './GLTFLoader'//
+import { GLTFLoader } from './GLTFLoaderSim'//
+// import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'//
+import { CoderDecoder } from './CoderDecoder.js';
 // import JSZip from 'jszip'
 import JSZip from 'jszip';
 // import { Engine3D } from '../main.js'
@@ -146,6 +148,7 @@ class LoadModel {//对一个构件的加载处理
             postMessage({
               "meshIndex":this.meshIndex,
               "myArray":myArray,
+              "code":CoderDecoder.encoderGltf(glb)
               // "matrixConfig":json0.matrixConfig,//matrixConfig,
               // "structdesc0":json0.structdesc0,//structdesc0
 

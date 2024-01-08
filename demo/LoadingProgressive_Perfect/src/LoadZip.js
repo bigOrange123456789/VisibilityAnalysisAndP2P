@@ -9,7 +9,7 @@ import {CrossDomain} from './myWorker/CrossDomain.js';
 import {RequestOrderManager} from './myWorker/RequestOrderManager.js';
 // const loadSubZip3_worker0=new Worker("./myWorker/loadSubZip.js")
 import { DRACOLoader } from './myWorker/dracoLoader/DRACOLoader.js';
-
+import { CoderDecoder } from './myWorker/CoderDecoder.js';
 const dracoLoader = new DRACOLoader();
 dracoLoader.setDecoderPath('assets/textures/draco/');
 dracoLoader.setDecoderConfig({ type: "js" });
@@ -67,17 +67,29 @@ export class LoadZip{
                 loader = new GLTFLoader(manager);
             }
             ///////////////////////////////////////////
-            loader.parse( 
-                ev.data.myArray, 
-                "./",
-                gltf=>{
-                    var m1 = null//gltf.scene.children[0].children[0]
-                    gltf.scene.traverse(o=>{
-                        if(o instanceof Mesh){ m1=o }
-                    })
-                    // console.log("double",Math.round(performance.now()-window.time0))
-                    back(m1,meshIndex,matrixConfig,structdesc0,ev.data.jsonDataAll)
-            })
+            
+            if(false&&ev.data.code){
+                // console.log(CoderDecoder.decoder(ev.data.code))
+                back(
+                    CoderDecoder.decoder(ev.data.code),//m1,
+                    meshIndex,
+                    matrixConfig,
+                    structdesc0,
+                    ev.data.jsonDataAll
+                )
+            }else{
+                loader.parse( 
+                    ev.data.myArray, 
+                    "./",
+                    gltf=>{
+                        var m1 = null//gltf.scene.children[0].children[0]
+                        gltf.scene.traverse(o=>{
+                            if(o instanceof Mesh){ m1=o }
+                        })
+                        // console.log("double",Math.round(performance.now()-window.time0))
+                        back(m1,meshIndex,matrixConfig,structdesc0,ev.data.jsonDataAll)
+                })
+            }
         }
         this._loadSubZip3_worker1.postMessage({//开始请求
             type:"start",

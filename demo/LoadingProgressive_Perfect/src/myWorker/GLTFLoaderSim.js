@@ -228,7 +228,7 @@ class GLTFLoader extends Loader {
 				scope.myArray=data
 				onLoad( null );
 				scope.manager.itemEnd( url );
-				// return
+				return
 
 				scope.parse( data, resourcePath, function ( gltf ) {
 
@@ -306,7 +306,6 @@ class GLTFLoader extends Loader {
 	parse( data, path, onLoad, onError ) {
 
 		this.myArray=data
-		
 		let json;
 		const extensions = {};
 		const plugins = {};
@@ -364,7 +363,6 @@ class GLTFLoader extends Loader {
 			meshoptDecoder: this.meshoptDecoder
 
 		} );
-		
 
 		parser.fileLoader.setRequestHeader( this.requestHeader );
 
@@ -384,8 +382,7 @@ class GLTFLoader extends Loader {
 
 		}
 
-		const myFlag=true
-		if ( json.extensionsUsed&&myFlag ) {
+		if ( json.extensionsUsed ) {
 
 			for ( let i = 0; i < json.extensionsUsed.length; ++ i ) {
 
@@ -424,7 +421,7 @@ class GLTFLoader extends Loader {
 
 		}
 
-		if(myFlag)parser.setExtensions( extensions );
+		parser.setExtensions( extensions );
 		parser.setPlugins( plugins );
 		parser.parse( onLoad, onError );
 
