@@ -1,6 +1,5 @@
 #include"iostream"
 using namespace std;
-int main(void){
+void say_hello(){
     cout<<"say hello world gakki"<<endl;
-    return 0;
 }
