@@ -1,0 +1,191 @@
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import {IndirectMaterial} from "./IndirectMaterial"
+import {UI} from "./UI"
+import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import {Communication} from "./Communication"
+import {Light} from "./Light"
+class Loader{
+	uniforms={
+		dGI: { value: true },
+		probeIrradiance: {value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
+		probeDistance:{value: null}, // probeDistance: { type: 't', value: null },
+		
+		rtaoBufferd: { value: null },
+		useRtao: { value: true ,value0:true},
+
+		GBufferd: { value: true },
+		screenWidth: { value: window.innerWidth },
+		screenHeight: { value: window.innerHeight },
+	}
+    constructor(){
+		this.initScene()
+		window.camera=this.camera
+		
+		this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
+
+		this.models = []
+		const self=this
+		const ui=new UI({
+			renderer:this.renderer,
+			camera:this.camera,
+			scene:this.scene,
+			orbitControl:this.orbitControl
+		})
+		const light=new Light()
+		
+		this.resize  = this.resize.bind(self)
+		this.animate = this.animate.bind(self)
+
+		const rtxgiNetwork = new Communication(self.camera,ui,light,this.uniforms);
+		rtxgiNetwork.onready=()=>{
+				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,this.uniforms)//initGui(rtxgiNetwork);//
+				self.updateCamera(rtxgiNetwork)
+				self.loadRoom(rtxgiNetwork,light,self.models)
+				light.init(rtxgiNetwork,self.scene)//initLight();
+					
+				window.onresize = self.resize;
+				self.rtxgiNetwork=rtxgiNetwork
+				self.animate()
+		}
+    }
+	loadRoom(rtxgiNetwork,light,models){
+		/*Directional Light y offset*/
+		var directionalYOffset = 15.0;
+		const self=this
+		//scene parse
+		var filestr = rtxgiNetwork.sceneName;
+		var sptr = filestr.split('.'); 
+		var folder = sptr[0];
+		var sUrl = 'CloudBake/' + folder + '/' + filestr;
+		//   sUrl='CloudBack/Sponza/Sponza.glb';
+		//scene loader
+		const modelLoader = new GLTFLoader()
+		
+		modelLoader.load(sUrl, function(gltf) {
+			gltf.scene.traverse(function(node) {
+				if (node.isMesh) {
+					// console.log(node.material)
+					node.geometry.computeVertexNormals()
+					node.castShadow = true
+					node.receiveShadow = true
+					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork,self.uniforms)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
+					node.litMaterial = node.material
+					// console.log(node.material)
+					window.material=indirectMaterial
+					node.diffuseMaterial = 
+						new THREE.MeshStandardMaterial({map:node.material.map,color:node.material.color})
+						node.material
+					node.indirectMaterial = indirectMaterial//node.material//
+					// console.log(node.diffuseMaterial,"node.diffuseMaterial")
+					// node.diffuseMaterial.onBeforeCompile = function ( shader ) {
+					// 	for(let tag in indirectMaterial.uniforms){
+					// 		shader.uniforms[tag]=indirectMaterial.uniforms[tag]
+					// 	}
+					// 	shader.vertexShader=indirectMaterial.vertexShader
+					// 	shader.fragmentShader=indirectMaterial.fragmentShader
+						
+					// }
+					// node.material=node.indirectMaterial
+					models.push(node)
+					  
+				}
+			})
+			self.scene.add(gltf.scene)
+			/*reset shadowMap and directionalLight*/
+			if(rtxgiNetwork.directionalLightCt == 1){
+				const sceneBox = new THREE.Box3().expandByObject(gltf.scene);
+				let offsetX = (sceneBox.min.x + sceneBox.max.x) / 2.0;
+				let offsetZ = (sceneBox.min.z + sceneBox.max.z) / 2.0;
+				light.directionalLightGroup[0].position.set(offsetX, sceneBox.max.y + directionalYOffset, offsetZ);
+			}
+		})
+	}
+	initScene(){
+		this.renderer = new THREE.WebGLRenderer({ antialias: true })
+        this.renderer.setPixelRatio(window.devicePixelRatio)
+		this.renderer.setSize(window.innerWidth, window.innerHeight)
+		//告诉渲染器需要阴影效果
+		this.renderer.shadowMap.enabled = true
+		this.renderer.shadowMapSoft = true;
+		this.renderer.setClearColor(0xcccccc)
+		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
+		this.renderer.shadowMap.type = THREE.VSMShadowMap;
+		this.renderer.shadowMap.autoUpdate = true;
+		this.renderer.tonemapping = THREE.NoToneMapping;
+		this.renderer.setScissorTest = true;
+		this.renderer.outputEncoding = THREE.sRGBEncoding;
+		document.body.appendChild(this.renderer.domElement)
+		
+		this.camera = new THREE.PerspectiveCamera(
+			50,
+			window.innerWidth / window.innerHeight,
+			0.1,
+			100000
+		)
+		this.scene= new THREE.Scene()
+		//////////////////////////////////////
+		this.litRenderTarget = new THREE.WebGLRenderTarget(
+			window.innerWidth,
+			window.innerHeight,
+			{
+			minFilter: THREE.NearestFilter,
+			magFilter: THREE.NearestFilter,
+			format: THREE.RGBAFormat,
+			type: THREE.FloatType
+			}
+		)
+		this.uniforms.GBufferd.value = this.litRenderTarget.texture;
+    }
+	updateCamera(rtxgiNetwork){
+		this.camera.fov=rtxgiNetwork.cameraFov
+		this.camera.updateProjectionMatrix ()
+		this.camera.position.x = rtxgiNetwork.cameraPosition.x;
+		this.camera.position.y = rtxgiNetwork.cameraPosition.y;
+		this.camera.position.z = rtxgiNetwork.cameraPosition.z;
+
+		this.camera.position.set(6.265035706784675,  5.205148632325065,  -0.7813622315003345)
+		this.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
+	}
+	render(){
+		this.uniforms.screenWidth.value = this.renderer.domElement.width;
+		this.uniforms.screenHeight.value = this.renderer.domElement.height;
+
+		const models=this.models
+		const renderer=this.renderer
+		window.renderer=renderer
+		const scene=this.scene
+		const camera=this.camera
+		const litRenderTarget=this.litRenderTarget
+
+		for (var i = 0; i < models.length; i++) {
+			models[i].material = models[i].diffuseMaterial
+		}
+		renderer.setRenderTarget(litRenderTarget)
+		renderer.render(scene, camera)
+		
+		for (var i = 0; i < models.length; i++) {
+			models[i].material = models[i].indirectMaterial//models[i].indirectShader;
+		}
+		renderer.setRenderTarget(null)
+		renderer.render(scene, camera)
+	}
+    animate(){
+		if(this.rtxgiNetwork.isDescTouch)this.render()
+        requestAnimationFrame(this.animate)
+    }
+    resize(){
+		const renderer=this.renderer
+		const camera=this.camera
+		
+		camera.aspect = window.innerWidth / window.innerHeight
+		camera.updateProjectionMatrix()
+		renderer.setSize(window.innerWidth, window.innerHeight)
+		this.litRenderTarget.setSize(window.innerWidth, window.innerHeight)
+		this.render()
+    }
+}
+document.addEventListener('DOMContentLoaded', () => {
+    new Loader(document.body)
+})
+// export{THREE}
