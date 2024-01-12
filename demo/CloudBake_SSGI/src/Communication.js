@@ -111,7 +111,7 @@ export class Communication extends RTXGINetwork{
         })
     }
     syncClientCameraToServer_test(){
-        console.log("update state")
+        // console.log("update state")
         const camera=this.camera
         const rtxgiNetwork=this
         var cameraMatrix = new THREE.Matrix4();

@@ -5,7 +5,60 @@ import {UI} from "./UI"
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {Communication} from "./Communication"
 import {Light} from "./Light"
+// import config_sh from '../config/sh.json';
+// console.log("config_sh",config_sh)
+window.loadJson=(path,cb)=>{
+	if(!path)path="./CloudBake/sh.json"
+	var xhr = new XMLHttpRequest()
+	xhr.open('GET', path, true)
+	xhr.send()
+	xhr.onreadystatechange = ()=> {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			var json_data = JSON.parse(xhr.responseText)
+			console.log("json_data:",json_data)
+			if(cb)cb(json_data)
+		}
+	}
+}
 class Loader{
+	SSGITestPram={
+		width: 1280,
+		height: 720,
+		camera:{//fov , aspect , near , far 
+			fov:60,
+			near:0.1,
+			far:512,
+
+			pos : [-0.5, 5.0, 3.5],
+			rot : [-15, 120, 0],
+			// mat : [
+			// 	-0.5, 		0.224144, 	-0.836516, 	0, 
+			// 	0, 			0.965926, 	0.258819, 	0, 
+			// 	0.866025, 	0.12941, 	-0.482963, 	0, 
+			// 	3.28109, 	-4.48877, 	-2.56621, 	1
+			// ],
+			mat:[
+				-0.5, 7.45058e-09, 0.866025, -0, 
+				0.224144, 0.965926, 0.12941, 0, 
+				-0.836516, 0.258819, -0.482963, 0, 
+				0.5, 5, -3.5, 1
+			],
+			matrix:[
+				0.5, 		7.45058e-09, -0.866025, -0, 
+				-0.224144, 	0.965926, 	 -0.12941, 0, 
+				0.836516, 	0.258819, 	 0.482963, 0, 
+				-0.5, 		5, 			 3.5, 1
+			],
+			//-0.5, 0.224144, -0.836516, 0, 0, 0.965926, 0.258819, 0, 0.866025, 0.12941, -0.482963, 0, 3.28109, -4.48877, -2.56621, 1
+			mat3:[
+				0.9899494936611666, 6.938893903907228e-18, 0.1414213562373095, 0, 
+				0.11547005383792514, 0.5773502691896258, -0.808290376865476, 0, 
+				-0.08164965809277261,0.8164965809277259,0.5715476066494083,0,
+				-0.5				,5.0			   ,3.5				  , 1
+			],
+			flipY:true,
+		}
+	}
 	uniforms={
 		dGI: { value: true },
 		probeIrradiance: {value: null}, //IndirectMaterial.prototype.probeIrradiance0//null 
@@ -19,9 +72,11 @@ class Loader{
 		screenHeight: { value: window.innerHeight },
 	}
     constructor(){
+		window.SSGITestPram=this.SSGITestPram
 		this.initScene()
 		window.camera=this.camera
 		
+		if(!this.SSGITestPram)
 		this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
 
 		this.models = []
@@ -104,25 +159,53 @@ class Loader{
 	initScene(){
 		this.renderer = new THREE.WebGLRenderer({ antialias: true })
         this.renderer.setPixelRatio(window.devicePixelRatio)
-		this.renderer.setSize(window.innerWidth, window.innerHeight)
+		if(this.SSGITestPram)
+			this.renderer.setSize(this.SSGITestPram.width, this.SSGITestPram.height)
+		else 
+			this.renderer.setSize(window.innerWidth, window.innerHeight)
 		//告诉渲染器需要阴影效果
-		this.renderer.shadowMap.enabled = true
-		this.renderer.shadowMapSoft = true;
+		if(!this.SSGITestPram){
+			this.renderer.shadowMap.enabled = true
+			this.renderer.shadowMapSoft = true;
+			this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
+			this.renderer.shadowMap.type = THREE.VSMShadowMap;
+			this.renderer.shadowMap.autoUpdate = true;
+		}
 		this.renderer.setClearColor(0xcccccc)
-		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
-		this.renderer.shadowMap.type = THREE.VSMShadowMap;
-		this.renderer.shadowMap.autoUpdate = true;
+		
+
 		this.renderer.tonemapping = THREE.NoToneMapping;
 		this.renderer.setScissorTest = true;
 		this.renderer.outputEncoding = THREE.sRGBEncoding;
 		document.body.appendChild(this.renderer.domElement)
+		if(this.SSGITestPram){
+			this.camera = new THREE.PerspectiveCamera(
+				this.SSGITestPram.camera.fov,
+				this.SSGITestPram.width/ this.SSGITestPram.height,
+				this.SSGITestPram.camera.near,
+				this.SSGITestPram.camera.far
+			)
+			// this.camera.position.set(
+			// 	this.SSGITestPram.camera.pos[0],  
+			// 	this.SSGITestPram.camera.pos[1],  
+			// 	this.SSGITestPram.camera.pos[2])
+			// // this.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
+			// this.camera.rotation.set(
+			// 	this.SSGITestPram.camera.rot[0]/180,  
+			// 	this.SSGITestPram.camera.rot[1]/180,  
+			// 	this.SSGITestPram.camera.rot[2]/180)
+			const m=new THREE.Matrix4()
+			m.elements = this.SSGITestPram.camera.matrix
+			this.camera.applyMatrix4(m)
+			console.log(this.camera.rotation.x,this.camera.rotation.y,this.camera.rotation.z)
+		}else
+			this.camera = new THREE.PerspectiveCamera(
+				50,
+				window.innerWidth / window.innerHeight,
+				0.1,
+				100000
+			)
 		
-		this.camera = new THREE.PerspectiveCamera(
-			50,
-			window.innerWidth / window.innerHeight,
-			0.1,
-			100000
-		)
 		this.scene= new THREE.Scene()
 		//////////////////////////////////////
 		this.litRenderTarget = new THREE.WebGLRenderTarget(
@@ -138,6 +221,7 @@ class Loader{
 		this.uniforms.GBufferd.value = this.litRenderTarget.texture;
     }
 	updateCamera(rtxgiNetwork){
+		if(this.SSGITestPram)return
 		this.camera.fov=rtxgiNetwork.cameraFov
 		this.camera.updateProjectionMatrix ()
 		this.camera.position.x = rtxgiNetwork.cameraPosition.x;
@@ -148,6 +232,14 @@ class Loader{
 		this.camera.rotation.set( -1.7197971157282994,  0.87205804959785,  1.7643994826736955)
 	}
 	render(){
+		if(this.SSGITestPram){
+			for (var i = 0; i < this.models.length; i++) {
+				this.models[i].material = this.models[i].diffuseMaterial
+			}
+			this.renderer.setRenderTarget(null)
+			this.renderer.render(this.scene, this.camera)
+			return
+		}
 		this.uniforms.screenWidth.value = this.renderer.domElement.width;
 		this.uniforms.screenHeight.value = this.renderer.domElement.height;
 

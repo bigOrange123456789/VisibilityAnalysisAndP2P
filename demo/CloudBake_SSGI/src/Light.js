@@ -37,6 +37,9 @@ export class Light{
           window.directionalLight=directionalLight
           directionalLight.position.set( -0.484151390183456,  26.43546636346798,  -0.3095244287641208)
           directionalLight.intensity=1.8
+          if(window.SSGITestPram){
+            directionalLight.castShadow = false
+          }
           
           scene.add(directionalLight)
           // scene.add(directionalLight.target)
@@ -49,8 +52,10 @@ export class Light{
         /*point light*/
           for(let i = 0; i < rtxgiNetwork.pointLightCt; i++){
               let pointLight = new THREE.PointLight('#ffffff');
-              if(i==0)pointLight = new THREE.PointLight('#ff0010');
-              if(i==1)pointLight = new THREE.PointLight('#00ff10');
+              if(!window.SSGITestPram){
+                if(i==0)pointLight = new THREE.PointLight('#ff0010');
+                if(i==1)pointLight = new THREE.PointLight('#00ff10');
+              }
               let position = rtxgiNetwork.pointLightParams[i].position;
               pointLight.position.set(position.x, position.y, position.z);
               pointLight.power = 3.0;
@@ -64,6 +69,18 @@ export class Light{
                 -0.2697829635108193+i*2,  3.6968538642054622,  0.27596807740972007
               )
               pointLight.intensity=2.3873241463784303
+              if(window.SSGITestPram){
+                if(i==1)
+                  pointLight.position.set(2.587634888862601,  3.6968538642054614,  3.6129)
+                else
+                  pointLight.position.set(-1.4206028718265213,3.6968538642054622,3.235464104885511)
+                pointLight.power = 30.0;
+                pointLight.distance = 100.0;
+                pointLight.intensity=23;
+                pointLight.castShadow = false
+              }
+              
+              
 
               scene.add(pointLight);
               // var ptHelpder = new THREE.PointLightHelper(pointLight,2.5,0xffffff);
