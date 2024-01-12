@@ -8,19 +8,20 @@ import {Communication} from "./Communication"
 import {Light} from "./Light"
 // import config_sh from '../config/sh.json';
 // console.log("config_sh",config_sh)
-window.loadJson=(path,cb)=>{
-	if(!path)path="./CloudBake/sh.json"
-	var xhr = new XMLHttpRequest()
-	xhr.open('GET', path, true)
-	xhr.send()
-	xhr.onreadystatechange = ()=> {
-		if (xhr.readyState == 4 && xhr.status == 200) {
-			var json_data = JSON.parse(xhr.responseText)
-			console.log("json_data:",json_data)
-			if(cb)cb(json_data)
-		}
-	}
-}
+// window.loadJson=(path,cb)=>{
+// 	if(!path)path="./CloudBake/sh.json"
+// 	var xhr = new XMLHttpRequest()
+// 	xhr.open('GET', path, true)
+// 	xhr.send()
+// 	xhr.onreadystatechange = ()=> {
+// 		if (xhr.readyState == 4 && xhr.status == 200) {
+// 			var json_data = JSON.parse(xhr.responseText)
+// 			console.log("json_data:",json_data)
+// 			if(cb)cb(json_data)
+// 		}
+// 	}
+// }
+import {SH}from"./SH.js"
 class Loader{
 	SSGITestPram={
 		width: 1280,
@@ -97,13 +98,22 @@ class Loader{
 		rtxgiNetwork.onready=()=>{
 				ui.init(rtxgiNetwork,light.directionalLightGroup,light.pointLightGroup,light.spotLightGroup,this.uniforms)//initGui(rtxgiNetwork);//
 				self.updateCamera(rtxgiNetwork)
-				self.loadRoom(rtxgiNetwork,light,self.models)
+				new SH(this.SSGITestPram,sh=>{
+					self.uniforms.mytex0=sh.tex0
+					self.uniforms.mytex1=sh.tex1
+					self.uniforms.mytex2=sh.tex2
+					self.uniforms.mytex3=sh.tex3
+					self.uniforms.mytex4=sh.tex4
+					self.loadRoom(rtxgiNetwork,light,self.models)
+				})
+				
 				light.init(rtxgiNetwork,self.scene)//initLight();
 					
 				window.onresize = self.resize;
 				self.rtxgiNetwork=rtxgiNetwork
 				self.animate()
 		}
+		
     }
 	loadRoom(rtxgiNetwork,light,models){
 		/*Directional Light y offset*/
@@ -257,6 +267,7 @@ class Loader{
         requestAnimationFrame(this.animate)
     }
     resize(){
+		if(this.SSGITestPram)return
 		const renderer=this.renderer
 		const camera=this.camera
 		

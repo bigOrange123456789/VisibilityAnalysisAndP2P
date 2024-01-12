@@ -34,16 +34,6 @@ export class IndirectMaterial2 extends THREE.ShaderMaterial {
 			texture.needsUpdate = true;
 			return texture;
 		}
-		function array2Texture_old(array, w,h) {
-			let data = new Float32Array(w * h * 3); // RGB:3 RGBA:4
-			data.set(array);
-			let texture = new THREE.DataTexture(
-				data, w, h, 
-				THREE.RGBFormat,// 使用RGB三个通道 //THREE.RGBAFormat 四个通道
-				THREE.FloatType);
-			texture.needsUpdate = true;
-			return texture;
-		}
 	}
 	static async Hdr2Texture(){
 		return new Promise( (resolve, reject) => { 
@@ -65,22 +55,17 @@ export class IndirectMaterial2 extends THREE.ShaderMaterial {
 		if(cb)cb()
 	}
     constructor(materialOld,param,uniforms) {
-		// const param={
-		// 	exposure:2,
-		// 	tonemapping:true,
-		// 	gamma:true,
-		// 	viewBias:0.3,
-		// 	normalBias:0.1,
-		// 	numIrradianceTexels:6,
-		// 	numDistanceTexels:6,
-		// 	origin:new THREE.Vector3 (-0.4000000059604645,  5.400000095367432,  -0.25) ,
-		// 	probeGridCounts:[11, 11, 11],
-		// 	probeGridSpacing:new THREE.Vector3( 2.0399999618530273,  1,  0.8999999761581421)
-		// }
+		
 		if(IndirectMaterial2.prototype.probeIrradiance0)
 			IndirectMaterial2.prototype.probeIrradiance0.needsUpdate = true;
 		super({//new THREE.ShaderMaterial({//
 			uniforms: {
+				mytex0:uniforms.mytex0,
+				mytex1:uniforms.mytex1,
+				mytex2:uniforms.mytex2,
+				mytex3:uniforms.mytex3,
+				mytex4:uniforms.mytex4,
+				// mytex0:uniforms.mytex0,
 				//Declare texture uniform in shader
 				GBufferd: uniforms.GBufferd,//IndirectMaterial.initLitRenderTarget(),
 				screenWidth: uniforms.screenWidth,//{ value: window.innerWidth },
