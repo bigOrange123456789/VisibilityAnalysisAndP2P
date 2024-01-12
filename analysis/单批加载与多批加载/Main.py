@@ -6,6 +6,50 @@ from PackList import PackList
 MAX=9999999
 MIN=-9999999
 class Main:
+    def FuYunKai(self):#根据傅韵凯的要求计算： 平均带宽利用率、吞吐率、平均解析时间
+        sorted_indices,arr_time=self.packList.sortList('loaded')
+        timeEnd=arr_time[len(arr_time)-1]
+        timeStart=self.timeStart
+
+        time_parsed=0
+        size=0
+        for i in range(len(arr_time)):
+            id=sorted_indices[i]
+            time_parsed+=self.packList.getPack(id).get("parsed-loaded")
+            size+=self.packList.getPack(id).size
+            # print(size)
+            # print(time_parsed)
+    
+
+        timeAll=timeEnd-timeStart
+        print("总加载时间为(ms):",timeAll)
+        print("任务总量(B):",size)
+        n=len(arr_time)
+        print("任务总数(个):",n)
+        print("平均带宽利用率(%):",
+              100*(size/(timeAll*1))#str(100*(size/(timeAll*1)))+"/SpeedMax"
+              )#size/(SpeedMax*timeAll)
+        print("吞吐率(个/ms):",n/timeAll)
+        print("平均解析时间(ms):",time_parsed/len(arr_time))
+        
+
+        return [
+            timeAll,
+            size,
+            n,
+            100*(size/(timeAll*1)),#str(100*(size/(timeAll*1)))+"/SpeedMax",
+            n/timeAll,
+            time_parsed/len(arr_time),
+        ]
+        # arr=[]
+        # for pack in self.packList.traverse():  
+        #         arr.append([id,vd,size,res,time0,time1,time2])
+        # tag=["总加载时间为(ms):",'任务总量(B):','任务总数(个)',
+        #      '平均带宽利用率(%)','吞吐率(个/ms):','平均解析时间(ms):']
+        # import pandas as pd
+        # df = pd.DataFrame(arr, columns=tag)
+        # return df
+  
     def getVDAndTime(self):
         sorted_indices,arr_time=self.packList.sortList('parsed')
         

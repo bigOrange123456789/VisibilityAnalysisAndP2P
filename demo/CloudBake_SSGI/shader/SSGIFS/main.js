@@ -31,10 +31,10 @@ ToLDR+
     {
 		vec2 _screenPosition = gl_FragCoord.xy/vec2(screenWidth,screenHeight);//当前像素的位置
 
-        vec3 result =GetIndirectRadiance();// GetDirectRadiance(_screenPosition)+ GetIndirectRadiance();
+        vec3 result =GetIndirectRadiance(_screenPosition);// GetDirectRadiance(_screenPosition)+ GetIndirectRadiance();
         //result*=getAO(_screenPosition);
 			
-		gl_FragColor = ToLDR(result);
+		gl_FragColor = vec4(result,1.0f);//ToLDR(result);
     }
 `
 // console.log("main",main)

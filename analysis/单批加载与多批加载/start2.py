@@ -41,6 +41,7 @@ def start():
     })
 def start2():
     arr=[]
+    arr_result=[]
     for s1 in ["远程","本地"]:
         for s2 in ["单批","双批"]:
             for s3 in ["渲染","不渲染"]:
@@ -58,6 +59,11 @@ def start2():
                 })
                 main.name=name
                 arr.append(main)
+                print(name+":")
+                # print("平均解析时间:\t",main.getVDAndTime())
+                result=main.FuYunKai()#draw2()
+                arr_result.append(
+                     [name,result[0],result[1],result[2],result[3],result[4],result[5]])
     import matplotlib.pyplot as plt
     plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签SimHei
     plt.rcParams['axes.unicode_minus'] = False # 用来正常显示负号
@@ -68,7 +74,28 @@ def start2():
         main=arr[i]
         data=main.to_excel2()
         data.to_excel(writer, main.name)
+    #########
+    # arr=[]
+    # for pack in self.packList.traverse():  
+    #         arr.append([id,vd,size,res,time0,time1,time2])
+    tag=["实验类型",
+         "总加载时间为(ms)",'任务总量(B)','任务总数(个)',
+         '平均带宽利用率(%)','吞吐率(个/ms)','平均解析时间(ms)']
+    data0 = pd.DataFrame(arr_result, columns=tag)
+    data0.to_excel(writer, "分析结果")
+    #########
     writer.close()# writer.save()
+    # import matplotlib.pyplot as plt
+    # plt.rcParams['font.sans-serif'] = ['SimHei'] # 用来正常显示中文标签SimHei
+    # plt.rcParams['axes.unicode_minus'] = False # 用来正常显示负号
+
+    # import pandas as pd
+    # writer=pd.ExcelWriter("result.xlsx")
+    # for i in range(8):
+    #     main=arr[i]
+    #     data=main.to_excel2()
+    #     data.to_excel(writer, main.name)
+    # writer.close()# writer.save()
 
     # for i in range(8):
     #     plt.subplot(2, 4, i+1)

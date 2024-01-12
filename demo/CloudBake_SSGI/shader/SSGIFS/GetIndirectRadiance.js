@@ -29,9 +29,12 @@ DDGIGetVolumeIrradiance+
     }
 	
 	uniform bool dGI; 
-    vec3 GetIndirectRadiance(){
+    vec3 GetIndirectRadiance(vec2 _screenPosition){
 		if(dGI){
 			vec4 albedo = GetAlbedo();//获取纹理颜色
+			float u=_screenPosition.x;
+			return vec3(u,_screenPosition.y,0.5);
+			return vNormal;
 			return albedo.xyz/PI;
             if(albedo.w > 0.f)//如果该像素不对应全透明纹理
 			{
