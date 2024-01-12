@@ -32,6 +32,7 @@ export class UI{
         this.dlightChange = false//true//false;
         this.plightChange = false//true//false;
         this.slightChange = false//true//false;
+        if(!window.SSGITestPram)
         this._test(param)
 
     }

@@ -1,6 +1,7 @@
 import * as THREE from 'three'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import {IndirectMaterial} from "./IndirectMaterial"
+import {IndirectMaterial2} from "./IndirectMaterial2"
 import {UI} from "./UI"
 import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import {Communication} from "./Communication"
@@ -46,7 +47,7 @@ class Loader{
 			matrix:[
 				0.5, 		7.45058e-09, -0.866025, -0, 
 				-0.224144, 	0.965926, 	 -0.12941, 0, 
-				0.836516, 	0.258819, 	 0.482963, 0, 
+				0.836516, 	0.258819, 	 -0.482963, 0, 
 				-0.5, 		5, 			 3.5, 1
 			],
 			//-0.5, 0.224144, -0.836516, 0, 0, 0.965926, 0.258819, 0, 0.866025, 0.12941, -0.482963, 0, 3.28109, -4.48877, -2.56621, 1
@@ -124,24 +125,12 @@ class Loader{
 					node.geometry.computeVertexNormals()
 					node.castShadow = true
 					node.receiveShadow = true
-					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork,self.uniforms)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
-					node.litMaterial = node.material
-					// console.log(node.material)
-					window.material=indirectMaterial
-					node.diffuseMaterial = 
-						new THREE.MeshStandardMaterial({map:node.material.map,color:node.material.color})
-						node.material
-					node.indirectMaterial = indirectMaterial//node.material//
-					// console.log(node.diffuseMaterial,"node.diffuseMaterial")
-					// node.diffuseMaterial.onBeforeCompile = function ( shader ) {
-					// 	for(let tag in indirectMaterial.uniforms){
-					// 		shader.uniforms[tag]=indirectMaterial.uniforms[tag]
-					// 	}
-					// 	shader.vertexShader=indirectMaterial.vertexShader
-					// 	shader.fragmentShader=indirectMaterial.fragmentShader
-						
-					// }
-					// node.material=node.indirectMaterial
+					// node.litMaterial = node.material
+					node.indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork,self.uniforms)
+					node.indirectMaterial2 = new IndirectMaterial2(node.material,rtxgiNetwork,self.uniforms)
+					node.diffuseMaterial = new THREE.MeshStandardMaterial({map:node.material.map,color:node.material.color})
+					
+
 					models.push(node)
 					  
 				}
@@ -234,7 +223,8 @@ class Loader{
 	render(){
 		if(this.SSGITestPram){
 			for (var i = 0; i < this.models.length; i++) {
-				this.models[i].material = this.models[i].diffuseMaterial
+				// this.models[i].material = this.models[i].diffuseMaterial
+				this.models[i].material = this.models[i].indirectMaterial2
 			}
 			this.renderer.setRenderTarget(null)
 			this.renderer.render(this.scene, this.camera)

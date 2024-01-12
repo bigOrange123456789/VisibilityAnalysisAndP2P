@@ -1,4 +1,4 @@
-export const fs =/* glsl */`
+export const GetDirectRadiance =/* glsl */`
 #define STANDARD
 #ifdef PHYSICAL
 	#define IOR
@@ -79,7 +79,7 @@ varying vec3 vViewPosition;
 #include <metalnessmap_pars_fragment>
 #include <logdepthbuf_pars_fragment>
 #include <clipping_planes_pars_fragment>
-void main() {
+vec3 GetDirectRadiance(vec2 _screenPosition) {
 	#include <clipping_planes_fragment>
 	vec4 diffuseColor = vec4( diffuse, opacity );
 	ReflectedLight reflectedLight = ReflectedLight( vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ), vec3( 0.0 ) );
@@ -121,5 +121,6 @@ void main() {
 	#include <fog_fragment>
 	#include <premultiplied_alpha_fragment>
 	#include <dithering_fragment>
+    return gl_FragColor.rgb;
 }
 `
