@@ -29,12 +29,12 @@ ToLDR+
     uniform float screenHeight;
 	void main(void)
     {
-		vec2 _screenPosition = gl_FragCoord.xy/vec2(1923.,1084.);//vec2(screenWidth,screenHeight);//当前像素的位置
+		vec2 _screenPosition = gl_FragCoord.xy/vec2(screenWidth,screenHeight);//当前像素的位置
 
-        vec3 result = GetIndirectRadiance(_screenPosition);//GetDirectRadiance(_screenPosition)+ GetIndirectRadiance(_screenPosition);//
+        vec3 result =GetIndirectRadiance(_screenPosition);// GetDirectRadiance(_screenPosition)+ GetIndirectRadiance();
         //result*=getAO(_screenPosition);
 			
-		gl_FragColor = vec4(result,1.0f);//ToLDR(result);//
+		gl_FragColor = vec4(result,1.0f);//ToLDR(result);
     }
 `
 // console.log("main",main)

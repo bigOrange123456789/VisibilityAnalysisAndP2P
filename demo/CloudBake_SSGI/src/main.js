@@ -70,8 +70,12 @@ class Loader{
 		useRtao: { value: true ,value0:true},
 
 		GBufferd: { value: true },
-		screenWidth: { value: window.innerWidth },
-		screenHeight: { value: window.innerHeight },
+		screenWidth: { 
+			value: this.SSGITestPram.width//window.innerWidth 
+		},
+		screenHeight: { 
+			value: this.SSGITestPram.height//window.innerHeight 
+		},
 	}
     constructor(){
 		window.SSGITestPram=this.SSGITestPram
@@ -238,6 +242,9 @@ class Loader{
 			}
 			this.renderer.setRenderTarget(null)
 			this.renderer.render(this.scene, this.camera)
+
+			this.uniforms.screenWidth.value = this.renderer.domElement.width;
+			this.uniforms.screenHeight.value = this.renderer.domElement.height;
 			return
 		}
 		this.uniforms.screenWidth.value = this.renderer.domElement.width;

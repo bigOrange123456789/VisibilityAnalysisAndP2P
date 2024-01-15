@@ -74,11 +74,16 @@ DDGIGetVolumeIrradiance+
 		if(dGI){
 			float u=_screenPosition.x;
 			float v=_screenPosition.y;
+			// return vec3(u,1.-v,1.);
+			vec3 shColor= getShColor(u,v);
+			vec4 albedo = GetAlbedo();//获取纹理颜色
+			return 10.*vec3(shColor.r*albedo.r,shColor.g*albedo.g,shColor.b*albedo.b);
+			// return shColor;
 			return 3.*getShColor(u,v);
 			return getXYZ(mytex0,u,1.-v);
-			return vec3(u,v,0.5);
+			
 			return vNormal;
-			vec4 albedo = GetAlbedo();//获取纹理颜色
+			
 			return albedo.xyz/PI;
             if(albedo.w > 0.f)//如果该像素不对应全透明纹理
 			{
