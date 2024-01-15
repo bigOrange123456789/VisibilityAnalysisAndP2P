@@ -19,9 +19,11 @@ import { Start } from './Start.js'
     const config=config_gkd// getParam('scene')=="haiNing0"?config_haiNing0:
     new Engine3D.Param(config)
     // new StartGPU(document.body,config.useGPU)
+
     new Start(document.body)
     // import { Building } from './Building.js'
     // new Engine3D.StartSampling(document.body,config,Building)
+
 // })
 
 export {Engine3D}

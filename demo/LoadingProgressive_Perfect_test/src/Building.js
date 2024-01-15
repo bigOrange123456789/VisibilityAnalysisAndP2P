@@ -118,7 +118,7 @@ export class Building{
             })
         // new Test(this)
         setTimeout(() => {
-            self.addWater()
+            // self.addWater()
         },6000);
     }
     addWater(){
@@ -233,17 +233,17 @@ export class Building{
             },1500)  
         }
         
-        // setTimeout(()=>{
-        //     for(let i=0;i<500;i++){
-        //         self.loadZip(i)
-        //     }
-        // },1500) 
-        // setTimeout(()=>{
-        //     for(let i=0;i<28;i++){
-        //         self.loadZip(i+500)
-        //     }
-        // },2000) 
-        // return
+        setTimeout(()=>{
+            for(let i=0;i<500;i++){
+                self.loadZip(i)
+            }
+        },1500) 
+        setTimeout(()=>{
+            for(let i=0;i<28;i++){
+                self.loadZip(i+500)
+            }
+        },2000) 
+        return
 
         this.visibiity=new Engine3D.Visibility(
             camera,
@@ -284,64 +284,27 @@ export class Building{
     }
     addMesh(id,meshOld){
         const a=[
-            3,4,5,7,9,25,26,28,29,30,31,32,33,34,37,38,41,42,48,49,53,54,56,57,59,61,62,169,170,171,172,173,174,175,179,180,182,183,186,187,188,189,191,192,236,238,241,243,264,267,268,269,284,286,287,289,291,292,294,295,296,298,300,302,303,306,307,308,309,394,395,396,398,399,400,401,404,405,406,407,408,411,433,434,435,436,438,440,442,464,465,466,467,472,473,481,497,498,515,516,517,518,519,520
+            171,
+            187,
+            // 1,3,4,5,6,7,9,10,14,15,18,21,22,25,26,28,29,30,31,32,33,34,37,42,49,53,57,59,61,62,163,164,165,166,168,169,170,172,174,175,176,179,180,181,182,183,184,186,188,189,191,192,193,194,196,197,199,200,203,205,207,499,511,528
+            1,3,4,5,6,9,14,15,18,21,22,25,26,28,29,30,31,32,34,37,49,53,56,57,58,59,61,62,163,170,175,179,182,183,188,189,191,192,516
+
             //25,26,28,29,30,31,32,34,36,37,38,40,41,42,48,49,51,52,53,54,55,56,60,62,166,167,168,169,170,171,172,173,174,179,180,182,183,184,185,187,193,196,197,201,202,208,209,211,212,215,235,236,237,238,240,241,242,243,245,248,252,254,255,257,258,260,261,262,264,265,266,267,268,269,271,272,273,274,276,277,278,279,280,282,283,286,291,292,293,294,295,296,298,300,301,303,306,307,308,309,311,312,313,315,316,318,319,321,322,324,325,327,328,404,405,406,407,408,411,415,418,419,421,422,424,426,427,429,448,451,452,454,455,457,458,460,481,482,483,484,485,495,497,515,516,517
             //174,171,170,166,182,29,173,169,62,172,167,26,193,28,42,25,162,185,280,202,175,34,54,203,199,237,200,197,277,183,282,528,179,41,245,292,184,56,295,241,180,168,204,49,3,298,187,527,30,274,242,32,315,238,278,293,22,316,5,236,9,205,255,294,37,276,279,262,240,181,283,243,194,186,201,301,272,311,482,419,196,192,415,408,405,15,296,273,515,319,207,21,31,260,306,176,406,411,452,308,38,448,208,291,254,481,17,499,164,264,429,497,261,269,267,4,51,163,271,235,424,6,307,60,407,265,188,258,427,189,507,312,52,426,300,53,460,313,495,266,418,517,57,485,483,209,303,18,404,455,516,61,309,322,484,268,451,257,59,327,191,422,212,458,48,457,326,40,252,286,454,36,248,328,211,7,33,195,1,421,420,55,215,410,350,324,318,321,325,430,329,14,414,220,511,416,453,467,447,464,465,487,523,488,432,463
         ]
+        meshOld.material=new THREE.MeshBasicMaterial()
         meshOld.material.color.r=0
         meshOld.material.color.g=0
         meshOld.material.color.b=1
         for(let i=0;i<a.length;i++){
             if(id==a[i]){
-                meshOld.material.color.r=1
+                meshOld.material.color.r=0.2
                 meshOld.material.color.g=0
                 meshOld.material.color.b=0
             }
         }
-        // console.log(meshOld)
-        if(!this.sampling)
-        if(this.buildMaterial)
-        this.buildMaterial.checkMaterial(id,meshOld)
-
-        // meshOld.material.map=null
-        // if(meshOld.material.map)
-        // meshOld.material.map=null
-
-        if(this.config.updateColor){
-            meshOld.geometry.computeVertexNormals()
-            let t=id*256*256*256/8431 ///2665
-            meshOld.material.color.r=0.5*((t&0xff)    )/255
-            meshOld.material.color.g=0.5*((t&0xff00)>>8 )/255
-            meshOld.material.color.b=0.5*((t&0xff0000)>>16)/255
-        }else{
-            meshOld.geometry.computeVertexNormals()
-            meshOld.material.depthWrite=true
-        }
-        meshOld.material.metalness0=meshOld.material.metalness//-0.5
-        meshOld.material.roughness0=meshOld.material.roughness//-0.5
-        meshOld.material.envMapIntensity0=meshOld.material.envMapIntensity//-0.5
-        meshOld.material.emissiveIntensity0=meshOld.material.emissiveIntensity//-0.5
-        // console.log(mesh.material.color.r+mesh.material.color.g+mesh.material.color.b)
-
-        const m=meshOld.material
         
-        m.side=0
-        if(id==29||id==3){//玻璃
-            m.transparent=true
-            m.opacity=0.6
-        }else if(id==166){//护栏
-            m.side=2
-        }else if(id==174||id==182){//道路
-            m.metalness=0.8
-            m.roughness=0.4
-            // m.visible=false
-            // m.metal=true
-            // alert(m.shininess)
-            // console.log(m)
-        }else{
-            // m.transparent=false
-        }
-        m.envMapIntensity=0.1+m.metalness
+        
 
         // meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
         if(this.sampling)meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
@@ -357,18 +320,14 @@ export class Building{
             const mesh0=meshOld
             const instance_info=this.instance_info[id]
             const geometry=meshOld.geometry
-            // const mesh2=this.getInstancedMesh(
+            
+            if(this.csm)this.csm.setupMaterial(meshOld.material);
+            const mesh1=
+            meshOld
+            // this.getInstancedMesh(
             //     geometry,
             //     meshOld.material,
             //     instance_info)
-            // mesh2.castShadow = false//true
-            // mesh2.receiveShadow = false//true
-            // mesh2.visible=false
-            if(this.csm)this.csm.setupMaterial(meshOld.material);
-            const mesh1=this.getInstancedMesh(
-                geometry,
-                meshOld.material,
-                instance_info)
             mesh1.castShadow =true// false//
             mesh1.receiveShadow = true//false//
             const mesh2=mesh1//mesh1.clone()
@@ -384,35 +343,9 @@ export class Building{
             
             ///////////////
             mesh.lod=[mesh1,mesh2]
-            if(id==194){//雕塑
-                // mesh.lod=[mesh2,mesh2]
-            }
-            // mesh.lod=[mesh,mesh]
-            // mesh.visible=false
-            if(this.config.waterCidList){//175
-                for(let i=0;i<this.config.waterCidList.length;i++)
-                    if(id==this.config.waterCidList[i]){
-                        mesh1.material.transparent=true
-                        mesh1.material.opacity=0.1
-                        mesh2.material.transparent=true
-                        mesh2.material.opacity=0.1
-                        // mesh.visible=false
-                        // var water = new Engine3D.WaterController(meshOld).water
-                        // mesh.visible=mesh2.visible=false
-                        // mesh.lod=[water,water]
-                        // if(true)this.parentGroup2.add(water)
-                        // alert(id)
-                        // mesh.lod=[mesh2,mesh2]
-                        // if(id==175)
-                        // window.waterMaterial = mesh.lod[1].material;
-                    }
-            }
+            
             mesh.add(mesh1)
             mesh.add(mesh2)
-            mesh.used      =mesh0.used
-            mesh.LoadDelay =mesh0.LoadDelay
-            mesh.originType=mesh0.originType
-            mesh.delay     =mesh0.delay
             mesh.config0=this.meshes_info[id]
         }else{
             mesh.lod=[meshOld,meshOld]
@@ -422,14 +355,13 @@ export class Building{
         // setTimeout(()=>{
             self.meshes[id]=mesh
         // },1000)
+        // if(
+        //     id==192
+        //     )   
         this.parentGroup.add(mesh)
-        const v=this.visibility
-        if(typeof v!=="undefined")
-            this.visibility.culling.update()//this.visibiity.prePoint2=""//重新进行可见剔除
 
         mesh.myId=id
-        mesh.name=meshOld.name
-        this.detection.receiveMesh(mesh)   
+        mesh.name=meshOld.name 
         // console.log(mesh,id)
         if(window.csm)window.csm.MyUpdate()
     }
