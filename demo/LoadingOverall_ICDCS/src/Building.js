@@ -14,6 +14,10 @@ export class Building{
         window.config0=this.config
         this.parentGroup = new THREE.Group()
 
+        this.pointFlag=new THREE.Group()
+        this.parentGroup.add(this.pointFlag)
+        window.pointFlag=this.pointFlag
+
         if(this.config.parentGroup&&this.config.parentGroup.scale)
             this.parentGroup.scale.set(
                 this.config.parentGroup.scale.x,
@@ -52,7 +56,7 @@ export class Building{
         this.convexArea=a.convexArea
         window.a=a
 
-        if(false){
+        if(true){
             new SamplePointList(
                 this.config.createSphere,
                 this.parentGroup,
@@ -160,6 +164,7 @@ export class Building{
                         geometry = new THREE.SphereGeometry( 
                             c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
                             32, 16 );
+                        geometry=new THREE.BoxGeometry( c.r,c.r,c.r ); 
                         material = new THREE.MeshBasicMaterial( );
                         material.color.r=material.color.g=material.color.b=
                             (-0.1+1.1*self.config.entropy[name]/entropyMax)
@@ -168,7 +173,7 @@ export class Building{
                     }
                     const sphere = new THREE.Mesh( geometry, material );
                     sphere.position.set(x,y,z)
-                    self.parentGroup.add( sphere )
+                    self.pointFlag.add(sphere)//self.parentGroup.add( sphere )
                     if( name==self.config["kernelPosition"] )window.sphere=sphere
                 }
     }
@@ -538,25 +543,6 @@ export class Building{
         const blob = new Blob([objData], { type: 'textain' });
         saveAs(blob, name);
     }
-    // saveMesh2(mesh,name){
-    //     const scene=new THREE.Scene()
-    //     scene.add(mesh)
-        
-    //     // 创建 GLTFExporter 对象
-    //     const exporter = new GLTFExporter();
-
-    //     // 导出 glTF 文件
-    //     exporter.parse(scene, (result) => {
-    //         // 将导出的数据存储为二进制文件
-    //         const blob = new Blob([result], { type: 'model/gltf-binary' });
-
-    //         // 创建链接，并下载文件
-    //         const link = document.createElement('a');
-    //         link.href = URL.createObjectURL(blob);
-    //         link.download = name
-    //         link.click();
-    //     });
-    // }
     saveMesh2_old2(mesh,name){
         mesh.geometry.attributes.position.data = new THREE.BufferAttribute(
             new Float32Array(

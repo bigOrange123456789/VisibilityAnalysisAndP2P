@@ -5,7 +5,7 @@ export class SamplePointList{
     constructor(createSphere,parentGroup,meshes,entropy){
         this.config=window.configALL.src.SamplePointList
         this.createSphere=createSphere
-        // console.log("visibleArea",visibleArea)
+        console.log("config",this.config)// console.log("visibleArea",visibleArea)
         window.showVDbyColor="evd"
         const self=this
         function load1(cb){
@@ -37,6 +37,8 @@ export class SamplePointList{
                     console.log(3)
                     document.getElementById("LoadProgress").innerHTML=""
                     self.voxel=c
+                    // console.log("self.voxel",self.voxel)
+                    
                     window.voxel=c
                     if(cb)cb()
                 }
@@ -44,9 +46,9 @@ export class SamplePointList{
         }
         load1(()=>{
             load2(()=>{
-                load3(()=>{
+                // load3(()=>{
                     self.init(createSphere,parentGroup,meshes,entropy)
-                })
+                // })
             })
         })
     }
@@ -179,40 +181,10 @@ export class SamplePointList{
             getMul(d,d1),getMul(d,d2),getMul(d,d3),getMul(d,d4),getMul(d,d5),getMul(d,d6)
         ]
     }
-    showVDbyColor_old(){
-        const self=this
-        const d=this.getDirection()
-        for(let i=0;i<self.meshes.length;i++){
-            const mesh=self.meshes[i]
-            const evd=mesh.vvd1*d[0]+
-                     mesh.vvd2*d[1]+
-                     mesh.vvd3*d[2]+
-                     mesh.vvd4*d[3]+
-                     mesh.vvd5*d[4]+
-                     mesh.vvd6*d[5]
-            const pvd=mesh.pvd
-            const vd=showVDbyColor=="pvd"?pvd:evd
-            const color=mesh.material.color
-            if(vd==0){
-                color.r=0.5
-                color.g=color.b=1
-                mesh.material.opacity=0.1
-            }else if(showVDbyColor=="evd"){
-                color.r=1-vd*50
-                if(color.r<0.3)color.r=0.3
-                color.g=color.b=0
-                mesh.material.opacity=1
-            }else{
-                color.g=1-vd*50
-                if(color.g<0.3)color.g=0.3
-                color.r=color.b=0
-                mesh.material.opacity=1
-            }
-        }
-    }
     showVDbyColor(){
         const self=this
         const d=this.getDirection()
+        for(let i=0;i<6;i++)d[i]+=0.1
         for(let i=0;i<self.meshes.length;i++){
             const mesh=self.meshes[i]
             const evd=mesh.vvd1*d[0]+
@@ -246,8 +218,8 @@ export class SamplePointList{
         const self=this
         const origin = new THREE.Vector3(0, 0, 0); // 箭头起点
         const direction = new THREE.Vector3(1, 0, 0); // 箭头方向
-        const length = 10; // 箭头长度
-        const color = 0xff0000; // 箭头颜色
+        const length = 0.1//10; // 箭头长度
+        const color = 0xFFD700//0xff0000; // 箭头颜色
 
         const arrowHelper = new THREE.Object3D()
         const obj= new THREE.ArrowHelper(direction, origin, length, color);
@@ -312,9 +284,10 @@ export class SamplePointList{
             for(let y=c.y[0];y<=c.y[1];y=y+c.y[2]){
                 let k=0
                 for(let z=c.z[0];z<=c.z[1];z=z+c.z[2]){
-                    let geometry = new THREE.SphereGeometry( 
-                            c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
-                            8,4);
+                    // let geometry = new THREE.SphereGeometry( 
+                    //         c.r,//c.r*(-0.4+1.4*self.config.entropy[name]/entropyMax), 
+                    //         3,2);//8,4);
+                    let geometry=new THREE.BoxGeometry( c.r,c.r,c.r ); 
                     let material = new THREE.MeshBasicMaterial( {
                         color:0x008f8f,
                         opacity:0.01,
@@ -332,8 +305,8 @@ export class SamplePointList{
                     self.parentGroup.add( sphere )
                     index++
                     list2[i][j][k]=sphere
-                    if(self.voxel)
-                        if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
+                    // if(self.voxel)
+                    //     if(self.voxel[i][j][k]==1)material.color.r=material.color.g=material.color.b=0
                     k++
                 }
                 j++
