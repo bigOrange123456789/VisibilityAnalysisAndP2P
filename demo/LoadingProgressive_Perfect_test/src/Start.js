@@ -43,6 +43,14 @@ export class Start{
         // console.log(this.unrealBloom)
 
         self.init()
+        window.test001=()=>{
+            const helper = new THREE.CameraHelper( self.camera.clone() );
+            self.scene.add( helper );
+        }
+        setTimeout(()=>{
+           window.test001() 
+        },500)
+        
 
     }
     init(){
@@ -56,6 +64,7 @@ export class Start{
         // if(false)
         this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
+        if(false)
         setTimeout(()=>{
             // new TreeManager(_self.sceneEx).init({}) 
             self.loadJson(
@@ -218,7 +227,7 @@ export class Start{
         this.scene = new THREE.Scene()
 
         this.camera = new THREE.PerspectiveCamera(
-            (this.config["FlipY"]?-1:1)*30,//50,
+            90,//(this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
             this.config.camera.near,//3,//
             this.config.camera.far//200,//
@@ -230,6 +239,11 @@ export class Start{
             this.config.camera.position.x,
             this.config.camera.position.y,
             this.config.camera.position.z
+        )
+        this.camera.position.set(
+            -247.00206274746648,  
+            16, 
+            195.8115250287483
         )
         this.camera.rotation.set(
             this.config.camera.rotation.x,
