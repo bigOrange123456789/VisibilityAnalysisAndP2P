@@ -1,7 +1,7 @@
 // import pos from './postprocessing/pos.json'
 import * as THREE from "three";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-// import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
+import { PlayerControl } from '../../../lib/playerControl/PlayerControl.js'
 // import {MapControls,OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 //RGBMLoader
 import { Building } from './Building.js'
@@ -9,16 +9,16 @@ import { LightProducer } from './LightProducer.js'
 import {Panel } from './Panel.js'
 import {UI } from './UI.js'
 import {AvatarManager } from './AvatarManager.js'
-// import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
-// import { SkyController  } from '../../../lib/threejs/SkyController'
+import { MoveManager } from '../../../lib/playerControl/MoveManager.js'
+import { SkyController  } from '../../../lib/threejs/SkyController'
 
 // import{Postprocessing}from"../../../lib/postprocessing/Postprocessing.js"
 // import{PostprocessingNew}from"../../../lib/postprocessing/PostprocessingNew"
-// import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
+import{UnrealBloom}from"../../../lib/postprocessing/UnrealBloom.js"
 
 // import { EXRLoader } from 'three/examples/jsm/loaders/EXRLoader'
-// import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
-// import { TreeManager } from "./TreeManager";
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import { TreeManager } from "./TreeManager";
 import {CSM} from "three/examples/jsm/csm/CSM.js";
 
 import { Engine3D } from './main.js'//Engine3D.Building.
@@ -39,7 +39,8 @@ export class Start{
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        // console.log(this.unrealBloom)
 
         self.init()
 
@@ -53,22 +54,29 @@ export class Start{
         // this.initSky()
         this.initWander()
         // if(false)
-        // this.panel = new Panel(this)
+        this.panel = new Panel(this)
         this.lightProducer=new LightProducer(this.scene,this.camera)
-        // this.loadJson(
-        //     "LoadingProgressive/pos.json",
-        //     data=>{
-                let data=null
-                // setTimeout(()=>{
-                //     console.log("data",data)
-                // new TreeManager(self.scene).init(data) 
-                // })
-                // if(typeof AvatarManager!=="undefined")
-                // for(let i=0;i<2;i++)
-                    // new AvatarManager(self.scene,self.camera,data)
-                // self.TreeManager.init(data) 
-            // }
-        // )
+        setTimeout(()=>{
+            // new TreeManager(_self.sceneEx).init({}) 
+            self.loadJson(
+                "LoadingProgressive/pos.json",
+                data=>{
+                    new AvatarManager(self.scene,self.camera,null)//new AvatarManager(self.scene,self.camera,data)
+                    
+                    // setTimeout(()=>{
+                    //     console.log("data",data)
+                    new TreeManager(self.scene).init(data) 
+                    // })
+                    // if(typeof AvatarManager!=="undefined")
+                    // for(let i=0;i<2;i++)
+                    // self.TreeManager.init(data) 
+                    setTimeout(()=>{
+                        if(window.csm)window.csm.MyUpdate()
+                    },6000)
+                }
+            )
+        },4000)
+        
         // self.TreeManager = new TreeManager(self.scene,data) 
           
         this.initCSM();
@@ -84,13 +92,40 @@ export class Start{
         // }
         // new Test2(this.scene)
 
+        setTimeout(()=>{
+            self.initBackground()
+            const scene=new THREE.Scene()
+            scene.add(
+                new Engine3D.PathLine({
+                    path:[],
+                    camera:self.camera,
+                    delayTime:500
+                })
+            )
+            scene.add(this.scene)
+            this.miniMap = new Engine3D.MiniMap({
+                target: self.camera,//center,//this.player,
+                scene: scene,//this.scene,
+                mapSize: 100*12,
+                mapRenderSize: 160,
+            });
+        },2000)
         
-        // this.getCubeMapTexture('assets/textures/environment/skybox.hdr').then(
-        //     ({ envMap }) => {
-        //       self.scene.background = envMap
-        //       self.scene.backgroundIntensity=0.8
-        //     }
-        //   )
+
+
+          
+        
+        // this.miniMap = new Engine3D.MiniMap({
+        //     target: this.camera,//this.player,
+        //     scene: this.scene,
+        //     mapSize: 12,
+        //     mapRenderSize: 160,
+        //   });
+          
+        
+    }
+    initBackground(){
+        const self=this
         Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
             ({ envMap }) => {
               self.scene.background = envMap
@@ -115,40 +150,6 @@ export class Start{
               window.scene=self.scene
             }
         )
-
-        // setTimeout(()=>{
-            // new Engine3D.PathPlanning()
-        // },3000)
-        
-        // const center=new THREE.Object3D()
-        // center.position.set( 126.06182686202473,  21,  161.6807662956592)
-        const scene=new THREE.Scene()
-        scene.add(
-            new Engine3D.PathLine({
-                path:[],
-                camera:this.camera,
-                delayTime:500
-              })
-          )
-        scene.add(this.scene)
-        this.miniMap = new Engine3D.MiniMap({
-            target: this.camera,//center,//this.player,
-            scene: scene,//this.scene,
-            mapSize: 100*12,
-            mapRenderSize: 160,
-          });
-
-
-          
-        
-        // this.miniMap = new Engine3D.MiniMap({
-        //     target: this.camera,//this.player,
-        //     scene: this.scene,
-        //     mapSize: 12,
-        //     mapRenderSize: 160,
-        //   });
-          
-        
     }
     initScene(){
         // this.renderer = new THREE.WebGLRenderer({
@@ -241,39 +242,15 @@ export class Start{
         this.scene.add(this.camera)
         window.scene=this.scene
 
-        this.playerControl=new Engine3D.PlayerControl(this.camera,this.config["FlipY"],true)
+        this.playerControl=new PlayerControl(this.camera,this.config["FlipY"],true)
         this.playerControl.target.set(
             this.config.camera.target.x,
             this.config.camera.target.y,
             this.config.camera.target.z
         )
-        this.playerControl.mode.set("viewpoint")
+        this.playerControl.mode.set("viewpoint")  // "model"  "viewpoint"
         this.playerControl.speed.moveBoard =this.config.speed     //this.config.speed.moveBoard//1
         this.playerControl.speed.moveWheel0=this.config.speed*0.01//this.config.speed.moveWheel0//0.01
-
-        // this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
-        // window.orbitControl=this.orbitControl
-        // this.orbitControl.target.set(
-        //     -340.67888298324596, 
-        //     8.573750000000038,  
-        //     199.38166396137652
-        // )
-        // this.camera.lookAt(
-        //     -340.67888298324596, 
-        //     8.573750000000038,  
-        //     199.38166396137652
-        // )
-
-        // this.playerControl.target.set(
-        //     this.config.camera.target.x,
-        //     this.config.camera.target.y,
-        //     this.config.camera.target.z
-        // )
-        // this.orbitControl.target = camera_tar[id].clone()
-
-        
-
-
     }
 
     initCSM() {
@@ -282,7 +259,7 @@ export class Start{
         this.csm = new THREE.CSM({
             fade: true,
             maxFar: this.camera.far,
-            cascades: 4,//4,
+            cascades: 3,//4,//4,
             shadowMapSize: 1024,//1024,
             lightDirection: new THREE.Vector3(0.5, -1, 1).normalize(),
             camera: this.camera,
@@ -293,6 +270,17 @@ export class Start{
             mode: 'practical',
             lightMargin: 200
         });
+        for(let i=0;i<this.csm.lights.length;i++){
+            const light=this.csm.lights[i]
+            light.shadow.autoUpdate=false
+        }
+        const csm=this.csm
+        csm.MyUpdate=()=>{
+            for(let i=0;i<csm.lights.length;i++){
+                const light=csm.lights[i]
+                light.shadow.needsUpdate=true
+            }
+        }
         window.csm=this.csm
         //this.csm.lightIntensity = 1000;
         //let mesh = new THREE.Mesh(new THREE.BoxGeometry(), material);
@@ -300,6 +288,28 @@ export class Start{
         //mesh.receiveShadow = true;
 
         //this.scene.add(mesh);();
+    }
+    getCubeMapHDR(path) {
+        var scope = this
+        return new Promise((resolve, reject) => {//'.exr'
+            new RGBELoader()
+                .setDataType(THREE.FloatType)
+                .load(
+                    path,
+                    texture => {
+                        const pmremGenerator = new THREE.PMREMGenerator(scope.renderer)
+                        pmremGenerator.compileEquirectangularShader()
+
+                        const envMap = 
+                            pmremGenerator.fromEquirectangular(texture).texture
+                        pmremGenerator.dispose()
+
+                        resolve({ envMap })
+                    },
+                    undefined,
+                    reject
+                )
+        })
     }
     animate() {
         if(this.csm)this.csm.update(this.camera.matrix);
@@ -348,7 +358,7 @@ export class Start{
     }
     initSky() {
         if(this.config.render=="false")return
-        new Engine3D.SkyController(this.scene,this.camera,this.renderer)
+        new SkyController(this.scene,this.camera,this.renderer)
     }
     setSpeed(){
         if(this.config.pathList)
@@ -360,7 +370,6 @@ export class Start{
     initWander() {
         this.setSpeed()
         this.wanderList=[]
-        console.log("this.config.pathList",this.config.pathList)
         if(this.config.pathList)
         for(let i=0;i<this.config.pathList.length;i++){
             const a=this.config.pathList[i]
@@ -368,7 +377,7 @@ export class Start{
                 a[j][6]*=2//速度减慢
             }
             this.wanderList.push(
-                new Engine3D.MoveManager(this.camera, this.config.pathList[i])
+                new MoveManager(this.camera, this.config.pathList[i])
             )
         }
         const self=this
