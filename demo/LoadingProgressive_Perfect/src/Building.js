@@ -278,6 +278,9 @@ export class Building{
         return mesh
     }
     addMesh(id,meshOld){
+        if(id==202){//不显示门口的学校名称
+            meshOld.material=new THREE.MeshBasicMaterial()
+        }
         // console.log(meshOld)
         if(!this.sampling)
         if(this.buildMaterial)
@@ -387,8 +390,11 @@ export class Building{
                         // window.waterMaterial = mesh.lod[1].material;
                     }
             }
-            mesh.add(mesh1)
-            mesh.add(mesh2)
+            if(id!=177){//不要显示操场的标记
+                mesh.add(mesh1)
+                mesh.add(mesh2)
+            }
+            
             mesh.used      =mesh0.used
             mesh.LoadDelay =mesh0.LoadDelay
             mesh.originType=mesh0.originType
