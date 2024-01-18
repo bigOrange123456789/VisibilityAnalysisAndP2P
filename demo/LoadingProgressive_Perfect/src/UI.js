@@ -178,11 +178,11 @@ export class UI{
         const main = this.main;
         const gui=this.gui
         const params=this.params
-        var directionFolder = gui.addFolder('光照');
+        var directionFolder = gui.addFolder('light');
         /*color*/
-        params['平行光颜色'] = new THREE.Color(0xffffff)
+        params['color'] = new THREE.Color(0xffffff)
         directionFolder
-        .addColor(params, '平行光颜色')
+        .addColor(params, 'color')
         .onChange(function(e)
         {
             //directionalLight.color = new THREE.Color(e);
@@ -191,9 +191,9 @@ export class UI{
             });
         });
         /*power*/
-        params['平行光强度'] = csm.lightIntensity
+        params['intensity'] = csm.lightIntensity
         directionFolder
-        .add(params, '平行光强度', 0.0, 10.0)
+        .add(params, 'intensity', 0.0, 10.0)
         .step(0.1)
         .onChange(function(e) {
             //directionalLight.intensity = e
@@ -205,27 +205,27 @@ export class UI{
             //csm.updateFrustums()
         });
         /*direction*/
-        params['平行光方向X'] = csm.lightDirection.x;
+        params['X'] = csm.lightDirection.x;
         directionFolder
-        .add(params, '平行光方向X', -1.0, 1.0)
+        .add(params, 'X', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
             //directionalLight.target.position.x =
                 //directionalLight.position.x + e;
             csm.lightDirection.x = e;
         });
-        params['平行光方向Y'] = csm.lightDirection.y
+        params['Y'] = csm.lightDirection.y
         directionFolder
-        .add(params, '平行光方向Y', -1.0, 1.0)
+        .add(params, 'Y', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
             //directionalLight.target.position.y = 
                 //directionalLight.position.y + e;
             csm.lightDirection.y = e;
         });
-        params['平行光方向Z'] = csm.lightDirection.z
+        params['Z'] = csm.lightDirection.z
         directionFolder
-        .add(params, '平行光方向Z', -1.0, 1.0)
+        .add(params, 'Z', -1.0, 1.0)
         .step(0.01)
         .onChange(function(e) {
             //directionalLight.target.position.z = 
@@ -255,9 +255,9 @@ export class UI{
 
 
         /*power*/
-        params['环境光强度']=ambient.intensity
+        params['envLight']=ambient.intensity
         directionFolder
-        .add(params, '环境光强度', -0.5, 3.0)
+        .add(params, 'envLight', -0.5, 3.0)
         .step(0.1)
         .onChange(function(e) {
             ambient.intensity = e
@@ -279,7 +279,7 @@ export class UI{
         params.bloomThreshold=bloomPass.threshold;
         params.bloomStrength=bloomPass.strength;
         params.bloomRadius=bloomPass.radius;
-        const folder = gui.addFolder("辉光")
+        const folder = gui.addFolder("bloom")
         folder.add( params, 'bloomStrength', 0.0, 1.5 ).step( 0.005 ).onChange( function ( value ) {
             bloomPass.strength = Number( value );
         } );

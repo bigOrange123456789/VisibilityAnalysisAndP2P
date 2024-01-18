@@ -15,7 +15,7 @@ import { Start } from './Start.js'
 
 // document.addEventListener('DOMContentLoaded', () => {
     const h1=document.getElementById("versionId")
-    if(h1)h1.innerHTML="version:"+Engine3D.versionId
+    if(h1)h1.innerHTML=""//"version:"+Engine3D.versionId
     const config=config_gkd// getParam('scene')=="haiNing0"?config_haiNing0:
     new Engine3D.Param(config)
     // new StartGPU(document.body,config.useGPU)
