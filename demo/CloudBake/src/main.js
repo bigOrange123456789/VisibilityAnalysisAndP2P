@@ -57,7 +57,7 @@ class Loader{
 					node.receiveShadow = true
 					let indirectMaterial = new IndirectMaterial(node.material,rtxgiNetwork)//indirectShader//.clone();//new IndirectMaterial0({rtxgiNetwork:rtxgiNetwork})//new THREE.MeshStandardMaterial({color:{r:1,g:0.5,b:0}})//
 					node.litMaterial = node.material
-					console.log(node.material.map)
+					// console.log(node.material.map)
 					window.material=indirectMaterial
 					node.diffuseMaterial = node.material
 					node.indirectMaterial = indirectMaterial
