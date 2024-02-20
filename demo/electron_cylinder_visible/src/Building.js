@@ -18,26 +18,41 @@ export class Building{
                 if(o instanceof THREE.Mesh){
                     const code=new Engine3D.Classification(o,[]).code
                     o=new THREE.Mesh(
-                        o.geometry,new THREE.MeshStandardMaterial()
+                        o.geometry,
+                        //new THREE.MeshDepthMaterial()
+                        // new THREE.MeshStandardMaterial()
+                        new THREE.MeshLambertMaterial()
                     )
                     if(code){
                         // console.log(o.name,code.type)
+                        //if(false)
                         if(code.type=="cube"){
                             o.material.color.r=0
                             o.material.color.g=1
                             o.material.color.b=0
                         }
                     //         self.paramCube[o.name]=code.matrix[0]
+                        //if(false)
                         if(code.type=="cylinder"){
                             o.material.color.r=0
                             o.material.color.g=0
                             o.material.color.b=1
                         }
+                        // o=new THREE.Mesh(
+                        //     o.geometry,
+                        //     new THREE.MeshDepthMaterial()
+                        //     //new THREE.MeshStandardMaterial()
+                        // )
+                        // o.visible=false
                     //         self.paramCylinder[o.name]=code.matrix[0]
                     }else{
-                        o.material.color.r=1
+                        // if(false)
+                        {
+                            o.material.color.r=1
                         o.material.color.g=0
                         o.material.color.b=0
+                        }
+                        
                         // o.visible=false
                     }
                     // console.log(code)
@@ -73,7 +88,9 @@ export class Building{
             227.22,
             250.03,
         )
-        
+
+        camera.position.set(-301.9959744700025,  247.22000000000003,  315.169907837892)
+        camera.rotation.set(0.021169286259497242, -0.7316884518312282,  0.014144938796166663)
     }
     loadJson(path,cb){
         console.log(path)

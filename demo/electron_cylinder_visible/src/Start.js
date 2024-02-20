@@ -43,14 +43,14 @@ export class Start{
         this.initCSM();
 
         this.building = new Building(this.scene, this.camera,this.csm,()=>{
-            this.ui=new UI(this)
+            // this.ui=new UI(this)
         })
         Engine3D.MapLoader.getCubeMapTexture('assets/textures/environment/skybox.jpg',this.renderer).then(
             ({ envMap }) => {
-              self.scene.background = envMap
+            //   self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
 
-              self.scene.backgroundIntensity=0.4
+            //   self.scene.backgroundIntensity=0//0.4
               if(self.unrealBloom)if(self.unrealBloom.bloomPass)
               self.unrealBloom.bloomPass.strength=0.55
 
@@ -76,6 +76,7 @@ export class Start{
         
         // const center=new THREE.Object3D()
         // center.position.set( 126.06182686202473,  21,  161.6807662956592)
+        return
         const scene=new THREE.Scene()
         scene.add(
             new Engine3D.PathLine({
@@ -137,7 +138,7 @@ export class Start{
 		// 告诉渲染器需要阴影效果
 		this.renderer.shadowMap.enabled = true
 		this.renderer.shadowMapSoft = true;
-		this.renderer.setClearColor(0xcccccc)
+		this.renderer.setClearColor(0xffffff)//(0xcccccc)
 		this.renderer.shadowMap.type = THREE.PCFSoftShadowMap // BasicShadowMap,PCFSoftShadowMap, PCFShadowMap,VSMShadowMap
 		this.renderer.shadowMap.autoUpdate = true;
 		//this.renderer.tonemapping = THREE.NoToneMapping;
@@ -168,15 +169,16 @@ export class Start{
         var statsContainer = document.createElement('div')
         statsContainer.id = 'stats-container'
         statsContainer.appendChild(this.stats.domElement)
-        this.body.appendChild(statsContainer)
+        // this.body.appendChild(statsContainer)
 
         this.scene = new THREE.Scene()
+        // this.scene.overrideMaterial=new THREE.MeshDepthMaterial()
 
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
-            this.config.camera.near,//3,//
-            100*this.config.camera.far//200,//
+            this.config.camera.near,//100,//
+            this.config.camera.far*200,//1000
             )
             // ( 65, width / height, 3, 10 )
 
