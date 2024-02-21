@@ -25,9 +25,7 @@ import {WanderControl} from "../lib/WanderControl";
 
 
 import { Engine3D } from './main.js'
-// import {AvatarManager } from './AvatarManager.js'
-import { TreeManager } from "./TreeBuilder/TreeManager";
-import {Lensflares}from"./Lensflares"
+
 export class Viewer
 {
   constructor (el, options)
@@ -123,11 +121,11 @@ export class Viewer
       _self.initBackground()
     },2000)
 
-    this.lensflares=new Lensflares()
-    _self.sceneEx.add(this.lensflares)
+    // this.lensflares=new Lensflares()
+    // _self.sceneEx.add(this.lensflares)
   
     setTimeout(()=>{
-      new TreeManager(_self.sceneEx).init({}) 
+      // new TreeManager(_self.sceneEx).init({}) 
     },4000)
     this.addGUI();
   }
@@ -146,6 +144,7 @@ export class Viewer
           //   self.unrealBloom.bloomPass.strength=1.5
         }
     )
+    if(false)
     _self.getCubeMapTexture('assets/textures/environment/skybox2.jpg',this.renderer).then(
       //this.getCubeMapTexture('assets/textures/environment/footprint_court_2k.hdr').then(
       ({ envMap }) => {
@@ -192,7 +191,7 @@ export class Viewer
     // return
 
     // this.render();//this.renderer.render(this.sceneEx, this.activeCamera);this.renderer.clear();
-    if(this.unrealBloom&&this.unrealBloom.bloomPass.enabled)
+    if(false&&this.unrealBloom&&this.unrealBloom.bloomPass.enabled)
       this.unrealBloom.render()
     else {
       this.renderer.render(this.sceneEx, this.defaultCamera);

@@ -78,6 +78,7 @@ export class SceneManager {
         // 47.103.21.207
 
         this.server_ip = "ws://47.116.5.3:4003";
+        // if(false)
         this.startConnect();
 
         this.processLoadList(InitialVisibleList)
@@ -172,10 +173,13 @@ export class SceneManager {
             this.httping = true
             this.sceneCulling();
         }
-        this.setVisibility(this.visibleModelList);
-        this.processLoadList(this.toLoadModelList)
+        if(false)
+        this.setVisibility(this.visibleModelList);//判断是否可见
+        if(false)
+        this.processLoadList(this.toLoadModelList)//是否进行加载
         this.manageCaches()
 
+        if(false)
         for(let i=0; i<this.waterList.length; i++){
             let water = this.waterList[i]
             water.material.uniforms['time'].value += 4.0/120.0
@@ -372,7 +376,7 @@ export class SceneManager {
         // this.scene.add(mesh)
         // if(Number(index)<466 || Number(index)>469){
         
-        if(index===21){
+        if(false&&index===21){
             var water = new Water(mesh.geometry,{
                 textureWidth: 512,
                 textureHeight: 512,
