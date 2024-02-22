@@ -34,7 +34,7 @@ export class Building{
                         o=classification.mesh2
                         // o.visible=false
                     }else{
-                        o.visible=false
+                        // o.visible=false
                     }
                     o.position.set(
                         m.position.x,
@@ -71,10 +71,11 @@ export class Building{
                     //         self.paramCube[o.name]=code.matrix[0]
                         //if(false)
                         if(code.type=="cylinder"){
-
+                            console.log(o,o.matrixWorld)
                             o.material.color.r=1
                             o.material.color.g=0
                             o.material.color.b=0
+                            o.type=code.type
                             // o.visible=false
                         }
                         // o=new THREE.Mesh(
@@ -97,6 +98,31 @@ export class Building{
                     // console.log(o)
                     // self.parentGroup.add(o)
                     self.parentGroup.add(o)
+                    window.start001=()=>{
+                        const data={
+                            cylinder:[],
+                            viewMatrix:         window.camera.matrixWorldInverse.elements,
+                            projectionMatrix:   window.camera.projectionMatrix.elements,
+                        }
+                        const arr=self.parentGroup.children
+                        for(let i=0;i<arr.length;i++){
+                            const mesh=arr[i]
+                            if(mesh.type=='cylinder'){
+                                console.log(mesh.name,mesh.matrixWorld.elements)
+                                data.cylinder.push(
+                                    mesh.matrixWorld.elements
+                                )
+                            }
+                        }
+
+                        let str=JSON.stringify(data)
+                        var link = document.createElement('a');
+                        link.style.display = 'none';
+                        document.body.appendChild(link);
+                        link.href = URL.createObjectURL(new Blob([str], { type: 'text/plain' }));
+                        link.download ="mvp.json";
+                        link.click();
+                    }
                 }
             })
             // self.parentGroup.add(gltf.scene)

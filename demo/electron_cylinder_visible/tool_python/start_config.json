@@ -1,5 +1,6 @@
 {
     "inPath":"../../../assets/data/capture.png",
+    "MVP_Path":"./data/mvp.json",
 
     "outPath":"./capture2.png",
     "startPosition":0.5,
