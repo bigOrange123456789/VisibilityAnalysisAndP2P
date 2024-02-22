@@ -1,0 +1,9 @@
+{
+    "inPath":"../../../assets/data/capture.png",
+
+    "outPath":"./capture2.png",
+    "startPosition":0.5,
+    "endPosition":1,
+    "analysis":false,
+    "maxComponentNum":100
+}

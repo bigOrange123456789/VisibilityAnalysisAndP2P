@@ -27,6 +27,9 @@ export class Start{
         // this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
 
         self.init()
+        window.capture=()=>{
+            self.capture()
+        }
 
     }
     init(){
@@ -177,8 +180,8 @@ export class Start{
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
-            this.config.camera.near,//100,//
-            this.config.camera.far*200,//1000
+            500,//this.config.camera.near,//100,
+            700,//this.config.camera.far*200,//1000,
             )
             // ( 65, width / height, 3, 10 )
 
