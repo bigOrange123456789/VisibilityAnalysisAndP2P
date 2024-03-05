@@ -180,8 +180,8 @@ export class Start{
         this.camera = new THREE.PerspectiveCamera(
             (this.config["FlipY"]?-1:1)*30,//50,
             this.body.clientWidth/this.body.clientHeight,
-            500,//this.config.camera.near,//100,
-            700,//this.config.camera.far*200,//1000,
+            this.config.camera.near,//500,//100,
+            this.config.camera.far*200,//700,//1000,
             )
             // ( 65, width / height, 3, 10 )
 

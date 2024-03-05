@@ -4,6 +4,33 @@ export class Building{
     test(){
         this.load_new(0)
     }
+    showPos(m){
+                    m.geometry.computeVertexNormals()
+                    m.geometry.computeBoundingBox()
+                    const pos=m.geometry.attributes.position.array
+                    console.log(123)
+                    const normal=m.geometry.attributes.normal.array
+                    for(var i=0;i<pos.length/3;i++){
+                        const cube = new THREE.Mesh( 
+                            new THREE.BoxGeometry( 0.1, 0.1, 0.1 ), 
+                            new THREE.MeshBasicMaterial( {color: 0x00ffff} )
+                        );
+                        // cube.scale.set(0.1,0.1,0.1)
+
+                        cube.position.set(
+                            pos[3*i+0],
+                            pos[3*i+1],
+                            pos[3*i+2],
+                        )
+                        const n=[
+                            normal[3*i+0],
+                            normal[3*i+1],
+                            normal[3*i+2]
+                        ]
+                        // if(n[0]!=0&&n[1]!=0&&n[2]!=0)
+                        this.parentGroup.add(cube)
+                    }
+    }
     load_new(index){
         // this.path='../../dist/assets/models/huayi/'
         this.path='./assets/models/'
@@ -18,8 +45,10 @@ export class Building{
             // return
             // return
             gltf.scene.traverse(m=>{
-                if(m instanceof THREE.Mesh){
-                    
+                if(m instanceof THREE.Mesh){//&&m.name=="Mesh_15"){
+                    // console.log(m.name,m.name.split("Cylinder").length)
+                    var flag=(m.name.split("Cylinder").length<2)
+                    var name=m.name
                     // m.visible=false
                     const classification=new Engine3D.Classification(m,[])
                     const code=classification.code                    
@@ -28,10 +57,17 @@ export class Building{
                         //new THREE.MeshDepthMaterial()
                         // new THREE.MeshStandardMaterial()
                         m.material
+                        // new THREE.LineBasicMaterial( {
+                        //     color: 0xffffff,
+                        //     linewidth: 1,
+                        //     linecap: 'round', //ignored by WebGLRenderer
+                        //     linejoin:  'round' //ignored by WebGLRenderer
+                        // } )
                         // new THREE.MeshLambertMaterial()
                     )
+                    // o.material.wireframe  = true;
                     if(code){
-                        o=classification.mesh2
+                        // o=classification.mesh2
                         // o.visible=false
                     }else{
                         // o.visible=false
@@ -71,7 +107,8 @@ export class Building{
                     //         self.paramCube[o.name]=code.matrix[0]
                         //if(false)
                         if(code.type=="cylinder"){
-                            console.log(o,o.matrixWorld)
+                            // if(flag)console.log(m.name)
+                            //console.log(o,o.matrixWorld)
                             o.material.color.r=1
                             o.material.color.g=0
                             o.material.color.b=0
@@ -97,6 +134,8 @@ export class Building{
                     }
                     // console.log(o)
                     // self.parentGroup.add(o)
+                    // self.showPos(o)
+                    // if(flag)
                     self.parentGroup.add(o)
                     window.start001=()=>{
                         const data={
