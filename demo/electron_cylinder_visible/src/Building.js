@@ -45,7 +45,7 @@ export class Building{
             // return
             // return
             gltf.scene.traverse(m=>{
-                if(m instanceof THREE.Mesh){//&&m.name=="Mesh_15"){
+                if(m instanceof THREE.Mesh){//&&m.name=="Mesh_15"){//
                     // console.log(m.name,m.name.split("Cylinder").length)
                     var flag=(m.name.split("Cylinder").length<2)
                     var name=m.name
@@ -67,7 +67,7 @@ export class Building{
                     )
                     // o.material.wireframe  = true;
                     if(code){
-                        // o=classification.mesh2
+                        o=classification.mesh2
                         // o.visible=false
                     }else{
                         // o.visible=false

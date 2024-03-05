@@ -70,5 +70,5 @@
   },
   "homepage": "https://github.com/bigOrange123456789/VisibilityAnalysisAndP2P#readme",
   "description": "",
-  "main": "./demo/electron_cylinder_visible/server_detection.js"
+  "main": "./demo/electron_cylinder/server_detection.js"
 }
