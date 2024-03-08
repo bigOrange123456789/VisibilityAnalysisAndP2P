@@ -119,6 +119,10 @@ export class Start{
         // setTimeout(()=>{
             // new Engine3D.PathPlanning()
         // },3000)
+        if(true){
+            window.scene=this.scene
+            new Engine3D.VCG()
+        }
         
         // const center=new THREE.Object3D()
         // center.position.set( 126.06182686202473,  21,  161.6807662956592)
