@@ -5,6 +5,7 @@
 /demo/*/index.js
 /demo/*/analysis
 
+/demo/electron_cylinder/data/
 
 /server/vd_data/
 /tool2/data/
