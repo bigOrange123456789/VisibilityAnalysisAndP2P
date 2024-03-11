@@ -39,7 +39,7 @@ export class Start{
         
         // this.postprocessing   =new Postprocessing(this.camera,this.scene,this.renderer)
         // this.postprocessingNew=new PostprocessingNew(this.camera,this.scene,this.renderer)
-        this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
+        if(true)this.unrealBloom=new UnrealBloom(this.camera,this.scene,this.renderer)
         // console.log(this.unrealBloom)
 
         self.init()
@@ -70,9 +70,13 @@ export class Start{
                     // if(typeof AvatarManager!=="undefined")
                     // for(let i=0;i<2;i++)
                     // self.TreeManager.init(data) 
-                    setTimeout(()=>{
+
+                    // setTimeout(()=>{
+                    //     if(window.csm)window.csm.MyUpdate()
+                    // },6000)
+                    setInterval(()=>{
                         if(window.csm)window.csm.MyUpdate()
-                    },6000)
+                    },5000)
                 }
             )
         },4000)
@@ -94,21 +98,23 @@ export class Start{
 
         setTimeout(()=>{
             self.initBackground()
-            const scene=new THREE.Scene()
-            scene.add(
-                new Engine3D.PathLine({
-                    path:[],
-                    camera:self.camera,
-                    delayTime:500
-                })
-            )
-            scene.add(this.scene)
-            this.miniMap = new Engine3D.MiniMap({
-                target: self.camera,//center,//this.player,
-                scene: scene,//this.scene,
-                mapSize: 100*12,
-                mapRenderSize: 160,
-            });
+            if(false){
+                const scene=new THREE.Scene()
+                scene.add(
+                    new Engine3D.PathLine({
+                        path:[],
+                        camera:self.camera,
+                        delayTime:500
+                    })
+                )
+                scene.add(this.scene)
+                this.miniMap = new Engine3D.MiniMap({
+                    target: self.camera,//center,//this.player,
+                    scene: scene,//this.scene,
+                    mapSize: 100*12,
+                    mapRenderSize: 160,
+                }); 
+            }
         },2000)
         
 
@@ -131,9 +137,9 @@ export class Start{
               self.scene.background = envMap
               self.scene.backgroundIntensity=0.8
 
-              self.scene.backgroundIntensity=0.4
+              self.scene.backgroundIntensity=0.6//0.4
               if(self.unrealBloom)if(self.unrealBloom.bloomPass)
-              self.unrealBloom.bloomPass.strength=0.55
+              self.unrealBloom.bloomPass.strength=0.3//0.55
 
             //   self.scene.environment = envMap
             //   self.scene.backgroundIntensity=0//=0.1
@@ -280,6 +286,7 @@ export class Start{
                 const light=csm.lights[i]
                 light.shadow.needsUpdate=true
             }
+            console.log("进行一次csm阴影更新。")
         }
         window.csm=this.csm
         //this.csm.lightIntensity = 1000;

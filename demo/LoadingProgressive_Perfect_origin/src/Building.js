@@ -99,7 +99,8 @@ export class Building{
 
         
 
-        this.detection=new Engine3D.Detection(this.meshes)
+        if(false)this.detection=new Engine3D.Detection(this.meshes)
+        console.log("p2p模块是否启动:",this.config.useP2P)
         if(this.config.useP2P){
             this.p2p=new Engine3D.P2P(camera,this.detection)
             this.p2p.parse=message=>{self.p2pParse(message)}
@@ -278,6 +279,7 @@ export class Building{
         return mesh
     }
     addMesh(id,meshOld){
+        if(false)
         if(id==202){//不显示门口的学校名称
             meshOld.material=new THREE.MeshBasicMaterial()
         }
@@ -308,23 +310,25 @@ export class Building{
 
         const m=meshOld.material
         
-        m.side=0
-        if(id==29||id==3){//玻璃
-            m.transparent=true
-            m.opacity=0.6
-        }else if(id==166){//护栏
-            m.side=2
-        }else if(id==174||id==182){//道路
-            m.metalness=0.8
-            m.roughness=0.4
-            // m.visible=false
-            // m.metal=true
-            // alert(m.shininess)
-            // console.log(m)
-        }else{
-            // m.transparent=false
+        if(false){
+            m.side=0
+            if(id==29||id==3){//玻璃
+                m.transparent=true
+                m.opacity=0.6
+            }else if(id==166){//护栏
+                m.side=2
+            }else if(id==174||id==182){//道路
+                m.metalness=0.8
+                m.roughness=0.4
+                // m.visible=false
+                // m.metal=true
+                // alert(m.shininess)
+                // console.log(m)
+            }else{
+                // m.transparent=false
+            }
+            m.envMapIntensity=0.1+m.metalness
         }
-        m.envMapIntensity=0.1+m.metalness
 
         // meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
         if(this.sampling)meshOld.material=Engine3D.Building.Tool.getSampleMaterial(id)
@@ -390,10 +394,11 @@ export class Building{
                         // window.waterMaterial = mesh.lod[1].material;
                     }
             }
-            if(id!=177){//不要显示操场的标记
+            
+            //if(id!=177){//不要显示操场的标记
                 mesh.add(mesh1)
                 mesh.add(mesh2)
-            }
+            //}
             
             mesh.used      =mesh0.used
             mesh.LoadDelay =mesh0.LoadDelay
@@ -415,8 +420,10 @@ export class Building{
 
         mesh.myId=id
         mesh.name=meshOld.name
+        if(false)
         this.detection.receiveMesh(mesh)   
         // console.log(mesh,id)
+        if(false)
         if(window.csm)window.csm.MyUpdate()
     }
     loadZip(id,cb){
@@ -424,8 +431,11 @@ export class Building{
         // return
         if(this.meshes_info[id])return
         else this.meshes_info[id]={request:performance.now()}//true
-        this.detection.receivePack("server")
-        this.detection.request("zip")
+        if(this.detection){
+            this.detection.receivePack("server")
+            this.detection.request("zip")
+        }
+        
         const self=this
         // if(this.loadZip2){
         //     this.loadZip2.load([id]);
@@ -475,7 +485,7 @@ export class Building{
     loadGLB(id,cb){
         if(this.meshes_info[id])return
         else this.meshes_info[id]={request:performance.now()}//true
-        this.detection.request("glb")
+        if(this.detection)this.detection.request("glb")
         const self=this
         this.loader.loadGLB(id,(gltf) => {
             gltf.scene.traverse(o=>{
@@ -487,7 +497,7 @@ export class Building{
         })
     }
     p2pParse(message){
-        this.detection.receivePack("p2p")
+        if(this.detection)this.detection.receivePack("p2p")
         const cid=message.cid
         if(this.meshes_info[cid])return
 		else this.meshes_info[cid]={request:performance.now()}
