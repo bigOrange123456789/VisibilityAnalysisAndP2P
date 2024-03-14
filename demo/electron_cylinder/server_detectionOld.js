@@ -1,9 +1,6 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const fs = require("fs");
-const Tool = require('./src_server/Tool')
-console.log("Test:",Tool)
-console.log("Tool.DownloadJSONStack",Tool.DownloadJSONStack)
-const downloadJSONStack=new Tool.DownloadJSONStack()//Stack
+
 function createWindow() {
   // 创建浏览器窗口
   const win = new BrowserWindow({
@@ -58,8 +55,6 @@ function createWindow() {
   });
 
   ipcMain.on("downloadJSON", (event, arg) => {
-    downloadJSONStack.push(arg)
-    return
     let result = JSON.parse(arg);
     let dataBuffer = result.data;
     let name = result.name;

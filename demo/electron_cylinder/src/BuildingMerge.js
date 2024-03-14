@@ -1,20 +1,9 @@
 import { Engine3D } from './main.js'
 // import { Classification } from './parametric/Classification.js'
 const { ipcRenderer } = require("electron");
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-
-const repeatedGreetings = async () => {
-  await sleep(1000)
-  console.log(1)
-  await sleep(1000)
-  console.log(2)
-  await sleep(1000)
-  console.log(3)
-}
 export class Building{
     path='../../dist/assets/models/'
     constructor(){   
-        this.saveCount=0
         this.paramCube={}
         this.paramCylinder={}
         this.numPack=920
@@ -70,16 +59,10 @@ export class Building{
                     if(code){
                         // console.log(o.name,code.type)
                         const sim=code2sim(code)
-                        if(false){
-                            if(code.type=="cube")
-                                self.paramCube[o.name]=sim//code//.matrix[0]
-                            if(code.type=="cylinder")
-                                self.paramCylinder[o.name]=sim//code//.matrix[0]
-                        }
                         if(code.type=="cube")
-                            self.save("data/cube/"+o.name,    sim)
+                            self.paramCube[o.name]=sim//code//.matrix[0]
                         if(code.type=="cylinder")
-                            self.save("data/cylinder/"+o.name, sim)    
+                            self.paramCylinder[o.name]=sim//code//.matrix[0]
                         function code2sim(code){
                             const sim=[
                                 code.color[0],
@@ -114,30 +97,18 @@ export class Building{
         });
     }
     finish(){
-        console.log("saveCount:",this.saveCount)
-        if(false){
-            this.save("cube",    this.paramCube)
-            this.save("cylinder",this.paramCylinder)
-        }
+        this.save("cube",    this.paramCube)
+        this.save("cylinder",this.paramCylinder)
         console.log("任务结束!")
         if(false)
             ipcRenderer.send('quit', "finish!");//异步
     }
     save(name,data){
-        this.saveCount++
         const fileData = JSON.stringify({
             name: name+".json",
             data: JSON.stringify(data),
         });
         ipcRenderer.send("downloadJSON", fileData);
-    }
-    save2(name,data){
-        this.saveCount++
-        const fileData = JSON.stringify({
-            name: name+".json",
-            data: JSON.stringify(data),
-        });
-        ipcRenderer.send("downloadJSON2", fileData);
     }
 
 }
