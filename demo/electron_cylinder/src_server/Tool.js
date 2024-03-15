@@ -80,7 +80,7 @@ class Decompose{
         try {
             console.log(id)
             const data0 = JSON.stringify(param[id])//JSON.stringify(param[id], null, 4);
-            fs.writeFileSync('./data/'+type+'/'+id+'.json', data0);
+            fs.writeFileSync(__dirname + '/../data/'+type+'/'+id+'.json', data0);
         } catch (error) {
             console.error(id,error);
         }
@@ -90,29 +90,35 @@ class Decompose{
 }
 class GetIndex{
     constructor(count){
+        const self=this
+        setTimeout(()=>{
+            self.start(count)
+        },1000)
+    }
+    start(count){
         //const count=275809
         const result=[]
         for(let i=0;i<count;i++){
             result.push(0)
         }
-        let files = fs.readdirSync("./cube");
+        let files = fs.readdirSync(__dirname + "/../data/cube");
         for(let i=0;i<files.length;i++){
             const f=files[i].split(".json")[0]
             const j=parseInt(f)
             result[j]=1
         }
-        files = fs.readdirSync("./cylinder");
+        files = fs.readdirSync(__dirname + "/../data/cylinder");
         for(let i=0;i<files.length;i++){
             const f=files[i].split(".json")[0]
             const j=parseInt(f)
             result[j]=2
         }
         const str=JSON.stringify(result)
-        fs.writeFile(__dirname + "/" + "result.json", str, function (err) {
+        fs.writeFile(__dirname + "/../data/" + "parameter.json", str, function (err) {
             if (err) {
             console.log(err);
             } else {
-            //console.log("save success");
+            console.log("save success");
             }
         });
     }
