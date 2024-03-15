@@ -12,6 +12,7 @@ const repeatedGreetings = async () => {
   console.log(3)
 }
 export class Building{
+    idMax=0
     path='../../dist/assets/models/'
     constructor(){   
         this.saveCount=0
@@ -53,6 +54,7 @@ export class Building{
                 if(o instanceof Engine3D.THREE.Mesh){
                     //// 开始获取矩阵 ////
                     const index = Number(o.name)
+                    if(index>self.idMax)self.idMax=index
                     const mats = self.matrixList[index]
                     mats.push([1,0,0,0,0,1,0,0,0,0,1,0])
                     const instanceList = []
@@ -70,16 +72,17 @@ export class Building{
                     if(code){
                         // console.log(o.name,code.type)
                         const sim=code2sim(code)
-                        if(false){
+                        if(true){
                             if(code.type=="cube")
                                 self.paramCube[o.name]=sim//code//.matrix[0]
                             if(code.type=="cylinder")
                                 self.paramCylinder[o.name]=sim//code//.matrix[0]
+                        }else{
+                            if(code.type=="cube")
+                                self.save("data/cube/"+o.name,    sim)
+                            if(code.type=="cylinder")
+                                self.save("data/cylinder/"+o.name, sim)   
                         }
-                        if(code.type=="cube")
-                            self.save("data/cube/"+o.name,    sim)
-                        if(code.type=="cylinder")
-                            self.save("data/cylinder/"+o.name, sim)    
                         function code2sim(code){
                             const sim=[
                                 code.color[0],
@@ -118,9 +121,16 @@ export class Building{
         if(false){
             this.save("cube",    this.paramCube)
             this.save("cylinder",this.paramCylinder)
+        }else if(true){
+            const fileData = JSON.stringify({
+                "cube"    :this.paramCube,
+                "cylinder":this.paramCylinder,
+                "count"   :this.idMax+1
+            });
+            ipcRenderer.send("backJSON", fileData);
         }
         console.log("任务结束!")
-        if(false)
+        // if(false)
             ipcRenderer.send('quit', "finish!");//异步
     }
     save(name,data){

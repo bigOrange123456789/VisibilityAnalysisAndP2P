@@ -53,7 +53,7 @@ function createWindow() {
   ipcMain.on("quit", (event, arg) => {
     //console.log(arg);
     setTimeout(function () {
-      app.quit();
+      if(false)app.quit();
     }, 500); //收到退出消息后等待500毫秒再退出
   });
 
@@ -70,6 +70,11 @@ function createWindow() {
         //console.log("save success");
       }
     });
+  });
+  ipcMain.on("backJSON", (event, arg) => {
+    let result = JSON.parse(arg)
+    new Tool.Decompose(result)
+    new Tool.GetIndex(result.count)
   });
 
   ipcMain.handle("exportGltf", async (event, arg) => {

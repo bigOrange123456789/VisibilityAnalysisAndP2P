@@ -64,7 +64,62 @@ class DownloadJSONStack extends Stack{
 
 
 }
+class Decompose{
+    constructor(opt){
+        this.process("cube",opt.cube)
+        this.process("cylinder",opt.cube)
+    }
+    process(type,param){
+        // const type="cube"
+        // const { readFileSync } = require('fs');
+        // const data = readFileSync('./data/'+type+'.json');
+        // console.log("data",data)
+        // const param=JSON.parse(data.toString())
+
+        for(let id in param){
+        try {
+            console.log(id)
+            const data0 = JSON.stringify(param[id])//JSON.stringify(param[id], null, 4);
+            fs.writeFileSync('./data/'+type+'/'+id+'.json', data0);
+        } catch (error) {
+            console.error(id,error);
+        }
+        }
+        console.log("finish!")
+    }
+}
+class GetIndex{
+    constructor(count){
+        //const count=275809
+        const result=[]
+        for(let i=0;i<count;i++){
+            result.push(0)
+        }
+        let files = fs.readdirSync("./cube");
+        for(let i=0;i<files.length;i++){
+            const f=files[i].split(".json")[0]
+            const j=parseInt(f)
+            result[j]=1
+        }
+        files = fs.readdirSync("./cylinder");
+        for(let i=0;i<files.length;i++){
+            const f=files[i].split(".json")[0]
+            const j=parseInt(f)
+            result[j]=2
+        }
+        const str=JSON.stringify(result)
+        fs.writeFile(__dirname + "/" + "result.json", str, function (err) {
+            if (err) {
+            console.log(err);
+            } else {
+            //console.log("save success");
+            }
+        });
+    }
+}
 module.exports = {
     Stack,
-    DownloadJSONStack
+    DownloadJSONStack,
+    Decompose,
+    GetIndex
 }
