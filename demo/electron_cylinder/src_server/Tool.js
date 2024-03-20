@@ -64,27 +64,53 @@ class DownloadJSONStack extends Stack{
 
 
 }
+
 class Decompose{
     constructor(opt){
-        this.process("cube",opt.cube)
-        this.process("cylinder",opt.cube)
+        this.process0("cube",opt.cube)
+        this.process0("cylinder",opt.cube)
     }
-    process(type,param){
+    emptyFolder(folderPath) {
+        console.log("Clearing folder:",folderPath)
+        const self=this
+        // 读取文件夹中的所有文件和子文件夹
+        const files = fs.readdirSync(folderPath);
+        // 遍历文件和子文件夹并删除
+        for (const file of files) {
+          const curPath = folderPath+"/"+file//path.join(folderPath, file);
+          if (fs.lstatSync(curPath).isDirectory()) {
+            // 递归删除子文件夹
+            self.emptyFolder(curPath);
+            // 删除空文件夹
+            fs.rmdirSync(curPath);
+          } else {
+            // 删除文件
+            fs.unlinkSync(curPath);
+          }
+        }
+    }
+    process0(type,param){
         // const type="cube"
         // const { readFileSync } = require('fs');
         // const data = readFileSync('./data/'+type+'.json');
         // console.log("data",data)
         // const param=JSON.parse(data.toString())
-
+        this.emptyFolder(__dirname + '/../data/'+type)
+        let testNum=0
+        const testNumMax=Object.keys(param).length
+        console.log()
         for(let id in param){
         try {
-            console.log(id)
+            testNum++
+            // process.stdout.write((100*testNum/testNumMax).toFixed(2)+"%\t",testNum+"/"+testNumMax);
+            process.stdout.write((100*testNum/testNumMax).toFixed(2)+"%\t"+testNum+"/"+testNumMax+"\t\t\r");
             const data0 = JSON.stringify(param[id])//JSON.stringify(param[id], null, 4);
             fs.writeFileSync(__dirname + '/../data/'+type+'/'+id+'.json', data0);
         } catch (error) {
             console.error(id,error);
         }
         }
+        console.log()
         console.log("finish!")
     }
 }

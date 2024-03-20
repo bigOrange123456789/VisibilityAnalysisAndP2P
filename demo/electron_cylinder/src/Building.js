@@ -1,16 +1,6 @@
 import { Engine3D } from './main.js'
 // import { Classification } from './parametric/Classification.js'
 const { ipcRenderer } = require("electron");
-const sleep = (delay) => new Promise((resolve) => setTimeout(resolve, delay))
-
-const repeatedGreetings = async () => {
-  await sleep(1000)
-  console.log(1)
-  await sleep(1000)
-  console.log(2)
-  await sleep(1000)
-  console.log(3)
-}
 export class Building{
     idMax=0
     path='../../dist/assets/models/'
@@ -49,7 +39,7 @@ export class Building{
         const self=this
         const loader = new Engine3D.GLTFLoader();
         loader.load(path, function (gltf) {
-            console.log(gltf,"gltf")
+            if(false)console.log(gltf,"gltf")
             gltf.scene.traverse(o=>{
                 if(o instanceof Engine3D.THREE.Mesh){
                     //// 开始获取矩阵 ////
@@ -108,8 +98,8 @@ export class Building{
                     }
                 }
             })
-            console.log(index)
             index++
+            console.log((100*index/self.numPack).toFixed(2)+"%\t",index+"/"+self.numPack,)
             if(index>=self.numPack)self.finish()
             else self.load(index)
         }, undefined, function (error) {
