@@ -1,14 +1,15 @@
 import * as THREE from "three";
 import {ZipLoader} from "./ziploader";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import{Classification} from "../parametric/Classification";
-import{CoderDecoder  } from "../parametric/CoderDecoder";
+// import{Classification} from "../parametric/Classification";
+// import{CoderDecoder  } from "../parametric/CoderDecoder";
+import { Engine3D } from '../main.js'
 // import { parameterFlag } from '../parametric/parameter.json'
 // console.log("parameterFlag",parameterFlag)
 ///////////改动的部分--开始///////////   --1--
 let parameterFlag=false
 // if(false)
-Classification.loadJson("./assets/huayi/parameter.json",result=>{
+Engine3D.loadJson("./assets/huayi/parameter.json",result=>{
     parameterFlag=result
     console.log(result)
 })
@@ -37,16 +38,16 @@ function loadModelZip(index){
             // Classification.loadJson("./assets/cube/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cube")})
             // })
-            CoderDecoder.loadBin("./assets/huayi/cubeBin/"+index+".bin",result=>{
-                postMessage({code:CoderDecoder.sim2code(result,"cube")})
+            Engine3D.CoderDecoder.loadBin("./assets/huayi/cubeBin/"+index+".bin",result=>{
+                postMessage({code:Engine3D.CoderDecoder.sim2code(result,"cube")})
             })
             return
         }else if(parameterFlag[index]==2){//cylinder
             // Classification.loadJson("./assets/cylinder/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
             // })
-            CoderDecoder.loadBin("./assets/huayi/cylinderBin/"+index+".bin",result=>{
-                postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
+            Engine3D.CoderDecoder.loadBin("./assets/huayi/cylinderBin/"+index+".bin",result=>{
+                postMessage({code:Engine3D.CoderDecoder.sim2code(result,"cylinder")})
             })
             return
         }
@@ -76,12 +77,12 @@ function loadModelZip(index){
                     let mesh = gltf.scene.children[0].children[0];
                     ///////////改动的部分--开始///////////   --1--
                     if(false){
-                        let classification = new Classification(mesh,[])
+                        let classification = new Engine3D.Classification(mesh,[])
                         if(classification.code){
                             // console.log("flag0049",mesh)
                             // mesh=classification.mesh2
                             // console.log({code:classification.code})
-                            postMessage({code:classification.code})
+                            postMessage({code:Engine3D.classification.code})
                             return
                             // material=new THREE.MeshBasicMaterial()
                         }else{
