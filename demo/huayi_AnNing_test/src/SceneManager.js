@@ -1,8 +1,7 @@
 import * as THREE from "three";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {ZipLoader} from "./myLib/ziploader";
-import{Classification} from "./parametric/Classification";
-import{CoderDecoder} from "./parametric/CoderDecoder";
+import { Engine3D } from './main.js'
 export class SceneManager{
     constructor(renderer, scene, camera){
         this.renderer = renderer
@@ -114,7 +113,7 @@ export class SceneManager{
             // console.log(e.data);
             ///////////改动的部分--开始///////////
             if(e.data.code){
-                const instance_mesh=CoderDecoder.decoder(e.data.code)
+                const instance_mesh=Engine3D.CoderDecoder.decoder(e.data.code)
                 this.instanceGroup.add(instance_mesh)
                 return
             }
@@ -471,7 +470,7 @@ export class SceneManager{
         //     console.log(index)
         // }
         if(false){
-            let classification = new Classification(new THREE.Mesh(geometry, material),matrix4List)
+            let classification = new Engine3D.Classification(new THREE.Mesh(geometry, material),matrix4List)
             if(classification.mesh2)
                 instance_mesh=classification.mesh2
         }

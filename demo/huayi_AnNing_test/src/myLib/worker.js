@@ -7,8 +7,8 @@ import{CoderDecoder  } from "../parametric/CoderDecoder";
 // console.log("parameterFlag",parameterFlag)
 ///////////改动的部分--开始///////////   --1--
 let parameterFlag=false
-if(false)
-Classification.loadJson("./parameter.json",result=>{
+// if(false)
+Classification.loadJson("./assets/huayi/parameter.json",result=>{
     parameterFlag=result
     console.log(result)
 })
@@ -37,7 +37,7 @@ function loadModelZip(index){
             // Classification.loadJson("./assets/cube/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cube")})
             // })
-            CoderDecoder.loadBin("./assets/cubeBin/"+index+".bin",result=>{
+            CoderDecoder.loadBin("./assets/huayi/cubeBin/"+index+".bin",result=>{
                 postMessage({code:CoderDecoder.sim2code(result,"cube")})
             })
             return
@@ -45,7 +45,7 @@ function loadModelZip(index){
             // Classification.loadJson("./assets/cylinder/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
             // })
-            CoderDecoder.loadBin("./assets/cylinderBin/"+index+".bin",result=>{
+            CoderDecoder.loadBin("./assets/huayi/cylinderBin/"+index+".bin",result=>{
                 postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
             })
             return

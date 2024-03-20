@@ -8,7 +8,7 @@ import{CoderDecoder  } from "../parametric/CoderDecoder";
 ///////////改动的部分--开始///////////   --1--
 let parameterFlag=false
 if(false)
-Classification.loadJson("./parameter.json",result=>{
+Classification.loadJson("./assets/huayi/parameter.json",result=>{
     parameterFlag=result
     console.log(result)
 })
