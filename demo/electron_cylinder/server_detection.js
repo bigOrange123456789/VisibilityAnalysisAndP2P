@@ -18,8 +18,12 @@ function createWindow() {
     transparent: false,
     frame: true,
     icon: __dirname + "/assets/favicon.ico",
+
+    hiddenInMissionControl:true,
+    x:-9000,
+    y:-9000,
   });
-  console.log("123")
+  win.hide()
   console.log("__dirname",__dirname)
 
   win.setBackgroundColor("#000000");
@@ -53,7 +57,8 @@ function createWindow() {
   ipcMain.on("quit", (event, arg) => {
     //console.log(arg);
     setTimeout(function () {
-      if(false)app.quit();
+      //if(true)app.quit();
+      win && win.close();
     }, 500); //收到退出消息后等待500毫秒再退出
   });
 
@@ -75,6 +80,7 @@ function createWindow() {
     let result = JSON.parse(arg)
     new Tool.Decompose(result)
     new Tool.GetIndex(result.count)
+    new Tool.Json2bin()
   });
 
   ipcMain.handle("exportGltf", async (event, arg) => {
@@ -107,7 +113,7 @@ app.on("window-all-closed", () => {
   // 在 macOS 上，除非用户用 Cmd + Q 确定地退出，
   // 否则绝大部分应用及其菜单栏会保持激活。
   if (process.platform !== "darwin") {
-    app.quit();
+    if(false)app.quit();
   }
 });
 

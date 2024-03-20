@@ -68,9 +68,10 @@ class DownloadJSONStack extends Stack{
 class Decompose{
     constructor(opt){
         this.process0("cube",opt.cube)
-        this.process0("cylinder",opt.cube)
+        this.process0("cylinder",opt.cylinder)
     }
     emptyFolder(folderPath) {
+        console.log()
         console.log("Clearing folder:",folderPath)
         const self=this
         // 读取文件夹中的所有文件和子文件夹
@@ -149,9 +150,28 @@ class GetIndex{
         });
     }
 }
+class Json2bin{
+    constructor(){
+        this.start()
+    }
+    start(){
+        console.log=str=>{
+            process.stdout.write(str)
+        }
+        const { spawn } = require('child_process')
+        const ls = spawn(__dirname + '/../src_py/'+'json2bin.bat', [])
+        ls.stdout.on('data', (data) => {
+            console.log(`stdout: ${data}`);
+        })
+        ls.on('close', (code) => {
+            console.log(`child process exited with code ${code}`);
+        })
+    }
+}
 module.exports = {
     Stack,
     DownloadJSONStack,
     Decompose,
-    GetIndex
+    GetIndex,
+    Json2bin
 }
