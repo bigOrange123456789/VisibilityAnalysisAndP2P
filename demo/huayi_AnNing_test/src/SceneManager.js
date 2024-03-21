@@ -132,6 +132,12 @@ export class SceneManager{
                 let zl = box.max.z-box.min.z
                 this.loaded_mesh_interest[index] = xl*yl+xl*zl+yl*zl
                 this.loaded_mesh_invisible_time[index] = 0
+
+                this.mesh_map[index].visible = false
+                e.data.code.sim=true
+                let instance_mesh_simp = Engine3D.CoderDecoder.decoder(e.data.code)//processMesh(geometry_simp, material, matrix4List)
+                this.instanceGroup.add(instance_mesh_simp)
+                this.mesh_simp_map[index] = instance_mesh_simp
                 return
             }
             ///////////改动的部分--结束///////////
@@ -265,7 +271,7 @@ export class SceneManager{
         this.mesText4.innerText = "Visible Meshes:  "+(vis_mesh+vis_mesh_simp)
         this.mesText5.innerText = "Loaded Meshes:  "+this.loadedModelList.length
         this.mesText6.innerText = "Triangles: "+Math.round(this.renderer.info.render.triangles)
-        this.mesText7.innerText = "视野内LOD构件数: "+paramComponentsCount.toString()
+        // this.mesText7.innerText = "视野内LOD构件数: "+paramComponentsCount.toString()
 
         // var cost = (performance.now()-start_time).toFixed(0)
         // console.log("cost ",cost,"ms")
