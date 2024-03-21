@@ -8,10 +8,9 @@ import { Engine3D } from '../main.js'
 // console.log("parameterFlag",parameterFlag)
 ///////////改动的部分--开始///////////   --1--
 let parameterFlag=false
-if(false)
+// if(false)
 Engine3D.loadJson("./assets/huayi/parameter.json",result=>{
     parameterFlag=result
-    console.log(result)
 })
 ///////////改动的部分--结束///////////   --1--
 // var loadingList = [];
@@ -39,7 +38,10 @@ function loadModelZip(index){
             //     postMessage({code:CoderDecoder.sim2code(result,"cube")})
             // })
             Engine3D.CoderDecoder.loadBin("./assets/huayi/cubeBin/"+index+".bin",result=>{
-                postMessage({code:Engine3D.CoderDecoder.sim2code(result,"cube")})
+                postMessage({
+                    index:index,
+                    code:Engine3D.CoderDecoder.sim2code(result,"cube")
+                })
             })
             return
         }else if(parameterFlag[index]==2){//cylinder
@@ -47,7 +49,10 @@ function loadModelZip(index){
             //     postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
             // })
             Engine3D.CoderDecoder.loadBin("./assets/huayi/cylinderBin/"+index+".bin",result=>{
-                postMessage({code:Engine3D.CoderDecoder.sim2code(result,"cylinder")})
+                postMessage({
+                    index:index,
+                    code:Engine3D.CoderDecoder.sim2code(result,"cylinder")
+                })
             })
             return
         }

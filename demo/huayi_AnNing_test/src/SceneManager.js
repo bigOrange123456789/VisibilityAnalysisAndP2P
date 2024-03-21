@@ -110,20 +110,22 @@ export class SceneManager{
         // worker多线程
         this.worker = new Worker("./myLib/worker.js");
         this.worker.onmessage = (e)=>{
-            // console.log(e.data);
-            ///////////改动的部分--开始///////////
-            if(e.data.code){
-                const instance_mesh=Engine3D.CoderDecoder.decoder(e.data.code)
-                this.instanceGroup.add(instance_mesh)
-                return
-            }
-            ///////////改动的部分--结束///////////
-
             let index = e.data.index;
             let pos = this.loadingModelList.indexOf(index);
             if(pos!==-1) this.loadingModelList.splice(pos,1);
             if(!this.loadedModelList.includes(index))
                 this.loadedModelList.push(index)
+
+            ///////////改动的部分--开始///////////
+            if(e.data.code){
+                if(this.mesh_map[index]) return;
+                const instance_mesh=Engine3D.CoderDecoder.decoder(e.data.code)
+                instance_mesh.visible = !!this.visibleSet[index]
+                this.instanceGroup.add(instance_mesh)
+                // this.mesh_map[index] = instance_mesh
+                return
+            }
+            ///////////改动的部分--结束///////////
 
             let geometry = new THREE.BufferGeometry();
             geometry.setAttribute('position', new THREE.BufferAttribute(e.data.vertices,3));
@@ -254,7 +256,7 @@ export class SceneManager{
         this.mesText4.innerText = "Visible Meshes:  "+(vis_mesh+vis_mesh_simp)
         this.mesText5.innerText = "Loaded Meshes:  "+this.loadedModelList.length
         this.mesText6.innerText = "Triangles: "+Math.round(this.renderer.info.render.triangles)
-        this.mesText7.innerText = "视野内参数化构件数: "+paramComponentsCount.toString()
+        this.mesText7.innerText = "视野内LOD构件数: "+paramComponentsCount.toString()
 
         // var cost = (performance.now()-start_time).toFixed(0)
         // console.log("cost ",cost,"ms")
