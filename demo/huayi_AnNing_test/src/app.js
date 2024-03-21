@@ -98,11 +98,11 @@ class App{
         this.renderer.setSize(clientWidth, clientHeight)
     }
     addLight(){
-        const dir1 = new THREE.DirectionalLight(0xffffff, 0.5)
+        const dir1 = new THREE.DirectionalLight(0xffffff, 0.5*3)
         dir1.position.set(-0.4, 0.6, 0.8)
         this.scene.add(dir1)
 
-        const dir2 = new THREE.DirectionalLight(0xffffff, 0.5)
+        const dir2 = new THREE.DirectionalLight(0xffffff, 0.5*3)
         dir2.position.set(0.4, 0.6, -0.8)
         this.scene.add(dir2)
 
@@ -126,6 +126,7 @@ class App{
         })
     }
     addSkyBox(){
+        this.scene.environment=///////////改动的部分--单行///////////
         this.scene.background = new THREE.CubeTextureLoader().setPath("./assets/huayi/skyBox/").load([
             "right.jpg", "left.jpg", "top.jpg", "bottom.jpg", "front.jpg", "back.jpg"
         ],()=>{})

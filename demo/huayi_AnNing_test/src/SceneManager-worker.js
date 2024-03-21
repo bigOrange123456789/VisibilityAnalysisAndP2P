@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {ZipLoader} from "./myLib/ziploader";
-import {CubeModeling, CylinderModeling} from "./myLib/parmetricModeling";
+// import {CubeModeling, CylinderModeling} from "./myLib/parmetricModeling";
 import{Classification} from "./parametric/Classification";
 export class SceneManager{
     constructor(renderer, scene, camera){

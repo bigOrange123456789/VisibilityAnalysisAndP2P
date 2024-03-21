@@ -8,7 +8,7 @@ import { Engine3D } from '../main.js'
 // console.log("parameterFlag",parameterFlag)
 ///////////改动的部分--开始///////////   --1--
 let parameterFlag=false
-// if(false)
+if(false)
 Engine3D.loadJson("./assets/huayi/parameter.json",result=>{
     parameterFlag=result
     console.log(result)
