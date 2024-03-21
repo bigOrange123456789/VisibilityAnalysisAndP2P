@@ -4,8 +4,8 @@ import Stats from "three/examples/jsm/libs/stats.module";
 import {MyUI} from "./myLib/MyUI";
 import {SceneManager} from "./SceneManager";
 import {TilesLoader} from "./myLib/TilesLoader";
-
 class App{
+    rootPath="./assets/huayi/"
     constructor(){
         this.body = document.body
         this.canvas = document.getElementById('myCanvas')
@@ -52,9 +52,10 @@ class App{
         this.addMyUI()
         this.addAutoMove()
 
-        this.sceneManager = new SceneManager(this.renderer, this.scene, this.camera)
+        this.sceneManager = new SceneManager(this.renderer, this.scene, this.camera, this.rootPath)
 
         window.tiles = null
+        if(false)
         new TilesLoader().reinstantiateTiles()
 
         // var self = this;
@@ -115,7 +116,7 @@ class App{
         plane.rotation.x = -Math.PI/2
         plane.position.set(2025.7,-0.1,-2167.1)
         this.scene.add(plane)
-        new THREE.TextureLoader().load("./assets/huayi/terrain/terrain.png",(texture)=>{
+        new THREE.TextureLoader().load(this.rootPath+"terrain/terrain.png",(texture)=>{
             texture.wrapS = THREE.RepeatWrapping
             texture.wrapT = THREE.RepeatWrapping
             texture.repeat.set(100,100)
@@ -127,7 +128,7 @@ class App{
     }
     addSkyBox(){
         this.scene.environment=///////////改动的部分--单行///////////
-        this.scene.background = new THREE.CubeTextureLoader().setPath("./assets/huayi/skyBox/").load([
+        this.scene.background = new THREE.CubeTextureLoader().setPath(this.rootPath+"skyBox/").load([
             "right.jpg", "left.jpg", "top.jpg", "bottom.jpg", "front.jpg", "back.jpg"
         ],()=>{})
     }

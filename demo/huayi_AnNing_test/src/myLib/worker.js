@@ -7,11 +7,8 @@ import { Engine3D } from '../main.js'
 // import { parameterFlag } from '../parametric/parameter.json'
 // console.log("parameterFlag",parameterFlag)
 ///////////改动的部分--开始///////////   --1--
+let rootPath="./assets/huayi/"
 let parameterFlag=false
-// if(false)
-Engine3D.loadJson("./assets/huayi/parameter.json",result=>{
-    parameterFlag=result
-})
 ///////////改动的部分--结束///////////   --1--
 // var loadingList = [];
 // var postTimes = 0;
@@ -22,6 +19,16 @@ Engine3D.loadJson("./assets/huayi/parameter.json",result=>{
 // },5000);
 
 onmessage = function(e){
+    ///////////改动的部分--开始///////////
+    if(e.data.parameterFlag){
+        parameterFlag=e.data.parameterFlag
+        return
+    }
+    if(e.data.rootPath){
+        rootPath=e.data.rootPath
+        return
+    }
+    ///////////改动的部分--结束///////////
     let to_load_list = e.data;
     // console.log(to_load_list);
     for(let i=0; i<to_load_list.length; i++){
@@ -34,10 +41,10 @@ function loadModelZip(index){
     ///////////改动的部分--开始///////////   --0-1--
     if(parameterFlag){
         if(parameterFlag[index]==1){//cube
-            // Classification.loadJson("./assets/cube/"+index+".json",result=>{
+            // Classification.loadJson(rootPath+"cube/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cube")})
             // })
-            Engine3D.CoderDecoder.loadBin("./assets/huayi/cubeBin/"+index+".bin",result=>{
+            Engine3D.CoderDecoder.loadBin(rootPath+"cubeBin/"+index+".bin",result=>{
                 postMessage({
                     index:index,
                     code:Engine3D.CoderDecoder.sim2code(result,"cube")
@@ -45,10 +52,10 @@ function loadModelZip(index){
             })
             return
         }else if(parameterFlag[index]==2){//cylinder
-            // Classification.loadJson("./assets/cylinder/"+index+".json",result=>{
+            // Classification.loadJson(rootPath+"cylinder/"+index+".json",result=>{
             //     postMessage({code:CoderDecoder.sim2code(result,"cylinder")})
             // })
-            Engine3D.CoderDecoder.loadBin("./assets/huayi/cylinderBin/"+index+".bin",result=>{
+            Engine3D.CoderDecoder.loadBin(rootPath+"cylinderBin/"+index+".bin",result=>{
                 postMessage({
                     index:index,
                     code:Engine3D.CoderDecoder.sim2code(result,"cylinder")
@@ -58,7 +65,7 @@ function loadModelZip(index){
         }
     }
     ///////////改动的部分--结束///////////   --0-1--
-    var url = "./assets/huayi/components/"+index+".zip";///////////改动的部分--单行///////////
+    var url = rootPath+"components/"+index+".zip";///////////改动的部分--单行///////////
     var loader = new THREE.LoadingManager();
     new Promise(function(resolve,reject){
         new ZipLoader().load(url,()=>{

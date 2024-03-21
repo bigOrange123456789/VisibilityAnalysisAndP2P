@@ -3,7 +3,8 @@ import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import {ZipLoader} from "./myLib/ziploader";
 import { Engine3D } from './main.js'
 export class SceneManager{
-    constructor(renderer, scene, camera){
+    constructor(renderer, scene, camera, rootPath){
+        this.rootPath = rootPath
         this.renderer = renderer
         this.scene = scene
         this.camera = camera
@@ -62,7 +63,7 @@ export class SceneManager{
         this.startConnect()
 
         // new paramEvaluator()
-        // new THREE.FileLoader().load("./assets/cube.json", (json)=>{
+        // new THREE.FileLoader().load(this.rootPath+"cube.json", (json)=>{
         //     let cylinderJSON = JSON.parse(json);
         //     console.log(cylinderJSON);
         //     let cylinderList = [];
@@ -81,7 +82,7 @@ export class SceneManager{
         requestAnimationFrame(this.animate)
 
         var self = this
-        new THREE.FileLoader().load("assets/huayi/preLoadList.json",(json)=>{
+        new THREE.FileLoader().load(this.rootPath+"preLoadList.json",(json)=>{
             self.preLoadList = JSON.parse(json)
             // for(let i=0; i<self.preLoadList.length; i++){
             //     self.preLoadList[i] = [self.preLoadList[i][0], []]
@@ -109,6 +110,19 @@ export class SceneManager{
 
         // worker多线程
         this.worker = new Worker("./myLib/worker.js");
+        ///////////改动的部分--开始///////////
+        this.worker.postMessage({
+            rootPath:this.rootPath
+        });
+        if(window.location.href.split("openParam=true").length>1){
+            const self=this
+            Engine3D.loadJson(this.rootPath+"parameter.json",result=>{
+                self.worker.postMessage({
+                    parameterFlag:result
+                });
+            })
+        }
+        ///////////改动的部分--结束///////////
         this.worker.onmessage = (e)=>{
             let index = e.data.index;
             let pos = this.loadingModelList.indexOf(index);
@@ -405,7 +419,7 @@ export class SceneManager{
         // this.toLoadModelList.splice(this.toLoadModelList.indexOf(index),1)
         // this.loadingModelList.push(index)
         var self = this
-        var url = "assets/components/"+index+".zip"
+        var url = this.rootPath+"components/"+index+".zip"
         var loader = new THREE.LoadingManager()
         new Promise(function(resolve,reject){
             new ZipLoader().load(url,()=>{
