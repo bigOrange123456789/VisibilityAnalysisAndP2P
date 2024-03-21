@@ -122,7 +122,16 @@ export class SceneManager{
                 const instance_mesh=Engine3D.CoderDecoder.decoder(e.data.code)
                 instance_mesh.visible = !!this.visibleSet[index]
                 this.instanceGroup.add(instance_mesh)
-                // this.mesh_map[index] = instance_mesh
+                this.mesh_map[index] = instance_mesh
+
+                let geometry = instance_mesh.geometry;
+                geometry.computeBoundingBox();
+                let box = geometry.boundingBox.clone().applyMatrix4(this.instanceGroup.matrixWorld)
+                let xl = box.max.x-box.min.x
+                let yl = box.max.y-box.min.y
+                let zl = box.max.z-box.min.z
+                this.loaded_mesh_interest[index] = xl*yl+xl*zl+yl*zl
+                this.loaded_mesh_invisible_time[index] = 0
                 return
             }
             ///////////改动的部分--结束///////////
@@ -193,39 +202,39 @@ export class SceneManager{
         for(let i=0; i<this.loadedModelList.length; i++){
             let index = this.loadedModelList[i]
             if(this.visibleSet[index]){   // 可见
-                if(this.mesh_map[index] && this.mesh_simp_map[index]){
-                    let weight = 0
-                    let dis_min = this.camera.position.clone().sub(this.bounding_sph[index][0].center).length()
-                    for(let j=0; j<this.bounding_sph[index].length && weight<weight_line; j++){
-                        let dis = this.camera.position.clone().sub(this.bounding_sph[index][j].center).length()
-                        if(dis<dis_min) dis_min = dis
-                        let wei = this.bounding_sph[index][j].radius / dis
-                        if(frustum.intersectsSphere(this.bounding_sph[index][j]))
-                            weight += wei
-                    }
-                    if(weight>weight_line || dis_min<50){
-                        this.mesh_map[index].visible = true
-                        this.mesh_simp_map[index].visible = false
-                        vis_mesh++
-                        invis_mesh_simp++
-                    }else{
-                        this.mesh_map[index].visible = false
-                        this.mesh_simp_map[index].visible = true
-                        invis_mesh++
-                        vis_mesh_simp++
-                    }
-                    this.loaded_mesh_invisible_time[index] = 0;
-                    paramComponentsCount += 1;
-                }else if(this.mesh_map[index]){
-                    this.mesh_map[index].visible = true
-                    vis_mesh++
-                    this.loaded_mesh_invisible_time[index] = 0;
-                }
-
-                // if(this.mesh_map[index]){
+                // if(this.mesh_map[index] && this.mesh_simp_map[index]){
+                //     let weight = 0
+                //     let dis_min = this.camera.position.clone().sub(this.bounding_sph[index][0].center).length()
+                //     for(let j=0; j<this.bounding_sph[index].length && weight<weight_line; j++){
+                //         let dis = this.camera.position.clone().sub(this.bounding_sph[index][j].center).length()
+                //         if(dis<dis_min) dis_min = dis
+                //         let wei = this.bounding_sph[index][j].radius / dis
+                //         if(frustum.intersectsSphere(this.bounding_sph[index][j]))
+                //             weight += wei
+                //     }
+                //     if(weight>weight_line || dis_min<50){
+                //         this.mesh_map[index].visible = true
+                //         this.mesh_simp_map[index].visible = false
+                //         vis_mesh++
+                //         invis_mesh_simp++
+                //     }else{
+                //         this.mesh_map[index].visible = false
+                //         this.mesh_simp_map[index].visible = true
+                //         invis_mesh++
+                //         vis_mesh_simp++
+                //     }
+                //     this.loaded_mesh_invisible_time[index] = 0;
+                //     paramComponentsCount += 1;
+                // }else if(this.mesh_map[index]){
                 //     this.mesh_map[index].visible = true
                 //     vis_mesh++
+                //     this.loaded_mesh_invisible_time[index] = 0;
                 // }
+
+                if(this.mesh_map[index]){
+                    this.mesh_map[index].visible = true
+                    vis_mesh++
+                }
             }
             else{                      // 不可见
                 if(this.mesh_map[index]){
