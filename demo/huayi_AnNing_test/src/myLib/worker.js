@@ -107,7 +107,7 @@ function loadModelZip(index){
                     });
                 })
             }else{
-                return;//测试
+                // return;//测试
                 new GLTFLoader(loader).load(zipContent.models[1], (gltf)=>{
                     let mesh = gltf.scene.children[0].children[0];
                     new GLTFLoader(loader).load(zipContent.models[0], (gltf)=>{
