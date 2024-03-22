@@ -46,6 +46,7 @@ def process(inpath,outpath):
             # print("\r"+str(round(100*j/(i+1),3))+"%"+"\t:"+str(j)+"/"+str(i+1),end="")
             print(str(round(100*j/(i+1),3))+"%"+"\t:"+str(j)+"/"+str(i+1)+"\tProcessing, please wait a moment...\r",end="")
             # print(str(round(100*j/(i+1),2))+"%"+"\t:"+str(j)+"/"+str(i+1))
+    print("\n")
 
 if __name__ == "__main__":
     process("../data/cube/",     "../data/cubeBin/")
