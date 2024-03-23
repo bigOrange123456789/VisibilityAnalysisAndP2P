@@ -502,7 +502,7 @@ export class SceneManager{
         // }
         if(false){
             let classification = new Engine3D.Classification(new THREE.Mesh(geometry, material),matrix4List)
-            if(classification.mesh2)
+            if(false)if(classification.mesh2)
                 instance_mesh=classification.mesh2
         }
         ///////////改动的部分--结束///////////
