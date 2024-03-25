@@ -2,8 +2,9 @@
 import{Instanced0Shader}from './shader/Instanced0Shader.js'// import{Instanced0Shader}from './shaderSim/Instanced0Shader.js'
 import * as THREE from "three"
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { Engine3D } from '../main.js'
 export class Template {
-    constructor(scene, camera,poslist,config,materialLoaderType,cb,Engine3D) {
+    constructor(scene, camera,poslist,config,materialLoaderType,cb) {
         this.Engine3D=Engine3D
         this.textureLoader=new THREE.TextureLoader()
         this.cb=cb
