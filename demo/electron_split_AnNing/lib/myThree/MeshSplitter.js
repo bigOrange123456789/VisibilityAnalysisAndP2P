@@ -180,6 +180,7 @@ class MeshSplitter{
                 matrices:matrices
             }),
         });
+        console.log({"downloadJSON":fileData})
         ipcRenderer.send("downloadJSON", fileData);
 
         this.splitAverage(index+1)
