@@ -51,7 +51,7 @@ export class SceneManager{
 
         // 192.168.114.129
         // 47.103.21.207
-        this.server_ip = "ws://47.116.5.3:3006/"
+        this.server_ip = "ws://47.100.183.30:3006/"//"ws://47.116.5.3:3006/"
         this.ws = null
 
         window.info=(p)=>{
