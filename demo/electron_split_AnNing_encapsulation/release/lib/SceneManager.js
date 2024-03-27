@@ -48,7 +48,8 @@ export class SceneManager {
         this.mesText1.style.top = 0 + "px";
         this.mesText1.style.fontSize = window.innerHeight / 60 + "px";
 
-        this.server_ip = "ws://47.100.183.30:4001"//"ws://47.116.5.3:4001";
+        if(!window.ParamURL.server_ip)window.ParamURL.server_ip="47.100.183.30:4001"
+        this.server_ip = "ws://"+window.ParamURL.server_ip//"ws://47.116.5.3:4001";
         console.log("?");
         
         if(false){
