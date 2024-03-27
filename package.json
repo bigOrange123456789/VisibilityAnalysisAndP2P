@@ -70,5 +70,5 @@
   },
   "homepage": "https://github.com/bigOrange123456789/VisibilityAnalysisAndP2P#readme",
   "description": "",
-  "main": "./demo/electron_split_AnNing/server_detection.js"
+  "main": "./demo/electron_split_AnNing_encapsulation/server_detection.js"
 }

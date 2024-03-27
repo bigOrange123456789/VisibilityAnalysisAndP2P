@@ -248,15 +248,15 @@ export class SpacePartitioning {
 
     var scene_graph = { graph:result, matrix: this.matrixWorld.elements };
 
-    download(scene_graph, "sceneGraph.json");
+    download(scene_graph, "../asssets_linux/sceneGraph.json");
 
     var self = this;
     // setTimeout(function () {
-    download(instanceSphereList, "boundingSphere.json");
+    download(instanceSphereList, "../asssets_linux/boundingSphere.json");
     //  }, 200);
 
     // setTimeout(function () {
-    download(instanceBoxList, "boundingBox.json");
+    download(instanceBoxList, "../asssets_linux/boundingBox.json");
     //  }, 400);
 
     //setTimeout(function () {

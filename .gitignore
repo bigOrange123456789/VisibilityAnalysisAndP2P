@@ -1,6 +1,7 @@
 /demo/test/
 
 /assets/data/
+/assets/project1/
 
 /demo/*/index.js
 /demo/*/analysis

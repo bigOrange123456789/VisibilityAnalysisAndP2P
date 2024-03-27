@@ -174,7 +174,7 @@ class MeshSplitter{
 
         var occluder_info = calculateOccluder(index, sum_group.children)
         var fileData = JSON.stringify({
-            name: "occluder"+index.toString()+".json",
+            name: "../asssets_linux/occluder/occluder"+index.toString()+".json",
             data: JSON.stringify({
                 occluder:occluder_info,
                 matrices:matrices

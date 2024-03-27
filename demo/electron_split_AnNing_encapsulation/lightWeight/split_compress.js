@@ -1,7 +1,9 @@
+const inpath="../../../dist/assets/project1/temp"
+const outpath="../../../dist/assets/project1"
+
 var fs = require('fs');
 var archiver = require('archiver');
-const inpath="dataOut1"
-const outpath="dataOut2"
+
 const start = 0
 var matrix_list = []
 
