@@ -60,6 +60,7 @@
     }
 
     function load(data){
+        ipcRenderer.send('debug', "Zip File loading, please wait a moment......\n")
         let viewerEl = document.createElement('div');
         viewerEl.classList.add('viewer');
         document.body.appendChild(viewerEl);

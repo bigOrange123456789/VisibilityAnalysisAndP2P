@@ -1,4 +1,3 @@
 set current_dir=%cd%
-set fileName=index.html
 cd ../../
-parcel %current_dir%/release/%fileName%
+parcel %current_dir%/release/index.html
