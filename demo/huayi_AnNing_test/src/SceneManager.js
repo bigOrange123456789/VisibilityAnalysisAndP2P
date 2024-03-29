@@ -477,7 +477,8 @@ export class SceneManager{
             color: new THREE.Color(base_color.r, base_color.g, base_color.b),
             emissive: new THREE.Color(base_color.r*0.5, base_color.g*0.5, base_color.b*0.5),
             roughness: 0.6,
-            metalness: 0.6
+            metalness: 0.6,
+            side: THREE.FrontSide,
         });
 
         let instance_mesh = processMesh(geometry, material, matrix4List)
