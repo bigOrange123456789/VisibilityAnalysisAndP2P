@@ -484,28 +484,55 @@ export class SceneManager{
         let instance_mesh = processMesh(geometry, material, matrix4List)
 
         ///////////改动的部分--开始///////////
-        // if(true){
-        //     // if(index!=213306)return
-        //     if(index<500*100)return
-        //     if(index<10*100*100)return
-        //     if(index<17.975*100*100)return
-        //     if(index<20*100*100)return
-        //     if(index<22*100*100)return
-        //     if(index<22.6*100*100)return
-        //     // if(index<25*100*100)return
-        //     // if(index<27.1*100*100)return
-        //     //
-        //     if(index>23*100*100)return
-        //     if(index>25*100*100)return
-        //     // if(index>27.2*100*100)return
-        //     if(index!=227540)return
-        //     console.log(index)
-        // }
         if(false){
+            // if(index!=213306)return
+            if(index<500*100)return
+            // if(index>10*100*100)return
+            // if(index<10*100*100)return
+            // if(index<17.975*100*100)return
+            // if(index<20*100*100)return
+            // if(index<22*100*100)return
+            // if(index<22.6*100*100)return
+            // if(index<25*100*100)return
+            // if(index<27.1*100*100)return
+            //
+            // if(index>23*100*100)return
+            // if(index>25*100*100)return
+            // if(index>27.2*100*100)return
+            if(index!=139366)return
+            // console.log(index)
+        }
+        if(true){
+            // matrix4List=[matrix4List[0]]
+            // console.log(geometry, material,matrix4List)
             let classification = new Engine3D.Classification(new THREE.Mesh(geometry, material),matrix4List)
             if(false)if(classification.mesh2)
                 instance_mesh=classification.mesh2
+            if(classification.type=='torus'){
+                // console.log("sphere",classification)
+                material.color.r=1
+                material.color.g=0
+                material.color.b=0
+            }else{
+                material.color.r=0
+                material.color.g=1
+                material.color.b=0
+            }
         }
+        // if(index<1393.5*100||index>1393.7*100)return
+        // console.log(index)
+        // //13.935*100*100 ~ 13.95*100*100
+        // //1393.5*100 ~ 1393.7*100
+        // if(index<1393.7*100){
+        //     // console.log("sphere",classification)
+        //     material.color.r=1
+        //     material.color.g=0
+        //     material.color.b=0
+        // }else{
+        //     material.color.r=0
+        //     material.color.g=1
+        //     material.color.b=0
+        // }
         ///////////改动的部分--结束///////////
 
         instance_mesh.visible = !!this.visibleSet[index]

@@ -37,6 +37,7 @@ class App{
         this.camera = new THREE.PerspectiveCamera(60,this.body.clientWidth/this.body.clientHeight,0.1, 3000000)//10, 3000000)
         this.camera.position.set(3032.4,400.9,-3486.2)
         this.scene.add(this.camera)
+        window.camera=this.camera
 
         this.orbitControl = new OrbitControls(this.camera,this.renderer.domElement)
         this.orbitControl.panSpeed = 0.1
