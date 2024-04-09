@@ -27,7 +27,7 @@ class MeshSplitter{
         // console.log(this.projectName+" 已载入")
 
         ipcRenderer.send("createDir", this.projectName);
-        ipcRenderer.send("createDir", this.projectName+"\\"+this.projectName);
+        // ipcRenderer.send("createDir", this.projectName+"\\"+this.projectName);
         ipcRenderer.send("createDir", this.projectName+"\\assets");
         ipcRenderer.send("createDir", this.projectName+"\\assets\\occluder");
         ipcRenderer.send("createDir", this.projectName+"\\input");

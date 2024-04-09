@@ -1,10 +1,8 @@
 set sceneName=Test_new
-set sceneID=project_%sceneName%
-
+set insertPath=electron_split_AnNing_encapsulation\lightWeight2
 set root_dir=%cd%\..\..\..\
-set inpath=%root_dir%assets\data\%sceneName%.zip
-set outpath=%root_dir%dist\assets\models\%sceneID%
+set inpath=%root_dir%dist\assets\models\%sceneName%.zip
+set outpath=%root_dir%dist\assets\models
 cd ..\..\..\
+node %cd%\demo\%insertPath%\updatePackage.js %insertPath%
 npx electron . %inpath% %outpath%
-
-pause

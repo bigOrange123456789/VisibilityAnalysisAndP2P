@@ -19,7 +19,7 @@ function createWindow() {
     // icon: __dirname + "/assets/favicon.ico",
   });
 
-  // win.hide();
+  win.hide();
 
   win.setBackgroundColor("#000000");
 
@@ -47,6 +47,7 @@ function createWindow() {
   } else {
     outputDir = process.argv[3];
   }
+  console.log("process.argv:",process.argv)
   // outputDir=__dirname+outputDir
   console.log("inputDir:",process.argv[2])
   console.log("outputDir:",outputDir)
@@ -98,24 +99,26 @@ function createWindow() {
   });
 
   ipcMain.on("createDir",(event, arg) => {
-    // const path=outputDir + "\\" + arg
-    // console.log("createDir:",path)
-    // if (fs.accessSync(path,fs.constants.F_OK)) {
-    //   console.log('exists');
-    // }else{
-    //   console.log('non-exists');
-    // }
-    // fs.mkdirSync(path);
-    fs.mkdir(outputDir + "\\" + arg, err => {
-      if(err) {
-        console.log('创建文件夹失败', err);
+    function emptyDir(path) {
+      const files = fs.readdirSync(path);
+      files.forEach(file => {
+          const filePath = `${path}/${file}`;
+          const stats = fs.statSync(filePath);
+          if (stats.isDirectory()) {
+              emptyDir(filePath);
+          } else {
+              fs.unlinkSync(filePath);
+          }
+      });
+    }
+    const path=outputDir + "\\" + arg
+    fs.access(path, (err) => {
+      if (err) {
+        fs.mkdir(path, err => {})//"不存在"
+      } else {
+        emptyDir(path)//"存在"
       }
     })
-    // fs.mkdirSync(outputDir + "\\" + arg, err => {
-    //   if(err) {
-    //     console.log('创建文件夹失败', err);
-    //   }
-    // })
   });
 
   ipcMain.on("downloadJSON", (event, arg) => {
@@ -165,7 +168,8 @@ function createWindow() {
         let name = result.name;
         let index = result.index;
 
-        let output = fs.createWriteStream(outputDir + "\\" + name+"\\"+name+"\\"+index.toString()+'.zip')
+        let output = fs.createWriteStream(outputDir + "\\" + name+"\\"+index.toString()+'.zip')
+        // let output = fs.createWriteStream(outputDir + "\\" + name+"\\"+name+"\\"+index.toString()+'.zip')
         var archive = archiver('zip', {zlib:{level:9}})
         archive.pipe(output)
         var filename1 = 'matrix'+index.toString()+'.json'
