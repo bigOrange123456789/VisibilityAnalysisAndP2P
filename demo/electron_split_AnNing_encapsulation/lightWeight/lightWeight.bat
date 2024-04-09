@@ -1,7 +1,7 @@
 set sceneName=Test
 set sceneID=project_%sceneName%
 call activate base
-python ./init.py ../../dist/assets/%sceneID%
+python ./init.py ../../../dist/assets/%sceneID%
 
 set root_dir=%cd%/../../../
 set inpath=%root_dir%assets/data/%sceneName%.zip
