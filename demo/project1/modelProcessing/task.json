@@ -39,5 +39,5 @@
   "bos3InstanceThreshold": 0,
   "optimizeGroup": true,
   "binaryOptimize": true,
-  "main": "./demo/electron_split_AnNing_encapsulation\\lightWeight2/server_detection.js"
+  "main": "./demo/project1\\modelProcessing/server_detection.js"
 }

@@ -1,5 +1,5 @@
 set sceneName=HG14
-set insertPath=electron_split_AnNing_encapsulation\modelProcessing
+set insertPath=project1\modelProcessing
 set root_dir=%cd%\..\..\..\
 set inpath=%root_dir%dist\assets\models\%sceneName%.zip
 set outpath=%root_dir%dist\assets\models
