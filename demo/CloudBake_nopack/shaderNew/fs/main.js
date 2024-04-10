@@ -98,9 +98,9 @@ getIrradianceColor+
 		vec2 _screenPosition = gl_FragCoord.xy/vec2(screenWidth,screenHeight);//当前像素的位置
         vec3 result = texture(GBufferd,_screenPosition).rgb;//当前像素的直接光着色结果    
 
-        // if(dGI)
-        //     result += getIrradianceColor();
-        result = getIrradianceColor();
+        if(dGI)
+            result += getIrradianceColor();
+        // result = getIrradianceColor();
         
 		result *= sigma;
 		result *= exposure;//2.

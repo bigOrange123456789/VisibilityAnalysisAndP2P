@@ -102,6 +102,7 @@ class Loader{
 			0.1,
 			100000
 		)
+		window.camera=this.camera
 		this.scene= new THREE.Scene()
 		//////////////////////////////////////
 		this.litRenderTarget = new THREE.WebGLRenderTarget(

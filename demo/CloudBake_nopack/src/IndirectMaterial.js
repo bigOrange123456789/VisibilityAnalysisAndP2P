@@ -1,6 +1,6 @@
 import * as THREE from '../three.module'
-import{indirectFS}from"../shader/indirectFS.js"
-import{indirectVS}from"../shader/indirectVS.js"
+import{indirectFS}from"../shaderOld/indirectFS.js"
+import{indirectVS}from"../shaderOld/indirectVS.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static async Json2Texture(){
 		return new Promise( (resolve, reject) => { 

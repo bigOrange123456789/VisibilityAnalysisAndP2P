@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import{indirectFS}from"../shader/indirectFS.js"
-import{indirectVS}from"../shader/indirectVS.js"
+import{indirectFS}from"../shaderNew2/indirectFS.js"
+import{indirectVS}from"../shaderNew2/indirectVS.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static async Json2Texture(){
 		return new Promise( (resolve, reject) => { 
@@ -174,6 +174,7 @@ export class IndirectMaterial extends THREE.ShaderMaterial {
 		return litRenderTarget 
 	}
 	probeIrradianceUpdate(irradianceLoader){
+		// console.log("irradianceLoader",irradianceLoader)
 		this.uniforms.probeIrradiance.value = irradianceLoader
 		window.irradianceLoader=irradianceLoader
 		// if(!window.flag00){
