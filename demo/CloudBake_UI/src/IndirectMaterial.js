@@ -1,8 +1,17 @@
 import * as THREE from 'three'
 // import{indirectFS}from"../shader/indirectFS.js"
 // import{indirectVS}from"../shader/indirectVS.js"
-import{fs}from"../shader/DDGIFS/main.js"
-import{vs}from"../shader/DDGIVS/main.js"
+
+// import {Engine3D} from "../main.js"
+// const fs=Engine3D.Shaders.ddgi.fragmentShader
+// const vs=Engine3D.Shaders.ddgi.vertexShader
+
+import {Shaders} from "../../../lib/shaders/Shaders.js"
+const fs=Shaders.ddgi.fragmentShader
+const vs=Shaders.ddgi.vertexShader
+
+// import{fs}from"../shader/DDGIFS/main.js"
+// import{vs}from"../shader/DDGIVS/main.js"
 export class IndirectMaterial extends THREE.ShaderMaterial {
 	static async Json2Texture(){
 		return new Promise( (resolve, reject) => { 
