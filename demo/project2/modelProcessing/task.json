@@ -39,5 +39,5 @@
   "bos3InstanceThreshold": 0,
   "optimizeGroup": true,
   "binaryOptimize": true,
-  "main": "./demo/project1\\modelProcessing/server_detection.js"
+  "main": "./demo/project2\\modelProcessing/server_detection.js"
 }

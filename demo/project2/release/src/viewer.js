@@ -667,14 +667,13 @@ export class Viewer
   setCamera()
   {
     this.controls.reset();
+    const position=new Vector3(-20.71,  17.21,  27.76)//(-50.0, 0.0, 30.0)//const position=new Vector3(60.0, 0.0, 0.0)
 
     if(window.ParamURL.server_ip){
-      this.defaultCamera.position.set(0, 1500, 0);
-      this.defaultCamera.lookAt(0, 0, 0);
-    }else{
-      this.defaultCamera.position.copy(new Vector3(60.0, 0.0, 0.0));
-      this.defaultCamera.lookAt(new Vector3());
+      position.multiplyScalar(0.013851/0.0002308)
     }
+    this.defaultCamera.position.copy(position);
+    this.defaultCamera.lookAt(new Vector3());
 
     this.controls.target = new Vector3(0.0, 0.0, 0.0);
 
