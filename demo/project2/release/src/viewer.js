@@ -2,9 +2,7 @@ import {
   Box3,
   DirectionalLight,
   PerspectiveCamera,
-  // Scene,
   Vector3,
-  // WebGLRendererEx,
   sRGBEncoding,
   Object3D,
   BufferGeometry,
@@ -19,7 +17,7 @@ import {
   Frustum,
   SphereGeometry
 } from 'three';//'../lib/three/build/three';
-import {Engine3D}from"../main.js"
+import {Engine3D}from"../Engine3D.js"
 const WebGLRendererEx=Engine3D.THREE_EX.WebGLRendererEx
 const Scene=Engine3D.THREE_EX.Scene
 import Stats from 'three/examples/jsm/libs/stats.module.js';

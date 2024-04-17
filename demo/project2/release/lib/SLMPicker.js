@@ -12,7 +12,7 @@ import {
 	TextureLoader,
 	Texture,
   } from 'three';
-import {Engine3D}from"../main.js"
+import {Engine3D}from"../Engine3D.js"
 const WebGLRendererEx=Engine3D.THREE_EX.WebGLRendererEx
 import { SLMConstansts } from './SLMLoader';
 

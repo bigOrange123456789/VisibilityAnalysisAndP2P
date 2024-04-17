@@ -7,7 +7,7 @@ import {
 	Vector3,
 	Vector4,
 } from 'three';
-import {Engine3D}from"../main.js"
+import {Engine3D}from"../Engine3D.js"
 const InstancedMeshEx=Engine3D.THREE_EX.InstancedMeshEx
 const GLTFLoaderEx=Engine3D.GLTFLoaderEx
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
