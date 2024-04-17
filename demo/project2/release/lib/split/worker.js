@@ -2,7 +2,7 @@ import {
     FileLoader,
     LoadingManager
 } from "three";
-import {ZipLoader} from "./ziploader";
+import {ZipLoader} from "../ziploader";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 
 var projectName = "";

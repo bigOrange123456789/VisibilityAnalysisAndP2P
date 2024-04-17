@@ -6,7 +6,7 @@ import {
     Matrix4,  MeshStandardMaterial, Vector2,
     Vector3, 
 } from "three";
-import { ZipLoader } from "./ziploader";
+import { ZipLoader } from "../ziploader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export class SceneManager {

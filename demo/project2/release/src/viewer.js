@@ -27,7 +27,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 
 import { GUI } from 'dat.gui';
 
-import { SLMLoader } from '../lib/merge/SLMLoader';
+import { SLMLoader } from '../lib/SLMLoader';
 import {SceneManager} from "../lib/split/SceneManager";
 
 export class Viewer
