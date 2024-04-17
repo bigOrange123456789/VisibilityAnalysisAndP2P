@@ -2,124 +2,136 @@
  * @author Takahiro / https://github.com/takahirox
  */
 import {
-  AmbientLight,
-  AnimationMixer,
-  AxesHelper,
-  Box3,
-  Cache,
-  CubeTextureLoader,
-  DirectionalLight,
-  GridHelper,
-  HemisphereLight,
-  LinearEncoding,
   LoaderUtils,
-  LoadingManager,
   DefaultLoadingManager,
   FileLoader,
-  PMREMGenerator,
-  PerspectiveCamera,
-  RGBFormat,
-  Scene,
-  SkeletonHelper,
-  UnsignedByteType,
-  Vector3,
-  WebGLRenderer,
-  sRGBEncoding,
-} from "three";
+  } from 'three';
 
-import JSZip from "jszip";
+import JSZip from 'jszip';
 
-function ZipLoader(manager) {
-  this.manager = manager !== undefined ? manager : DefaultLoadingManager;
+
+function ZipLoader( manager ) {
+
+	this.manager = ( manager !== undefined ) ? manager : DefaultLoadingManager;
+
 }
 
-function checkJSZipAvailability(onError) {
-  if (typeof JSZip === "undefined") {
-    var error = new Error(
-      "ZipLoader: Import JSZip https://stuk.github.io/jszip/"
-    );
+function checkJSZipAvailability( onError ) {
 
-    if (onError !== undefined) {
-      onError(error);
-      return false;
-    } else {
-      throw error;
-    }
-  }
+	if ( typeof JSZip === 'undefined' ) {
 
-  return true;
+		var error = new Error( 'ZipLoader: Import JSZip https://stuk.github.io/jszip/' );
+
+		if ( onError !== undefined ) {
+
+			onError( error );
+			return false;
+
+		} else {
+
+			throw error;
+
+		}
+
+	}
+
+	return true;
+
 }
 
-Object.assign(ZipLoader.prototype, {
-  constructor: ZipLoader,
+Object.assign( ZipLoader.prototype, {
 
-  load: function (url, onProgress, onError) {
-    if (!checkJSZipAvailability(onError)) return;
+	constructor: ZipLoader,
 
-    var scope = this;
+	load: function ( url, onProgress, onError ) {
 
-    var promise = JSZip.external.Promise;
+		if ( ! checkJSZipAvailability( onError ) ) return;
 
-    var baseUrl = "blob:" + LoaderUtils.extractUrlBase(url);
+		var scope = this;
 
-    return new promise(function (resolve, reject) {
-      var loader = new FileLoader(scope.manager);
-      loader.setResponseType("arraybuffer");
-      loader.load(url, resolve, onProgress, reject);
-    })
-      .then(function (buffer) {
-        return JSZip.loadAsync(buffer);
-      })
-      .then(function (zip) {
-        var fileMap = {};
+		var promise = JSZip.external.Promise;
 
-        var pendings = [];
+		var baseUrl = 'blob:' + LoaderUtils.extractUrlBase( url );
 
-        for (var file in zip.files) {
-          var entry = zip.file(file);
+		return new promise( function ( resolve, reject ) {
 
-          if (entry === null) continue;
+			var loader = new FileLoader( scope.manager );
+			loader.setResponseType( 'arraybuffer' );
+			loader.load( url, resolve, onProgress, reject );
 
-          pendings.push(
-            entry.async("blob").then(
-              function (file, blob) {
-                fileMap[baseUrl + file] = URL.createObjectURL(blob);
-              }.bind(this, file)
-            )
-          );
-        }
+		} ).then( function ( buffer ) {
 
-        return promise.all(pendings).then(function () {
-          return fileMap;
-        });
-      })
-      .then(function (fileMap) {
-        return {
-          urlResolver: function (url) {
-            // console.log(url)
+			return JSZip.loadAsync( buffer );
 
-            return fileMap[url] ? fileMap[url] : url;
-          },
+		} ).then( function ( zip ) {
 
-          find: function (query) {
-            if (typeof query === "string") {
-              query = new RegExp(query.replace(/\./g, "\\."));
-            }
+			var fileMap = {};
 
-            var files = [];
+			var pendings = [];
 
-            for (var key in fileMap) {
-              if (key.match(query) !== null) {
-                files.push(key);
-              }
-            }
+			for ( var file in zip.files ) {
 
-            return files;
-          },
-        };
-      })
-      .catch(onError);
-  },
-});
+				var entry = zip.file( file );
+
+				if ( entry === null ) continue;
+
+				pendings.push( entry.async( 'blob' ).then( function ( file, blob ) {
+
+					fileMap[ baseUrl + file ] = URL.createObjectURL( blob );
+
+				}.bind( this, file ) ) );
+
+			}
+
+			return promise.all( pendings ).then( function () {
+
+				return fileMap;
+
+			} );
+
+		} ).then( function ( fileMap ) {
+
+			return {
+
+				urlResolver: function ( url ) {
+
+					// console.log(url)
+
+					return fileMap[ url ] ? fileMap[ url ] : url;
+
+				},
+
+				find: function ( query ) {
+
+					if ( typeof query === 'string' ) {
+
+						query = new RegExp( query.replace( /\./g, '\\.' ) );
+
+					}
+
+					var files = [];
+
+					for ( var key in fileMap ) {
+
+						if ( key.match( query ) !== null ) {
+
+							files.push( key );
+
+						}
+
+					}
+
+					return files;
+
+				}
+
+			};
+
+		} ).catch( onError );
+
+	}
+
+} );
+
 
 export { ZipLoader };

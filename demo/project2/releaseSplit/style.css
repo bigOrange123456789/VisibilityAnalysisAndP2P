@@ -50,8 +50,12 @@ body {
   height: 100%;
   flex-grow: 1;
   flex-shrink: 1;
-  position: absolute;
+  position: relative;
   top: 0;
+}
+
+#container canvas, #overlay {
+  position: absolute;
 }
 
 .demo-wrapper {
@@ -112,23 +116,32 @@ wrap .html5-progress-bar .progress-value {
 	float: right;
 }
 
+.info-instruction {
+  width:90%;
+  text-align: left;
+  position: absolute;
+  left: 5px;
+  top: 45px;
+  font-family: '';
+}
+
 .info-performance {
-    width:50%;
-    text-align: center;
+    width:90%;
+    text-align: left;
     position: absolute;
-    left: 25%;
+    left: 5px;
     top: 5px;
     font-family: '';
 }
 
 .info-performance .info-span{
-	text-align: center;
+	text-align: left;
     font-weight: 500;
     font-family: '';
 }
 
 .info-performance .info-span-title {
-    text-align: center;
+    text-align: left;
     font-weight: 600;
     font-family: '';
 }
