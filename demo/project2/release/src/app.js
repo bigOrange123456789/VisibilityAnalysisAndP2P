@@ -42,7 +42,6 @@ class App
 
     
     //var scenes = 'assets\\models\\mtltest.zip';
-    if(this.viewer.load)
     this.viewer.load(scenes);
   }
 

@@ -49,7 +49,13 @@ export class Viewer
     this.scene = new Scene();
 
     const fov = 60;
-    this.defaultCamera = new PerspectiveCamera(fov, el.clientWidth / el.clientHeight, 0.1, 700);
+    this.defaultCamera = //new PerspectiveCamera(fov, el.clientWidth / el.clientHeight, 0.1, 700);
+      new PerspectiveCamera(
+        fov,
+        el.clientWidth / el.clientHeight,
+        window.ParamURL.server_ip?1:0.1,
+        window.ParamURL.server_ip?5000:700
+      );
     this.activeCamera = this.defaultCamera;
     window.camera=this.activeCamera
     this.scene.add(this.defaultCamera);
@@ -84,12 +90,6 @@ export class Viewer
           EnableCulling: true,
         }
     );
-    new SceneManager(
-        {
-          scene: this.scene,
-          camera:this.activeCamera
-        }
-    )
 
     this.showgui = true;
 
@@ -563,27 +563,36 @@ export class Viewer
 
   load(scenes, finishCallback)
   {
-    var scope = this;
-    this.slmLoader.LoadScene(scenes, function(slmScene, _tag, bvhScene)
-    {
-      // console.log('get scene: ' + _tag);
-
-      // console.log(slmScene);
-
-      scope.addSceneModel(slmScene,_tag);
-    }, function()
-    {
-      console.log('all scene loaded');
-
-      if (finishCallback)
+    if(window.ParamURL.server_ip){
+      new SceneManager(
+        {
+          scene: this.scene,
+          camera:this.activeCamera
+        }
+      )
+    }else{
+      const scope = this;
+      this.slmLoader.LoadScene(scenes, function(slmScene, _tag, bvhScene)
       {
-        finishCallback();
-      }
-    }, function(slmScene, _tag)
-    {
-      // console.log(slmScene);
+        // console.log('get scene: ' + _tag);
 
-    });
+        // console.log(slmScene);
+
+        scope.addSceneModel(slmScene,_tag);
+      }, function()
+      {
+        console.log('all scene loaded');
+
+        if (finishCallback)
+        {
+          finishCallback();
+        }
+      }, function(slmScene, _tag)
+      {
+        // console.log(slmScene);
+
+      });
+    }
   }
 
   addSceneModel(sceneModel,tag)
@@ -659,8 +668,13 @@ export class Viewer
   {
     this.controls.reset();
 
-    this.defaultCamera.position.copy(new Vector3(60.0, 0.0, 0.0));
-    this.defaultCamera.lookAt(new Vector3());
+    if(window.ParamURL.server_ip){
+      this.defaultCamera.position.set(0, 1500, 0);
+      this.defaultCamera.lookAt(0, 0, 0);
+    }else{
+      this.defaultCamera.position.copy(new Vector3(60.0, 0.0, 0.0));
+      this.defaultCamera.lookAt(new Vector3());
+    }
 
     this.controls.target = new Vector3(0.0, 0.0, 0.0);
 
