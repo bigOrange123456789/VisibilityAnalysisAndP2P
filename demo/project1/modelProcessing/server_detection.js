@@ -19,7 +19,7 @@ function createWindow() {
     // icon: __dirname + "/assets/favicon.ico",
   });
 
-  win.hide();
+  if(false)win.hide();
 
   win.setBackgroundColor("#000000");
 

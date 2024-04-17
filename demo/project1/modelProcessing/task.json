@@ -1,6 +1,6 @@
 {
-  "id": "HG14_output",
-  "inputObjFileFullName": "assets\\models\\HG14\\HG14.obj",
+  "id": "bigCity_output",
+  "inputObjFileFullName": "assets\\models\\bigCity\\bigCity.obj",
   "outputFolderFullPath": "assets\\models",
   "unzipBos3": true,
   "splitObj": true,
