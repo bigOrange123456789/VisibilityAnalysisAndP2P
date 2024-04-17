@@ -11,6 +11,7 @@ import {
 import { GUI } from "dat.gui";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import {SceneManager} from "../lib/SceneManager";
 
 export class Viewer {
   constructor(el, options) {
@@ -88,6 +89,7 @@ export class Viewer {
     window.addEventListener("keydown", this.onKeyDown, false);
     window.addEventListener("keyup", this.onKeyUp, false);
     window.addEventListener("click", this.onMouseMove, true);
+    new SceneManager()
   }
 
   animate() {

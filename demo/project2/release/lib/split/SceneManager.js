@@ -10,11 +10,13 @@ import { ZipLoader } from "./ziploader";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 
 export class SceneManager {
-    constructor() {
+    constructor(opt) {
         this.projectName = window.projectName;
-        this.scene = window.scene;
-        this.camera = window.camera;
+        this.scene = opt.scene;
+        this.camera = opt.camera;
         this.instanceGroup = new Group();
+        this.instanceGroup.name="instanceGroup-split"
+        console.log("this.instanceGroup[split]",this.instanceGroup)
         this.scene.add(this.instanceGroup);
         this.matrixWorld = null;
 
