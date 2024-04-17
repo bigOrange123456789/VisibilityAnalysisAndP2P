@@ -9,10 +9,8 @@ import {
   Vector3,
 } from "three";
 import { GUI } from "dat.gui";
-import { MyUI } from "../lib/MyUI.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
-import { WanderControl } from "../lib/WanderControl";
 
 export class Viewer {
   constructor(el, options) {
@@ -173,101 +171,5 @@ export class Viewer {
     guiWrap.classList.add("gui-wrap");
     guiWrap.appendChild(gui.domElement);
     gui.open();
-  }
-
-  addMyUI() {
-    var ui = new MyUI();
-    var self = this;
-    var width = window.innerWidth;
-    var height = window.innerHeight;
-
-    var camera_pos = [
-      new Vector3(0, -1800, 550),
-      new Vector3(-303.8, -1529.9, 332.2),
-      new Vector3(272.8, -1362.1, 290.2),
-      new Vector3(-267.3, -743.3, -44.6),
-      new Vector3(268.9, -1404.7, -255.3),
-      new Vector3(26.9, -1540.6, -150.2),
-    ];
-    var camera_tar = [
-      new Vector3(0, -1050, -100),
-      new Vector3(-303.2, -1360.1, 196.8),
-      new Vector3(273.1, -1322.6, 203.9),
-      new Vector3(-265.3, -728.9, -94.8),
-      new Vector3(268.5, -1373.5, -276.6),
-      new Vector3(27.6, -1375.8, -260.1),
-    ];
-    var inf = {
-      "6th": 5,
-      "5th": 4,
-      "4th": 3,
-      "3rd": 2,
-      "2nd": 1,
-      "1st": 0,
-    };
-
-    var names = Object.keys(inf);
-    for (let i = 0; i < names.length; i++) {
-      new ui.Button(
-        names[i],
-        "#888888",
-        "#666666",
-        "#DDDDDD",
-        height / 36,
-        width / 150,
-        width / 12,
-        height / 20,
-        height / 90,
-        height - (height / 15) * (i + 1.5),
-        () => {
-          var id = inf[names[i]];
-          self.defaultCamera.position.copy(camera_pos[id]);
-          self.defaultCamera.lookAt(camera_tar[id]);
-          self.orbitControl.target = camera_tar[id].clone();
-        }
-      );
-    }
-
-    var route = [
-      new Vector3(0, -1800, 550),
-      new Vector3(29.8, -1490.9, -87.4),
-      new Vector3(-263.9, -1490.0, -192.1),
-      new Vector3(-262.3, -1494.6, 275.4),
-      new Vector3(-259.2, -1387.8, 268.4),
-      new Vector3(-259.2, -1319.1, 16.8),
-      new Vector3(-259.7, -1329.6, -26.1),
-      new Vector3(-246.0, -1311.0, -252.3),
-      new Vector3(-244.6, -828.1, -274.5),
-      new Vector3(181.7, -764.0, -168.7),
-      new Vector3(314.1, -1241.7, -193.1),
-      new Vector3(-1.2, -1419.8, -168.2),
-      new Vector3(0, -1800, 550),
-      new Vector3(0, -1050, -100),
-    ];
-    this.wanderControl = new WanderControl(this.defaultCamera, route, 300);
-
-    // new ui.Button("自动漫游", "#F4A460", '#666666', '#FFD700',
-    //     height/36, width/150,
-    //     width/12, height/20,
-    //     height/90, 13.5*height/15, (b)=>{
-    //       if(!this.wanderControl.wander){
-    //         console.log("start wander")
-    //         this.wanderControl.init()
-    //         this.wanderControl.startWander()
-    //       } else {
-    //         console.log("stop wander")
-    //         this.wanderControl.wander = false
-    //       }
-    //     });
-
-    window.ondblclick = function () {
-      if (!self.wanderControl.wander) {
-        // console.log("start wander")
-        // self.wanderControl.init()
-        // self.wanderControl.startWander()
-      } else {
-        self.wanderControl.wander = false;
-      }
-    };
   }
 }

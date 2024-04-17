@@ -1,4 +1,6 @@
 import { Viewer } from './viewer.js';
+import {SceneManager} from "../lib/SceneManager";
+
 class App
 {
   constructor (el)
@@ -6,6 +8,8 @@ class App
     this.el = el;
     this.viewer = null;
     this.viewerEl = null;
+
+    if (this.viewer) this.viewer.clear();
 
     var parseUrlParams = function()
     {
@@ -20,6 +24,7 @@ class App
     }
 
     var paramJson = parseUrlParams();
+    window.projectName = paramJson.scene
 
     this.createViewer(paramJson);
 
@@ -32,15 +37,15 @@ class App
 
     if (paramJson.scene)
     {
-      scenes =
-          [
-            {url: 'assets\\models\\' + paramJson.scene + '.zip', tag: 1}
-          ]
+      // scenes =
+      //     [
+      //       {url: 'assets\\models\\' + paramJson.scene + '.zip', tag: 1}
+      //     ]
+      new SceneManager()
     }
 
-    window.projectName = paramJson.scene
     //var scenes = 'assets\\models\\mtltest.zip';
-    this.viewer.load(scenes);
+    // this.viewer.load(scenes);
   }
 
   createViewer(paramJson)

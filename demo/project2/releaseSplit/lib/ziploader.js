@@ -2,29 +2,9 @@
  * @author Takahiro / https://github.com/takahirox
  */
 import {
-  AmbientLight,
-  AnimationMixer,
-  AxesHelper,
-  Box3,
-  Cache,
-  CubeTextureLoader,
-  DirectionalLight,
-  GridHelper,
-  HemisphereLight,
-  LinearEncoding,
   LoaderUtils,
-  LoadingManager,
   DefaultLoadingManager,
-  FileLoader,
-  PMREMGenerator,
-  PerspectiveCamera,
-  RGBFormat,
-  Scene,
-  SkeletonHelper,
-  UnsignedByteType,
-  Vector3,
-  WebGLRenderer,
-  sRGBEncoding,
+  FileLoader
 } from "three";
 
 import JSZip from "jszip";
