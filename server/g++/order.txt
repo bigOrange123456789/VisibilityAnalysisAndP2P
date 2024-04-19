@@ -1,0 +1,27 @@
+jsoncpp: -ljsoncpp
+workflow: -lworkflow
+wfrest: -lwfrest
+opengl: -lglut -lGLU -lGL
+
+command:
+main:
+g++ src/main.cc glad.c -march=native -O3 -std=c++20 -IuWebSockets -IuSockets/src -flto uSockets/*.o -lz -lssl -lcrypto -lwfrest -lworkflow -lGL -lglfw -lassimp -Wl,-rpath=/usr/local/lib -o main
+
+//lzcNote
+g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o main4004-off
+g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o output/main4004-off
+
+命令分析：
+g++ 
+-IuWebSockets 
+-IuSockets/src 
+src/main.cc 
+glad.c 
+uSockets/*.o 
+-lz 
+-lGL 
+-lglfw 
+-lassimp 
+-o 
+main4004-off
+
