@@ -41,7 +41,6 @@ class App
     }
 
     
-    //var scenes = 'assets\\models\\mtltest.zip';
     this.viewer.load(scenes);
   }
 

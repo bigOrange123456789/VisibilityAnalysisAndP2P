@@ -1421,8 +1421,6 @@ var SLMSceneParser = function(sceneMgr)
 						{
 							scope.finishCallback(scene, scope.sceneTag);
 						}
-
-						//instanceNode(scene, dataList[0], dataList[1], dataList[2], dataList[3]);
 					});
 				}
 				else
@@ -1513,7 +1511,7 @@ var SLMSceneParser = function(sceneMgr)
 function loadSubGLTF(back,index)
 {
 	var projectName=window.param.projectName;
-	var url="assets/models/"+projectName+"/"+projectName+"_output"+index+".gltf"
+	var url="./assets/models/"+projectName+"/"+projectName+"_output"+index+".gltf"
 	new Promise(function( resolve, reject) {
 		new GLTFLoaderEx().load(url, (gltf)=>{
 			resolve(gltf)

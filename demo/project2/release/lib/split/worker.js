@@ -36,7 +36,9 @@ function loadModelZip(index){
         new FileLoader(loader).load(zipContent.matrices[0],(json)=>{
             let matrix = JSON.parse(json);
             new GLTFLoader(loader).load(zipContent.models[0], (gltf)=>{
-                let mesh = gltf.scene.children[0].children[0].children[0];
+                let mesh = gltf.scene.children[0].children[0]
+                if(!mesh.geometry)mesh=mesh.children[0]
+                // let mesh = gltf.scene.children[0].children[0].children[0];
                 postMessage({
                     index: index,
                     matrix: matrix,
