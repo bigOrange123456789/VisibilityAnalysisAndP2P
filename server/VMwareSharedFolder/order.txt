@@ -8,8 +8,13 @@ main:
 g++ src/main.cc glad.c -march=native -O3 -std=c++20 -IuWebSockets -IuSockets/src -flto uSockets/*.o -lz -lssl -lcrypto -lwfrest -lworkflow -lGL -lglfw -lassimp -Wl,-rpath=/usr/local/lib -o main
 
 //lzcNote
+用户名称：haodong
+锁屏密码：123456
+取消挂载：sudo umount /mnt/hgfs
+重新挂载：sudo /usr/bin/vmhgfs-fuse .host:/ /mnt/hgfs -o allow_other -o uid=1000 -o gid=1000 -o umask=022
+
 g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o main4004-off
-g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o output/main4004-off
+g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o dist/main-off
 
 命令分析：
 g++ 

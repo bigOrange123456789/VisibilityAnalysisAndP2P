@@ -12,9 +12,7 @@ class Correspond{
 private:
 
 };
-
 void Correspond::setUp(SceneInfo* scene){
-
     sceneInfo = scene;
 
     /* ws->getUserData returns one of these */
