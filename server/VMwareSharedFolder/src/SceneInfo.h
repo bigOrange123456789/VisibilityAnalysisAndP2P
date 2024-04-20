@@ -84,7 +84,7 @@ private:
 
 void SceneInfo::init()
 {
-    string sceneName="HG14";
+    string sceneName="ExhibitionHall";
     std::cout << "sceneName:" << sceneName << std::endl;
     string pathPre="dist/assets/"+sceneName+"/";//"assets/";
     nlohmann::json graphInfo = readJsonFile(pathPre+"sceneGraph.json");
