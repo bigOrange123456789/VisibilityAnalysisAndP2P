@@ -16,6 +16,8 @@
 #include "opengl/occluder_loader.h"
 #include "opengl/instanced_mesh.h"
 
+#include "LZC.h"
+
 #define SCREEN_WIDTH 1024
 #define SCREEN_HEIGHT 1024
 
@@ -57,7 +59,7 @@ class SceneInfo
 public:
     glm::mat4 matrixWorld;
 
-    void init();
+    void init(string sceneName);//(LZC* lzc);
     void printInfomation();
 
     vector<int> subregionCulling(Frustum& frustum);
@@ -82,9 +84,9 @@ private:
     Shader myShader;
 };
 
-void SceneInfo::init()
+void SceneInfo::init(string sceneName)//(LZC* lzc)
 {
-    string sceneName="ExhibitionHall";
+    //string sceneName=lzc->config->sceneName;//"ExhibitionHall";//
     std::cout << "sceneName:" << sceneName << std::endl;
     string pathPre="dist/assets/"+sceneName+"/";//"assets/";
     nlohmann::json graphInfo = readJsonFile(pathPre+"sceneGraph.json");
