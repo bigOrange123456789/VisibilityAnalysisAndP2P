@@ -57,6 +57,7 @@ struct SceneUnit
 class SceneInfo
 {
 public:
+    string sceneName;
     glm::mat4 matrixWorld;
 
     void init(string sceneName);//(LZC* lzc);

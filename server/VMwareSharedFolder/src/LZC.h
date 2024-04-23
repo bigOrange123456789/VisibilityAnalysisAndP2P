@@ -4,13 +4,20 @@
 #include <iostream>
 #include <string>
 struct Config0{
-    string sceneName;
+    // string sceneName;
+    string* sceneNameList;
+    int sceneNameList_len;
     int port;
     Config0(){}
     Config0(nlohmann::json info)
     {
         port = info["port"];//8080;
-        sceneName = info["sceneName"];//"project01";
+        // sceneName = info["sceneName"];//"project01";
+        sceneNameList = new string[info["sceneNameList"].size()];//info["sceneNameList"];
+        sceneNameList_len=info["sceneNameList"].size();
+        for(int i=0;i<sceneNameList_len;i++){
+            sceneNameList[i]=info["sceneNameList"][i];
+        }
     }
 };
 

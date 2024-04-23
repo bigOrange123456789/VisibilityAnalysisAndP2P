@@ -6,14 +6,17 @@
 
 class Correspond{
     public:
-    SceneInfo* sceneInfo;
+    // SceneInfo* sceneInfo;
+    SceneInfo** sceneList;
 
-    void setUp(SceneInfo* scene,int port);
+    void setUp(SceneInfo** scene,int sceneList_len,int port);
 private:
 
 };
-void Correspond::setUp(SceneInfo* scene,int port){
-    sceneInfo = scene;
+void Correspond::setUp(SceneInfo** sceneList,int sceneList_len,int port){
+    // sceneInfo = sceneList[0];
+    // this->sceneInfo=this->sceneList[0];
+    std::cout<<"sceneList_len:"<< sceneList_len <<endl;
 
     /* ws->getUserData returns one of these */
     struct PerSocketData {
@@ -48,32 +51,41 @@ void Correspond::setUp(SceneInfo* scene,int port){
             /* This is the opposite of what you probably want; compress if message is LARGER than 16 kb
              * the reason we do the opposite here; compress if SMALLER than 16 kb is to allow for 
              * benchmarking of large message sending without compression */
-            
-            nlohmann::json root = nlohmann::json::parse(message);
-            if(root["typ"]==0){
-                Frustum frustum;
-                frustum.setFromProjectMatrixJson(root);
-                auto res = this->sceneInfo->subregionCulling(frustum);
-                nlohmann::json response;
-                response["typ"] = 0;
-                response["pos"] = root["pos"];
-                response["res"] = res;
-                ws->send(response.dump(), opCode, true);
-            }else if(root["typ"]==1){
-                Frustum frustum;
-                frustum.setFromProjectMatrixJson(root);
-                nlohmann::json PVS = root["PVS"];
-                auto res = this->sceneInfo->occlusionCulling(frustum, PVS);
-                nlohmann::json response;
-                response["typ"] = 0;
-                response["pos"] = root["pos"];
-                response["res"] = res;
-                ws->send(response.dump(), opCode, true);
-            }else if(root["typ"]==-1){
-                nlohmann::json response;
-                response["mat"] = mat4ToString(this->sceneInfo->matrixWorld);
-                ws->send(response.dump(), opCode, true);
+            // std::cout<< this->sceneList.size() <<endl;
+            for(unsigned int i=0; i<sceneList_len; i++){//this->sceneList.size()
+                nlohmann::json root = nlohmann::json::parse(message);
+                SceneInfo* sceneInfo0=sceneList[i];
+                if(root["sceneName"]==sceneInfo0->sceneName)//if(i==0)//
+                {
+                    
+                    if(root["typ"]==0){
+                        Frustum frustum;
+                        frustum.setFromProjectMatrixJson(root);
+                        auto res = sceneInfo0->subregionCulling(frustum);
+                        nlohmann::json response;
+                        response["typ"] = 0;
+                        response["pos"] = root["pos"];
+                        response["res"] = res;
+                        ws->send(response.dump(), opCode, true);
+                    }else if(root["typ"]==1){
+                        Frustum frustum;
+                        frustum.setFromProjectMatrixJson(root);
+                        nlohmann::json PVS = root["PVS"];
+                        auto res = sceneInfo0->occlusionCulling(frustum, PVS);
+                        nlohmann::json response;
+                        response["typ"] = 0;
+                        response["pos"] = root["pos"];
+                        response["res"] = res;
+                        ws->send(response.dump(), opCode, true);
+                    }else if(root["typ"]==-1){
+                        nlohmann::json response;
+                        response["mat"] = mat4ToString(sceneInfo0->matrixWorld);
+                        ws->send(response.dump(), opCode, true);
+                    }        
+                    break;
+                }
             }
+            
         },
         .drain = [](auto */*ws*/) {
             /* Check ws->getBufferedAmount() here */

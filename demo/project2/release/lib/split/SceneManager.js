@@ -58,7 +58,12 @@ export class SceneManager {
         this.ws = new WebSocket(this.server_ip)
         this.ws.onopen = (evt) => {
             console.log("websocket connect succeed")
-            self.ws.send(JSON.stringify({typ:-1}))
+            self.ws.send2=data=>{
+                const data2=JSON.parse(data)
+                data2.sceneName=self.projectName
+                self.ws.send(JSON.stringify(data2))
+            }
+            self.ws.send2(JSON.stringify({typ:-1}))
         }
         this.ws.onclose = (evt) => {
             // window.alert("暂时无法访问服务器")
@@ -102,7 +107,7 @@ export class SceneManager {
                                 hei:document.documentElement.clientHeight,
                                 typ:0
                             }
-                            self.ws.send(JSON.stringify(frustumPVS_data))
+                            self.ws.send2(JSON.stringify(frustumPVS_data))
                             self.pre_camera_position = self.camera.position.clone()
                         }
                     }else{
@@ -116,12 +121,12 @@ export class SceneManager {
                             typ:1
                         }
                         if(positionMatch(res["pos"],self.camera.position)){ // 如果相机没有改变，进行遮挡剔除
-                            self.ws.send(JSON.stringify(frustumPVS_data))
+                            self.ws.send2(JSON.stringify(frustumPVS_data))
                             // self.httping = false
                         }else{                                              // 如果相机改变了，再来一次视锥剔除
                             delete frustumPVS_data["PVS"]
                             frustumPVS_data["typ"] = 0
-                            self.ws.send(JSON.stringify(frustumPVS_data))
+                            self.ws.send2(JSON.stringify(frustumPVS_data))
                             self.pre_camera_position = self.camera.position.clone()
                         }
                         self.processFVS(res["res"])
@@ -190,7 +195,7 @@ export class SceneManager {
         })
         // console.log(document.documentElement.clientWidth,document.documentElement.clientHeight)
         this.pre_camera_position = this.camera.position.clone()
-        this.ws.send(frustum_data)
+        this.ws.send2(frustum_data)
     }
     setVisibility(list) {
         var vis_num = 0;
