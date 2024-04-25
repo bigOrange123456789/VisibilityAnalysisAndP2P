@@ -172,15 +172,121 @@ export class SceneManager {
             }
             this.addInsModel(e.data.index, e.data.matrix, geometry, material);
         };
+        /////////////////lzc_test_开始///////////////////
+        // setTimeout(()=>{
+        //     self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=0; i<1000; i++){
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },2000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=1000; i<2000; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },4000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=2000; i<3000; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },6000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=3000; i<4000; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },8000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=4000; i<4500; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },10000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=4500; i<5000; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },10000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=5000; i<5500; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },11000)
+        // setTimeout(()=>{self.loadlimit=9999
+        //     var to_load_list = [];
+        //     for(let i=5500; i<5385; i++){//5385
+        //         let ind = i;//load_list[i];
+        //         if(i<self.loadlimit && !self.loadingModelList.includes(ind)){
+        //             to_load_list.push(ind);
+        //             self.toLoadModelList.splice(self.toLoadModelList.indexOf(ind),1);
+        //             self.loadingModelList.push(ind);
+        //         }
+        //     }
+        //     self.worker.postMessage(to_load_list); 
+        // },12000)
+        /////////////////lzc_test_结束///////////////////
     }
     animate() {
-        if (!this.camera.position.equals(this.pre_camera_position) && !this.httping) {
-            this.httping = true
-            this.sceneCulling();
+        /////////////////lzc_test_开始///////////////////
+        // if(true){
+        // }else
+        /////////////////lzc_test_结束///////////////////
+        {
+           if (!this.camera.position.equals(this.pre_camera_position) && !this.httping) {
+                this.httping = true
+                this.sceneCulling();
+            }
+            this.setVisibility(this.visibleModelList);
+            this.processLoadList(this.toLoadModelList)
+            this.manageCaches() 
         }
-        this.setVisibility(this.visibleModelList);
-        this.processLoadList(this.toLoadModelList)
-        this.manageCaches()
+        
 
         requestAnimationFrame(this.animate);
     }
@@ -202,6 +308,11 @@ export class SceneManager {
         var invis_num = 0;
         for (let i = 0; i < this.loadedModelList.length; i++) {
             let index = this.loadedModelList[i];
+            /////////////////lzc_test_开始///////////////////
+            // if(true){
+            //     this.loaded_mesh[index].visible = true;
+            // }else
+            /////////////////lzc_test_结束///////////////////
             if (list.includes(index)) {
                 // 可见
                 if (this.loaded_mesh[index]) {
@@ -359,6 +470,7 @@ export class SceneManager {
         let zl = box.max.z-box.min.z;
         this.loaded_mesh_interest[index] = xl*yl+xl*zl+yl*zl * matrix.length
         this.loaded_mesh_invisible_time[index] = 0
+        // console.log(index)
     }
     manageCaches(){// 新增函数
         let model_list = [];

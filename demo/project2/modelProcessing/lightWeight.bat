@@ -1,4 +1,4 @@
-set sceneName=bigCity
+set sceneName=ExhibitionHall_Ding
 set insertPath=project2\modelProcessing
 set root_dir=%cd%\..\..\..\
 set inpath=%root_dir%dist\assets\models\%sceneName%.zip
