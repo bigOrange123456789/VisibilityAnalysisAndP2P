@@ -16,20 +16,12 @@ g++ src/main.cc glad.c -march=native -O3 -std=c++20 -IuWebSockets -IuSockets/src
 g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o main4004-off
 g++ -IuWebSockets -IuSockets/src src/main.cc glad.c uSockets/*.o -lz -lGL -lglfw -lassimp -o dist/main-off
 
-命令分析：
-g++ 
--IuWebSockets 
--IuSockets/src 
-src/main.cc 
-glad.c 
-uSockets/*.o 
--lz 
--lGL 
--lglfw 
--lassimp 
--o 
-main4004-off
-
 -----------------------远程部署时-----------------------
 sudo chmod 777 main-off
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/LD_LIBRARY/
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/Desktop/server/LD_LIBRARY/
+
+screen -S name
+ctrl+A+D
+screen -ls
+screen -r ID
