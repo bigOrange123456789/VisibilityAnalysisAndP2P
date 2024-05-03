@@ -30,3 +30,6 @@ uSockets/*.o
 -o 
 main4004-off
 
+-----------------------远程部署时-----------------------
+sudo chmod 777 main-off
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/ubuntu/LD_LIBRARY/
