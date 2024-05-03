@@ -200,7 +200,7 @@ void SceneInfo::printInfomation()
 
 vector<int> SceneInfo::subregionCulling(Frustum& frustum)//视锥剔除
 {
-    vctor<pair<SceneUnit*,float>> firstUnitPair, secondUnitPair, thirdUnitPair;
+    vector<pair<SceneUnit*,float>> firstUnitPair, secondUnitPair, thirdUnitPair;
     for(unsigned int i=0; i<sceneVoxels.size(); i++){
         SceneUnit* firstLevelUnit = sceneVoxels[i];
         Box unitBox = firstLevelUnit->unitBox;
@@ -225,7 +225,7 @@ vector<int> SceneInfo::subregionCulling(Frustum& frustum)//视锥剔除
             }
         }
     }
-e
+
     sort(begin(firstUnitPair), end(firstUnitPair), [&](const auto& a, const auto& b){ return a.second < b.second; });
     sort(begin(secondUnitPair), end(secondUnitPair), [&](const auto& a, const auto& b){ return a.second < b.second; });
     sort(begin(thirdUnitPair), end(thirdUnitPair), [&](const auto& a, const auto& b){ return a.second < b.second; });
@@ -233,7 +233,7 @@ e
     vector<pair<int,float>> loadMap;
     unordered_set<int> componentMap;
 
-    in firstComponentCount = 0;
+    int firstComponentCount = 0;
     for(int i=0; i<firstUnitPair.size(); i++){
         SceneUnit* unit = firstUnitPair[i].first;
         for(int j=0; j<unit->meshCount; j++){
@@ -306,7 +306,7 @@ e
         }
         if(thirdComponentCount>3072) break;
     }
-t
+
     sort(begin(loadMap), end(loadMap), [&](const auto& a, const auto& b){ return a.second > b.second; });
 
     vector<int> loadList;
