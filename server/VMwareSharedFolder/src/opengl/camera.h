@@ -9,8 +9,8 @@
 glm::mat4 calculate_lookAt_matrix(glm::vec3 position, glm::vec3 target, glm::vec3 worldUp);
 
 // Defines several possible options for camera movement. Used as abstraction to stay away from window-system specific input methods
-enum Camera_Movement {
-    FORWARD,
+enum Camera_Movement {//相机移动
+    FORWARD,//前后左右上下
     BACKWARD,
     LEFT,
     RIGHT,

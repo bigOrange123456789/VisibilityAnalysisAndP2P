@@ -57,11 +57,10 @@ void Correspond::setUp(SceneInfo** sceneList,int sceneList_len,int port){
                 SceneInfo* sceneInfo0=sceneList[i];
                 if(root["sceneName"]==sceneInfo0->sceneName)//if(i==0)//
                 {
-                    
                     if(root["typ"]==0){
                         Frustum frustum;
                         frustum.setFromProjectMatrixJson(root);
-                        auto res = sceneInfo0->subregionCulling(frustum);
+                        auto res = sceneInfo0->subregionCulling(frustum);//视锥剔除
                         nlohmann::json response;
                         response["typ"] = 0;
                         response["pos"] = root["pos"];
@@ -71,13 +70,13 @@ void Correspond::setUp(SceneInfo** sceneList,int sceneList_len,int port){
                         Frustum frustum;
                         frustum.setFromProjectMatrixJson(root);
                         nlohmann::json PVS = root["PVS"];
-                        auto res = sceneInfo0->occlusionCulling(frustum, PVS);
+                        auto res = sceneInfo0->occlusionCulling(frustum, PVS);//遮挡剔除
                         nlohmann::json response;
                         response["typ"] = 0;
                         response["pos"] = root["pos"];
                         response["res"] = res;
                         ws->send(response.dump(), opCode, true);
-                    }else if(root["typ"]==-1){
+                    }else if(root["typ"]==-1){//给出整个场景的变换矩阵
                         nlohmann::json response;
                         response["mat"] = mat4ToString(sceneInfo0->matrixWorld);
                         ws->send(response.dump(), opCode, true);
