@@ -1,6 +1,6 @@
 {
-  "id": "ExhibitionHall_Ding_output",
-  "inputObjFileFullName": "assets\\models\\ExhibitionHall_Ding\\ExhibitionHall_Ding.obj",
+  "id": "HKUST_GYM2_output",
+  "inputObjFileFullName": "assets\\models\\HKUST_GYM2\\HKUST_GYM2.obj",
   "outputFolderFullPath": "assets\\models",
   "unzipBos3": true,
   "splitObj": true,
@@ -39,5 +39,5 @@
   "bos3InstanceThreshold": 0,
   "optimizeGroup": true,
   "binaryOptimize": true,
-  "main": "./demo/project2\\modelProcessing/server_detection.js"
+  "main": "./demo/project3\\modelProcessing/server_detection.js"
 }

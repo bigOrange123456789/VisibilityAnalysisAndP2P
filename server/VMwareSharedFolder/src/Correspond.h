@@ -55,7 +55,7 @@ void Correspond::setUp(SceneInfo** sceneList,int sceneList_len,int port){
             for(unsigned int i=0; i<sceneList_len; i++){//this->sceneList.size()
                 nlohmann::json root = nlohmann::json::parse(message);
                 SceneInfo* sceneInfo0=sceneList[i];
-                if(root["sceneName"]==sceneInfo0->sceneName)//if(i==0)//
+                if(sceneList_len==1||root["sceneName"]==sceneInfo0->sceneName)//if(i==0)//
                 {
                     if(root["typ"]==0){
                         Frustum frustum;
